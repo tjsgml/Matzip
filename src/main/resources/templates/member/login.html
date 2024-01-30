@@ -1,22 +1,33 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
 </head>
+
 <body>
-	<form method="post">
+	<main class="mz-container">
+		<form method="post">
+			<div style="color:red;" th:if="${param.error}">
+				아이디/비밀번호를 확인하세요.
+			</div>
+			<div>
+				<label>username</label>
+				<input type="text" name="username" required autofocus />
+			</div>
+			<div>
+				<label>password</label>
+				<input type="password" name="password" required />
+			</div>
+			<div>
+				<input type="submit" value="로그인" />
+			</div>
+		</form>
 		<div>
-			<label>username</label>
-			<input type="text" name="username" required autofocus />
+			<a th:href="@{/member/signup}">회원가입</a>
 		</div>
-		<div>
-			<label>password</label>
-			<input type="password" name="password" required />
-		</div>
-		<div>
-			<input type="submit" value="로그인"/>
-		</div>
-	</form>
+	</main>
 </body>
+
 </html>

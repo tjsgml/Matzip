@@ -14,8 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.itwill.matzip.domain.Gender;
 import com.itwill.matzip.domain.Member;
-import com.itwill.matzip.domain.MemberRepository;
 import com.itwill.matzip.domain.MemberRole;
+import com.itwill.matzip.repository.MemberRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -32,17 +32,17 @@ public class MemberRepositoryTest {
 		Assertions.assertNotNull(passwordEncoder);
 	}
 	
-	//@Test
+	@Test
 	public void InsertMemberTest() {
 		Member m = Member.builder()
-									.username("username1")
+									.username("user2")
 									.password(passwordEncoder.encode("1111"))
-									.email("user1@naver.com")
+									.email("user2@naver.com")
 									.birth(LocalDate.of(1993,7 , 20))
-									.nickname("ys")
-									.gender(Gender.Female)
+									.nickname("bb")
+									.gender(Gender.F)
 									.build();
-		m.addRole(MemberRole.ADMIN);
+		m.addRole(MemberRole.USER);
 		
 		log.info("save 전 : {} ", m );
 		
@@ -57,9 +57,9 @@ public class MemberRepositoryTest {
 		list.forEach((x) -> log.info("{}, {}", x, x.getRoles()));
 	}
 	
-	@Test
+	//@Test
 	public void findByUsernameTest() {
-		Optional<Member> m = memberDao.findByUsername("username1");
+		Optional<Member> m = memberDao.findByUsername("user2");
 		log.info("{}, {}", m.get(), m.get().getRoles());
 	}
 	
