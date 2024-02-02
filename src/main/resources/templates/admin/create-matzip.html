@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<script src="/js/local_variable.js"></script>
+<script src="/js/admin/searchLocation.js"></script>
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
 <head th:replace="~{/layout/fragment-common.html::my-header('MAT.ZIP ADMIN')}"></head>
 <link href="/css/admin/admin-common.css" rel="stylesheet">
+<link href="/css/admin/admin-holiday.css" rel="stylesheet">
 <body>
 <nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
 
@@ -40,7 +41,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="mb-1" for="addrInput">주소</label>
-                        <input class="form-control" type="text" id="addrInput" placeholder="주소"/>
+                        <input class="form-control" type="text" id="addrInput" placeholder="주소" readonly/>
                     </div>
                     <div class="mb-3">
                         <label class="mb-1" for="detailAddrInput">상세주소</label>
@@ -53,12 +54,24 @@
                     <input class="form-control mb-3" type="hidden" id="lngInput"/>
                     <input class="form-control mb-3" type="hidden" id="latInput"/>
                 </div>
-                <div>
-                    <ul id="placesList" style="padding: 0">
-                    </ul>
+                <div id="business-time-container">
+                    <div>
+                        <ul id="placesList" style="padding: 0">
+                        </ul>
 
-                    <div id="pagination" class="pagination input-group d-flex">
+                        <div id="pagination" class="pagination input-group d-flex">
+                        </div>
                     </div>
+                    <hr class="border border-secondary border-2 opacity-50">
+                    <h5>영업 시간 등록하기</h5>
+                    <div class="text-secondary">선택 사항</div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='월', dayValue= 'MON')}"></div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='화', dayValue='TUE')}"></div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='수', dayValue= 'WED')}"></div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='목', dayValue= 'THU')}"></div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='금', dayValue= 'FRI')}"></div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='토', dayValue= 'SAT')}"></div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='일', dayValue= 'SUN')}"></div>
                 </div>
             </div>
             <div>
@@ -74,13 +87,13 @@
                             </select>
                         </div>
                     </div>
-                    <div id="map" class="mb-3" style="width:800px;height:600px;"></div>
+                    <div id="map" class="mb-3"></div>
                     <div class="input-group">
                         <button class="form-control btn btn-outline-success active" id="draggable-btn">지도 드래그 활성화
                         </button>
                         <button class="form-control btn btn-outline-warning" id="un-draggable-btn">지도 드래그 비활성화</button>
                     </div>
-                    <button class="btn btn-outline-primary mt-3 form-control">제출</button>
+                    <button id="submit-btn" class="btn btn-outline-primary mt-3 form-control">제출</button>
                 </div>
             </div>
         </div>
@@ -88,370 +101,10 @@
 </div>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script> //
-let curPage = 1;
-let totalPage = 0;
-let reqSize = 10;
-let keyword = "";
-let searchType = "";
-let origin_lat = "";
-let origin_lng = "";
-
-const keywordInput = document.getElementById("keywordInput");
-const keywordSearchBtn = document.getElementById("keywordSearchBtn")
-const addrSearchInput = document.getElementById("addrSearchInput");
-const addrSearchBtn = document.getElementById("addrSearchBtn");
-
-const nameInput = document.getElementById("nameInput");
-const addrInput = document.getElementById("addrInput");
-const detailAddrInput = document.getElementById("detailAddrInput");
-const contactInput = document.getElementById("contactInput");
-const lngInput = document.getElementById("lngInput");
-const latInput = document.getElementById("latInput");
-
-const paginationComp = document.getElementById("pagination");
-
-const selectDistance = document.getElementById("selectDistance");
-
-const REST_API_KEY = "c89a020dd130ee8b16d5aba0dc567c8e";
-const SEARCH_BY_KEYWORD_URL = "https://dapi.kakao.com/v2/local/search/keyword.JSON?";
-const SEARCH_BY_ADDRESS_URL = "https://dapi.kakao.com/v2/local/search/address.JSON?";
-</script>
-<script>
-
-    let markers = [];
-    <!--  맵 관련 초기 설정  -->
-    const mapContainer = document.getElementById('map'), // 지도를 표시할 div
-        mapOption = {
-            center: new kakao.maps.LatLng(37.514322572335935, 127.06283102249932), // 지도의 중심좌표
-            draggable: true,
-            level: 3 // 지도의 확대 레벨
-        };
-
-    const map = new kakao.maps.Map(mapContainer, mapOption, {useMapBounds: true}); // 지도를 생성합니다
-
-    const draggableMarker = new kakao.maps.Marker(
-        {
-            position: map.getCenter(),
-            map,
-            draggable: true
-        }
-    );
-
-    changeDraggableMarkerPosition(draggableMarker.getPosition());
-
-    // 센터 정하는 메서드
-    function setCenter(lat, lng) {
-        const moveLatLon = new kakao.maps.LatLng(lat, lng);
-        map.setCenter(moveLatLon);
-    }
-
-    kakao.maps.event.addListener(map, 'center_changed', function () {
-        draggableMarker.setPosition(map.getCenter());
-        changeDraggableMarkerPosition(map.getCenter());
-    });
-
-    kakao.maps.event.addListener(draggableMarker, 'dragend', function () {
-        getCurrentCord();
-        changeDraggableMarkerPosition(draggableMarker.getPosition());
-    });
-
-    async function changeDraggableMarkerPosition(latLng) {
-        setCenter(latLng.getLat(), latLng.getLng());
-        const query = `y=${latLng.getLat()}&x=${latLng.getLng()}&page=${curPage}&size=${reqSize}`;
-        const resp = await axios.get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?${query}`, {
-            headers: {
-                "Content-Type": "application/json;charset=UTF-8",
-                Authorization: `KakaoAK ${REST_API_KEY}`
-            }
-        });
-
-        // console.log(resp)
-        const address = await resp.data.documents[0]?.address;
-
-        const infowindowContent = document.createElement("div");
-
-        infowindowContent.classList.add("overlay_info");
-        infowindowContent.style.zIndex = 0;
-
-        infowindowContent.innerHTML = `
-                 <div class="desc">
-                   <div>
-                      <span>주소 : </span>
-                      <span>${address?.address_name ?? "등록된 주소가 없습니다."}</span>
-                   </div>
-                   <div>
-                      <span>전화 번호 : </span>
-                      <span>등록된 전화번호가 없습니다.</span>
-                   </div>
-                 </div>
-                <input id="placename-Input-center" type="hidden" value="" />
-                <input id="address-Input-center" type="hidden" value="${address?.address_name || ''}" />
-                <input id="phone-Input-center" type="hidden" value="" />
-                <input id="lat-Input-center" type="hidden" value="" />
-                <input id="lng-Input-center" type="hidden" value="" />
-       `;
-
-        // iwPosition = new kakao.maps.LatLng(33.450701, 126.570667); //인포윈도우 표시 위치입니다
-
-// 인포윈도우를 생성합니다
-        const infowindow = new kakao.maps.InfoWindow({
-            position: draggableMarker.getPosition(),
-            content: infowindowContent,
-        });
-
-// 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
-        kakao.maps.event.addListener(draggableMarker, "mouseover", (event) => {
-            draggableMarker.setZIndex(10);
-            infowindow.open(map, draggableMarker);
-        })
-
-        kakao.maps.event.addListener(draggableMarker, "mouseout", (event) => {
-            draggableMarker.setZIndex(0);
-            infowindow.close();
-        })
-
-        kakao.maps.event.addListener(draggableMarker, "click", () => setAddressInfo("center", infowindow));
-    }
-
-    // 지도, 스카이뷰 선택
-    const mapTypeControl = new kakao.maps.MapTypeControl();
-    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-
-    // 지도 드래그 가능 여부 설정
-    const draggableBtn = document.getElementById("draggable-btn")
-    draggableBtn.addEventListener("click", () => {
-        map.setDraggable(true);
-        draggableBtn.classList.add("active");
-        unDraggableBtn.classList.remove("active");
-    });
-
-    const unDraggableBtn = document.getElementById("un-draggable-btn")
-    unDraggableBtn.addEventListener("click", (ev) => {
-        map.setDraggable(false);
-        draggableBtn.classList.remove("active");
-        unDraggableBtn.classList.add("active");
-    });
-
-
-    keywordSearchBtn.addEventListener("click", () => {
-        curPage = 1;
-        searchType = "KEYWORD";
-        keyword = keywordInput.value;
-        getCurrentCord();
-        searchByKeyword();
-    });
-
-    // 키워드 검색
-
-</script>
-<script src="/js/local_variable.js"></script>
-<script>
-    function setList(el, marker, infowindow) {
-        const listItem = document.createElement("li");
-        listItem.style.listStyle = "none";
-        listItem.classList.add("card");
-
-        listItem.innerHTML = `
-            <div class="card-body">
-                  <a href="${el.place_url}">
-                    <h5 class="card-title">${el.place_name || el.address_name}</h5>
-                   <span class="fs-6"> ${el.category_name ? " | " + el.category_name : ""}</span>
-                   </a>
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                       전화번호 : <span>${el.phone || " 등록된 전화번호가 없습니다."}</span>
-                    </div>
-                    <button id="select-${el.id}">선택</button>
-                  </div>
-                </div>
-        `;
-
-
-        const onmouseover = () => {
-            listItem.classList.add("active");
-            marker.setZIndex(10);
-            infowindow.open(map, marker);
-            // setCenter(marker.getPosition().getLat(), marker.getPosition().getLng());
-        }
-        const onmouseout = () => {
-            listItem.classList.remove("active");
-            marker.setZIndex(0);
-            infowindow.close();
-        }
-
-        listItem.addEventListener("mouseover", onmouseover)
-        listItem.addEventListener("mouseout", onmouseout)
-        document.getElementById("placesList").append(listItem);
-
-        const selectBtn = document.getElementById("select-" + el.id);
-        console.log("밖 selectBtn : " + selectBtn);
-        selectBtn.addEventListener("click", () => {
-            console.log("selectBtn : " + selectBtn);
-            setAddressInfo(el.id, infowindow);
-        })
-    }
-
-    // 개별 마커 생성
-    function setMarker(el) {
-
-        const markerPosition = new kakao.maps.LatLng(el.y, el.x);
-        const marker = new kakao.maps.Marker({
-            position: markerPosition,
-            map: map
-        });
-
-        markers.push(marker);
-
-        const infowindowContent = document.createElement("div");
-
-        infowindowContent.classList.add("overlay_info");
-        infowindowContent.style.zIndex = 0;
-
-        infowindowContent.innerHTML = `
-                <div>
-                  <a href="${el.place_url || ''}" target="_blank"><strong>${el.place_name || ""}</strong></a>
-                </div>
-                   <div class="desc">
-                   <div>
-                      <span>주소 : </span>
-                      <span>${el.address_name || ""}</span>
-                   </div>
-                   <div>
-                      <span>전화 번호 : </span>
-                      <span>${el.phone ?? ""}</span>
-                   </div>
-                 </div>
-                <input id="placename-Input-${el.id}" type="hidden" value="${el.place_name || ''}" />
-                <input id="address-Input-${el.id}" type="hidden" value="${el.address_name || ''}" />
-                <input id="phone-Input-${el.id}" type="hidden" value="${el.phone || ''}" />
-                <input id="lat-Input-${el.id}" type="hidden" value="${el.x}" />
-                <input id="lng-Input-${el.id}" type="hidden" value="${el.y}" />
-       `;
-
-        // iwPosition = new kakao.maps.LatLng(33.450701, 126.570667); //인포윈도우 표시 위치입니다
-
-// 인포윈도우를 생성합니다
-        const infowindow = new kakao.maps.InfoWindow({
-            position: markerPosition,
-            content: infowindowContent,
-        });
-
-// 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
-        //   customOverlay.setMap(map);
-
-        // customOverlay.addListener("mouseover", () => {
-        //     customOverlay.zIndex = 10;
-        // })
-
-        kakao.maps.event.addListener(marker, "mouseover", (event) => {
-            marker.setZIndex(10);
-            infowindow.open(map, marker);
-            setCenter(el.x, el.y);
-        })
-
-        kakao.maps.event.addListener(marker, "mouseout", (event) => {
-            marker.setZIndex(0);
-            infowindow.close();
-        })
-        kakao.maps.event.addListener(marker, "click", () => setAddressInfo(el.id, infowindow));
-        setList(el, marker, infowindow);
-    }
-
-    // 마커 선택 시 해당 마커 정보
-    function setAddressInfo(locId, infoWindow) {
-        resetAddress();
-        const placeName = document.getElementById(`placename-Input-${locId}`).value;
-        const address = document.getElementById(`address-Input-${locId}`).value;
-        const phone = document.getElementById(`phone-Input-${locId}`).value;
-        const lng = document.getElementById(`lng-Input-${locId}`).value;
-        const lat = document.getElementById(`lat-Input-${locId}`).value;
-
-        nameInput.value = placeName;
-        addrInput.value = address;
-        contactInput.value = phone;
-        lngInput.value = lng;
-        latInput.value = lat;
-        document.getElementById("placesList").innerHTML = "";
-        removeAllMarkers();
-        infoWindow.close();
-    }
-
-
-    // 마커 전체 삭제
-    function removeAllMarkers() {
-        markers.forEach(el => el.setMap(null));
-        markers = [];
-        document.getElementById("placesList").innerHTML = "";
-        paginationComp.innerHTML = "";
-    }
-
-    addrSearchBtn.addEventListener("click", () => {
-        curPage = 1;
-        keyword = addrSearchInput.value;
-        searchType = "ADDR";
-        searchByAddress();
-    });
-
-    function getCurrentCord () {
-        origin_lng = map.getCenter().getLng();
-        origin_lat = map.getCenter().getLat();
-    }
-
-
-    function resetAddress() {
-        nameInput.value = "";
-        addrInput.value = "";
-        contactInput.value = "";
-        lngInput.value = "";
-        latInput.value = "";
-        detailAddrInput.value = "";
-    }
-
-    function pagination(total_num) {
-        paginationComp.innerHTML = "";
-
-        totalPage = Math.ceil(total_num / (reqSize * 1.0));
-        console.log("토탈페이지 ㅣ " + totalPage);
-        curPage = curPage || 1;
-
-        console.log(totalPage)
-        for (let i = 1; i <= totalPage; i++) {
-            const radio = document.createElement("input");
-            radio.classList.add("btn-check");
-            radio.name = "pageOption";
-            radio.id = "option" + i;
-            radio.autocomplete = false;
-            radio.value = i;
-
-            const labelForRadio = document.createElement("label");
-            labelForRadio.classList.add("btn");
-            labelForRadio.htmlFor = "option" + i;
-            labelForRadio.innerHTML = i;
-
-            if (i === curPage) {
-                radio.classList.add("selected");
-                radio.defaultChecked = true;
-            }
-
-            radio.addEventListener("click", () => {
-                switch (searchType) {
-                    case "KEYWORD" :
-                        curPage = radio.value;
-                        searchByKeyword();
-                        break;
-                    case "ADDR" :
-                        curPage = radio.value;
-                        searchByAddress();
-                        break;
-                }
-            })
-
-            paginationComp.append(radio);
-            paginationComp.append(labelForRadio);
-        }
-
-    }
-</script>
+<script src="/js/admin/variablesToCreateLocation.js"></script>
+<script src="/js/admin/configMap.js"></script>
+<script src="/js/admin/searchLocation.js"></script>
+<script src="/js/admin/workingTime.js"></script>
+<script src="/js/admin/submitInfoToRegisterRestaurant.js"></script>
 </body>
 </html>

@@ -1,43 +1,38 @@
-package com.itwill.matzip.entity;
+package com.itwill.matzip.dto;
 
 import com.itwill.matzip.domain.Restaurant;
-import jakarta.persistence.Basic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RestaurantToCreateEntity {
-    @Basic(optional = false)
-    String name;
 
-    @Basic(optional = false)
+    String placeName;
+
     String address;
 
-    String detail_address;
+    String detailAddress;
 
-    @NaturalId
-    @Basic(optional = false)
     String contact;
 
-    @Basic(optional = false)
-    Double lon;
+    Double lng;
 
-    @Basic(optional = false)
     Double lat;
+
+    BusinessTimePerWeek businessTime;
 
     public Restaurant toEntity () {
         return Restaurant.builder()
-                .name(name)
+                .placeName(placeName)
                 .address(address)
-                .detail_address(detail_address)
+                .detailAddress(detailAddress)
                 .contact(contact)
-                .lon(lon)
+                .lng(lng)
                 .lat(lat)
                 .build();
     }

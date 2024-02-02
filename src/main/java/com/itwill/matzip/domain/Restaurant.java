@@ -14,35 +14,31 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Restaurant {
+public class Restaurant extends BaseTimeEntity {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Basic(optional = false)
-    private String name;
+    private String placeName;
 
     @Basic(optional = false)
     private String address;
 
-    @Basic(optional = true)
-    private String detail_address;
+    private String detailAddress;
 
     @NaturalId
     @Basic(optional = false)
     private String contact;
 
     @Basic(optional = false)
-    private Double lon;
+    private Double lng;
 
     @Basic(optional = false)
     private Double lat;
 
-    @CreatedDate // -> Entity 생성 시간을 저장하는 필드
-    @Column(updatable = false)
-    private LocalDate created_time;
-
-    @LastModifiedDate
-    private LocalDate modified_time;
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private RestaurantStatus status = RestaurantStatus.WAIT;
 }

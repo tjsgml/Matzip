@@ -36,6 +36,11 @@ body {
     }
 }
 
+#map{
+    width:800px;
+    height:600px;
+}
+
 #v-pills-tab {
     position: fixed;
     left: 0;

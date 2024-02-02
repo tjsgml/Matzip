@@ -25,10 +25,26 @@
         <a class="mz-nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"
            type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
         <a class="mz-nav-link active" id="v-pills-disabled-tab" data-bs-toggle="pill" data-bs-target="#v-pills-disabled"
-           type="button" role="tab" aria-controls="v-pills-disabled" aria-selected="false" disabled>Disabled</a>
+           type="button" role="tab" aria-controls="v-pills-disabled" aria-selected="false">Disabled</a>
         <a class="mz-nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages"
            type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</a>
         <a class="mz-nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings"
            type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</a>
+    </div>
+</div>
+
+<div class="business-time my-4" th:fragment="businessTimeInput(day, dayValue)">
+    <h6 th:text="${day}"></h6>
+    <div>
+        <input type="hidden" id="day-value" th:value="${dayValue}">
+        <input id="input-start-hour" type="number" class="time" min="0" max="23">
+        <label for="input-start-hour">시 </label>
+        <input id="input-start-minute" type="number" class="time" min="0" max="59">
+        <label for="input-start-minute">분 ~ </label>
+        <input id="input-end-hour" type="number" class="time" min="0" max="23">
+        <label for="input-end-hour">시 </label>
+        <input id="input-end-minute" type="number" class="time" min="0" max="59">
+        <label for="input-end-minute">분</label>
+        <span class="fs-6 mx-4"><label for="is-holiday">휴일인가요?</label><input id="is-holiday" class="mx-2" type="checkbox"></span>
     </div>
 </div>
