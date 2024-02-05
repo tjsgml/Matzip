@@ -1,5 +1,6 @@
 package com.itwill.matzip.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.itwill.matzip.domain.enums.BusinessDay;
@@ -15,7 +16,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -45,17 +45,17 @@ public class BusinessHour {
     @JoinColumn(name = "RESTAURNT_FK")
     private Restaurant restaurant;
 	
+	
 	@ToString.Exclude
-	@OneToMany(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private Set<BusinessDay> days;
+    @Builder.Default
+    private Set<BusinessDay> days = new HashSet<>();
 	
 	private Boolean isHoliday;
 	
 	private String openTime;
 	
 	private String closeTime;
-	
-	
-
 }
+
