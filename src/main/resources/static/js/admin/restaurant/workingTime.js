@@ -3,7 +3,7 @@ function getBusinessTime() {
     const businessTime = {};
 
     businessDiv.forEach(el => {
-        const dayValue = (el.querySelector("input#day-value").value.toLowerCase());
+        const dayValue = (el.querySelector("input#day-value").value);
         const isHoliday = el.querySelector("input#is-holiday").checked;
         const startHour = el.querySelector("input#input-start-hour").value;
         const startMinute = el.querySelector("input#input-start-minute").value;
@@ -18,7 +18,8 @@ function getBusinessTime() {
                 startHour,
                 startMinute,
                 endHour,
-                endMinute
+                endMinute,
+                day: dayValue
             }
         }
     })

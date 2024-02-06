@@ -28,8 +28,8 @@ function addMenuToMenuList() {
     }
 
     const menu = {
-        name : menuInput.value.trim(),
-        price : Number.parseInt(priceInput.value.trim())
+        name: menuInput.value.trim(),
+        price: Number.parseInt(priceInput.value.trim())
     };
 
     menusToCreate.push(menu);
@@ -53,7 +53,7 @@ function addMenuToMenuList() {
 function checkMenuListEmpty(comp) {
     console.log(comp);
 
-    const checkDouble = confirm("메뉴를 정말 삭제하시겠습니까?");
+    const checkDouble = confirm("메뉴를 삭제하시겠습니까?");
     if (!checkDouble) {
         return;
     }
@@ -102,13 +102,23 @@ submitBtn.addEventListener("click", async () => {
     }
 
     const result = await axios.post("./menu", {
-        menus : menusToCreate
+        menus: menusToCreate
     }, {
         headers: {
-            "Content-Type" : "application/json"
+            "Content-Type": "application/json"
         }
     });
 
-    console.log(result);
+    console.log("result=", result)
+    console.log("dataToDelete=", dataToDelete)
 
+    let query = "";
+
+    dataToDelete.forEach(el => {
+        query += (query === "") ? ("menus=" + el) : ("&menus=" + el);
+    })
+
+
+    const resp = await axios.delete("../menu?" + query);
+    console.log("resp=", resp)
 })

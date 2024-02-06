@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,11 +22,11 @@ public class RestaurantToCreateEntity {
 
     String contact;
 
-    Double lng;
+    Double lon;
 
     Double lat;
 
-    BusinessTimePerWeek businessTime;
+    Map<String, BusinessTime> businessTimes;
 
     public Restaurant toEntity () {
         return Restaurant.builder()
@@ -32,7 +34,7 @@ public class RestaurantToCreateEntity {
                 .address(address)
                 .detailAddress(detailAddress)
                 .contact(contact)
-                .lon(lng)
+                .lon(lon)
                 .lat(lat)
                 .build();
     }

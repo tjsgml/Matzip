@@ -97,9 +97,11 @@
                 <div class="card card-body bg-light mt-4" style="height: 90%; padding-left: 20px;padding-bottom: 20px">
                     <div style="display: flex; justify-content: space-between;">
                         <div class="mt-3"><h6><span class="">Step 2.</span> 메뉴 추가하기</h6></div>
-                        <div class="m-3"><button class="btn btn-sm" id="prevBtn">되돌리기</button></div>
+                        <div class="m-3">
+                            <button class="btn btn-sm" id="prevBtn">되돌리기</button>
+                        </div>
                     </div>
-                    <div th:if="${!#lists.isEmpty(restaurant.menus)}" class="row fw-semibold text-center"
+                    <div th:if="${#lists.isEmpty(restaurant.menus)}" class="row fw-semibold text-center"
                          style="font-size: 20px; overflow: scroll;" id="menu-list-container">
                         <div id="empty-menu-list" class="col my-5">
                             <p style="font-size: 50px">📋️</p>
@@ -109,7 +111,7 @@
                              style="display: grid; grid-template-columns: repeat(2, 1fr);">
                         </div>
                     </div>
-                    <div th:if="${#lists.isEmpty(restaurant.menus)}" class="row fw-semibold text-center"
+                    <div th:if="${!#lists.isEmpty(restaurant.menus)}" class="row fw-semibold text-center"
                          style="font-size: 20px; overflow: scroll;" id="menu-list-container">
                         <div class="col my-2">
                             <div id="empty-menu-list" class="col my-5 d-none">
@@ -117,44 +119,12 @@
                                 <div class="display-6 fw-medium">등록된 메뉴가 없습니다.</div>
                             </div>
                             <div id="menu-list" style="display: grid; grid-template-columns: repeat(2, 1fr);">
-                                <div th:each="menu : ${restaurant.menus}" th:attrappend="${'data-id='+menu.id}"
-                                     class="menu-badge">
-                                    <div class="menu-name" th:text="${menu.name}">바지락 칼제비</div>
-                                    <div class="price" style="font-size:medium" th:text="${menu.price}">9000원</div>
-                                </div>
-                                <div class="menu-badge" data-id="1">
-                                    <div class="menu-name">바지락 칼제비</div>
-                                    <div class="price" style="font-size:medium">9000원
-                                        <button class="btn btn-remove-menu" style="height: 30px">x
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="menu-badge" data-id="1">
-                                    <div class="menu-name">바지락 칼제비</div>
-                                    <div class="price" style="font-size:medium">9000원
-                                        <button class="btn btn-remove-menu" style="height: 30px">x
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="menu-badge" data-id="1">
-                                    <div class="menu-name">바지락 칼제비</div>
-                                    <div class="price" style="font-size:medium">9000원
-                                        <button class="btn btn-remove-menu" style="height: 30px">x
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="menu-badge" data-id="1">
-                                    <div class="menu-name">바지락 칼제비</div>
-                                    <div class="price" style="font-size:medium">9000원
-                                        <button class="btn btn-remove-menu" style="height: 30px">x
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="menu-badge" data-id="1">
-                                    <div class="menu-name">바지락 칼제비</div>
-                                    <div class="price" style="font-size:medium">9000원
-                                        <button class="btn btn-remove-menu" style="height: 30px">x
-                                        </button>
+                                <div th:each="menu : ${restaurant.menus}"
+                                     class="menu-badge" th:attr="data-id=${menu.id}">
+                                    <div class="menu-name"><span class="menu" th:text="${menu.name}"></span></div>
+                                    <div class="price"><span id="price-value"
+                                                             th:text="${menu.price}"></span><span>원</span>
+                                        <button class="btn btn-remove-menu" style="height: 30px;">x</button>
                                     </div>
                                 </div>
                             </div>
@@ -187,7 +157,7 @@
 </script>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="/js/admin/restaurant/addMenu.js"></script>
+<script src="/js/admin/restaurant/updateMenu.js"></script>
 </body>
 
 </html>

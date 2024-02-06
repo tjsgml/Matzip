@@ -7,34 +7,34 @@ async function submitRestaurantInfo() {
     const address = addrInput.value;
     const detailAddress = detailAddrInput.value;
     const contact = contactInput.value;
-    const lng = lngInput.value;
+    const lon = lngInput.value;
     const lat = latInput.value;
 
     console.log(placeName + " placeName")
     console.log(address + " address")
     console.log(detailAddress + " detailAddress")
     console.log(contact + " contact")
-    console.log(lng + " lng")
+    console.log(lon + " lon")
     console.log(lat + " lat")
 
     if (placeName.trim() === ''
         || address.trim() === ''
-        || lng.trim() === ''
+        || lon.trim() === ''
         || lat.trim() === ''
     ) {
         alert("지도에서 위치를 선택해주세요.")
         return;
     }
 
-    const businessTime = getBusinessTime();
+    const businessTimes = getBusinessTime();
 
     const data = {
         placeName,
         address,
         detailAddress,
         contact,
-        lng, lat,
-        businessTime
+        lon, lat,
+        businessTimes
     }
 
     console.log("data = {}" , data);

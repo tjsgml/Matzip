@@ -1,0 +1,7 @@
+package com.itwill.matzip.repository;
+
+import com.itwill.matzip.domain.BusinessHour;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface BusinessHourRepository extends JpaRepository<BusinessHour, Integer> {
+}

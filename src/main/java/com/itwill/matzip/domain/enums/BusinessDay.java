@@ -3,10 +3,9 @@ package com.itwill.matzip.domain.enums;
 public enum BusinessDay {
 	MON,
 	TUE,
-	WEN,
+	WED,
 	THU,
 	FRI,
 	SAT,
-	SUN
-
+	SUN;
 }
