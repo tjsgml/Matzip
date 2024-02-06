@@ -1,13 +1,18 @@
 package com.itwill.matzip.controller;
 
 import com.itwill.matzip.domain.Restaurant;
+import com.itwill.matzip.dto.MenuToCreate;
+import com.itwill.matzip.dto.MenusToCreate;
 import com.itwill.matzip.dto.RestaurantToCreateEntity;
 import com.itwill.matzip.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -24,17 +29,33 @@ public class AdminController {
 
     @GetMapping("/matzip/restaurant")
     public String showPageToAddMatzip() {
-        return "admin/create-matzip";
+        return "/admin/create-matzip";
+    }
+
+    @GetMapping("/matzip/restaurant/{restaurantId}/menu")
+    public String showPageToAddMenu(@PathVariable Long restaurantId, Model model) {
+        log.info("restaurantId = {}", restaurantId);
+        Restaurant restaurant = adminService.getRestaurant(restaurantId);
+        model.addAttribute("restaurant", restaurant);
+        return "/admin/add-menu";
     }
 
     @ResponseBody
     @PostMapping("/matzip/restaurant")
     public ResponseEntity<Long> addMatzip(@RequestBody RestaurantToCreateEntity restaurant) {
-        log.info("addMatzip(restaurant : {})" ,restaurant);
+        log.info("addMatzip(restaurant : {})", restaurant);
 
         Restaurant restaurantCreated = adminService.addMatzip(restaurant);
 
         log.info("restaurantCreated={}", restaurantCreated);
         return ResponseEntity.ok(restaurantCreated.getId());
     }
+
+    @ResponseBody
+    @PostMapping("/matzip/restaurant/{restaurantId}/menu")
+    public ResponseEntity<String> addMenuToRestaurant(@RequestBody MenusToCreate menus, @PathVariable Integer restaurantId){
+
+        return ResponseEntity.ok("Good");
+    }
+
 }

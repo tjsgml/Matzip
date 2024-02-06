@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<script src="/js/admin/searchLocation.js"></script>
+<script src="/js/admin/restaurant/searchLocation.js"></script>
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
-<head th:replace="~{/layout/fragment-common.html::my-header('MAT.ZIP ADMIN')}"></head>
+<head th:replace="~{/layout/fragment-common.html::my-header('MAT.ZIP ADMIN | 맛집 추가')}"></head>
 <link href="/css/admin/admin-common.css" rel="stylesheet">
 <link href="/css/admin/admin-holiday.css" rel="stylesheet">
 <body>
@@ -13,7 +13,7 @@
     <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
     <main>
         <div class="mz-inner-container">
-            <div style="margin: 20px 15px 0 15px;">
+            <div class="mz-main-comp">
                 <h4>장소 추가하기</h4>
                 <div class="my-2">
                     <div class="my-2"
@@ -101,10 +101,10 @@
 </div>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="/js/admin/variablesToCreateLocation.js"></script>
-<script src="/js/admin/configMap.js"></script>
-<script src="/js/admin/searchLocation.js"></script>
-<script src="/js/admin/workingTime.js"></script>
-<script src="/js/admin/submitInfoToRegisterRestaurant.js"></script>
+<script src="/js/admin/restaurant/variablesToCreateLocation.js"></script>
+<script src="/js/admin/restaurant/configMap.js"></script>
+<script src="/js/admin/restaurant/searchLocation.js"></script>
+<script src="/js/admin/restaurant/workingTime.js"></script>
+<script src="/js/admin/restaurant/submitInfoToRegisterRestaurant.js"></script>
 </body>
 </html>

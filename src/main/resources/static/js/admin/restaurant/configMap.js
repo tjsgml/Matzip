@@ -17,8 +17,6 @@ const draggableMarker = new kakao.maps.Marker(
     }
 );
 
-
-
 changeDraggableMarkerPosition(draggableMarker.getPosition());
 
 // 센터 정하는 메서드

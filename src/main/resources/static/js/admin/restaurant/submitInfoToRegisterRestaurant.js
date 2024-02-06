@@ -41,5 +41,5 @@ async function submitRestaurantInfo() {
 
     const {data: result} = await axios.post("./restaurant", data);
 
-    location.href = `./restaurant/${result}/menu/`;
+    location.href = `./restaurant/${result}/menu`;
 }

@@ -83,6 +83,10 @@ body {
     grid-template-columns: 4fr 6fr;
 }
 
+.mz-main-comp{
+    margin: 20px 15px 0 15px;
+}
+
 /*카카오*/
 .overlay_info {
     border-radius: 6px;

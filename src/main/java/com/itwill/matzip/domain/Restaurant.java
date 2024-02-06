@@ -3,10 +3,7 @@ package com.itwill.matzip.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @ToString
@@ -41,4 +38,8 @@ public class Restaurant extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private RestaurantStatus status = RestaurantStatus.WAIT;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Menu> menus;
 }
