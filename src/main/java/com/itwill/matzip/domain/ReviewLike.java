@@ -1,5 +1,6 @@
 package com.itwill.matzip.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,27 +18,26 @@ import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 @ToString
 @EqualsAndHashCode
 @Entity
-public class Menu {
+public class ReviewLike {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "MENU_PK")
+	@Column(name = "REVIEW_LIKE_PK")
 	private Long id;
 	
 	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "RESTAURANT_FK")
-	private Restaurant restaurant;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "REVIEW_FK")
+	private Review review;
 	
-	private String name; // menu name
-	
-	private Long price;
-	
-	@Column(name = "SALES") 
-	private Long sales;
+	@ToString.Exclude
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "MEMBER_FK")
+	private Member member;
 
 }

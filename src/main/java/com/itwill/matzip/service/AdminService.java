@@ -27,7 +27,7 @@ public class AdminService {
     public Restaurant getRestaurant(Long restaurantId) {
         Restaurant restaurant = restaurantDao.findById(restaurantId).orElse(null);
         log.info("restaurant = {}", restaurant);
-        log.info("restaurant.menus = {}", restaurant.getMenus());
+        log.info("restaurant.menus = {}", restaurant);
         return restaurant;
     }
 

@@ -1,45 +1,47 @@
 package com.itwill.matzip.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.NaturalId;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.util.List;
 
-@Getter
-@ToString
-@Entity
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
-public class Restaurant extends BaseTimeEntity {
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
+@Getter
+@ToString(callSuper = true)
+@EqualsAndHashCode
+@Entity
+@Table(name="RESTAURANT")
+public class Restaurant extends BaseTimeEntity{
+	
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "RESTAURANT_PK")
+   private Long id;
+   
+   @Basic(optional = false)
+   private String name;
+   
+   @Basic(optional = false)
+   private String address;
+   
+   private String detailAddress;
+   
+   private String contact;
+   
+   private double lon;
+   
+   private double lat;
 
-    @Basic(optional = false)
-    private String placeName;
+   @OneToMany
+   @JoinColumn(name = "RESTAURANT_FK")
+   private List<Menu> menus;
 
-    @Basic(optional = false)
-    private String address;
-
-    private String detailAddress;
-
-    @NaturalId
-    @Basic(optional = false)
-    private String contact;
-
-    @Basic(optional = false)
-    private Double lng;
-
-    @Basic(optional = false)
-    private Double lat;
-
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private RestaurantStatus status = RestaurantStatus.WAIT;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<Menu> menus;
 }

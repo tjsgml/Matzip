@@ -28,11 +28,11 @@ public class RestaurantToCreateEntity {
 
     public Restaurant toEntity () {
         return Restaurant.builder()
-                .placeName(placeName)
+                .name(placeName)
                 .address(address)
                 .detailAddress(detailAddress)
                 .contact(contact)
-                .lng(lng)
+                .lon(lng)
                 .lat(lat)
                 .build();
     }
