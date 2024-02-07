@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="../css/member-style.css" />
+</head>
+
+<body>
+	<main class="mz-container">
+		<div class="member-container">
+
+			<div class="member-title forgot-title">
+				<a th:href="@{/}"><img src="../img/matzip_logo.png" alt="로고" /></a>
+				<div class="member-title__text">
+					<h2 class="member-title__header">새 비밀번호가</br>성공적으로 변경되었습니다.</h2>
+					<span>아래 버튼을 눌러 다시 한번 로그인 해주세요.</span>
+				</div>
+			</div>
+
+			<div class="forgot-btns">
+				<a th:href="@{/member/login}" id="loginBtn">로그인</a>
+			</div>
+
+		</div>
+	</main>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="../js/member-forgot.js"></script>
+	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

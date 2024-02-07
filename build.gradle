@@ -21,8 +21,7 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    
+dependencies {    
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -52,6 +51,12 @@ dependencies {
     //jasypt-spring-boot-starter---
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
     //-----------------------------
+
+	//oAuth2 client 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	//이메일 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	
 }
 
 tasks.named('test') {
