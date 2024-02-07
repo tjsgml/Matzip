@@ -9,39 +9,37 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.List;
-
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
 @ToString(callSuper = true)
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name="RESTAURANT")
-public class Restaurant extends BaseTimeEntity{
-	
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name = "RESTAURANT_PK")
-   private Long id;
-   
-   @Basic(optional = false)
-   private String name;
-   
-   @Basic(optional = false)
-   private String address;
-   
-   private String detailAddress;
-   
-   private String contact;
-   
-   private double lon;
-   
-   private double lat;
+@Table(name = "RESTAURANT")
+public class Restaurant extends BaseTimeEntity {
 
-   @OneToMany
-   @JoinColumn(name = "RESTAURANT_FK")
-   private List<Menu> menus;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "RESTAURANT_PK")
+    private Long id;
 
+    @Basic(optional = false)
+    private String name;
+
+    @Basic(optional = false)
+    private String address;
+
+    private String detailAddress;
+
+    private String contact;
+
+    private double lon;
+
+    private double lat;
+
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORY_FK")
+    private Category category;
 }
