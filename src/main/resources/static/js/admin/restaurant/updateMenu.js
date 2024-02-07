@@ -100,25 +100,38 @@ submitBtn.addEventListener("click", async () => {
     if (!checkDouble) {
         return;
     }
+    let result = null;
+    if (menusToCreate.length > 0) {
 
-    const result = await axios.post("./menu", {
-        menus: menusToCreate
-    }, {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
+        result = await axios.post("./menu", {
+            menus: menusToCreate
+        }, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
 
-    console.log("result=", result)
-    console.log("dataToDelete=", dataToDelete)
+
+    }
+
+    if (result && result.status !== 201) {
+        return;
+    }
 
     let query = "";
+    let resp = null;
+    if (dataToDelete.length > 0) {
+        dataToDelete.forEach(el => {
+            query += (query === "") ? ("menus=" + el) : ("&menus=" + el);
+        })
 
-    dataToDelete.forEach(el => {
-        query += (query === "") ? ("menus=" + el) : ("&menus=" + el);
-    })
+        resp = await axios.delete("../menu?" + query);
+    }
 
+    if (resp && resp.status !== 204) {
+        return;
+    }
 
-    const resp = await axios.delete("../menu?" + query);
-    console.log("resp=", resp)
+    location.reload();
+    console.dir("result : " + result);
 })

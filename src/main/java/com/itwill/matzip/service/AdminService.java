@@ -66,6 +66,6 @@ public class AdminService {
         });
     }
     public void deleteMenuFromRestaurant (List<Long> menus) {
-
+        menuDao.deleteAllById(menus);
     }
 }

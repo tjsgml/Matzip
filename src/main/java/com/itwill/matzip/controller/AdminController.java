@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @Slf4j
@@ -53,20 +54,23 @@ public class AdminController {
 
     @ResponseBody
     @PostMapping("/matzip/restaurant/{restaurantId}/menu")
-    public ResponseEntity<String> addMenuToRestaurant(@RequestBody MenusToCreate menus, @PathVariable Long restaurantId) {
+    public ResponseEntity<URI> addMenuToRestaurant(@RequestBody MenusToCreate menus, @PathVariable Long restaurantId) {
         menus.setRestaurantId(restaurantId);
 
         adminService.addMenuToRestaurant(menus);
-        return ResponseEntity.ok("Good");
+        URI url = URI.create("./");
+        return ResponseEntity.created(url).build();
     }
 
     @ResponseBody
     @DeleteMapping("/matzip/restaurant/menu")
-    public ResponseEntity<String> deleteMenuToRestaurant(@RequestParam List<Long> menus) {
+    public ResponseEntity<Void> deleteMenuToRestaurant(@RequestParam List<Long> menus) {
 
         log.info("deleteMenuToRestaurant(menus={})", menus);
 
-        return null;
+        adminService.deleteMenuFromRestaurant(menus);
+
+        return ResponseEntity.noContent().build();
     }
 
 
