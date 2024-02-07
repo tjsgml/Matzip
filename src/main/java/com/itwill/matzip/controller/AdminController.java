@@ -2,6 +2,7 @@ package com.itwill.matzip.controller;
 
 import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.Restaurant;
+import com.itwill.matzip.domain.RestaurantStatus;
 import com.itwill.matzip.dto.MenusToCreate;
 import com.itwill.matzip.dto.RestaurantToCreateEntity;
 import com.itwill.matzip.service.AdminService;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Controller
@@ -31,7 +34,7 @@ public class AdminController {
 
     @GetMapping("/matzip/restaurant")
     public String showPageToAddMatzip(Model model) {
-        List<Category>  categories = adminService.getCategories();
+        List<Category> categories = adminService.getCategories();
         model.addAttribute("categories", categories);
         return "admin/create-matzip";
     }
@@ -45,7 +48,14 @@ public class AdminController {
     }
 
     @GetMapping("/matzip/restaurant/all")
-    public String showRestaurantListPage() {
+    public String showRestaurantListPage(Model model) {
+        Map<String, Object> result = adminService.getRestaurantByOptions();
+        model.addAllAttributes(result);
+        model.addAttribute("CLOSURE", RestaurantStatus.CLOSURE);
+        model.addAttribute("OPEN", RestaurantStatus.OPEN);
+        model.addAttribute("WAIT", RestaurantStatus.WAIT);
+
+        log.info("restaurants={}", result.get("restaurants"));
         return "admin/restaurant-list";
     }
 
@@ -78,6 +88,16 @@ public class AdminController {
 
         adminService.deleteMenuFromRestaurant(menus);
 
+        return ResponseEntity.noContent().build();
+    }
+
+    @ResponseBody
+    @PutMapping("/matzip/restaurant/{restaurantId}/{status}")
+    public ResponseEntity<Void> setRestaurantById(
+            @PathVariable Long restaurantId,
+            @PathVariable String status
+    ) {
+        adminService.setStatusRestaurantById(restaurantId, status);
         return ResponseEntity.noContent().build();
     }
 

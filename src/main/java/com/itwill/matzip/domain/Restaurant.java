@@ -40,6 +40,11 @@ public class Restaurant extends BaseTimeEntity {
 
     private double lat;
 
+    @Builder.Default
+    @ToString.Exclude
+    @Enumerated(EnumType.STRING)
+    private RestaurantStatus status = RestaurantStatus.WAIT;
+
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_FK")
