@@ -17,14 +17,14 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CATEGORY_PK")
-    private Long id;
+    private Integer id;
 
     @Basic(optional = false)
     private String name;
 
     @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_PK")
+    @JoinColumn(name = "CATEGORY_FK")
     private Set<Restaurant> restaurants;
 
 }

@@ -1,5 +1,6 @@
 package com.itwill.matzip.dto;
 
+import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.Restaurant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +27,8 @@ public class RestaurantToCreateEntity {
 
     Double lat;
 
+    Integer category;
+
     Map<String, BusinessTime> businessTimes;
 
     public Restaurant toEntity () {
@@ -36,6 +39,9 @@ public class RestaurantToCreateEntity {
                 .contact(contact)
                 .lon(lon)
                 .lat(lat)
+                .category(Category.builder()
+                        .id(category)
+                        .build())
                 .build();
     }
 }

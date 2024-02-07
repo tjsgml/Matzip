@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head th:replace="~{/layout/fragment-common::my-header('MAT.ZIP ADMIN | 레스토랑 리스트')}"></head>
+<link href="/css/admin/admin-common.css" rel="stylesheet">
+<body>
+<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+<div class="mz-admin-container">
+    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <main>
+        <div class="mz-inner-container">
+            <h3 class="page-main-desc">레스토랑 리스트</h3>
+        </div>
+
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">카테고리</th>
+                    <th scope="col">가게명</th>
+                    <th scope="col">위치</th>
+                    <th scope="col">전화번호</th>
+                    <th scope="col">업데이트</th>
+                    <th scope="col">삭제</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="matzip : ${restaurants}">
+                    <th scope="row" th:text="${matzip.category.name}"></th>
+                    <td th:text="${matzip.name}>Larry the Bird</td>
+                    <td>@twitter</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+
+
+</div>
+<script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+</html>

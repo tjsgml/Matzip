@@ -10,6 +10,8 @@ async function submitRestaurantInfo() {
     const lon = lngInput.value;
     const lat = latInput.value;
 
+    const category = categorySelect.value;
+
     console.log(placeName + " placeName")
     console.log(address + " address")
     console.log(detailAddress + " detailAddress")
@@ -34,6 +36,7 @@ async function submitRestaurantInfo() {
         detailAddress,
         contact,
         lon, lat,
+        category,
         businessTimes
     }
 

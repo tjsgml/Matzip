@@ -1,5 +1,6 @@
 package com.itwill.matzip.controller;
 
+import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.dto.MenusToCreate;
 import com.itwill.matzip.dto.RestaurantToCreateEntity;
@@ -29,7 +30,9 @@ public class AdminController {
     }
 
     @GetMapping("/matzip/restaurant")
-    public String showPageToAddMatzip() {
+    public String showPageToAddMatzip(Model model) {
+        List<Category>  categories = adminService.getCategories();
+        model.addAttribute("categories", categories);
         return "admin/create-matzip";
     }
 
@@ -39,6 +42,11 @@ public class AdminController {
         Restaurant restaurant = adminService.getRestaurant(restaurantId);
         model.addAttribute("restaurant", restaurant);
         return "admin/update-menu";
+    }
+
+    @GetMapping("/matzip/restaurant/all")
+    public String showRestaurantListPage() {
+        return "admin/restaurant-list";
     }
 
     @ResponseBody

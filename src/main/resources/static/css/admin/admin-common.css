@@ -86,7 +86,9 @@ body {
 .mz-main-comp{
     margin: 20px 15px 0 15px;
 }
-
+.page-main-desc{
+    margin: 20px 0 10px 20px;
+}
 /*카카오*/
 .overlay_info {
     border-radius: 6px;

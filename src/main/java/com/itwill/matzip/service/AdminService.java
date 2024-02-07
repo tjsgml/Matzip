@@ -1,12 +1,14 @@
 package com.itwill.matzip.service;
 
 import com.itwill.matzip.domain.BusinessHour;
+import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.enums.BusinessDay;
 import com.itwill.matzip.dto.BusinessTime;
 import com.itwill.matzip.dto.MenusToCreate;
 import com.itwill.matzip.dto.RestaurantToCreateEntity;
 import com.itwill.matzip.repository.BusinessHourRepository;
+import com.itwill.matzip.repository.CategoryRepository;
 import com.itwill.matzip.repository.MenuRepository;
 import com.itwill.matzip.repository.RestaurantRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +26,17 @@ public class AdminService {
     RestaurantRepository restaurantDao;
 
     @Autowired
+    CategoryRepository categoryDao;
+
+    @Autowired
     MenuRepository menuDao;
 
     @Autowired
     BusinessHourRepository businessHourDao;
 
+    public List<Category> getCategories() {
+        return categoryDao.findAll();
+    }
 
     public Restaurant addMatzip(RestaurantToCreateEntity restaurantToAdd) {
         Restaurant restaurant = restaurantToAdd.toEntity();
@@ -40,7 +48,7 @@ public class AdminService {
         for (String day : businessTimes.keySet()) {
             log.info("day={}", day);
 
-            if (day == null) {
+            if (businessTimes.get(day) == null) {
                 continue;
             }
 
@@ -65,7 +73,8 @@ public class AdminService {
             menuDao.save(el.toEntity(restaurant));
         });
     }
-    public void deleteMenuFromRestaurant (List<Long> menus) {
+
+    public void deleteMenuFromRestaurant(List<Long> menus) {
         menuDao.deleteAllById(menus);
     }
 }

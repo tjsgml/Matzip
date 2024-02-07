@@ -132,6 +132,7 @@ submitBtn.addEventListener("click", async () => {
         return;
     }
 
+    alert("메뉴판 수정이 완료되었습니다.")
     location.reload();
     console.dir("result : " + result);
 })

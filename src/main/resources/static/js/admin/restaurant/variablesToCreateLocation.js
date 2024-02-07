@@ -25,6 +25,7 @@ const detailAddrInput = document.getElementById("detailAddrInput");
 const contactInput = document.getElementById("contactInput");
 const lngInput = document.getElementById("lngInput");
 const latInput = document.getElementById("latInput");
+const categorySelect = document.querySelector("select#select-category");
 
 const paginationComp = document.getElementById("pagination");
 const selectDistance = document.getElementById("selectDistance");

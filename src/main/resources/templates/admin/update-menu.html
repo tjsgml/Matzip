@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr">
 <head th:replace="~{/layout/fragment-common::my-header('MAT.ZIP ADMIN | 메뉴 추가')}"></head>
 <link href="/css/admin/admin-common.css" rel="stylesheet">
 <style>
@@ -42,7 +42,7 @@
         <div class="mz-inner-container">
             <div class="mz-main-comp px-2">
                 <div class="card card-body p-4 align-middle">
-                    <h4>메뉴 추가하기</h4>
+                    <h4 class="page-main-desc">메뉴 추가하기</h4>
                     <div style="margin: auto">
                         <div>
                             <div class="mb-1">
@@ -76,18 +76,23 @@
                         <div style="display: grid; grid-template-columns: 2fr 1fr">
                             <div id="map" style="width: 550px; height: 200px; margin: 7px"></div>
                             <div class="vertical-align-container">
-                                <div style="position: relative;top: 15%;">
+                                <div style="position: relative;top: 5%;">
+                                    <div>
+                                        <div class="fs-6 fw-bold">카테고리</div>
+                                        <div class="fs-6" th:text="${restaurant.category.name}"></div>
+                                    </div>
                                     <div>
                                         <div class="fs-6 fw-bold">가게 이름</div>
-                                        <div class="fs-6">노랑통닭 철산점</div>
+                                        <div class="fs-6"  th:text="${restaurant.name}"></div>
                                     </div>
                                     <div>
                                         <div class="fs-6 fw-bold">주소</div>
-                                        <div class="fs-6">광명시 철산동 105번지 광복현대아파트</div>
+                                        <div class="fs-6" th:text="${restaurant.address + restaurant.detailAddress}"></div>
                                     </div>
                                     <div>
                                         <div class="fs-6 fw-bold">연락처</div>
-                                        <div class="fs-6">01-10930-1939</div>
+                                        <div class="fs-6" th:if="${restaurant.contact}" th:text="${restaurant.contact}"></div>
+                                        <div class="fs-6 text-secondary" th:if="${#strings.isEmpty(restaurant.contact)}" >등록된 전화번호가 없습니다.</div>
                                     </div>
                                 </div>
                             </div>
@@ -104,6 +109,7 @@
                     <div th:if="${#lists.isEmpty(restaurant.menus)}" class="row fw-semibold text-center"
                          style="font-size: 20px; overflow: scroll;" id="menu-list-container">
                         <div id="empty-menu-list" class="col my-5">
+                            dddd
                             <p style="font-size: 50px">📋️</p>
                             <div class="display-6 fw-medium">등록된 메뉴가 없습니다.</div>
                         </div>

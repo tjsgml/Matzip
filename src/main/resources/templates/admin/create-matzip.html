@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr">
 <script src="/js/admin/restaurant/searchLocation.js"></script>
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
@@ -14,7 +14,7 @@
     <main>
         <div class="mz-inner-container">
             <div class="mz-main-comp">
-                <h4>장소 추가하기</h4>
+                <h4 class="page-main-desc">장소 추가하기</h4>
                 <div class="my-2">
                     <div class="my-2"
                          style="border: 1px #1B365C solid; padding : 20px; border-radius: 30px; background-color: #F2F5F5">
@@ -34,6 +34,13 @@
                                 <button id="keywordSearchBtn" class="btn input-group-text">검색</button>
                             </div>
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label mt-3" for="select-category">카테고리 선택</label>
+                        <select id="select-category" class="form-select">
+                        <option th:each="category : ${categories}" th:value="${category.id}"
+                                th:text="${category.name}"></option>
+                    </select>
                     </div>
                     <div class="mb-3">
                         <label class="mb-1" for="nameInput">가게명</label>
