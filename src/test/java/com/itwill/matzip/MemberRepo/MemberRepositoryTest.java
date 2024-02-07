@@ -1,7 +1,5 @@
 package com.itwill.matzip.MemberRepo;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.opaqueToken;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.itwill.matzip.domain.Gender;
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.MemberRole;
+import com.itwill.matzip.dto.MemberUpdateRequestDto;
 import com.itwill.matzip.repository.MemberRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -63,4 +61,24 @@ public class MemberRepositoryTest {
 		log.info("{}, {}", m.get(), m.get().getRoles());
 	}
 	
+	//카카오 로그인 사용자 정보 업데이트
+	//@Test
+	public void updateSocialMember() {
+		Member entity = memberDao.findBykakaoClientId("11111").orElseThrow();
+		
+		MemberUpdateRequestDto dto = MemberUpdateRequestDto.builder()
+																				.email("aa@aa")
+																				.gender(Gender.F)
+																				.birth(LocalDate.of(1993, 7, 20))
+																				.nickname("aa")
+																				.build();
+
+		entity.socialMemUpdate(dto.toEntity());
+		
+		entity.clearRoles();
+		entity.addRole(MemberRole.USER);
+		
+		memberDao.save(entity);
+		
+	}
 }

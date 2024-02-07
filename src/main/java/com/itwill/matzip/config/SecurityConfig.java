@@ -2,7 +2,6 @@ package com.itwill.matzip.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,6 +28,9 @@ public class SecurityConfig {
 		
 		//로그인
 		http.formLogin((login) -> login.loginPage("/member/login"));
+		//소셜 로그인
+		http.oauth2Login((login)->login.loginPage("/member/login")
+																	.successHandler(new CustomLoginSuccessHandler()));
 		
 		//로그아웃
 		http.logout((logout) -> logout.logoutSuccessUrl("/"));

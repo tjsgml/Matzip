@@ -1,43 +1,53 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-<main class="mz-container">
-	<form method="post">
-		<div>
-			<input id="username" name="username" type="text" required autofocus placeholder="Id"/>
-			<div id="username-check"></div>
-		</div>
-		<div>
-			<input id="password" name="password" type="password" required placeholder="Password" />
-			<div id="password-check"></div>
-		</div>
-		<div>			
-			<input id="email" name="email" type="email" required placeholder="email" />
-			<div id="email-check"></div>
-		</div>
-		<div>
-			<input id="nickname" name="nickname" type="text" required placeholder="nickname" />
-			<div id="nickname-check"></div>
-		</div>
-		<div>
-			<input name="birth" type="date" required />
-			<select name="gender">
-				<option value="M">남</option>
-				<option value="F">여</option>
-			</select>			
-		</div>
-		<div>
-			<input id="btnSubmit" type="submit" value="회원가입" disabled/>			
-		</div>
-	</form>
-</main>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="../js/member-signup.js" ></script>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="../css/member-style.css" />
+</head>
+
+<body>
+	<main class="mz-container">
+		<div class="member-container">
+			<div  class="member-title">
+				<a th:href="@{/}"><img src="../img/matzip_logo.png" alt="로고" /></a>
+			</div>
+			<form method="post" class="member-form signup-form">
+				<div>
+					<input id="username" name="username" type="text" required autofocus placeholder="아이디" />
+					<div id="username-check"></div>
+				</div>
+				<div>
+					<input id="password" name="password" type="password" required placeholder="비밀번호" />
+					<div id="password-check"></div>
+				</div>
+				<div>
+					<input id="email" name="email" type="email" required placeholder="이메일" />
+					<div id="email-check"></div>
+				</div>
+				<div>
+					<input id="nickname" name="nickname" type="text" required placeholder="닉네임" />
+					<div id="nickname-check"></div>
+				</div>
+				<div>
+					<input name="birth" type="date" required />
+				</div>
+
+				<div class="select">
+					<input type="radio" id="gender_m" name="gender" value="M"><label for="gender_m">남자</label>
+					<input type="radio" id="gender_f" name="gender" value="F"><label for="gender_f">여자</label>
+				</div>
+				<div>
+					<input id="btnSubmit" type="submit" value="회원가입" disabled />
+				</div>
+			</form>
+		</div>
+	</main>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="../js/member-signup.js"></script>
 
 </body>
+
 </html>

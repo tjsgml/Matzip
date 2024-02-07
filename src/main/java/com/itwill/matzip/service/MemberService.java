@@ -14,6 +14,8 @@ import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MemberSignupRequestDto;
 import com.itwill.matzip.repository.MemberRepository;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,7 +61,6 @@ public class MemberService implements UserDetailsService{
 		}else {
 			return "N";
 		}
-		
 	}
 
 	public String checkNickname(String nickname) {
@@ -74,15 +75,27 @@ public class MemberService implements UserDetailsService{
 		}
 	}
 
-	public String checkEmail(String email) {
+	public Member checkEmail(String email) {
 		log.info("checkEmail(email = {})", email);
 		
 		Member m = memberDao.findByEmail(email);
 
-		if(m != null) {
-			return "Y";
-		}else {
-			return "N";
-		}
+		return m;
+	}
+
+	//이메일 인증키와 username이 맞는지 비교
+	public boolean authKey(String key, String username) {
+		boolean result = passwordEncoder.matches(username, key);
+		
+		return result;
+	}
+
+	
+	@Transactional
+	public void updatePwd(String username, String pwd) {
+		log.info("updatePwd(username : {}, pwd : {}", username, pwd);
+		
+		Member entity =memberDao.findByUsername(username).orElseThrow();
+		entity.pwdUpdate(passwordEncoder.encode(pwd));
 	}
 }
