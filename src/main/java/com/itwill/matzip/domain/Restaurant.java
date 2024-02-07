@@ -1,12 +1,6 @@
 package com.itwill.matzip.domain;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +14,7 @@ import lombok.ToString;
 @Builder
 @Getter
 @ToString(callSuper = true)
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name="RESTAURANT")
 public class Restaurant extends BaseTimeEntity{
@@ -36,7 +30,7 @@ public class Restaurant extends BaseTimeEntity{
    @Basic(optional = false)
    private String address;
    
-   private String detailAddress;
+   private String detail_address;
    
    private String contact;
    
@@ -44,4 +38,8 @@ public class Restaurant extends BaseTimeEntity{
    
    private double lat;
 
+   @ToString.Exclude
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "CATEGORY_FK")
+   private Category category;
 }

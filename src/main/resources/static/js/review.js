@@ -30,3 +30,5 @@ function executeRating(stars){
 } // end executeRating
 
 executeRating(ratingStars);
+
+

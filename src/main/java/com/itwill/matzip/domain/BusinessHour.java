@@ -1,5 +1,7 @@
 package com.itwill.matzip.domain;
 
+import java.util.HashSet;
+import java.util.Set;
 
 import com.itwill.matzip.domain.enums.BusinessDay;
 
@@ -45,8 +47,10 @@ public class BusinessHour {
 	
 	
 	@ToString.Exclude
+    @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
-    private BusinessDay days;
+    @Builder.Default
+    private Set<BusinessDay> days = new HashSet<>();
 	
 	private Boolean isHoliday;
 	
@@ -54,4 +58,3 @@ public class BusinessHour {
 	
 	private String closeTime;
 }
-
