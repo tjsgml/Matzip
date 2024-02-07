@@ -47,7 +47,7 @@ public class BusinessHour {
 	
 	
 	@ToString.Exclude
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private Set<BusinessDay> days = new HashSet<>();
