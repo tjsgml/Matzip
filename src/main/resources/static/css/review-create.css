@@ -1,0 +1,17 @@
+
+.text-center-title {
+    text-align: center;
+}
+
+
+.rating {
+    width: 180px;
+ }
+ 
+ .rating__star {
+    cursor: pointer;
+    color: #b3da18b2;
+ }
+ 
+
+    

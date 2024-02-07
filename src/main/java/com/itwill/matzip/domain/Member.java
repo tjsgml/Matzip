@@ -66,7 +66,7 @@ public class Member {
    
    @Builder.Default
    @ToString.Exclude
-   @ElementCollection(fetch = FetchType.EAGER)
+   @ElementCollection(fetch = FetchType.LAZY)
    @Enumerated(EnumType.STRING)
    private Set<MemberRole> roles = new HashSet<>(); 
    

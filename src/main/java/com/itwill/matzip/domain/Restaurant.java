@@ -36,7 +36,7 @@ public class Restaurant extends BaseTimeEntity{
    @Basic(optional = false)
    private String address;
    
-   private String detail_address;
+   private String detailAddress;
    
    private String contact;
    
