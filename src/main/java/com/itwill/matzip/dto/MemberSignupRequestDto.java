@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.itwill.matzip.domain.Gender;
 import com.itwill.matzip.domain.Member;
+import com.itwill.matzip.domain.enums.Gender;
 
 import lombok.Data;
 

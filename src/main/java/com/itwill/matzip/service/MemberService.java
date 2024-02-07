@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.itwill.matzip.domain.Member;
-import com.itwill.matzip.domain.MemberRole;
+import com.itwill.matzip.domain.enums.MemberRole;
 import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MemberSignupRequestDto;
 import com.itwill.matzip.repository.MemberRepository;

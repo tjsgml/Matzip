@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.itwill.matzip.domain.Gender;
 import com.itwill.matzip.domain.Member;
-import com.itwill.matzip.domain.MemberRole;
+import com.itwill.matzip.domain.enums.Gender;
+import com.itwill.matzip.domain.enums.MemberRole;
 import com.itwill.matzip.dto.MemberUpdateRequestDto;
 import com.itwill.matzip.repository.MemberRepository;
 

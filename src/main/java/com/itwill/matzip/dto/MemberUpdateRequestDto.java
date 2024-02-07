@@ -2,8 +2,8 @@ package com.itwill.matzip.dto;
 
 import java.time.LocalDate;
 
-import com.itwill.matzip.domain.Gender;
 import com.itwill.matzip.domain.Member;
+import com.itwill.matzip.domain.enums.Gender;
 
 import lombok.*;
 

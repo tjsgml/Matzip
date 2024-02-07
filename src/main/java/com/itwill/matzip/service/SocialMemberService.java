@@ -21,7 +21,7 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Service;
 
 import com.itwill.matzip.domain.Member;
-import com.itwill.matzip.domain.MemberRole;
+import com.itwill.matzip.domain.enums.MemberRole;
 import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MemberUpdateRequestDto;
 import com.itwill.matzip.repository.MemberRepository;

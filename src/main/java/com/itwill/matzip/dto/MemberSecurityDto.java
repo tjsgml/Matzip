@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.itwill.matzip.domain.Member;
-import com.itwill.matzip.domain.MemberRole;
+import com.itwill.matzip.domain.enums.MemberRole;
 
 import lombok.extern.slf4j.Slf4j;
 
