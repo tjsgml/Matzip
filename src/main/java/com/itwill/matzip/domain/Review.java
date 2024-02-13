@@ -58,7 +58,7 @@ public class Review extends BaseTimeEntity{
 	private Integer serviceScore;
 	
 	@Basic(optional = false)
-	private Integer priveScore;
+	private Integer priceScore;
 	
 	@OneToMany(mappedBy = "review")
 	private List<ReviewImage> reviewImages = new ArrayList<>();

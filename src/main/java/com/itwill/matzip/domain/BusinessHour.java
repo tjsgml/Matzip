@@ -47,10 +47,8 @@ public class BusinessHour {
 	
 	
 	@ToString.Exclude
-    @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private Set<BusinessDay> days = new HashSet<>();
+    private BusinessDay days;
 	
 	private Boolean isHoliday;
 	
