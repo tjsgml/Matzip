@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class HomeController {
 
-	@PreAuthorize("hasRole('USER')")
+	//@PreAuthorize("hasRole('USER')")
 	@GetMapping("/")
 	public String home() {
 		log.info("home()");
