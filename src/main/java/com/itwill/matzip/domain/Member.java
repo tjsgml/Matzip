@@ -67,7 +67,7 @@ public class Member {
 
 	public Member socialMemUpdate(Member dto) {
 		this.email = dto.getEmail();
-		this.nickname = dto.getEmail();
+		this.nickname = dto.getNickname();		/*02.14 수정 - getEmail()로 되어 있었음*/
 		this.birth = dto.getBirth();
 		this.gender = dto.getGender();
 
