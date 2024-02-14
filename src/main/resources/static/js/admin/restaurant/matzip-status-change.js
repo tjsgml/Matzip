@@ -8,6 +8,7 @@ async function setClosureStatusRestaurantById(id) {
     if (continueSet) {
         const resp = await axios.put(`./${id}/closure`);
         console.log(resp)
+        location.reload();
     }
 }
 
@@ -33,7 +34,9 @@ async function deleteRestaurant(id) {
     const continueSet = confirm(`레스토랑 정보를 삭제하시겠습니까?
     ** 되돌릴 수 없습니다.`);
     if (continueSet) {
-        const resp = await axios.delete(`./${id}`);
-        location.reload();
+        const {status} = await axios.delete(`./${id}`);
+        console.log(status);
+
+        if (status === 204) location.reload();
     }
 }

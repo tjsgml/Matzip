@@ -26,7 +26,7 @@ public class BusinessHour {
 	private Long id;
 	
 	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "RESTAURNT_FK")
     private Restaurant restaurant;
 	

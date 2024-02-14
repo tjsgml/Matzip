@@ -15,7 +15,8 @@ public class RestaurantSearchCond {
     @Builder.Default
     private Integer categoryCond = null;
     private RestaurantStatus restaurantStatus;
-    private String keywordCriteria;
+    @Builder.Default
+    private String keywordCriteria = "ALL";
     private String keyword;
     @Builder.Default
     private Integer curPage = 0;

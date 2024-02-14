@@ -51,7 +51,7 @@ public class Restaurant extends BaseTimeEntity {
     private Category category;
 
     @ToString.Exclude
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "RESTAURANT_FK")
     private List<Menu> menus;
 }

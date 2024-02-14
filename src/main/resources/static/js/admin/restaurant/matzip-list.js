@@ -54,18 +54,6 @@ orderRadio.forEach(el => el.addEventListener("change", (e) => {
     changeLocation();
 }));
 
-async function submit() {
-    let query = "";
-
-    for (let key in data) {
-        query += (key + "=");
-        query += (data[key] + "&");
-    }
-
-    const {data: result} = await axios.get(`/admin/matzip/search?${query}`);
-    console.log(result);
-}
-
 document.querySelectorAll("nav#pagination button").forEach(el =>
     el.addEventListener("click", (e) => {
         data.curPage = e.target.getAttribute("cur-page");

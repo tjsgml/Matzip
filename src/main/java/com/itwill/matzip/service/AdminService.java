@@ -111,7 +111,7 @@ public class AdminService {
         Map<String, Object> result = new HashMap<>();
         log.info("getRestaurantByOptionsser(RestaurantSearchCond={})", cond);
         Page<Restaurant> restaurants = restaurantDao.search(cond);
-        log.info("Page<Restaurant> restaurants = restaurantDao.search(cond);= {}", restaurants);
+        log.info("Page<Restaurant> restaurants = restaurantDao.search(cond);= {}", restaurants.getContent());
         result.put("restaurants", restaurants);
 
         List<Category> categories = getCategories();

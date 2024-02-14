@@ -37,10 +37,16 @@ public class RestaurantQuerydslImpl extends QuerydslRepositorySupport implements
             builder.and(restaurant.status.eq(cond.getRestaurantStatus()));
         }
 
-        if (cond.getKeywordCriteria() != null) {
+        if (cond.getKeyword() != null) {
             switch (cond.getKeywordCriteria()) {
-
-                case "ALL" -> {
+                case "NAME" -> {
+                    builder.and(restaurant.name.containsIgnoreCase(cond.getKeyword()));
+                }
+                case "PLACE" -> {
+                    builder.and(builder.or(restaurant.address.containsIgnoreCase(cond.getKeyword()))
+                            .or(restaurant.detailAddress.containsIgnoreCase(cond.getKeyword())));
+                }
+                default -> {
                     builder.and(
                             builder.or(
                                             restaurant.name.containsIgnoreCase(
@@ -53,13 +59,6 @@ public class RestaurantQuerydslImpl extends QuerydslRepositorySupport implements
                                                     cond.getKeyword()))
                     );
                 }
-                case "PLACENAME" -> {
-                    builder.and(restaurant.name.containsIgnoreCase(cond.getKeyword()));
-                }
-                case "PLACE" -> {
-                    builder.and(builder.or(restaurant.address.containsIgnoreCase(cond.getKeyword()))
-                            .or(restaurant.detailAddress.containsIgnoreCase(cond.getKeyword())));
-                }
 
             }
         }
@@ -69,7 +68,7 @@ public class RestaurantQuerydslImpl extends QuerydslRepositorySupport implements
 
         if (cond.getOrder().equals("createdTimeASC")) {
             pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.ASC, "createdTime");
-        } else if(cond.getOrder().equals("nameASC")) {
+        } else if (cond.getOrder().equals("nameASC")) {
             pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.ASC, "name");
         } else {
             pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.DESC, "createdTime");
@@ -77,14 +76,14 @@ public class RestaurantQuerydslImpl extends QuerydslRepositorySupport implements
 
         Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query);
 
-            // 한 페이지에 표시될 데이터(컨텐트)
+        // 한 페이지에 표시될 데이터(컨텐트)
         List<Restaurant> content = query.fetch();
-            // 전체 원소 개수
+        // 전체 원소 개수
         long total = query.fetchCount();
 
-            // Page<T> 타입 객체를 생성
+        // Page<T> 타입 객체를 생성
         Page<Restaurant> page = new PageImpl<>(content, pageable, total);
-        log.info("pageable = {}" , page.getNumber());
+        log.info("pageable = {}", page.getNumber());
 
         return page;
     }

@@ -48,7 +48,7 @@ public class AdminController {
 
     @GetMapping("/matzip/restaurant/all")
     public String showRestaurantListPage(@ModelAttribute RestaurantSearchCond cond, Model model) {
-        log.info("showRestaurantListPage(RestaurantSearchCond cond={})", cond);
+        log.info("showRestaurantListPage(RestaurantSearchCond cond={})", cond.getKeywordCriteria());
 
         Map<String, Object> result = adminService.getRestaurantByOptions(cond);
         model.addAllAttributes(result);
@@ -65,7 +65,7 @@ public class AdminController {
     }
 
     @ResponseBody
-    @DeleteMapping("/matzip/restaurant")
+    @PostMapping("/matzip/restaurant")
     public ResponseEntity<Long> addMatzip(@RequestBody RestaurantToCreateDto restaurant) {
         log.info("addMatzip(restaurant : {})", restaurant);
 
@@ -75,12 +75,12 @@ public class AdminController {
         return ResponseEntity.ok(restaurantCreated.getId());
     }
 
-//    @ResponseBody
-//    @PostMapping("/matzip/restaurant/{restaurantId}")
-//    public ResponseEntity<String> addMatzip(@PathVariable Long restaurantId) {
-//        adminService.deleteRestaurantById(restaurantId);
-//        return ResponseEntity.noContent());
-//    }
+    @ResponseBody
+    @DeleteMapping("/matzip/restaurant/{restaurantId}")
+    public ResponseEntity<Void> addMatzip(@PathVariable Long restaurantId) {
+        adminService.deleteRestaurantById(restaurantId);
+        return ResponseEntity.noContent().build();
+    }
 
     @ResponseBody
     @PostMapping("/matzip/restaurant/{restaurantId}/menu")
@@ -112,6 +112,5 @@ public class AdminController {
         adminService.setStatusRestaurantById(restaurantId, status);
         return ResponseEntity.noContent().build();
     }
-
 
 }

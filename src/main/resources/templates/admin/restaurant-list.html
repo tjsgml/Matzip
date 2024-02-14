@@ -48,11 +48,15 @@
                 </div>
                 <div class="input-group" style="width: 300px">
                     <select id="search-option" class="form-control">
-                        <option value="" selected>전체</option>
-                        <option value="name">가게명</option>
-                        <option value="address">위치</option>
+                        <option th:if="${param.keywordCriteria == 'ALL'}" value="ALL" selected>전체</option>
+                        <option th:if="${param.keywordCriteria != 'ALL'}" value="ALL">전체</option>
+                        <option th:if="${param.keywordCriteria == 'NAME'}" value="NAME">가게명</option>
+                        <option th:if="${param.keywordCriteria != 'NAME'}" value="NAME">가게명</option>
+                        <option  th:if="${param.keywordCriteria == 'ADDRESS'}" value="ADDRESS">위치</option>
+                        <option  th:if="${param.keywordCriteria != 'ADDRESS'}" value="ADDRESS">위치</option>
                     </select>
-                    <input type="text" id="search-keyword" class="form-control" style="display: inline-block"/>
+                    <input th:if="${param.keyword}" th:value="${param.keyword}" type="text" id="search-keyword" class="form-control" style="display: inline-block"/>
+                    <input th:if="!${param.keyword}" type="text" id="search-keyword" class="form-control" style="display: inline-block"/>
                     <button id="submit-btn" class="btn btn-outline-success">검색</button>
                 </div>
                 <div>
