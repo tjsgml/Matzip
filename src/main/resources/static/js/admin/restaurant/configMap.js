@@ -32,11 +32,11 @@ kakao.maps.event.addListener(map, 'center_changed', function () {
 
 kakao.maps.event.addListener(draggableMarker, 'dragend', function () {
     getCurrentCord();
+    setCenter(draggableMarker.getPosition());
     changeDraggableMarkerPosition(draggableMarker.getPosition());
 });
 
 async function changeDraggableMarkerPosition(latLng) {
-    setCenter(latLng.getLat(), latLng.getLng());
     const query = `y=${latLng.getLat()}&x=${latLng.getLng()}&page=${curPage}&size=${reqSize}`;
     const resp = await axios.get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?${query}`, {
         headers: {

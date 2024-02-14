@@ -70,7 +70,7 @@ function checkMenuListEmpty(comp) {
         console.log(`price=${price}`);
 
         menuList.removeChild(comp);
-        menusToCreate = menusToCreate.filter(el => el.name === menuName);
+        menusToCreate = menusToCreate.filter(el => el.name.trim() !== menuName.trim());
     }
 
     if (document.getElementsByClassName("menu-badge").length === 0) {

@@ -83,16 +83,24 @@
                                     </div>
                                     <div>
                                         <div class="fs-6 fw-bold">가게 이름</div>
-                                        <div class="fs-6"  th:text="${restaurant.name}"></div>
+                                        <div class="fs-6" th:text="${restaurant.name}"></div>
                                     </div>
                                     <div>
                                         <div class="fs-6 fw-bold">주소</div>
-                                        <div class="fs-6" th:text="${restaurant.address + restaurant.detailAddress}"></div>
+                                        <div class="fs-6"
+                                             th:text="${restaurant.address + restaurant.detailAddress}"></div>
+                                    </div>
+                                    <div>
+                                        <input type="hidden" id="lat" th:value="${restaurant.lat}">
+                                        <input type="hidden" id="lon" th:value="${restaurant.lon}">
                                     </div>
                                     <div>
                                         <div class="fs-6 fw-bold">연락처</div>
-                                        <div class="fs-6" th:if="${restaurant.contact}" th:text="${restaurant.contact}"></div>
-                                        <div class="fs-6 text-secondary" th:if="${#strings.isEmpty(restaurant.contact)}" >등록된 전화번호가 없습니다.</div>
+                                        <div class="fs-6" th:if="${restaurant.contact}"
+                                             th:text="${restaurant.contact}"></div>
+                                        <div class="fs-6 text-secondary"
+                                             th:if="${#strings.isEmpty(restaurant.contact)}">등록된 전화번호가 없습니다.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +117,6 @@
                     <div th:if="${#lists.isEmpty(restaurant.menus)}" class="row fw-semibold text-center"
                          style="font-size: 20px; overflow: scroll;" id="menu-list-container">
                         <div id="empty-menu-list" class="col my-5">
-                            dddd
                             <p style="font-size: 50px">📋️</p>
                             <div class="display-6 fw-medium">등록된 메뉴가 없습니다.</div>
                         </div>
@@ -150,7 +157,8 @@
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
 <script>
-    const center = new kakao.maps.LatLng(37.514322572335935, 127.06283102249932);
+    console.log(document.getElementById("lat").value)
+    const center = new kakao.maps.LatLng(document.getElementById("lon").value, document.getElementById("lat").value);
     const marker = new kakao.maps.Marker();
     const mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {

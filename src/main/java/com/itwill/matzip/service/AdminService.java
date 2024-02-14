@@ -4,6 +4,7 @@ import com.itwill.matzip.domain.BusinessHour;
 import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.RestaurantStatus;
+import com.itwill.matzip.domain.enums.BusinessDay;
 import com.itwill.matzip.dto.BusinessTimeDto;
 import com.itwill.matzip.dto.MenusToCreateDto;
 import com.itwill.matzip.dto.RestaurantSearchCond;
@@ -17,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -66,6 +65,25 @@ public class AdminService {
         log.info("restaurant = {}", restaurant);
         log.info("restaurant.menus = {}", restaurant.getMenus());
         return restaurant;
+    }
+
+    public Map<String, Object> getRestaurantForDetail(Long restaurantId) {
+        Map<String, Object> result = new HashMap<>();
+        Restaurant restaurant = restaurantDao.findById(restaurantId).orElse(null);
+        result.put("restaurant", restaurant);
+
+        List<BusinessHour> bHours = businessHourDao.findByRestaurant(restaurant);
+        Map<String, BusinessHour> businessHours = new HashMap<>();
+        bHours.forEach(el -> businessHours.put(el.getDays().toString(), el));
+        result.put("businessHours", businessHours);
+
+        List<BusinessDay> dayValue = Arrays.stream(BusinessDay.values()).toList();
+        List<String> days = new ArrayList<>();
+        dayValue.forEach(el -> days.add(el.toString()));
+        days.forEach(System.out::println);
+        result.put("days", days);
+
+        return result;
     }
 
     public void addMenuToRestaurant(MenusToCreateDto menus) {

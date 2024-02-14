@@ -1,6 +1,7 @@
 // placesList
 
 async function searchByKeyword() {
+    console.log("키워드검색입니다.")
     removeAllMarkers();
     keywordInput.value = "";
     addrInput.value = "";
@@ -34,6 +35,7 @@ async function searchByKeyword() {
 }
 
 async function searchByAddress() {
+    console.log("주소검색입니다.")
     removeAllMarkers();
     keywordInput.value = "";
     addrInput.value = "";
@@ -183,7 +185,7 @@ function setMarker(el) {
     kakao.maps.event.addListener(marker, "mouseover", (event) => {
         marker.setZIndex(10);
         infowindow.open(map, marker);
-        setCenter(el.x, el.y);
+        // setCenter(el.x, el.y);
     })
 
     kakao.maps.event.addListener(marker, "mouseout", (event) => {
@@ -215,8 +217,8 @@ function setAddressInfo(locId, infoWindow) {
     removeAllMarkers();
     infoWindow.close();
 
-    console.log("lng : " +lng )
-    console.log("lat : " +lat )
+    console.log("lng : " +lng );
+    console.log("lat : " +lat );
 }
 
 
@@ -247,6 +249,7 @@ function setList(el, marker, infowindow) {
         infowindow.open(map, marker);
         // setCenter(marker.getPosition().getLat(), marker.getPosition().getLng());
     }
+
     const onmouseout = () => {
         listItem.classList.remove("active");
         marker.setZIndex(0);
@@ -260,5 +263,5 @@ function setList(el, marker, infowindow) {
     const selectBtn = document.getElementById("select-" + el.id);
     selectBtn.addEventListener("click", () => {
         setAddressInfo(el.id, infowindow);
-    })
+    });
 }
