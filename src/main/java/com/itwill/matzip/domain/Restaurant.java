@@ -55,3 +55,6 @@ public class Restaurant extends BaseTimeEntity {
     @JoinColumn(name = "RESTAURANT_FK")
     private List<Menu> menus;
 }
+
+
+

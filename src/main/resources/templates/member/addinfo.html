@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="../css/member-style.css" />
+</head>
+
+<body>
+	<main class="mz-container">
+		<div class="member-container">
+			<div class="member-title">
+				<a th:href="@{/}"><img src="../img/matzip_logo.png" alt="로고" /></a>
+			</div>
+			<form th:action="@{/member/addinfo}" method="post" class="member-form signup-form">
+
+				<input id="username" name="username" th:value="${#authentication.name}" style="display:none" />					
+
+				<div>
+					<input id="email" name="email" type="email" required placeholder="email" />
+					<div id="email-check"></div>
+				</div>
+				<div>
+					<input id="nickname" name="nickname" type="text" required placeholder="nickname" />
+					<div id="nickname-check"></div>
+				</div>
+				<div>
+					<input name="birth" type="date" required />
+				<div class="select">
+					<input type="radio" id="gender_m" name="gender" value="M"><label for="gender_m" required>남자</label>
+					<input type="radio" id="gender_f" name="gender" value="F"><label for="gender_f">여자</label>
+				</div>
+				</div>
+				<div>
+					<input id="btnSubmit" type="submit" value="추가 정보 저장" />
+				</div>
+			</form>
+		</div>
+	</main>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="../js/member-addinfo.js" ></script>
+</body>
+
+</html>

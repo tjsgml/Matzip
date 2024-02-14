@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=UTF-8> <meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Insert title here</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" 
+		rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+		<link href="/css/main.css" rel="stylesheet" />
+		<link href="/css/list.css" rel="stylesheet" />
+		<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5"></script>
+		<style>
+			.col-md-4::-webkit-scrollbar{
+				display: none;
+			}
+			#restPost:hover{
+				background-color: azure;
+			}
+			.v26_78:hover {
+			  background-color: #F5F5F5; /* 원하는 배경색으로 변경 */
+			  /* 추가적인 스타일 변경을 원한다면 여기에 추가하세요 */
+			}
+		</style>
+		
+	</head>
+		<body>
+			<div class="container-fluid" >
+				<div class="row" >
+					<!-- 왼쪽 바-->
+					<div class="col-md-4" style="overflow:scroll;  height:100vh; padding: 0;">
+						<!-- 로고 부분-->
+						<div>
+							<h1>로고 부분</h1>
+						</div>
+						<!-- 음식점 태그(검색 기능) -->
+						<div>
+							<span>강남역</span>
+							<span>전체</span>
+							<hr style="margin-bottom: 0;">
+						</div>
+						<!-- 음식점 리스트-->
+						<div id="restList">
+						    <div class="v26_78"> 
+						        <div class="v26_79"> </div>
+						        <span class="v26_81">음식점 이름</span>
+						        <span class="v26_82">주요 메뉴명</span><span class="v26_83">태그들</span>
+						        <div class="v26_89"></div>
+								<span class="v26_90">평점(@@명)</span>
+								<div class="name"></div>
+						    <div class="v26_98"></div>
+						    <span class="v26_99">좋아요수</span>
+						    <span class="v26_101">“@@@@@@@@랜덤으로 뽑은 리뷰 내용@@@@@@@@@@@@..”</span>
+						    <span class="v26_102">21명이 추천했습니다</span>
+						    <span class="v26_103">by. 닉네임</span>
+						    
+						   </div>
+						   <hr>
+						</div>
+				</div><!--End div#col-md-4 -->
+				
+				<!-- 지도 보여줄 부분-->
+				<div class="col-md-8" style="padding: 0;">
+					<div style=" height:100vh" id="map" ></div>
+				</div>
+			</div><!--End div#row -->
+	</body>
+			
+			
+			 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+			<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+			<script src="/js/map.js"></script>
+		</body>
+</html>
