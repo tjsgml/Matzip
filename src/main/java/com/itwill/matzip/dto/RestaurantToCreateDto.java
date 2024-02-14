@@ -13,7 +13,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestaurantToCreateEntity {
+public class RestaurantToCreateDto {
 
     String placeName;
 
@@ -29,7 +29,7 @@ public class RestaurantToCreateEntity {
 
     Integer category;
 
-    Map<String, BusinessTime> businessTimes;
+    Map<String, BusinessTimeDto> businessTimes;
 
     public Restaurant toEntity () {
         return Restaurant.builder()

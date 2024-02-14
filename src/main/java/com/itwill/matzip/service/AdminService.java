@@ -4,16 +4,19 @@ import com.itwill.matzip.domain.BusinessHour;
 import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.RestaurantStatus;
-import com.itwill.matzip.dto.BusinessTime;
-import com.itwill.matzip.dto.MenusToCreate;
-import com.itwill.matzip.dto.RestaurantToCreateEntity;
+import com.itwill.matzip.dto.BusinessTimeDto;
+import com.itwill.matzip.dto.MenusToCreateDto;
+import com.itwill.matzip.dto.RestaurantSearchCond;
+import com.itwill.matzip.dto.RestaurantToCreateDto;
 import com.itwill.matzip.repository.BusinessHourRepository;
 import com.itwill.matzip.repository.CategoryRepository;
 import com.itwill.matzip.repository.MenuRepository;
-import com.itwill.matzip.repository.RestaurantRepository;
+import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,10 +41,10 @@ public class AdminService {
         return categoryDao.findAll();
     }
 
-    public Restaurant addMatzip(RestaurantToCreateEntity restaurantToAdd) {
+    public Restaurant addMatzip(RestaurantToCreateDto restaurantToAdd) {
         Restaurant restaurant = restaurantToAdd.toEntity();
         restaurantDao.save(restaurant);
-        Map<String, BusinessTime> businessTimes = restaurantToAdd.getBusinessTimes();
+        Map<String, BusinessTimeDto> businessTimes = restaurantToAdd.getBusinessTimes();
         log.info("businessTimes11={}", businessTimes);
 
         for (String day : businessTimes.keySet()) {
@@ -65,7 +68,7 @@ public class AdminService {
         return restaurant;
     }
 
-    public void addMenuToRestaurant(MenusToCreate menus) {
+    public void addMenuToRestaurant(MenusToCreateDto menus) {
         Restaurant restaurant = restaurantDao.findById(menus.getRestaurantId()).orElse(null);
         menus.getMenus().forEach(el -> {
             menuDao.save(el.toEntity(restaurant));
@@ -104,14 +107,23 @@ public class AdminService {
         restaurantDao.save(restaurantToUpdate);
     }
 
-    public Map<String, Object> getRestaurantByOptions() {
+    public Map<String, Object> getRestaurantByOptions(RestaurantSearchCond cond) {
         Map<String, Object> result = new HashMap<>();
-        List<Restaurant> restaurants = restaurantDao.findAll();
+        log.info("getRestaurantByOptionsser(RestaurantSearchCond={})", cond);
+        Page<Restaurant> restaurants = restaurantDao.search(cond);
+        log.info("Page<Restaurant> restaurants = restaurantDao.search(cond);= {}", restaurants);
         result.put("restaurants", restaurants);
 
         List<Category> categories = getCategories();
         result.put("categories", categories);
 
+        result.put("category", cond.getCategoryCond() != null ? cond.getCategoryCond() : null);
+        result.put("status", cond.getRestaurantStatus());
+        result.put("order", cond.getOrder());
+
+        result.put("CLOSURE", RestaurantStatus.CLOSURE);
+        result.put("OPEN", RestaurantStatus.OPEN);
+        result.put("WAIT", RestaurantStatus.WAIT);
         log.info("categories={}", categories);
 
         return result;

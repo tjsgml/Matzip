@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuToCreate {
+public class MenuToCreateDto {
     private String name;
     private Long price;
 

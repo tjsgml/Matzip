@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenusToCreate {
+public class MenusToCreateDto {
     Long restaurantId;
-    List<MenuToCreate> menus;
+    List<MenuToCreateDto> menus;
 }
