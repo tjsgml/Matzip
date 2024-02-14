@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="../css/member-style.css" />
+</head>
+
+<body>
+	<main class="mz-container">
+		<div class="member-container">
+			<div class="member-title">
+				<a th:href="@{/}"><img src="../img/matzip_logo.png" alt="로고" /></a>
+			</div>
+
+			<div class="member-main">
+				<form method="post" class="member-form login-form">
+					<input type="text" name="username" required autofocus placeholder="아이디" />
+					<input type="password" name="password" required placeholder="비밀번호" />
+					<div class="login-noti">
+						<span th:if="${param.error}">아이디 혹은 비밀번호가 일치하지 않습니다.</span>
+					</div>
+					<div>
+						<input type="submit" value="로그인" class="login-btn" />
+					</div>
+				</form>
+
+
+				<div class="lineor">
+					<div></div>
+					<div>OR</div>
+					<div></div>
+				</div>
+
+				<!-- 소셜 로그인 -->
+				<a th:href="@{/oauth2/authorization/kakao}" class="social-login"><img src="../img/kakao_logo.png" /></a>
+
+				<div class="login-account">
+					<div>
+						<a th:href="@{/member/signup}">회원가입</a>
+					</div>
+					<div class="login-status">
+						<a th:href="@{/member/forgot}">계정 찾기</a>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</main>
+</body>
+
+</html>

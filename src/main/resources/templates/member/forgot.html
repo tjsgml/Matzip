@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="../css/member-style.css" />
+</head>
+
+<body>
+	<main class="mz-container">
+		<div th:if="${email == null}" class="member-container">
+
+			<div class="member-title forgot-title">
+				<a th:href="@{/}"><img src="../img/matzip_logo.png" alt="로고" /></a>
+				<div class="member-title__text">
+					<h2>계정 찾기</h2>
+					<span>회원 가입시 입력하신 이메일 주소를 입력하시면,</span>
+					<span>해당 이메일로 아이디 및 비밀번호 변경 링크를 보내드립니다.</span>
+				</div>
+			</div>
+
+			<form th:action="@{/member/forgot}" method="post" class="member-form forgot-form">
+				<input id="email" name="email" type="email" required placeholder="이메일" />
+				<div id="email-check"></div>
+			</form>
+
+			<div class="forgot-btns">
+				<button id="btnBack">취소</button>
+				<button id="btnSubmit">계정찾기</button>
+			</div>
+
+			<div class="forgot-noti" th:if="${param.error}">
+				<div>
+					<i class="fa-solid fa-circle-info"></i>
+					<span>계정찾기 실패</span>
+				</div>
+				<span>해당 이메일을 찾을 수 없습니다.</span>
+			</div>
+
+		</div>
+
+		<div th:if="${email != null}" class="member-container">
+
+			<div class="member-title forgot-title">
+				<a th:href="@{/}"><img src="../img/matzip_logo.png" alt="로고" /></a>
+
+				<div class="member-title__text">
+					<div class="member-title__sendmail">
+						<h2 th:text="${email}"></h2>
+						<h3>으로 안내 메일을 발송하였습니다.</h3>
+					</div>
+					<span>해당 이메일을 확인 하시고, 비밀번호 변경이 필요하신 경우</span>
+					<span>해당 이메일을 통해 변경 가능합니다.</span>
+				</div>
+			</div>
+
+			<div class="forgot-btns">
+				<a th:href="@{/member/login}" id="loginBtn">로그인</a>
+			</div>
+
+		</div>
+	</main>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="../js/member-forgot.js"></script>
+	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
