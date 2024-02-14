@@ -3,15 +3,154 @@
     text-align: center;
 }
 
-
-.rating {
-    width: 180px;
- }
- 
- .rating__star {
+.stars {
+    display: inline-block;
+    font-size: 25px;
     cursor: pointer;
-    color: #b3da18b2;
- }
+    
+}
+
+.stars .star {
+    color: grey;
+}
+
+.stars .star:hover,
+.stars .star.active {
+    color: gold;
+}
+
+
+.rating-title{
+    margin: 0%;
+}
+
+.rating-container{
+    margin: 20px;
+}
+
+p {
+    margin: 0%;
+}
+
+textarea {
+    resize: none; 
+    margin: 10px 0; 
+    padding: 10px; 
+    width: calc(100% - 40px); 
+    background-color: #e96464; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+}
+
+p {
+    font-size: 16px; 
+}
+
+/* 파일 입력 컨테이너*/
+.image-upload {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    width: 100px; 
+    height: 100px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* 파일 입력 버튼 (+ 박스 누르면 되게끔)*/
+.image-upload input[type="file"] {
+    position: absolute;
+    font-size: 100px;
+    opacity: 0;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+}
+
+/* 플러스 기호*/
+.image-upload .file:before {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+    color: #555; 
+}
+
+
+/**/
+.image-section {
+    display: flex; 
+    align-items: flex-start; 
+    gap: 20px; 
+}
+
+.image-upload, .image-preview-container {
+    flex: 1;
+    min-width: 150px; 
+    height: 150px; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden; 
+}
+
+.image-preview-container {
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 10px; 
+    overflow-y: auto; /* 세로 스크롤바 */
+    max-height: 210px; /* 최대 높이(4개 이미지 높이 + gap) */
+}
+
+.image-preview-container img {
+    width: 150px;  
+    height: 150px; 
+    object-fit: cover; /* 이미지 비율 유지 */
+}
+
+.image-preview-wrap {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+}
+
+.image-preview-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.delete-image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px;
+}
+
+.tag-list li {
+    display: inline-block;
+    margin: 2px;
+    padding: 5px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
  
 
     
