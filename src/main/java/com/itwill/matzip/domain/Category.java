@@ -24,6 +24,7 @@ public class Category {
 
     @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORY_FK")
     private Set<Restaurant> restaurants;
 
 }

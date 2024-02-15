@@ -76,6 +76,4 @@ public class Review extends BaseTimeEntity{
     private Set<ReviewHashtag> hashtags = new HashSet<>();
 
 	
-	
-
 }
