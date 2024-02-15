@@ -36,10 +36,15 @@ async function submitRestaurantInfo() {
         address,
         detailAddress,
         contact,
-        lon, lat,
+        lon,
+        lat,
         category
     }
 
     console.log("data = {}", data);
 
+    const {data :result} = await axios.patch("../"+restaurantId, data);
+    console.log("result = " + result)
+
+    location.reload();
 }

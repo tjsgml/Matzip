@@ -15,27 +15,32 @@
                  style="border: #B3B8BC 1px solid; padding: 20px;border-radius: 30px; background-color: whitesmoke">
                 <h3>가게 정보</h3>
                 <div class="mb-3">
-                    <label class="mb-1" for="nameInput">가게명</label>
-                    <div class="fs-5" type="text" id="nameInput" th:text="${restaurant.name}"></div>
+                    <label class="mb-1">카테고리</label>
+                    <div class="fs-5" type="text" th:text="${restaurant.name}"></div>
+
                 </div>
                 <div class="mb-3">
-                    <label class="mb-1" for="addrInput">주소</label>
-                    <div class="fs-5" type="text" id="addrInput" th:text="${restaurant.address}"></div>
+                    <label class="mb-1">가게명</label>
+                    <div class="fs-5" type="text" th:text="${restaurant.name}"></div>
                 </div>
                 <div class="mb-3">
-                    <label class="mb-1" for="detailAddrInput">상세주소</label>
+                    <label class="mb-1">주소</label>
+                    <div class="fs-5" type="text" th:text="${restaurant.address}"></div>
+                </div>
+                <div class="mb-3">
+                    <label class="mb-1">상세주소</label>
                     <div th:if="${!#strings.isEmpty(restaurant.detailAddress)}" class="fs-5" type="text"
-                         id="detailAddrInput" th:text="${restaurant.detailAddress}"></div>
+                         th:text="${restaurant.detailAddress}"></div>
                     <div th:if="${#strings.isEmpty(restaurant.detailAddress)}" class="fs-5 text-secondary"
-                         type="text" id="detailAddrInput">상세주소가 없습니다.
+                         type="text">상세주소가 없습니다.
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="mb-1" for="contactInput">전화번호</label>
-                    <div th:if="${!#strings.isEmpty(restaurant.contact)}" class="fs-5" type="text" id="contactInput"
+                    <label class="mb-1">전화번호</label>
+                    <div th:if="${!#strings.isEmpty(restaurant.contact)}" class="fs-5" type="text"
                          th:text="${restaurant.contact}"></div>
                     <div th:if="${#strings.isEmpty(restaurant.contact)}" class="fs-5 text-secondary" type="text"
-                         id="contactInput">등록된 전화번호가 없습니다.
+                    >등록된 전화번호가 없습니다.
                     </div>
                 </div>
                 <div class="my-2"
@@ -62,17 +67,16 @@
                             [[${day}]] : 등록된 일정이 없습니다.
                         </span>
                     </div>
-                    <div class="container card my-5 border-0"
-                         id="emptyCart"
+                    <div class="container card mt-4 border-0"
                          style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);"
                          th:if="${businessHours.isEmpty()}">
-                        <div class="card-body py-5">
+                        <div class="card-body pt-5">
                             <div class="row fw-semibold text-center"
                                  style="font-size: 20px;">
                                 <div class="col my-5">
                                     <p style="font-size: 50px">📅</p>
                                     <div>
-                                       영업시간이 등록되지 않았습니다.
+                                        영업시간이 등록되지 않았습니다.
                                     </div>
                                 </div>
                             </div>
@@ -86,13 +90,28 @@
                     <a th:href="${'./' + restaurantId+ '/menu'}">수정하기</a>
                 </div>
                 <div>
-                    <ul class="list-group">
+                    <ul th:if="${! #lists.isEmpty(restaurant.menus)}" class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center"
                             th:each="menu : ${restaurant.menus}" th:object="${menu}">
                             <span th:text="*{name}"></span>
                             <span class="badge bg-primary rounded-pill" th:text="*{price}"></span>
                         </li>
                     </ul>
+                    <div class="container card mt-4 border-0"
+                         style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);"
+                         th:if="${#lists.isEmpty(restaurant.menus)}">
+                        <div class="card-body py-5">
+                            <div class="row fw-semibold text-center"
+                                 style="font-size: 20px;">
+                                <div class="col my-5">
+                                    <p style="font-size: 50px">🍴</p>
+                                    <div>
+                                        등록된 메뉴가 없습니다.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

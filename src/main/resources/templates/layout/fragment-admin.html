@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-sm bg-dark d-flex"
      style="justify-content:space-between;background-color: #292F3D" th:fragment="mz-top-nav">
     <div class="container">
-        <a class="navbar-brand" href="/admin/">
+        <a class="navbar-brand" href="/admin">
             <img src="/image/admin/navy-bg-admin-logo.png" class="object-fit-cover" style="height: 50px"
                  alt="logo"/>
         </a>
@@ -21,6 +21,7 @@
 <div class="d-flex align-items-start bg-dark" style="height: 100%;" th:fragment="mz-nav">
     <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
         <a class="mz-nav-link" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button"
+           th:href="@{/admin}"
            role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>
         <a class="mz-nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"
            type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>

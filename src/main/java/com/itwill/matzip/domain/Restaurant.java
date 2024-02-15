@@ -1,5 +1,7 @@
 package com.itwill.matzip.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -42,18 +44,50 @@ public class Restaurant extends BaseTimeEntity {
 
     @Builder.Default
     @ToString.Exclude
+
     @Enumerated(EnumType.STRING)
     private RestaurantStatus status = RestaurantStatus.WAIT;
 
-    @ToString.Exclude
+//    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_FK")
+    @JsonInclude
     private Category category;
 
     @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "RESTAURANT_FK")
+    @JsonIgnore
     private List<Menu> menus;
+
+    public void updateName (String name) {
+        this.name = name;
+    }
+
+    public void updateAddress (String address) {
+        this.address = address;
+    }
+    public void updateDetailAddress (String detailAddress) {
+        this.detailAddress = detailAddress;
+    }
+
+    public void updateContact (String contact) {
+        this.contact = contact;
+    }
+
+    public void updateLon (Double lon) {
+        this.lon = lon;
+    }
+
+    public void updateLat (Double lat) {
+        this.lat = lat;
+    }
+
+    public void updateCategory (Category category) {
+        this.category = category;
+    }
+
+
 }
 
 

@@ -1,10 +1,11 @@
-package com.itwill.matzip.web;
+package com.itwill.matzip.web.admin;
 
 import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.dto.MenusToCreateDto;
 import com.itwill.matzip.dto.RestaurantSearchCond;
 import com.itwill.matzip.dto.RestaurantToCreateDto;
+import com.itwill.matzip.dto.RestaurantUpdateDto;
 import com.itwill.matzip.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +20,14 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/admin/matzip")
+public class AdminMatzipController {
 
     @Autowired
     AdminService adminService;
 
-    @GetMapping("/")
-    public String getMatzipToControl() {
-        return "admin/index";
-    }
-
     //    레스토랑 추가 페이지로 이동
-    @GetMapping("/matzip/restaurant")
+    @GetMapping("/restaurant")
     public String showPageToAddMatzip(Model model) {
         List<Category> categories = adminService.getCategories();
         model.addAttribute("categories", categories);
@@ -39,7 +35,7 @@ public class AdminController {
     }
 
     //    레스토랑 메뉴 추가 페이지로 이동
-    @GetMapping("/matzip/restaurant/{restaurantId}/menu")
+    @GetMapping("/restaurant/{restaurantId}/menu")
     public String showPageToAddMenu(@PathVariable Long restaurantId, Model model) {
         log.info("restaurantId = {}", restaurantId);
         Restaurant restaurant = adminService.getRestaurant(restaurantId);
@@ -48,7 +44,7 @@ public class AdminController {
     }
 
     //    레스토랑 관리 리스트
-    @GetMapping("/matzip/restaurant/all")
+    @GetMapping("/restaurant/all")
     public String showRestaurantListPage(@ModelAttribute RestaurantSearchCond cond, Model model) {
         log.info("showRestaurantListPage(RestaurantSearchCond cond={})", cond.getKeywordCriteria());
 
@@ -61,7 +57,7 @@ public class AdminController {
 
     //    현재 사용 X : 조건 검사하여 검색하는 rest API
     @ResponseBody
-    @GetMapping("/matzip/restaurant/search")
+    @GetMapping("/restaurant/search")
     public ResponseEntity<Map<String, Object>> searchRestaurantListPage() {
         Map<String, Object> result = adminService.getRestaurantByOptions(null);
         return ResponseEntity.ok(result);
@@ -69,7 +65,7 @@ public class AdminController {
 
     //    레스토랑 추가
     @ResponseBody
-    @PostMapping("/matzip/restaurant")
+    @PostMapping("/restaurant")
     public ResponseEntity<Long> addMatzip(@RequestBody RestaurantToCreateDto restaurant) {
         log.info("addMatzip(restaurant : {})", restaurant);
 
@@ -81,7 +77,7 @@ public class AdminController {
 
     //    레스토랑 삭제 (폐업 처리된 레스토랑 삭제)
     @ResponseBody
-    @DeleteMapping("/matzip/restaurant/{restaurantId}")
+    @DeleteMapping("/restaurant/{restaurantId}")
     public ResponseEntity<Void> deleteMatzipData(@PathVariable Long restaurantId) {
         adminService.deleteRestaurantById(restaurantId);
         return ResponseEntity.noContent().build();
@@ -89,7 +85,7 @@ public class AdminController {
 
     //    메뉴 등록하는 REST API
     @ResponseBody
-    @PostMapping("/matzip/restaurant/{restaurantId}/menu")
+    @PostMapping("/restaurant/{restaurantId}/menu")
     public ResponseEntity<URI> addMenuToRestaurant(@RequestBody MenusToCreateDto menus, @PathVariable Long restaurantId) {
         menus.setRestaurantId(restaurantId);
 
@@ -100,7 +96,7 @@ public class AdminController {
 
     //    메뉴 삭제 REST API
     @ResponseBody
-    @DeleteMapping("/matzip/restaurant/menu")
+    @DeleteMapping("/restaurant/menu")
     public ResponseEntity<Void> deleteMenuToRestaurant(@RequestParam List<Long> menus) {
 
         log.info("deleteMenuToRestaurant(menus={})", menus);
@@ -111,7 +107,7 @@ public class AdminController {
     }
 
     @ResponseBody
-    @PutMapping("/matzip/restaurant/{restaurantId}/{status}")
+    @PutMapping("/restaurant/{restaurantId}/{status}")
     public ResponseEntity<Void> setRestaurantById(
             @PathVariable Long restaurantId,
             @PathVariable String status
@@ -121,7 +117,7 @@ public class AdminController {
     }
 
     //    레스토랑 디테일 페이지로 이동
-    @GetMapping("/matzip/restaurant/{restaurantId}")
+    @GetMapping("/restaurant/{restaurantId}")
     public String getRestaurantDetail(@PathVariable Long restaurantId, Model model) {
         Map<String, Object> result = adminService.getRestaurantForDetail(restaurantId);
         model.addAllAttributes(result);
@@ -129,11 +125,17 @@ public class AdminController {
         return "admin/detail-restaurant";
     }
 
-    @GetMapping("/matzip/restaurant/{restaurantId}/info")
+    @GetMapping("/restaurant/{restaurantId}/info")
     public String getRestaurantUpdatePage(@PathVariable Long restaurantId, Model model) {
 
         Map<String, Object> result = adminService.getRestaurantInfoForUpdate(restaurantId);
         model.addAllAttributes(result);
         return "admin/update-restaurant";
+    }
+
+    @PatchMapping("/restaurant/{restaurantId}")
+    public ResponseEntity<Restaurant> updateRestaurantInfo(@RequestBody RestaurantUpdateDto restaurantUpdateDto) {
+        Restaurant updatedRestaurant= adminService.updateRestaurant(restaurantUpdateDto);
+        return ResponseEntity.ok(updatedRestaurant);
     }
 }

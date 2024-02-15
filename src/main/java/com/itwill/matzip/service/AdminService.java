@@ -5,10 +5,7 @@ import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.RestaurantStatus;
 import com.itwill.matzip.domain.enums.BusinessDay;
-import com.itwill.matzip.dto.BusinessTimeDto;
-import com.itwill.matzip.dto.MenusToCreateDto;
-import com.itwill.matzip.dto.RestaurantSearchCond;
-import com.itwill.matzip.dto.RestaurantToCreateDto;
+import com.itwill.matzip.dto.*;
 import com.itwill.matzip.repository.BusinessHourRepository;
 import com.itwill.matzip.repository.CategoryRepository;
 import com.itwill.matzip.repository.MenuRepository;
@@ -17,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.util.*;
 
 @Service
@@ -128,10 +127,12 @@ public class AdminService {
     }
 
     public Map<String, Object> getRestaurantByOptions(RestaurantSearchCond cond) {
+
+        if (cond == null) return null;
+
+        log.info("getRestaurantByOptions(RestaurantSearchCond={})", cond);
         Map<String, Object> result = new HashMap<>();
-        log.info("getRestaurantByOptionsser(RestaurantSearchCond={})", cond);
         Page<Restaurant> restaurants = restaurantDao.search(cond);
-        log.info("Page<Restaurant> restaurants = restaurantDao.search(cond);= {}", restaurants.getContent());
         result.put("restaurants", restaurants);
 
         List<Category> categories = getCategories();
@@ -150,6 +151,7 @@ public class AdminService {
     }
 
     public Map<String, Object> getRestaurantInfoForUpdate(Long restaurantId) {
+        log.info("getRestaurantInfoForUpdate(restaurantId={})", restaurantId);
         Map<String, Object> result = new HashMap<>();
         Restaurant restaurant = restaurantDao.findById(restaurantId).orElse(null);
         result.put("restaurant", restaurant);
@@ -158,5 +160,21 @@ public class AdminService {
         result.put("categories", categories);
 
         return result;
+    }
+
+    @Transactional
+    public Restaurant updateRestaurant(RestaurantUpdateDto restaurantUpdateDto) {
+        log.info("updateRestaurant(RestaurantUpdateDto={})", restaurantUpdateDto);
+        Restaurant restaurant = restaurantDao.findById(restaurantUpdateDto.getRestaurantId()).orElseThrow();
+
+        restaurant.updateCategory(restaurantUpdateDto.getCategoryToUpdate());
+        restaurant.updateName(restaurantUpdateDto.getPlaceName());
+        restaurant.updateAddress(restaurantUpdateDto.getAddress());
+        restaurant.updateDetailAddress(restaurantUpdateDto.getDetailAddress());
+        restaurant.updateContact(restaurantUpdateDto.getContact());
+        restaurant.updateLon(restaurantUpdateDto.getLon());
+        restaurant.updateLat(restaurantUpdateDto.getLat());
+
+        return restaurant;
     }
 }
