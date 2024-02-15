@@ -128,4 +128,12 @@ public class AdminController {
 
         return "admin/detail-restaurant";
     }
+
+    @GetMapping("/matzip/restaurant/{restaurantId}/info")
+    public String getRestaurantUpdatePage(@PathVariable Long restaurantId, Model model) {
+
+        Map<String, Object> result = adminService.getRestaurantInfoForUpdate(restaurantId);
+        model.addAllAttributes(result);
+        return "admin/update-restaurant";
+    }
 }

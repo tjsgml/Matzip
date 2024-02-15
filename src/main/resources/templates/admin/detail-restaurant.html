@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="kr">
-<script src="/js/admin/restaurant/searchLocation.js"></script>
-<script type="text/javascript"
-        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
+
 <head th:replace="~{/layout/fragment-common.html::my-header('MAT.ZIP ADMIN | 맛집')}"></head>
 <link href="/css/admin/admin-common.css" rel="stylesheet">
 <link href="/css/admin/admin-holiday.css" rel="stylesheet">
@@ -50,9 +48,35 @@
                 <hr class="border border-secondary border-2 opacity-50">
                 <div id="business-time-container">
                     <h5>영업 시간</h5>
-                    <div th:each="day : ${days}">
-                        <span th:if="${businessHours[day] != null}" th:text="${businessHours[day].openTime}"></span>
-                        <span th:if="${businessHours[day] == null}">등록된 시간이 없습니다.</span>
+
+                    <div th:if="${!businessHours.isEmpty()}" th:each="day : ${days}">
+                        <span th:if="${businessHours.get(day) != null}">
+                            <span th:if="${businessHours.get(day).isHoliday}" class="text-danger">
+                                [[${day}]] : 휴일입니다!
+                            </span>
+                            <span th:if="${!businessHours.get(day).isHoliday}" class="text-dark">
+                                [[${day}]] : [[${businessHours.get(day).openTime}]] ~ [[${businessHours.get(day).closeTime}]]
+                            </span>
+                        </span>
+                        <span th:if="${businessHours.get(day) == null}" class="text-secondary">
+                            [[${day}]] : 등록된 일정이 없습니다.
+                        </span>
+                    </div>
+                    <div class="container card my-5 border-0"
+                         id="emptyCart"
+                         style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);"
+                         th:if="${businessHours.isEmpty()}">
+                        <div class="card-body py-5">
+                            <div class="row fw-semibold text-center"
+                                 style="font-size: 20px;">
+                                <div class="col my-5">
+                                    <p style="font-size: 50px">📅</p>
+                                    <div>
+                                       영업시간이 등록되지 않았습니다.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -74,6 +98,9 @@
         </div>
     </main>
 </div>
+<script src="/js/admin/restaurant/searchLocation.js"></script>
+<script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>

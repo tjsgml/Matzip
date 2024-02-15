@@ -74,14 +74,16 @@ public class AdminService {
 
         List<BusinessHour> bHours = businessHourDao.findByRestaurant(restaurant);
         Map<String, BusinessHour> businessHours = new HashMap<>();
-        bHours.forEach(el -> businessHours.put(el.getDays().toString(), el));
+        bHours.forEach(el -> businessHours.put(el.getDays().getKor().trim(), el));
+        businessHours.keySet().forEach(e -> System.out.println(e));
         result.put("businessHours", businessHours);
 
         List<BusinessDay> dayValue = Arrays.stream(BusinessDay.values()).toList();
         List<String> days = new ArrayList<>();
-        dayValue.forEach(el -> days.add(el.toString()));
-        days.forEach(System.out::println);
+        dayValue.forEach(el -> days.add(el.getKor().trim()));
+//        days.forEach(System.out::println);
         result.put("days", days);
+        log.info("businessHoursday222 = {}", businessHours.get(days.get(2)));
 
         return result;
     }
@@ -143,6 +145,17 @@ public class AdminService {
         result.put("OPEN", RestaurantStatus.OPEN);
         result.put("WAIT", RestaurantStatus.WAIT);
         log.info("categories={}", categories);
+
+        return result;
+    }
+
+    public Map<String, Object> getRestaurantInfoForUpdate(Long restaurantId) {
+        Map<String, Object> result = new HashMap<>();
+        Restaurant restaurant = restaurantDao.findById(restaurantId).orElse(null);
+        result.put("restaurant", restaurant);
+
+        List<Category> categories = getCategories();
+        result.put("categories", categories);
 
         return result;
     }
