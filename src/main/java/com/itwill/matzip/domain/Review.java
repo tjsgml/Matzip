@@ -2,7 +2,9 @@ package com.itwill.matzip.domain;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
@@ -13,6 +15,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -52,7 +56,7 @@ public class Review extends BaseTimeEntity{
 	private String content;
 	
 	@Basic(optional = false)
-	private Integer flavorScore;
+	private Integer flavorScore; 
 	
 	@Basic(optional = false)
 	private Integer serviceScore;
@@ -62,6 +66,14 @@ public class Review extends BaseTimeEntity{
 	
 	@OneToMany(mappedBy = "review")
 	private List<ReviewImage> reviewImages = new ArrayList<>();
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "REVIEW_HASHTAG_REL", // 중간 테이블 이름 
+        joinColumns = @JoinColumn(name = "REVIEW_PK"), // 현재 엔티티 참조 컬럼이름
+        inverseJoinColumns = @JoinColumn(name = "REVIEW_HASHTAG_PK") // 반대 엔티티 참조 컬럼이름
+    )
+    private Set<ReviewHashtag> hashtags = new HashSet<>();
 
 	
 	

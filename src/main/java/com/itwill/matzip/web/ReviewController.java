@@ -31,18 +31,32 @@ public class ReviewController {
 	}
 	
 	@PostMapping("/register")
-	public String registerReview(@RequestParam("file") MultipartFile file) {
-	    log.info("POST - review register()");
-	    
-	    // 파일명 생성
-	    String s3FileName = s3Utility.generateFileName();
-	    
-	    // 이미지 업로드
-	    String imageUrl = s3Utility.uploadImageToS3(file, s3FileName);
-	    log.info("이미지 URL: {}", imageUrl);
-	    
-	    return "/restaurant/detail"; // 리뷰 등록 후 상세페이지로 리다이렉트
+	public String handleReviewSubmit(@RequestParam("tasteRating") int tasteRating, 
+	                                 @RequestParam("priceRating") int priceRating, 
+	                                 @RequestParam("serviceRating") int serviceRating, 
+	                                 @RequestParam("reviewContent") String reviewContent, 
+	                                 @RequestParam("visit-purpose") String visitPurpose, 
+	                                 @RequestParam("mood") String mood, 
+	                                 @RequestParam("convenience") String convenience, 
+	                                 @RequestParam("images") MultipartFile[] images) {
+	    return "redirect:/some-success-page";
 	}
+
+	
+//	@PostMapping("/register")
+//	public String registerReview(@RequestParam("file") MultipartFile file) {
+//	    log.info("POST - review register()");
+//	    
+//	    
+//	    // 파일명 생성
+//	    String s3FileName = s3Utility.generateFileName();
+//	    
+//	    // 이미지 업로드
+//	    String imageUrl = s3Utility.uploadImageToS3(file, s3FileName);
+//	    log.info("이미지 URL: {}", imageUrl);
+//	    
+//	    return "/restaurant/detail"; // 리뷰 등록 후 상세페이지로 리다이렉트
+//	}
 
 
 	

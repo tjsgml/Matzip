@@ -22,11 +22,12 @@
     </head>
 		
         <body>
-        <main>
+        <main>        
+        
             <div class="row">
                 <div class="col-3"></div>
                     <div class="col-6 mt-5">
-                    <h2 class="text-center-title">리뷰 작성</h2>
+                    <h2 class="text-center-title">' ' 평가하기</h2>
                         <hr/>
                         <div>
                             <h4 class="text-center-title">평점</h4>
@@ -72,6 +73,15 @@
                             <div class="review-comment form-control">
                             <div>
                             
+                        <form th:action="@{/review/register}" th:object="${reviewForm}" method="post" enctype="multipart/form-data" id="reviewForm">
+                            <!-- 리뷰평점 -->
+                            <input type="hidden" id="tasteRating" name="tasteRating" value="0">
+                            <input type="hidden" id="priceRating" name="priceRating" value="0">
+                            <input type="hidden" id="serviceRating" name="serviceRating" value="0">
+                            <!--  -->
+
+                        
+                        
                             <!-- 이미지 업로드 -->
                             <div class="image-section">
                                 <div class="image-upload">
@@ -83,50 +93,62 @@
                                 </div>
                                 <!-- 이미지 미리보기 -->
                                 <div class="image-preview-container">
-                                    <div class="image-preview-text">아직 추가한 사진이 없습니다</div>
+                                    <div class="image-preview-text ">이미지 업로드</div>
                                 </div>
                             </div>
 
                             <div class="review-content">
                                 <div>
-                                    <textarea class="form-control" id="review" rows="5" placeholder="방문한 식당의 솔직한 후기를 입력해 주세요!" required></textarea>
-                                </div>
+                                    <textarea class="form-control" id="review" rows="5" name="review-content" placeholder="방문한 식당의 솔직한 후기를 입력해 주세요!" ></textarea>
+                                </div><!-- -->
                             </div>
-
+                        
 
                         </div>
                         </div>
                     
                         <hr/>
+                        
                         <h4 class="text-center-title">음식점 키워드</h4>
-                        <div>
-                            <div class="keyword-purpose form-group">
-                                <div>방문목적</div>
-                                <input type="text" class="tag-input" name="purpose" data-category="visit-purpose" placeholder="엔터를 눌러 해시태그 등록" style="width: 300px" />
-                                <ul id="visit-purpose-tags"></ul>
+                            <div>
+                                <!-- 방문목적 -->
+                                <div class="keyword-purpose form-group">
+                                    <div>방문목적</div>
+                                    <input type="text" class="tag-input" name="purpose" data-category="visit-purpose" placeholder="엔터를 눌러 해시태그 등록" />
+                                    <ul id="visit-purpose-tags" class="tag-list"></ul>
+                                </div>
+                                
+                                <!-- 분위기 -->
+                                <div class="keyword-mood form-group">
+                                    <div>분위기</div>
+                                    <input type="text" class="tag-input" name="mood" data-category="mood" placeholder="엔터를 눌러 해시태그 등록" />
+                                    <ul id="mood-tags" class="tag-list"></ul>
+                                </div>
+                                
+                                <!-- 편의시설 -->
+                                <div class="keyword-convenience form-group">
+                                    <div>편의시설</div>
+                                    <input type="text" class="tag-input" name="convenience" data-category="convenience" placeholder="엔터를 눌러 해시태그 등록" />
+                                    <ul id="convenience-tags" class="tag-list"></ul>
+                                </div>
+    
                             </div>
-                            
-                            <div class="keyword-mood form-group">
-                                <div>분위기</div>
-                                <input type="text" class="tag-input" name="mood" data-category="mood" placeholder="엔터를 눌러 해시태그 등록" style="width: 300px" />
-                                <ul id="mood-tags"></ul>
-                            </div>
-                            
-                            <div class="keyword-convenience form-group">
-                                <div>편의시설</div>
-                                <input type="text" class="tag-input" name="convenience" data-category="convenience" placeholder="엔터를 눌러 해시태그 등록" style="width: 300px" />
-                                <ul id="convenience-tags"></ul>
-                            </div>
-                        </div>
+                        
 
                             
-                          
-                            <!-- ReviewController의 registerReview() -->
-                            <button action="/review/register" type="submit" method="post"  class="btn btn-primary">리뷰 저장</button>
+                          <button type="submit" class="btn btn-submit">리뷰 저장</button>
+                          </form>
                     </div>
                     
+                    
+
+                    
+
                 </div>
                 <div class="col-3"></div>
+                
+                   
+
             
         </main>
         

@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    /* 별 평점 */
+/* 별 평점 */
     // 평가 카테고리 별 별점 값
     const ratingContainers = document.querySelectorAll(".rating-container");
 
@@ -57,10 +57,13 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
     
-     // 평점 처리: 카테고리 ID, 평점 값 
+     // 카테고리 + 평점
     function processRating(categoryId, ratingValue) {
         console.log(`${categoryId} 평점: ${ratingValue}`);
+        // hidden input 값 업데이트
+        document.getElementById(`${categoryId}Rating`).value = ratingValue;
     }
+
 
 
 
@@ -88,44 +91,139 @@ document.addEventListener("DOMContentLoaded", function() {
                 imagePreview.src = e.target.result;
 
                 const deleteButton = document.createElement('a');
-                deleteButton.innerHTML = '<i class="fas fa-times"></i>'; // Font Awesome 사용
+                deleteButton.innerHTML = '<i class="fas fa-times"></i>'; 
                 deleteButton.classList.add('delete-image');
                 deleteButton.href = 'javascript:void(0);';
 
                 deleteButton.addEventListener('click', function() {
-                    imagePreviewWrap.remove(); // 이 부분이 이미지와 삭제버튼을 감싼 div를 제거합니다.
+                    imagePreviewWrap.remove(); 
                 });
 
-                // 이미지와 삭제 버튼을 wrap에 추가
+                // 이미지 & 삭제 버튼 wrap에 추가
                 imagePreviewWrap.appendChild(imagePreview);
-                imagePreviewWrap.appendChild(deleteButton); // 이 부분을 수정했습니다.
+                imagePreviewWrap.appendChild(deleteButton);
 
                 // wrap을 imagePreviewContainer에 추가
-                imagePreviewContainer.appendChild(imagePreviewWrap); // 수정했습니다.
+                imagePreviewContainer.appendChild(imagePreviewWrap);
             };
             reader.readAsDataURL(file);
         }
     });
     
     
-    /* 키워드(해시태그) */
-    document.querySelectorAll('.tag-input').forEach(function(input) {
+/* 키워드(해시태그) */
+    // 태그 ID를 위한 글로벌 카운터나 타임스탬프 사용
+    let tagIdCounter = 0;
+
+    document.querySelectorAll('.tag-input').forEach(input => {
         input.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                e.preventDefault(); // 폼 제출 방지
-                const tagValue = this.value.trim(); // 입력된 값 가져오기
-                console.log(tagValue);
+                e.preventDefault();
+                const tagValue = this.value.trim();
                 if (tagValue) {
-                    const category = this.getAttribute('data-category'); // 해당 입력 필드의 카테고리 가져오기
-                    const tagList = document.getElementById(category); // 카테고리의 태그리스트 가져오기
-                    const newTag = document.createElement('li'); // 새 태그 만듦
-                    newTag.textContent = '#' + tagValue; // 텍스트 내용 설정
-                    tagList.appendChild(newTag); // 태그 리스트에 새 태그 추가
+                    const category = this.getAttribute('data-category');
+                    const tagId = `tag-${tagIdCounter++}`; // 태그 고유 ID 생성
+
+                    // 숨겨진 입력 필드 생성
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = `${category}`;
+                    hiddenInput.value = tagValue;
+                    hiddenInput.id = tagId; 
+                    
+                    
+                    document.getElementById('reviewForm').appendChild(hiddenInput);
+
+                    // 태그 UI 생성
+                    const tagList = document.getElementById(input.getAttribute('data-category') + '-tags');
+                    const tagItem = document.createElement('li');
+                    tagItem.textContent = tagValue;
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'X';
+                    deleteBtn.addEventListener('click', function() {
+                        tagItem.remove(); // 태그 UI 삭제
+                        document.getElementById(tagId).remove(); // 숨겨진 입력 필드 삭제
+                    });
+
+                    tagItem.appendChild(deleteBtn);
+                    tagList.appendChild(tagItem);
+
                     this.value = ''; // 입력 필드 초기화
                 }
             }
         });
     });
+
+    
+    
+    document.querySelectorAll('.tag-input').forEach(function(input) {
+        const maxLength = 8; // 글자 수 제한
+        input.addEventListener('input', function() {
+            if (this.value.length > maxLength) {
+                // 글자수 제한 초과시 초과 부분 자름
+                this.value = this.value.substring(0, maxLength);
+                // 경고 표시
+                displayWarning(this.name, '태그는 8글자를 초과할 수 없습니다.');
+            } else {
+                // 경고 숨김
+                clearWarning(this.name);
+            }
+        });
+    });
+
+
+    //해시태그 글자수제한
+    function displayWarning(inputName, message) {
+        const warningElement = document.getElementById(inputName + '-warning');
+        if (warningElement) {
+            warningElement.textContent = message;
+            warningElement.classList.remove('d-none');
+        } else {
+            // 경고요소 없으면
+            const inputElement = document.querySelector(`input[name=${inputName}]`);
+            const newWarning = document.createElement('small');
+            newWarning.id = inputName + '-warning';
+            newWarning.textContent = message;
+            newWarning.classList.add('form-text', 'text-muted');
+            inputElement.parentNode.insertBefore(newWarning, inputElement.nextSibling);
+        }
+    }
+    function clearWarning(inputName) {
+        const warningElement = document.getElementById(inputName + '-warning');
+        if (warningElement) {
+            warningElement.classList.add('d-none');
+        }
+    }
+
+/* 폼 제출  */
+    document.addEventListener("DOMContentLoaded", function() {
+        const reviewForm = document.getElementById("reviewForm");
+        reviewForm.addEventListener("submit", function(e) {
+            // 평점 입력 확인
+            const tasteRating = document.getElementById('tasteRating').value;
+            const priceRating = document.getElementById('priceRating').value;
+            const serviceRating = document.getElementById('serviceRating').value;
+            
+            if (tasteRating === "0" || priceRating === "0" || serviceRating === "0") {
+                e.preventDefault();
+                alert("모든 평점을 선택해주세요.");
+                return;
+            }
+    
+            const reviewContent = document.getElementById('review').value; 
+            if (!reviewContent.trim()) {
+                e.preventDefault();
+                alert("리뷰 내용을 입력해주세요.");
+                return;
+            }
+    
+            
+        });
+    });
+
+
+
+
 
 
 
