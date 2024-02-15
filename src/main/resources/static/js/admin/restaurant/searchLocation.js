@@ -247,7 +247,6 @@ function setList(el, marker, infowindow) {
         listItem.classList.add("active");
         marker.setZIndex(10);
         infowindow.open(map, marker);
-        // setCenter(marker.getPosition().getLat(), marker.getPosition().getLng());
     }
 
     const onmouseout = () => {
