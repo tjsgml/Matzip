@@ -16,6 +16,7 @@ addrSearchBtn.addEventListener("click", () => {
     searchByAddress();
 });
 
+const restaurantIdInput = document.getElementById("restaurantIdInput");
 const nameInput = document.getElementById("nameInput");
 const addrInput = document.getElementById("addrInput");
 const detailAddrInput = document.getElementById("detailAddrInput");
@@ -24,6 +25,16 @@ const lngInput = document.getElementById("lngInput");
 const latInput = document.getElementById("latInput");
 const categorySelect = document.querySelector("select#select-category");
 
+const originRestaurantInfo = {
+    name: nameInput.value,
+    addr: addrInput.value,
+    detailAddr: detailAddrInput.value,
+    lat: latInput.value,
+    lng: lngInput.value,
+    contact: contactInput.value,
+    category: categorySelect.value
+}
+
 const paginationComp = document.getElementById("pagination");
 const selectDistance = document.getElementById("selectDistance");
 
@@ -31,39 +42,31 @@ const REST_API_KEY = "c89a020dd130ee8b16d5aba0dc567c8e";
 const SEARCH_BY_KEYWORD_URL = "https://dapi.kakao.com/v2/local/search/keyword.JSON?";
 const SEARCH_BY_ADDRESS_URL = "https://dapi.kakao.com/v2/local/search/address.JSON?";
 
-let origin_lat  = latInput.value ?? 37.514322572335935;
+let origin_lat = latInput.value ?? 37.514322572335935;
 let origin_lng = lngInput.value ?? 127.06283102249932;
 
 function resetAddress() {
-    nameInput.value = "";
-    addrInput.value = "";
-    contactInput.value = "";
-    lngInput.value = "";
-    latInput.value = "";
-    detailAddrInput.value = "";
+    nameInput.value = originRestaurantInfo.name;
+    addrInput.value = originRestaurantInfo.addr;
+    detailAddrInput.value = originRestaurantInfo.detailAddr;
+    latInput.value = originRestaurantInfo.lat;
+    lngInput.value = originRestaurantInfo.lng;
+    contactInput.value = originRestaurantInfo.contact;
+    categorySelect.value = originRestaurantInfo.category;
 }
 
 function setAddressInfo(locId, infoWindow) {
-    resetAddress();
-    const placeName = document.getElementById(`placename-Input-${locId}`).value;
+    detailAddrInput.value = "";
     const address = document.getElementById(`address-Input-${locId}`).value;
-    const phone = document.getElementById(`phone-Input-${locId}`).value;
     const lng = document.getElementById(`lng-Input-${locId}`).value;
     const lat = document.getElementById(`lat-Input-${locId}`).value;
 
-    nameInput.value = placeName;
     addrInput.value = address;
-    contactInput.value = phone;
-
-    console.log(lng + " lnglng")
-    console.log(lat + " lat")
-
     lngInput.value = lng;
     latInput.value = lat;
     document.getElementById("placesList").innerHTML = "";
     removeAllMarkers();
     infoWindow.close();
-
-    console.log("lng : " +lng );
-    console.log("lat : " +lat );
 }
+
+document.querySelector("button#reset-button").addEventListener("click", resetAddress)

@@ -1,13 +1,8 @@
 let markers = [];
-const defLon = lngInput.value ?? 127.06283102249932;
-const defLat = latInput.value ?? 37.514322572335935;
-
-console.log("defLat" + defLat)
-console.log("defLon" + defLon)
 
 const mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
-        center: new kakao.maps.LatLng(defLon, defLat), // 지도의 중심좌표
+        center: new kakao.maps.LatLng(origin_lng, origin_lat), // 지도의 중심좌표
         draggable: true,
         level: 3 // 지도의 확대 레벨
     };

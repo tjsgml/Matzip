@@ -17,14 +17,15 @@
                     <div class="mb-3">
                         <label class="form-label mt-3" for="select-category">카테고리 선택</label>
                         <select id="select-category" class="form-select">
-                        <option th:each="category : ${categories}" th:value="${category.id}"
-                                th:text="${category.name}"></option>
-                    </select>
+                            <option th:each="category : ${categories}" th:value="${category.id}"
+                                    th:text="${category.name}"></option>
+                        </select>
                     </div>
+                    <input type="hidden" id="restaurantIdInput" th:value="${restaurant.id}"/>
                     <div class="mb-3">
                         <label class="mb-1" for="nameInput">가게명</label>
                         <input class="form-control" type="text" id="nameInput" placeholder="가게이름"
-                        th:value="${restaurant.name}"/>
+                               th:value="${restaurant.name}"/>
                     </div>
                     <div class="mb-3">
                         <label class="mb-1" for="addrInput">주소</label>
@@ -34,7 +35,7 @@
                     <div class="mb-3">
                         <label class="mb-1" for="detailAddrInput">상세주소</label>
                         <input class="form-control" type="text" id="detailAddrInput" placeholder="상세 주소"
-                            th:value="${restaurant.detailAddress ?: ' '}"
+                               th:value="${restaurant.detailAddress ?: ' '}"
                         />
                     </div>
                     <div class="mb-3">
@@ -43,6 +44,10 @@
                                th:value="${restaurant.contact ?: '등록된 연락처가 없습니다.'}"
                         />
                     </div>
+                    <div class="mb-3">
+                        <button class="form-control btn" id="reset-button">초기화</button>
+                    </div>
+
                     <input class="form-control mb-3" type="hidden" id="lngInput"
                            th:value="${restaurant.getLon()}"
                     />
@@ -50,14 +55,14 @@
                            th:value="${restaurant.lat}"
                     />
                 </div>
-                <hr />
+                <hr/>
                 <div class="my-2"
                      style="border: 1px #1B365C solid; padding : 20px; border-radius: 30px; background-color: #F2F5F5">
                     <h5>장소 검색</h5>
                     <div>
                         <label class="mb-1" for="addrSearchInput">주소로 검색하기</label>
                         <div class="input-group mb-3">
-                            <input class="form-control" type="text" id="addrSearchInput" placeholder="주소" />
+                            <input class="form-control" type="text" id="addrSearchInput" placeholder="주소"/>
                             <button id="addrSearchBtn" class="btn input-group-text">검색</button>
                         </div>
                     </div>
@@ -70,7 +75,13 @@
                         </div>
                     </div>
                 </div>
-                <div id="placesList"></div>
+                <div>
+                    <ul id="placesList" style="padding: 0">
+                    </ul>
+
+                    <div id="pagination" class="pagination input-group d-flex">
+                    </div>
+                </div>
             </div>
             <div>
                 <div class="m-3" id="floating">
@@ -91,7 +102,7 @@
                         </button>
                         <button class="form-control btn btn-outline-warning" id="un-draggable-btn">지도 드래그 비활성화</button>
                     </div>
-                    <button id="submit-btn" class="btn btn-outline-primary mt-3 form-control">제출</button>
+                    <button id="submit-btn" class="btn btn-outline-primary mt-3 form-control">수정하기</button>
                 </div>
             </div>
         </div>
@@ -101,9 +112,11 @@
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="/js/admin/restaurant/variablesToCreateLocation.js"></script>
+<script src="/js/admin/restaurant/variablesToUpdateLocation.js"></script>
 <script src="/js/admin/restaurant/configMap.js"></script>
 <script src="/js/admin/restaurant/searchLocation.js"></script>
+<script src="/js/admin/restaurant/updateRestaurant.js"></script>
+
 <script>
 
 </script>

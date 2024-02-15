@@ -1,5 +1,3 @@
-// placesList
-
 async function searchByKeyword() {
     console.log("키워드검색입니다.")
     removeAllMarkers();
@@ -45,8 +43,6 @@ async function searchByAddress() {
         return false;
     }
 
-    // const keyword = "제주특별자치도 제주시 첨단로 242";
-
     const query = `query=${keyword}&size=10&analyze_type=similar&page=${curPage}&size=${reqSize}`;
     const url = `${SEARCH_BY_ADDRESS_URL}${query}`;
     const resp = await axios.get(url + query, {
@@ -84,14 +80,6 @@ function getCurrentCord () {
     origin_lat = map.getCenter().getLat();
 }
 
-function resetAddress() {
-    nameInput.value = "";
-    addrInput.value = "";
-    contactInput.value = "";
-    lngInput.value = "";
-    latInput.value = "";
-    detailAddrInput.value = "";
-}
 
 function pagination(total_num) {
     paginationComp.innerHTML = "";
@@ -194,31 +182,6 @@ function setMarker(el) {
     })
     kakao.maps.event.addListener(marker, "click", () => setAddressInfo(el.id, infowindow));
     setList(el, marker, infowindow);
-}
-
-function setAddressInfo(locId, infoWindow) {
-    resetAddress();
-    const placeName = document.getElementById(`placename-Input-${locId}`).value;
-    const address = document.getElementById(`address-Input-${locId}`).value;
-    const phone = document.getElementById(`phone-Input-${locId}`).value;
-    const lng = document.getElementById(`lng-Input-${locId}`).value;
-    const lat = document.getElementById(`lat-Input-${locId}`).value;
-
-    nameInput.value = placeName;
-    addrInput.value = address;
-    contactInput.value = phone;
-
-    console.log(lng + " lnglng")
-    console.log(lat + " lat")
-
-    lngInput.value = lng;
-    latInput.value = lat;
-    document.getElementById("placesList").innerHTML = "";
-    removeAllMarkers();
-    infoWindow.close();
-
-    console.log("lng : " +lng );
-    console.log("lat : " +lat );
 }
 
 
