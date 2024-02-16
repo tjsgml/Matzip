@@ -8,7 +8,79 @@
 	const btnShowModal = document.querySelector('button.showMap');
 	let lat ='';
 	let lon='';
-	const restId = document.querySelector('input#restId').value;
+	//좋아요 상태(false - 좋아요X, true - 좋아요O )
+	let isLiked = false;
+	//로그인 상태인지 확인
+	let isLoggedin = false;
+	//회원의 아이디
+	let memberId ='';
+	//좋아요를 한 상태라면 좋아요 아이디
+	let myPickId = '';
+	 
+	checkLogin();
+	
+	const restId = document.querySelector('input#restId').value;//음식점 아이디
+	
+	const btnReportInfo = document.getElementById('btnReportInfo');//폐업신고,정보수정제안 버튼
+	//좋아요 버튼
+	const btnMyPick = document.getElementById('btnMyPick');
+	
+	//평가하기 버튼
+	const btnEval = document.getElementById('btnEval');
+	
+	btnEval.addEventListener('click',() => {
+			if(isLoggedin){
+				console.log('클릭');
+			}else{
+				 if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
+				        // 로그인 페이지로 이동
+				        window.location.href = '/member/login';
+				    } else {
+				        // 사용자가 취소한 경우
+				        alert('로그인이 취소되었습니다.');
+				    }
+			}
+	});
+					
+
+	//폐업신고,정보수정제안 버튼 클릭시 
+	btnReportInfo.addEventListener('click',() => {
+		const textReportInfo = document.getElementById('reportInfo').value;
+		if(textReportInfo==''){
+			alert('수정할 내용을 입력해주세요.');
+		}else{
+			const reportInfo =document.getElementById('reportInfo');
+			
+			updateInfo(textReportInfo);
+			
+			alert('전송 완료. 소중한 의견 감사합니다!');
+			$('#reportModal').modal('hide');
+			
+			
+			//모달 텍스트창 초기화.
+			reportInfo.value='';
+		}
+	});
+	
+	//좋아요 버튼 클릭시
+	btnMyPick.addEventListener('click',() => {
+		//(1) 로그인 상태 확인
+		//(2) 로그인 상태가 아니면 팝업창을 보여주고 확인 시, 로그인 페이지로 넘기기.
+		if(isLoggedin){
+			console.log('클릭');
+			drawMyPick();
+		}else{
+			 if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
+			        // 로그인 페이지로 이동
+			        window.location.href = '/member/login';
+			    } else {
+			        // 사용자가 취소한 경우
+			        alert('로그인이 취소되었습니다.');
+			    }
+		}
+	});
+	
+
 	
 	let isAdditionalMenuVisible = false; // 추가 메뉴가 보이는지 여부를 저장하는 변수
 	//영업시간 정보들 가져오기
@@ -295,7 +367,97 @@
 		        menuDiv.innerHTML += menuHTML;
 		    });
 		}
+		
+	//로그인 상태인지 아닌지 확인
+	function checkLogin(){
+				$.ajax({
+			url:'/rest/details/checkMember',
+			type:'GET',
+			success:function(response){
+				if(response !== null && response !== ''){
+					//로그인 상태
+					console.log('로그인 아이디 :',response);
+					isLoggedin = true;
+					memberId = response;
+					changeMyPick(memberId,restId);
+				}else{
+					//로그아웃 상태
 
-	
+				}
+			},
+			error:function(xhr, status,error){
+				console.error('로그인 상태 확인 중 오류 발생 : ',error);
+			}
+		});
+	}
+	//회원의 해당 음식점에 좋아요를 눌렀는지 확인
+	function changeMyPick(memberId,restId){
+		
+		console.log('멤버 아이디:',memberId);
+		console.log('음식점 아이디:',restId);
+		
+		$.ajax({
+			url:'/rest/details/checkMyPick',
+			type:'GET',
+			data:{
+				memberId: memberId,
+				restId: restId
+			},
+			success:function(response){
+				console.log('좋아요 아이디 :',response);
+				if(response ==''){
+				}else{
+					myPickId = response;
+					isLiked=true;
+					btnMyPick.classList.add('liked');
+				}
+			},
+			error: function(xhr, status, error) {
+            	console.error('MyPick 조회 중 오류 발생:', error);
+            }
+			
+		});
+	}
+	//좋아요 그리기 
+	function drawMyPick(){
+		if(isLiked){//좋아요가 되어있는 상태-> 좋아요 취소-> 해당 행 삭제
+			$.ajax({
+				url:'/rest/details/myPick/'+ myPickId,
+				type:'DELETE',
+				
+				success: function(response){
+					console.log('취소완료');
+					btnMyPick.classList.remove('liked');
+					isLiked = false;
+				},
+				  error: function(xhr, status, error) {
+		            console.error('좋아요 취소 중 오류 발생:', error);
+		            // 오류 처리 로직을 추가하세요
+		        }
+			});
+		}else{//좋아요 되어있지 않는 상태 -> 좋아요 누름 -> 행 삽입.
+			const data ={memberId, restId};
+			
+			 axios.post('/rest/details/registerMyPick',data)
+				  .then(response => {
+					  console.log('좋아요 클릭시 아이디:',response.data);
+					  console.log('좋아요 누름!');
+					  btnMyPick.classList.add('liked');
+					  myPickId= response.data;
+					  isLiked = true;
+				  })
+				  .catch(error=>{
+					   console.error('오류 발생:', error);
+				  });			
+			
+		}	
+	}
+	//폐업신고, 정보 수정 제안 메시지 보내기
+	function updateInfo(content){
+		const data ={restId,content};
+		
+		const response = axios.post('/rest/details/update',data);
+		
+	}
 
  });//end document

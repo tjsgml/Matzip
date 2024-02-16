@@ -26,6 +26,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -76,4 +77,5 @@ public class Review extends BaseTimeEntity{
     private Set<ReviewHashtag> hashtags = new HashSet<>();
 
 	
+
 }

@@ -1,0 +1,8 @@
+#business-time-container input.time{
+    width: 40px;
+    font-size: 15px;
+}
+
+#business-time-container label{
+    padding-right: 5px;
+}
