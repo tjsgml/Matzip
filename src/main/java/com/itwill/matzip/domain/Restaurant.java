@@ -25,9 +25,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "RESTAURANT")
-public class Restaurant extends BaseTimeEntity {
-
- 
+public class Restaurant extends BaseTimeEntity { 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,6 +53,7 @@ public class Restaurant extends BaseTimeEntity {
     @Fetch(FetchMode.JOIN)
     private Category category;
 
+    
     @ToString.Exclude
     @JsonInclude
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)

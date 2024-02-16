@@ -2,7 +2,6 @@ package com.itwill.matzip.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import software.amazon.awssdk.core.pagination.sync.PaginatedResponsesIterator;
 
 import java.util.Set;
 
