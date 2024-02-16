@@ -8,42 +8,57 @@
 		<link href="/css/main.css" rel="stylesheet" />
 		<link href="/css/list.css" rel="stylesheet" />
 		<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5"></script>
-		<style>
-			.col-md-4::-webkit-scrollbar{
-				display: none;
-			}
-			#restPost:hover{
-				background-color: azure;
-			}
-			.v26_78:hover {
-			  background-color: #F5F5F5; /* 원하는 배경색으로 변경 */
-			  /* 추가적인 스타일 변경을 원한다면 여기에 추가하세요 */
-			}
-		</style>
+		
 		
 	</head>
 		<body>
 			<div class="container-fluid" >
 				<div class="row" >
 					<!-- 왼쪽 바-->
-					<div class="col-md-4" style="overflow:scroll;  height:100vh; padding: 0;">
+					<div class="col-md-3" style="overflow:scroll;  height:100vh; padding: 0;">
 						<!-- 로고 부분-->
 						<div>
-							<h1>로고 부분</h1>
+							<img src="/img/matzip_logo.png" style="width: 91px; height: 50.41px; margin: 20px 20px;">
 						</div>
 						<!-- 음식점 태그(검색 기능) -->
 						<div>
-							<span>강남역</span>
-							<span>전체</span>
-							<hr style="margin-bottom: 0;">
+							<span style="font-size: 25px;  margin-left: 23px; margin-top:3px;">강남역</span>
+							<span  style="font-size: 25px; font-weight: bold; margin-left:10px; margin-top:3px;">#혼밥</span>
+							<span  style="display: inline-block;  margin-left:10px; margin-bottom: 2px; ">
+								<select class="form-select" aria-label="Default select example" style="font-size: 20px;">
+								  <option selected>전체</option>
+								  <option value="1">밥집</option>
+								  <option value="2">카페</option>
+								  <option value="3">고깃집</option>
+								  <option value="4">횟집</option>
+							    </select>
+							</span>
+							
 						</div>
 						<!-- 음식점 리스트-->
+						<hr style="margin-bottom: 0;">
+						<a >
+								 <div class="v26_78" > 
+						        <div class="v26_79" > </div>
+						        <span id="rest-title" class="v26_81" >감격시대</span>
+						        <span id="rest-category" class="v26_82">소고기</span>
+						        <div class="v26_89"></div>
+								<span class="v26_90">평점(@@명)</span>
+								<div class="name"></div>
+						    <div class="v26_98"></div>
+						    <span class="v26_99">좋아요수</span>
+						    <span class="v26_101">“@@@@@@@@랜덤으로 뽑은 리뷰 내용@@@@@@@@@@@@..”</span>
+						    <span class="v26_102">21명이 추천했습니다</span>
+						    <span class="v26_103">by. 닉네임@@@@@@@</span>
+						   </div>
+						</a>
+						<hr style="margin-bottom: 0;">
+						<hr style="margin-bottom: 0;">
 						<div id="restList">
 						    <div class="v26_78"> 
 						        <div class="v26_79"> </div>
 						        <span class="v26_81">음식점 이름</span>
 						        <span class="v26_82">주요 메뉴명</span><span class="v26_83">태그들</span>
-						        <div class="v26_89"></div>
 								<span class="v26_90">평점(@@명)</span>
 								<div class="name"></div>
 						    <div class="v26_98"></div>
@@ -58,7 +73,7 @@
 				</div><!--End div#col-md-4 -->
 				
 				<!-- 지도 보여줄 부분-->
-				<div class="col-md-8" style="padding: 0;">
+				<div class="col-md-9" style="padding: 0;">
 					<div style=" height:100vh" id="map" ></div>
 				</div>
 			</div><!--End div#row -->

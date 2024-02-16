@@ -1,5 +1,9 @@
 package com.itwill.matzip.domain;
 
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,5 +45,6 @@ public class Restaurant extends BaseTimeEntity{
    @ToString.Exclude
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "CATEGORY_FK")
+   @Fetch(FetchMode.JOIN)
    private Category category;
 }
