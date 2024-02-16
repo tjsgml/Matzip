@@ -1,5 +1,9 @@
 package com.itwill.matzip.domain;
 
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,6 +24,8 @@ import java.util.List;
 @Entity
 @Table(name = "RESTAURANT")
 public class Restaurant extends BaseTimeEntity {
+
+ 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +49,7 @@ public class Restaurant extends BaseTimeEntity {
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_FK")
+    @Fetch(FetchMode.JOIN)
     private Category category;
 
     @ToString.Exclude
