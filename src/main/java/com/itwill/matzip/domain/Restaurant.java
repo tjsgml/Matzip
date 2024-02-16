@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
@@ -20,31 +22,38 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name="RESTAURANT")
-public class Restaurant extends BaseTimeEntity{
-	
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name = "RESTAURANT_PK")
-   private Long id;
-   
-   @Basic(optional = false)
-   private String name;
-   
-   @Basic(optional = false)
-   private String address;
-   
-   private String detailAddress;
-   
-   private String contact;
-   
-   private double lon;
-   
-   private double lat;
+@Table(name = "RESTAURANT")
+public class Restaurant extends BaseTimeEntity {
 
-   @ToString.Exclude
-   @ManyToOne(fetch = FetchType.LAZY)
-   @JoinColumn(name = "CATEGORY_FK")
-   @Fetch(FetchMode.JOIN)
-   private Category category;
+ 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "RESTAURANT_PK")
+    private Long id;
+
+    @Basic(optional = false)
+    private String name;
+
+    @Basic(optional = false)
+    private String address;
+
+    private String detailAddress;
+
+    private String contact;
+
+    private double lon;
+
+    private double lat;
+
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORY_FK")
+    @Fetch(FetchMode.JOIN)
+    private Category category;
+
+    @ToString.Exclude
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JoinColumn(name = "RESTAURANT_FK")
+    private List<Menu> menus;
 }
