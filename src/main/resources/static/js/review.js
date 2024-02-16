@@ -123,17 +123,25 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (tagValue) {
                     const category = this.getAttribute('data-category');
                     const tagId = `tag-${tagIdCounter++}`; // 태그 고유 ID 생성
-
+    
                     // 숨겨진 입력 필드 생성
                     const hiddenInput = document.createElement('input');
                     hiddenInput.type = 'hidden';
-                    hiddenInput.name = `${category}`;
+                    // name 속성을 DTO의 변수명과 일치하게 수정
+                    let inputName = '';
+                    if (category === 'visit-purpose') {
+                        inputName = 'visitPurposeTags[]';
+                    } else if (category === 'mood') {
+                        inputName = 'moodTags[]';
+                    } else if (category === 'convenience') {
+                        inputName = 'convenienceTags[]';
+                    }
+                    hiddenInput.name = inputName;
                     hiddenInput.value = tagValue;
-                    hiddenInput.id = tagId; 
-                    
-                    
+                    hiddenInput.id = tagId;
+    
                     document.getElementById('reviewForm').appendChild(hiddenInput);
-
+    
                     // 태그 UI 생성
                     const tagList = document.getElementById(input.getAttribute('data-category') + '-tags');
                     const tagItem = document.createElement('li');
@@ -144,15 +152,16 @@ document.addEventListener("DOMContentLoaded", function() {
                         tagItem.remove(); // 태그 UI 삭제
                         document.getElementById(tagId).remove(); // 숨겨진 입력 필드 삭제
                     });
-
+    
                     tagItem.appendChild(deleteBtn);
                     tagList.appendChild(tagItem);
-
+    
                     this.value = ''; // 입력 필드 초기화
                 }
             }
         });
     });
+
 
     
     

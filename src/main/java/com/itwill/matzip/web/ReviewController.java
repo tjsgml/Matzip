@@ -3,12 +3,13 @@ package com.itwill.matzip.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.itwill.matzip.util.S3Utility;
+import com.itwill.matzip.dto.ReviewCreateDto;
+import com.itwill.matzip.service.ReviewService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,48 +17,31 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/review")
 public class ReviewController {
-	
-	private final S3Utility s3Utility;
-    
+
+    private final ReviewService reviewService;
+
     @Autowired
-    public ReviewController(S3Utility s3Utility) {
-        this.s3Utility = s3Utility;
+    public ReviewController(ReviewService reviewService) {
+        this.reviewService = reviewService;
     }
-	
-    
-	@GetMapping("/create")
-    public void uploadPage() {
-		log.info("GET - review create()");
-	}
-	
-	@PostMapping("/register")
-	public String handleReviewSubmit(@RequestParam("tasteRating") int tasteRating, 
-	                                 @RequestParam("priceRating") int priceRating, 
-	                                 @RequestParam("serviceRating") int serviceRating, 
-	                                 @RequestParam("reviewContent") String reviewContent, 
-	                                 @RequestParam("visit-purpose") String visitPurpose, 
-	                                 @RequestParam("mood") String mood, 
-	                                 @RequestParam("convenience") String convenience, 
-	                                 @RequestParam("images") MultipartFile[] images) {
-	    return "redirect:/some-success-page";
-	}
 
-	
-//	@PostMapping("/register")
-//	public String registerReview(@RequestParam("file") MultipartFile file) {
-//	    log.info("POST - review register()");
-//	    
-//	    
-//	    // 파일명 생성
-//	    String s3FileName = s3Utility.generateFileName();
-//	    
-//	    // 이미지 업로드
-//	    String imageUrl = s3Utility.uploadImageToS3(file, s3FileName);
-//	    log.info("이미지 URL: {}", imageUrl);
-//	    
-//	    return "/restaurant/detail"; // 리뷰 등록 후 상세페이지로 리다이렉트
-//	}
+    @GetMapping("/create")
+    public String reviewCreateForm() {
+    	log.info("GET - reviewCreateForm");
+        return "review/create";
+    }
 
-
-	
+    @PostMapping("/register")
+    public String handleReviewSubmit(@ModelAttribute ReviewCreateDto reviewDto, RedirectAttributes redirectAttributes) {
+        try {
+            reviewService.saveReview(reviewDto);
+            log.info("reviewDto", reviewDto.toString());
+            redirectAttributes.addFlashAttribute("message", "리뷰 등록 성공!");
+        } catch (Exception e) {
+        	log.info("review register 실패", reviewDto);
+            redirectAttributes.addFlashAttribute("errorMessage", "리뷰 등록 실패: " + e.getMessage());
+            return "redirect:/review/create";
+        }
+        return "redirect:/reviews";
+    }
 }
