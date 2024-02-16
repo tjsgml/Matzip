@@ -22,45 +22,46 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 @ToString
 @Entity
-public class Review extends BaseTimeEntity{ 
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "REVIEW_PK")
-	private Long id;
-	
-	@EqualsAndHashCode.Include
-	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "RESTAURANT_FK")
-	@Basic(optional = false)
-	private Restaurant restaurant;
-	
-	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "MEMBER_FK")
-	@Basic(optional = false)
-	private Member member;
-	
-	@Basic(optional = false)
-	private String content;
-	
-	@Basic(optional = false)
-	private Integer flavorScore;
-	
-	@Basic(optional = false)
-	private Integer serviceScore;
-	
-	@Basic(optional = false)
-	private Integer priceScore;
-	
-	@OneToMany(mappedBy = "review")
-	private List<ReviewImage> reviewImages = new ArrayList<>();
-	
+public class Review extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "REVIEW_PK")
+    private Long id;
+
+    @EqualsAndHashCode.Include
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RESTAURANT_FK")
+    @Basic(optional = false)
+    private Restaurant restaurant;
+
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "MEMBER_FK")
+    @Basic(optional = false)
+    private Member member;
+
+    @Basic(optional = false)
+    private String content;
+
+    @Basic(optional = false)
+    private Integer flavorScore;
+
+    @Basic(optional = false)
+    private Integer serviceScore;
+
+    @Basic(optional = false)
+    private Integer priceScore;
+
+    @OneToMany(mappedBy = "review")
+    private List<ReviewImage> reviewImages = new ArrayList<>();
+
 }
