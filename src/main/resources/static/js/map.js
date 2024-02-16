@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded',async() =>{
 	// DB의 restaurant 테이블의 정보들을 불러오기...
 	try{
 		const response = await axios.get('/map/all');
-		console.log(response.data);
 		
 	    // DB에서 받은 음식점 정보를 이용하여 마커 생성
 	    response.data.forEach(restaurant => {

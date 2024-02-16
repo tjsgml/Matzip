@@ -4,6 +4,8 @@ package com.itwill.matzip.domain;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -47,12 +49,14 @@ public class Restaurant extends BaseTimeEntity {
     private double lat;
 
     @ToString.Exclude
+    @JsonInclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_FK")
     @Fetch(FetchMode.JOIN)
     private Category category;
 
     @ToString.Exclude
+    @JsonInclude
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "RESTAURANT_FK")
     private List<Menu> menus;
