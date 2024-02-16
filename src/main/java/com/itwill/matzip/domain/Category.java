@@ -6,6 +6,8 @@ import software.amazon.awssdk.core.pagination.sync.PaginatedResponsesIterator;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
@@ -14,6 +16,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 public class Category {
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CATEGORY_PK")
@@ -23,6 +26,7 @@ public class Category {
     private String name;
 
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_FK")
     private Set<Restaurant> restaurants;
