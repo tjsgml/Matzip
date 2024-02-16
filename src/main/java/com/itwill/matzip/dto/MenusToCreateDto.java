@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -14,4 +15,8 @@ import java.util.List;
 public class MenusToCreateDto {
     Long restaurantId;
     List<MenuToCreateDto> menus;
+
+    public void setMenus (MenuToCreateDto... menus) {
+        this.menus = Arrays.stream(menus).toList();
+    }
 }

@@ -1,11 +1,9 @@
 package com.itwill.matzip.web.admin;
 
 import com.itwill.matzip.domain.Category;
+import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.Restaurant;
-import com.itwill.matzip.dto.MenusToCreateDto;
-import com.itwill.matzip.dto.RestaurantSearchCond;
-import com.itwill.matzip.dto.RestaurantToCreateDto;
-import com.itwill.matzip.dto.RestaurantUpdateDto;
+import com.itwill.matzip.dto.*;
 import com.itwill.matzip.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,21 +87,44 @@ public class AdminMatzipController {
     public ResponseEntity<URI> addMenuToRestaurant(@RequestBody MenusToCreateDto menus, @PathVariable Long restaurantId) {
         menus.setRestaurantId(restaurantId);
 
-        adminService.addMenuToRestaurant(menus);
+        adminService.addMenusToRestaurant(menus);
         URI url = URI.create("./");
         return ResponseEntity.created(url).build();
+    }
+
+    @ResponseBody
+    @PostMapping("/restaurant/{restaurantId}/menu/one")
+    public ResponseEntity<Long> addMenuToRestaurant(@RequestBody MenuToCreateDto menu, @PathVariable Long restaurantId) {
+        log.info("addMenuToRestaurant(MenuToCreateDto={})",menu);
+        Menu menuCreated = adminService.addMenuToRestaurant(restaurantId, menu);
+
+        return ResponseEntity.ok(menuCreated.getId());
     }
 
     //    메뉴 삭제 REST API
     @ResponseBody
     @DeleteMapping("/restaurant/menu")
-    public ResponseEntity<Void> deleteMenuToRestaurant(@RequestParam List<Long> menus) {
+    public ResponseEntity<Void> deleteMenuToRestaurant(@RequestParam List<Long> menuId) {
 
-        log.info("deleteMenuToRestaurant(menus={})", menus);
+        log.info("deleteMenuToRestaurant(menus={})", menuId);
 
-        adminService.deleteMenuFromRestaurant(menus);
+        adminService.deleteMenuFromRestaurant(menuId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @ResponseBody
+    @PatchMapping("/restaurant/menu/{menuId}/price")
+    public ResponseEntity<Menu> updateMenuPriceToRestaurant(@PathVariable Long menuId, @RequestParam Long price) {
+        Menu menu = adminService.updateMenuPrice(menuId, price);
+        return ResponseEntity.ok(menu);
+    }
+
+    @ResponseBody
+    @PatchMapping("/restaurant/menu/{menuId}/name")
+    public ResponseEntity<Menu> updateMenuNameToRestaurant(@PathVariable Long menuId, @RequestParam String name) {
+        Menu menu = adminService.updateMenuName(menuId, name);
+        return ResponseEntity.ok(menu);
     }
 
     @ResponseBody
@@ -135,7 +156,9 @@ public class AdminMatzipController {
 
     @PatchMapping("/restaurant/{restaurantId}")
     public ResponseEntity<Restaurant> updateRestaurantInfo(@RequestBody RestaurantUpdateDto restaurantUpdateDto) {
-        Restaurant updatedRestaurant= adminService.updateRestaurant(restaurantUpdateDto);
+        Restaurant updatedRestaurant = adminService.updateRestaurant(restaurantUpdateDto);
         return ResponseEntity.ok(updatedRestaurant);
     }
+
+
 }

@@ -1,9 +1,6 @@
 package com.itwill.matzip.service;
 
-import com.itwill.matzip.domain.BusinessHour;
-import com.itwill.matzip.domain.Category;
-import com.itwill.matzip.domain.Restaurant;
-import com.itwill.matzip.domain.RestaurantStatus;
+import com.itwill.matzip.domain.*;
 import com.itwill.matzip.domain.enums.BusinessDay;
 import com.itwill.matzip.dto.*;
 import com.itwill.matzip.repository.BusinessHourRepository;
@@ -87,12 +84,20 @@ public class AdminService {
         return result;
     }
 
-    public void addMenuToRestaurant(MenusToCreateDto menus) {
+    public void addMenusToRestaurant(MenusToCreateDto menus) {
         Restaurant restaurant = restaurantDao.findById(menus.getRestaurantId()).orElse(null);
         menus.getMenus().forEach(el -> {
             menuDao.save(el.toEntity(restaurant));
         });
     }
+
+    public Menu addMenuToRestaurant(Long restaurantId , MenuToCreateDto menu) {
+        Restaurant restaurant = restaurantDao.findById(restaurantId).orElseThrow();
+        Menu menuToCreate = menu.toEntity(restaurant);
+        menuDao.save(menuToCreate);
+        return menuToCreate;
+    }
+
 
     public void deleteMenuFromRestaurant(List<Long> menus) {
         menuDao.deleteAllById(menus);
@@ -176,5 +181,19 @@ public class AdminService {
         restaurant.updateLat(restaurantUpdateDto.getLat());
 
         return restaurant;
+    }
+
+    @Transactional
+    public Menu updateMenuName(Long menuId, String name) {
+        Menu menu = menuDao.findById(menuId).orElseThrow();
+        menu.updateName(name);
+        return menu;
+    }
+
+    @Transactional
+    public Menu updateMenuPrice(Long menuId, Long price) {
+        Menu menu = menuDao.findById(menuId).orElseThrow();
+        menu.updatePrice(price);
+        return menu;
     }
 }

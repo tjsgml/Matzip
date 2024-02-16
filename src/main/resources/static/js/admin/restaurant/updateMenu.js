@@ -122,7 +122,7 @@ submitBtn.addEventListener("click", async () => {
     let resp = null;
     if (dataToDelete.length > 0) {
         dataToDelete.forEach(el => {
-            query += (query === "") ? ("menus=" + el) : ("&menus=" + el);
+            query += (query === "") ? ("menuId=" + el) : ("&menuId=" + el);
         })
 
         resp = await axios.delete("../menu?" + query);

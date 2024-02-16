@@ -37,7 +37,7 @@ public class RestaurantQuerydslImpl extends QuerydslRepositorySupport implements
             builder.and(restaurant.status.eq(cond.getRestaurantStatus()));
         }
 
-        if (cond.getKeyword() != null) {
+        if (cond.getKeyword() != null && !cond.getKeyword().isBlank()) {
             switch (cond.getKeywordCriteria()) {
                 case "NAME" -> {
                     builder.and(restaurant.name.containsIgnoreCase(cond.getKeyword()));
