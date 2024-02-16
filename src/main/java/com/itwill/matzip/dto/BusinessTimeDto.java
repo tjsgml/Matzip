@@ -22,14 +22,13 @@ public class BusinessTimeDto {
     String day;
 
     private String getStartTime() {
-        return startHour + ":" + String.format("%02d", startMinute);}
+        return String.format("%02d", startHour) + ":" + String.format("%02d", startMinute);}
 
     private String getEndTime() {
-        return endHour + ":" + String.format("%02d", endMinute);
+        return String.format("%02d", endHour) + ":" + String.format("%02d", endMinute);
     }
 
     public BusinessHour toEntity(Restaurant restaurant) {
-
         if (!isHoliday) {
             return BusinessHour.builder()
                     .restaurant(restaurant)
