@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
 
@@ -44,17 +46,19 @@ public class Restaurant extends BaseTimeEntity {
     @ToString.Exclude
     @JsonInclude
     @ManyToOne(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "CATEGORY_FK")
     private Category category;
 
     @ToString.Exclude
     @JsonInclude
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "RESTAURANT_FK")
     private List<Menu> menus;
+
     @Builder.Default
     @ToString.Exclude
-
     @Enumerated(EnumType.STRING)
     private RestaurantStatus status = RestaurantStatus.WAIT;
 

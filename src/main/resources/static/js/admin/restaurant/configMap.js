@@ -2,7 +2,7 @@ let markers = [];
 
 const mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
-        center: new kakao.maps.LatLng(origin_lng, origin_lat), // 지도의 중심좌표
+        center: new kakao.maps.LatLng(origin_lat, origin_lng), // 지도의 중심좌표
         draggable: true,
         level: 3 // 지도의 확대 레벨
     };

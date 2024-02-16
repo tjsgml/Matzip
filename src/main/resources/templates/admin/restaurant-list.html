@@ -113,8 +113,11 @@
                         <button th:if="${status ne OPEN}" class="btn btn-outline-secondary btn-sm disabled" disabled>수정</button>
                     </td>
                     <td>
-                        <button th:if="${matzip.status ne CLOSURE}"
+                        <button th:if="${matzip.status eq OPEN}"
                                 class="btn btn-outline-secondary btn-sm close-restaurant">폐업전환
+                        </button>
+                        <button th:if="${matzip.status eq WAIT}"
+                                class="btn btn-outline-secondary btn-sm close-restaurant disabled" disabled>폐업전환
                         </button>
                         <button th:if="${matzip.status eq CLOSURE}"
                                 class="btn btn-outline-secondary btn-sm delete-restaurant">삭제
