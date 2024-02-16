@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head th:replace="~{/layout/fragment-common.html::my-header('MAT.ZIP ADMIN')}"></head>
+<link href="/css/admin/admin-common.css" rel="stylesheet">
+<body>
+<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+<div class="mz-admin-container">
+    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <main class="m-2">
+        <h5 class="my-3" style="padding-left: 10px">
+            💪🏼심땡땡님 오늘도 득근💪🏼<br />
+            심땡땡님 오늘도 월루🥸</h5>
+        <div class="row-grid">
+            <div>
+                <h3 class="text-center">레스토랑 리뷰</h3>
+                <div class="column-grid-double">
+                    <a th:href="@{/admin/matzip/restaurant}" class="btn column-grid-item">레스토랑 등록</a>
+                    <a th:href="@{/admin/matzip/restaurant/all}" class="btn column-grid-item">레스토랑 관리</a>
+                    <a class="btn column-grid-item">버튼</a>
+                    <a class="btn column-grid-item">버튼</a>
+                    <a class="btn column-grid-item">버튼</a>
+                    <a class="btn column-grid-item">버튼</a>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-center">Get 꿀조합</h3>
+                <div class="column-grid-double">
+                    <a class="btn column-grid-item">Get꿀조합</a>
+                    <a class="btn column-grid-item">레스토랑 등록하기</a>
+                    <a class="btn column-grid-item">버튼</a>
+                    <a class="btn column-grid-item">버튼</a>
+                    <a class="btn column-grid-item">버튼</a>
+                    <a class="btn column-grid-item">버튼</a>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-center" >어드민 관리</h3>
+                <div class="column-grid-double">
+                    <a class="btn column-grid-item">Get꿀조합</a>
+                    <a class="btn column-grid-item">레스토랑 등록하기</a>
+                    <a class="btn column-grid-item">버튼</a>
+                    <a class="btn column-grid-item">버튼</a>
+                    <a class="btn column-grid-item">버튼</a>
+                    <a class="btn column-grid-item">버튼</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+</html>

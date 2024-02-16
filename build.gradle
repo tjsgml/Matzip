@@ -21,13 +21,11 @@ repositories {
     mavenCentral()
 }
 
-dependencies {   
+dependencies {
 	//Sprinng Security  의존성, Thymeleaf 템플릿 엔진의 Spring Security 추가 기능
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	testImplementation 'org.springframework.security:spring-security-test'
-	//---------------------------------------------------------------------------
-	 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -36,33 +34,33 @@ dependencies {
     runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
     // gradle build task 에러를 해결하기 위해서:
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
-    
+
     // Querydsl -----
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
     annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
     annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
     // --------------
-    
+
     //aws S3 -----
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-    
+
     implementation 'software.amazon.awssdk:s3:2.17.100'
     // -----------
-    
+
     //jasypt-spring-boot-starter---
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
     //-----------------------------
 
-	//oAuth2 client 라이브러리
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	//이메일 라이브러리
-	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	
+    //oAuth2 client 라이브러리
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    //이메일 라이브러리
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {
@@ -70,13 +68,13 @@ tasks.named('test') {
 }
 
 // Querydsl 관련 빌드 옵션 -----
-def querydslDir = "$buildDir/generated/querydsl" 
+def querydslDir = "$buildDir/generated/querydsl"
 
 sourceSets {
-    main.java.srcDirs += [ querydslDir ]
+    main.java.srcDirs += [querydslDir]
 }
 
-tasks.withType(JavaCompile){
+tasks.withType(JavaCompile).configureEach {
     options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
 }
 
