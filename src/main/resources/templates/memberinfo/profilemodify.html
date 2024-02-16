@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="~{/memberinfo/fragments::myinfo_head}"></head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-3"></div>
+
+			<!-- 메인 -->
+			<div class="col-md-6 mymain">
+
+				<!-- 마이페이지 헤더 -->
+				<header class="barandmeta">
+					<div th:replace="~{/memberinfo/fragments::myinfo_bar('프로필 수정')}"></div>
+				</header>
+
+				<main class="sidemargin_lr">
+
+					<form>
+
+						<div class="mypage-profile modify_profile">
+							<div class="profile-pic">
+								<img
+									src="http://k.kakaocdn.net/dn/bE8FLr/btsDdGvLHbV/xFH85Q2DVQhNvM69GJXkGk/img_640x640.jpg" />
+								<i class="fa-solid fa-pen"></i>
+							</div>
+						</div>
+
+
+						<!-- 닉네임, 이메일, 생년월일, 성별, 비밀번호 -->
+						<div>
+							<label>닉네임</label>
+							<input type="text" id="nickname" />
+						</div>
+						<div>
+							<label>이메일</label>
+							<input type="email" id="email" />
+						</div>
+						<div>
+							<label>생년월일</label>
+							<input type="date" id="birth" />
+						</div>
+						<div>
+							<label>생년월일</label>
+							<input type="date" id="birth" />
+						</div>
+
+
+					</form>
+				</main>
+
+			</div>
+
+			<div class="col-md-3"></div>
+		</div>
+	</div>
+
+	<!-- 자바 스크립트 모음 -->
+	<script th:replace="~{/memberinfo/fragments::script_bs}"></script>
+	<script th:replace="~{/memberinfo/fragments::script_icons}"></script>
+</body>
+
+</html>

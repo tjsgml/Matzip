@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="~{/memberinfo/fragments::myinfo_head}"></head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-3"></div>
+
+			<!-- 메인 -->
+			<div class="col-md-6 mymain">
+
+				<!-- 마이페이지 헤더 -->
+				<header class="barandmeta">
+					<div th:replace="~{/memberinfo/fragments::myinfo_bar('마이페이지')}"></div>
+					<div th:replace="~{/memberinfo/fragments::myinfo_profile}"></div>
+				</header>
+
+				<!-- 광고란 -->
+				<div class="ad"></div>
+
+				<!-- 마이 픽/리뷰 버튼들 -->
+				<div th:replace="~{/memberinfo/fragments::myinfo_btn('1')}"></div>
+
+				<!-- 북마크 리스트 -->
+				<div class="restaurant-list">
+
+					<!-- 포스트 1개-->
+					<div class="restaurant-info">
+
+						<!-- 음식점 사진 -->
+						<a href="#">
+							<img
+								src="https://image.toast.com/aaaaaqx/catchtable/shopinfo/sUK7s5qW1j99fY2FXaBjsDQ/uk7s5qw1j99fy2fxabjsdq_239122433357711_thumbMenuImage.jpg" />
+						</a>
+
+						<!-- 음식점 정보 -->
+						<div class="restaurant-detail">
+							<a href="#">
+								<h4>문화시민 서울(강남)</h4>
+								<div class="restaurant-rating">
+									<span>✨</span>
+									<span>4.7</span>
+									<span>(722)</span>
+								</div>
+								<div class="restaurant-category">
+									<span>카페 디저트</span>
+									<span>.</span>
+									<span>강남</span>
+								</div>
+							</a>
+						</div>
+
+						<!-- 북마크 -->
+						<div class="restaurant-mypick">
+							<a href="#">
+								<img src="/img/like_heart.png" />
+							</a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="col-md-3"></div>
+		</div>
+	</div>
+
+	<!-- 자바 스크립트 모음 -->
+	<script th:replace="~{/memberinfo/fragments::script_bs}"></script>
+</body>
+
+</html>

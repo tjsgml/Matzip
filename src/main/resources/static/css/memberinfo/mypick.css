@@ -1,0 +1,75 @@
+@charset "UTF-8";
+
+.restaurant-info {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 30px;
+}
+
+.restaurant-info>a:first-child img {
+	width: 78px;
+	height: 104px;
+	border-radius: 4px;
+	background-size: cover;
+	object-fit: cover;
+	box-sizing: border-box;
+	border: 1px solid #f1f1f1;
+	margin-right: 15px;
+}
+
+.restaurant-detail {
+	width: 100%;
+}
+
+.restaurant-detail h4 {
+	font-weight: 600;
+	font-size: 18px;
+}
+
+.restaurant-rating {
+	display: flex;
+	align-items: center;
+}
+
+.restaurant-rating span {
+	margin-right: 5px;
+}
+
+.restaurant-rating span:nth-child(2) {
+	font-weight: 600;
+	font-size: 14px;
+}
+
+.restaurant-rating span:last-child {
+	color: #999999;
+	font-size: 12px;
+}
+
+.restaurant-category span {
+	color: #aaaaaa;
+	font-size: 11px;
+}
+
+.restaurant-mypick {
+	align-self: self-start;
+	padding-top: 5px;
+}
+
+.restaurant-mypick>a {
+	display: block;
+	width: 30px;
+	height: 30px;
+	border: 1.2px solid #AAAAAA;
+	padding: 5px;
+	border-radius: 50%;
+	position :relative;
+}
+
+.restaurant-mypick>a img {
+position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 7.3px;
+    left: 6.8px;
+}

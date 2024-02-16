@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+@import "../css/memberinfo/component.css";
+@import "../css/memberinfo/mypick.css";
+@import "../css/memberinfo/myreview.css";
+@import "../css/memberinfo/modify.css";
+
+
+body {
+	background-color: #F0F0F3;
+}

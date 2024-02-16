@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+.modify_profile {
+	justify-content: center;
+}
+
+.modify_profile>.profile-pic {
+	margin:0;
+	position: relative;
+}
+
+.modify_profile>.profile-pic>img{
+	width: 96px;
+	height: 96px;
+}
+
+
+.modify_profile>.profile-pic>i {
+	position: absolute;
+	box-shadow: 1px 1px 5px #aaaaaa;
+	stroke-dasharray: 5px;
+	background-color: white;
+	padding: 5px;
+	border-radius: 50%;
+	font-size: 10px;
+	bottom: 3px;
+	right:2px
+}

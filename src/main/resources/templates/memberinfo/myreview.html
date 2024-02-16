@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="~{/memberinfo/fragments::myinfo_head}"></head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-3"></div>
+
+			<!-- 마이 페이지 메인 -->
+			<div class="col-md-6 mymain">
+
+				<!-- 마이페이지 헤더 -->
+				<header class="barandmeta">
+					<div th:replace="~{/memberinfo/fragments::myinfo_bar('마이페이지')}"></div>
+					<div th:replace="~{/memberinfo/fragments::myinfo_profile}"></div>
+				</header>
+
+				<!-- 광고란 -->
+				<div class="ad"></div>
+
+				<!-- 마이 픽/리뷰 버튼들 -->
+				<div th:replace="~{/memberinfo/fragments::myinfo_btn('2')}"></div>
+
+				<div>
+					<dl class="overall-avg">
+						<dt>평균 별점</dt>
+						<dd>
+							<strong>5</strong>
+							<div class="stars">
+								<img src="/img/star_on.png" />
+								<img src="/img/star_on.png" />
+								<img src="/img/star_on.png" />
+								<img src="/img/star_on.png" />
+								<img src="/img/star_off.png" />
+							</div>
+						</dd>
+					</dl>
+				</div>
+
+				<!-- 리뷰 리스트 -->
+				<div class="review-list">
+
+					<!-- 리뷰 포스트 1개 -->
+					<div class="review-post">
+
+						<div class="review-post_column">
+							<a href="#">
+								<img class="img-sm"
+									src="https://image.toast.com/aaaaaqx/catchtable/shopinfo/sUK7s5qW1j99fY2FXaBjsDQ/uk7s5qw1j99fy2fxabjsdq_239122433357711_thumbMenuImage.jpg" />
+								<div class="review-info">
+									<h4>문화시민 서울</h4>
+									<div>카페 디저트. 강남</div>
+								</div>
+							</a>
+						</div>
+
+						<!-- 이미지 뿌리는 곳 -->
+						<div class="review-post_column">
+							<div class="review-img_pic">
+								
+								
+							</div>
+						</div>
+
+						<div class="review-post_column">
+							<div>
+								<span>✨</span>
+								<span>5.0</span>
+							</div>
+							<div>2023년 10월 09일</div>
+						</div>
+						<div class="review-post_column">
+							<div>
+								<span>맛</span>
+								<span>
+									✨
+									<strong>5.0</strong>
+								</span>
+							</div>
+							<div>
+								<span>분위기</span>
+								<span>
+									✨
+									<strong>5.0</strong>
+								</span>
+							</div>
+							<div>
+								<span>서비스</span>
+								<span>
+									✨
+									<strong>5.0</strong>
+								</span>
+							</div>
+						</div>
+						<div class="review-post_column">
+							<p>음식 짱짱 맛남!!!!!</p>
+						</div>
+
+						<div class="review-post_column dropdown text-end">
+							<div class="d-block link-body-emphasis text-decoration-none " data-bs-toggle="dropdown"
+								aria-expanded="false">
+								<img src="/img/icon_null.png" />
+							</div>
+							<ul class="dropdown-menu text-small dropdown-menu-end mt-2">
+								<li>
+									<a class="dropdown-item" href="#">리뷰 삭제</a>
+								</li>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-md-3"></div>
+		</div>
+		<script th:replace="~{/memberinfo/fragments::script_bs}"></script>
+</body>
+
+</html>
