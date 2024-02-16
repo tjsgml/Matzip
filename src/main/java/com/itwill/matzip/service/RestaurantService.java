@@ -2,14 +2,17 @@ package com.itwill.matzip.service;
 
 import java.util.List;
 
+import com.itwill.matzip.repository.*;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import org.springframework.stereotype.Service;
 
 import com.itwill.matzip.domain.BusinessHour;
+import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.Menu;
+import com.itwill.matzip.domain.MyPick;
 import com.itwill.matzip.domain.Restaurant;
-import com.itwill.matzip.repository.BusinessHourRepository;
-import com.itwill.matzip.repository.MenuRepository;
+import com.itwill.matzip.domain.UpdateRequest;
+import com.itwill.matzip.dto.UpdateRequestItemDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,18 +21,26 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class RestaurantService {
+	
 	//RESTAURANT 테이블
 	private final RestaurantRepository restDao;
 	//BUSINESS_HOUR 테이블
 	private final BusinessHourRepository bsDao;
 	//MENU 테이블
 	private final MenuRepository menuDao;
+	//MYPICK 테이블
+	private final MyPickRepository myPickDao;
+	//MEMBER 테이블
+	private final MemberRepository memberDao;
+	//UPDATE_REQUEST 테이블
+	private final UpdateRequestRepository URdao;
 	
 	//음식점 전체 목록 가져오기
 	public List<Restaurant> findAllMaps(){
 		log.info("@@@ findAllMaps");
-		
-		return restDao.findAll();
+		List<Restaurant> list =restDao.findAll();
+		log.info(list.toString());
+		return list;
 	}
 	
 	//음식점 한개 목록 가져오기
@@ -58,5 +69,52 @@ public class RestaurantService {
 		return menuList;
 	}
 	
+	//멤버 id 가져오기
+	public Long findMemberId(String username) {
+		Member member = memberDao.findByUsername(username).orElseThrow();
+		
+		return member.getId();
+	}
 	
+	//좋아요 정보 가져오기- 있으면 1, 없으면 null을 반환.
+	public Long checkMyPick(Long memberId,Long restId) {
+		
+		MyPick myPick = myPickDao.findByMemberIdAndRestaurantId(memberId, restId);
+		
+		if(myPick == null) {
+			return null;
+		}else {
+			return myPick.getId();
+		}
+	}
+	
+	//좋아요 삭제
+	public void deleteMyPick(Long myPickId) {
+		myPickDao.deleteById(myPickId);
+		
+	}
+	//좋아요 생성
+	public Long registerMyPick(Long memberId, Long restId) {
+		
+		Member member = memberDao.findById(memberId).orElse(null);
+		Restaurant rest = restDao.findById(restId).orElse(null);
+		
+		MyPick myPick = MyPick.builder()
+							  .member(member)
+							  .restaurant(rest)
+							  .build();
+		
+		myPick = myPickDao.save(myPick);				      
+		
+		return myPick.getId();
+	}
+	
+	// 수정 요청 사항 삽입
+	public void updateRequest(UpdateRequestItemDto dto) {
+		UpdateRequest ur = UpdateRequest.builder()
+										.restId(dto.getRestId())
+										.content(dto.getContent())
+										.build();
+		URdao.save(ur);
+	}
 }

@@ -30,7 +30,7 @@ body {
 .v26_81 {
   width: 200px;
   color: rgba(0,0,0,1);
-  top: 23px;
+  top: 27px;
   left: 164px;
   font-weight: Bold;
   position: absolute;
@@ -41,8 +41,8 @@ body {
 .v26_82 {
   width: 100px;
   color: rgba(136,117,127,1);
-  top: 53px;
-  left: 164px;
+  top: 63px;
+  left: 169px;
   font-weight: Medium;
   position: absolute;
   font-size: 20px;
@@ -67,14 +67,14 @@ body {
   background-size: cover;
   position: absolute;
   opacity: 1;
-  top: 104px;
+  top: 100px;
   left: 166px;
   overflow: hidden;
 }
 .v26_90 {
   width: 90px;
   color: rgba(0,0,0,1);
-  top: 107px;
+  top: 100px;
   left: 191px;
   font-weight: Medium;
   position: absolute;
@@ -94,14 +94,14 @@ body {
   background-size: cover;
   position: absolute;
   opacity: 1;
-  top: 106px;
-  left: 290px;
+  top: 100px;
+  left: 295px;
   overflow: hidden;
 }
 .v26_99 {
   width: 70px;
   color: rgba(0,0,0,1);
-  top: 107px;
+  top: 100px;
   left: 319px;
   font-weight: Medium;
   position: absolute;
@@ -133,14 +133,26 @@ body {
   width: 80px;
   color: rgba(0,0,0,1);
   top: 197px;
-  left: 550px;
+  left: 220px;
   font-weight: Regular;
   position: absolute;
   font-size: 17px;
   opacity: 1;
   text-align: center;
 }
-
+.col-md-3::-webkit-scrollbar{
+				display: none;
+			}
+#restPost:hover{
+	background-color: azure;
+}
+#restPost:hover .v26_81{
+	color: #FF230A;
+}
+.v26_78:hover {
+  background-color: #F5F5F5; /* 원하는 배경색으로 변경 */
+  /* 추가적인 스타일 변경을 원한다면 여기에 추가하세요 */
+}
 @media (max-width: 768px) {
   .v26_81 {
     font-size: 18px; /* 미디어 쿼리에 따라 폰트 크기 변경 */

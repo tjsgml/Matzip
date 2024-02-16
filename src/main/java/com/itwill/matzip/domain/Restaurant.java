@@ -1,6 +1,5 @@
 package com.itwill.matzip.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -42,53 +41,51 @@ public class Restaurant extends BaseTimeEntity {
 
     private double lat;
 
+    @ToString.Exclude
+    @JsonInclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORY_FK")
+    private Category category;
+
+    @ToString.Exclude
+    @JsonInclude
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JoinColumn(name = "RESTAURANT_FK")
+    private List<Menu> menus;
     @Builder.Default
     @ToString.Exclude
 
     @Enumerated(EnumType.STRING)
     private RestaurantStatus status = RestaurantStatus.WAIT;
 
-//    @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_FK")
-    @JsonInclude
-    private Category category;
-
-    @ToString.Exclude
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "RESTAURANT_FK")
-    @JsonIgnore
-    private List<Menu> menus;
-
-    public void updateName (String name) {
+    public void updateName(String name) {
         this.name = name;
     }
 
-    public void updateAddress (String address) {
+    public void updateAddress(String address) {
         this.address = address;
     }
-    public void updateDetailAddress (String detailAddress) {
+
+    public void updateDetailAddress(String detailAddress) {
         this.detailAddress = detailAddress;
     }
 
-    public void updateContact (String contact) {
+    public void updateContact(String contact) {
         this.contact = contact;
     }
 
-    public void updateLon (Double lon) {
+    public void updateLon(Double lon) {
         this.lon = lon;
     }
 
-    public void updateLat (Double lat) {
+    public void updateLat(Double lat) {
         this.lat = lat;
     }
 
-    public void updateCategory (Category category) {
+    public void updateCategory(Category category) {
         this.category = category;
     }
 
 
 }
-
-
 

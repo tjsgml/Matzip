@@ -19,16 +19,15 @@ import lombok.*;
 @Entity
 @Builder
 public class Menu {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MENU_PK")
     private Long id;
 
     @ToString.Exclude
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RESTAURANT_FK")
-    @JsonIgnore
     private Restaurant restaurant;
 
     private String name; // menu name
