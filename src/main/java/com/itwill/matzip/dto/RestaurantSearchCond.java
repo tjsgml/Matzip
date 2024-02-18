@@ -1,6 +1,7 @@
 package com.itwill.matzip.dto;
 
 import com.itwill.matzip.domain.RestaurantStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

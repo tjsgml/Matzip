@@ -1,4 +1,4 @@
-package com.itwill.matzip.domain;
+package com.itwill.matzip.domain.enums;
 
 public enum HashtagCategoryName {
 	VISIT_PURPOSE("visitPurpose"),

@@ -25,22 +25,24 @@
 	//좋아요 버튼
 	const btnMyPick = document.getElementById('btnMyPick');
 	
-	//평가하기 버튼
-	const btnEval = document.getElementById('btnEval');
-	
-	btnEval.addEventListener('click',() => {
-			if(isLoggedin){
-				console.log('클릭');
-			}else{
-				 if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
-				        // 로그인 페이지로 이동
-				        window.location.href = '/member/login';
-				    } else {
-				        // 사용자가 취소한 경우
-				        alert('로그인이 취소되었습니다.');
-				    }
-			}
-	});
+	// 평가하기 버튼 클릭 이벤트 수정
+    const btnEval = document.getElementById('btnEval');
+    
+    btnEval.addEventListener('click', () => {
+        if(isLoggedin){
+            // 로그인 상태인 경우, 리뷰 작성 페이지로 이동하면서 레스토랑 ID 전달
+            const restaurantId = new URL(window.location.href).searchParams.get("id");
+            window.location.href = `/review/create?restaurantId=${restaurantId}`;
+        } else {
+            // 로그인이 필요한 경우
+            if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
+                window.location.href = '/member/login';
+            } else {
+                alert('로그인이 취소되었습니다.');
+            }
+        }
+    });
+
 					
 
 	//폐업신고,정보수정제안 버튼 클릭시 

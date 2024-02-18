@@ -229,6 +229,25 @@ document.addEventListener("DOMContentLoaded", function() {
             
         });
     });
+    
+    // 레스토랑 ID
+    
+    // URL에서 식당 ID 읽어오기
+    const params = getQueryStringParams(window.location.search);
+    const restaurantId = params.get('id'); // 'id'-쿼리 스트링 파라미터
+    
+    // 식당 ID hidden input 추가
+    if(restaurantId) {
+        const hiddenRestaurantIdInput = document.createElement('input');
+        hiddenRestaurantIdInput.setAttribute('type', 'hidden');
+        hiddenRestaurantIdInput.setAttribute('name', 'restaurantId');
+        hiddenRestaurantIdInput.setAttribute('value', restaurantId);
+        document.querySelector('form').appendChild(hiddenRestaurantIdInput);
+    }
+    
+    function getQueryStringParams(query) {
+        return new URLSearchParams(query);
+    }
 
 
 

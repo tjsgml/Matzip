@@ -17,6 +17,8 @@ public class ReviewCreateDto {
     private List<String> moodTags;
     private List<String> convenienceTags;
     private MultipartFile[] images;
+    private Long restaurantId;
+
     
     
 	

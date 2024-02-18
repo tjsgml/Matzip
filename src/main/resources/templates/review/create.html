@@ -72,8 +72,11 @@
                             <h4 class="text-center-title">방문후기</h4>
                             <div class="review-comment form-control">
                             <div>
-                            
+                        
+                        <!-- hidden input 태그들 -->
                         <form th:action="@{/review/register}" th:object="${reviewForm}" method="post" enctype="multipart/form-data" id="reviewForm">
+                            <!-- restaurantId -->
+                            <input type="hidden" name="restaurantId" th:value="${restaurantId}" />
                             <!-- 리뷰평점 -->
                             <input type="hidden" id="tasteRating" name="tasteRating" value="0">
                             <input type="hidden" id="priceRating" name="priceRating" value="0">
@@ -137,7 +140,7 @@
 
                             
                           <button type="submit" class="btn btn-submit">리뷰 저장</button>
-                          </form>
+                        </form>
                     </div>
                     
                     

@@ -1,6 +1,5 @@
 package com.itwill.matzip.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +8,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.itwill.matzip.domain.HashtagCategory;
-import com.itwill.matzip.domain.HashtagCategoryName;
+import com.itwill.matzip.domain.Member;
+import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.domain.ReviewHashtag;
 import com.itwill.matzip.domain.ReviewImage;
+import com.itwill.matzip.domain.enums.HashtagCategoryName;
 import com.itwill.matzip.dto.ReviewCreateDto;
 import com.itwill.matzip.repository.HashtagCategoryRepository;
+import com.itwill.matzip.repository.MemberRepository;
 import com.itwill.matzip.repository.ReviewHashtagRepository;
 import com.itwill.matzip.repository.ReviewImageRepository;
 import com.itwill.matzip.repository.ReviewRepository;
+import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import com.itwill.matzip.util.S3Utility;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,28 +33,42 @@ public class ReviewService {
     private final ReviewHashtagRepository reviewHTDao;
     private final HashtagCategoryRepository hashCategoryDao;
     private final ReviewImageRepository reviewImageDao;
+    private final RestaurantRepository  restaurantDao;
+    private final MemberRepository memberDao; 
     private final S3Utility s3Util;
     
     @Autowired
     public ReviewService(ReviewRepository reviewDao, ReviewImageRepository reviewImageDao, 
                         ReviewHashtagRepository reviewHTDao, HashtagCategoryRepository hashCategoryDao,
+                        RestaurantRepository  restaurantDao, MemberRepository memberDao,
                         S3Utility s3Util) {
         this.reviewDao = reviewDao;
         this.reviewImageDao = reviewImageDao;
         this.reviewHTDao = reviewHTDao;
 		this.hashCategoryDao = hashCategoryDao;
+		this.restaurantDao = restaurantDao;
+		this.memberDao = memberDao;
         this.s3Util = s3Util;
+        
     }
     
     @Transactional
     public void saveReview(ReviewCreateDto dto) {
-        // 리뷰 엔티티 생성 및 기본 정보 설정 // TODO: member_fk, restaurant_fk
+    	
+    	Restaurant restaurant = restaurantDao.findById(dto.getRestaurantId()) 
+    			.orElseThrow(() -> new IllegalArgumentException("존재하지않는 restaurant ID: " + dto.getRestaurantId()));
+    	
+    	
+        // 리뷰 기본 정보 
         Review review = Review.builder()
                               .flavorScore(dto.getTasteRating())
                               .priceScore(dto.getPriceRating())
                               .serviceScore(dto.getServiceRating())
                               .content(dto.getReviewContent())
+                              .restaurant(restaurant)
                               .build();
+        
+        
         
         // 리뷰 저장
         Review savedReview = reviewDao.save(review);
