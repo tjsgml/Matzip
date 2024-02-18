@@ -18,6 +18,8 @@ public class ReviewCreateDto {
     private List<String> convenienceTags;
     private MultipartFile[] images;
     private Long restaurantId;
+    private Long memberId;
+    
 
     
     
