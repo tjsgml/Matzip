@@ -14,7 +14,6 @@ import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MemberSignupRequestDto;
 import com.itwill.matzip.repository.MemberRepository;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

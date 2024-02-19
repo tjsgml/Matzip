@@ -13,9 +13,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.enums.MemberRole;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class MemberSecurityDto extends User implements OAuth2User {
 
 	private static final long serialVersionUID = 1L;

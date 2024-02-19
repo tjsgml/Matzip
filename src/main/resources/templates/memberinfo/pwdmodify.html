@@ -18,63 +18,25 @@
 
 			<div class="col-md-6 main-bg-color">
 				<header class="mypage-header margin-side-lr">
-					<span>프로필 수정</span>
+					<span>비밀번호 수정</span>
 					<span><!--<a href="#"><i class="fa-sharp fa-solid fa-gear"></i></a>--></span>
 				</header>
 
 				<main>
 
-					<section class="profile-header">
-						<div class="profile-header__modify">
-							<a href="#">
-								<div class="modify-pic">
-									<img
-										src="http://k.kakaocdn.net/dn/bE8FLr/btsDdGvLHbV/xFH85Q2DVQhNvM69GJXkGk/img_640x640.jpg" />
-									<i class="fa-solid fa-pen"></i>
-								</div>
-							</a>
-						</div>
-					</section>
-
 					<section class="profile-update margin-side-lr">
 						<form>
 							<div>
-								<label>닉네임</label>
-								<input type="text" />
-								<div id="nickname-check"></div>
+								<label>현재 비밀번호</label>
+								<input type="password" />
 							</div>
 							<div>
-								<label>생년월일</label>
-								<input type="date" />
+								<label>새로운 비밀번호</label>
+								<input type="password" />
 							</div>
-							<div>
-								<label>성별</label>
-								<div class="select">
-									<input type="radio" id="gender_m" name="gender" value="M" checked><label
-										for="gender_m">남자</label>
-									<input type="radio" id="gender_f" name="gender" value="F"><label
-										for="gender_f">여자</label>
-								</div>
-							</div>
-							<div>
-								<label>이메일</label>
-								<input type="email" />
-								<div id="email-check"></div>
-							</div>
-
+							<div id="pwd-check"></div>
 						</form>
-
-						<a th:href="@{/memberinfo/pwdmodify}">
-							<section class="pwd-modify">
-								<div>
-									<label>비밀번호</label>
-									<div>*********</div>
-								</div>
-								<i class="fa-solid fa-angle-right"></i>
-							</section>
-						</a>
-
-						<button id="modifyBtn">저장</button>
+						<button id="modifyBtn">변경</button>
 					</section>
 
 				</main>

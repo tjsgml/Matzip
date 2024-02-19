@@ -1,74 +1,148 @@
 <!DOCTYPE html>
 <html>
 
-<head th:replace="~{/memberinfo/fragments::myinfo_head}"></head>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>mat.zip</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+	<link rel="stylesheet" href="../css/memberinfo-style.css" />
+</head>
 
 <body>
 	<div class="container-fluid">
 		<div class="row">
+			<!-- 여백 -->
 			<div class="col-md-3"></div>
 
-			<!-- 메인 -->
-			<div class="col-md-6 mymain">
-
-				<!-- 마이페이지 헤더 -->
-				<header class="barandmeta">
-					<div th:replace="~{/memberinfo/fragments::myinfo_bar('마이페이지')}"></div>
-					<div th:replace="~{/memberinfo/fragments::myinfo_profile}"></div>
+			<div class="col-md-6 main-bg-color">
+				<header class="mypage-header margin-side-lr">
+					<span>마이페이지</span>
 				</header>
 
-				<!-- 광고란 -->
-				<div class="ad"></div>
+				<main>
+					<section class="profile-header margin-side-lr">
+						<div class="profile-header__meta">
+							<div class="meta-pic">
+								<img src="#"/>
+							</div>
+							<div class="meta-info">
+								<h4 th:text="${#authentication}"></h4>
+								<div class="meta-info__count">
+									<dl>
+										<dd>마이 픽</dd>
+										<dt>0</dt>
+									</dl>
+									<span>|</span>
+									<dl>
+										<dd>리뷰</dd>
+										<dt>0</dt>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div class="profile-header__btn">
+							<a th:href="@{/memberinfo/profilemodify}">프로필 수정</a>
+						</div>
+					</section>
 
-				<!-- 마이 픽/리뷰 버튼들 -->
-				<div th:replace="~{/memberinfo/fragments::myinfo_btn('1')}"></div>
+					<section class="tab-menu">
+						<ul>
+							<li class="active">
+								<a th:href="@{/memberinfo/mymain}">마이 픽</a>
+							</li>
+							<li><a th:href="@{/memberinfo/myreview}">리뷰</a></li>
+						</ul>
+					</section>
 
-				<!-- 북마크 리스트 -->
-				<div class="restaurant-list">
-
-					<!-- 포스트 1개-->
-					<div class="restaurant-info">
-
-						<!-- 음식점 사진 -->
+					<section class="list-all margin-side-lr">
 						<a href="#">
-							<img
-								src="https://image.toast.com/aaaaaqx/catchtable/shopinfo/sUK7s5qW1j99fY2FXaBjsDQ/uk7s5qw1j99fy2fxabjsdq_239122433357711_thumbMenuImage.jpg" />
+							<span>전체보기</span>
+							<span><i class="fa-solid fa-angle-right"></i></span>
 						</a>
+					</section>
 
-						<!-- 음식점 정보 -->
-						<div class="restaurant-detail">
+					<!-- 포스트 전체 -->
+					<section class="mypick-list">
+						<!-- 포스트 1개-->
+						<div class="mypick-post_one margin-side-lr">
+							<!-- 음식점 사진 -->
 							<a href="#">
-								<h4>문화시민 서울(강남)</h4>
-								<div class="restaurant-rating">
-									<span>✨</span>
-									<span>4.7</span>
-									<span>(722)</span>
-								</div>
-								<div class="restaurant-category">
-									<span>카페 디저트</span>
-									<span>.</span>
-									<span>강남</span>
-								</div>
+								<img
+									src="https://image.toast.com/aaaaaqx/catchtable/shopinfo/sUK7s5qW1j99fY2FXaBjsDQ/uk7s5qw1j99fy2fxabjsdq_239122433357711_thumbMenuImage.jpg" />
 							</a>
+
+							<!-- 음식점 정보 -->
+							<div class="mypick-detail">
+								<a href="#">
+									<h4>문화시민 서울(강남)</h4>
+									<div class="mypick-rating">
+										<img src="/img/v26_89.png" />
+										<span>4.7</span>
+										<span>(722)</span>
+									</div>
+									<div class="mypick-category">
+										<span>카페 디저트</span>
+										<span>.</span>
+										<span>강남</span>
+									</div>
+								</a>
+							</div>
+
+							<!-- 북마크 -->
+							<div class="mypick-pick">
+								<a href="#">
+									<img src="/img/like_heart.png" />
+								</a>
+							</div>
 						</div>
 
-						<!-- 북마크 -->
-						<div class="restaurant-mypick">
+						<div class="mypick-post_one margin-side-lr">
+							<!-- 음식점 사진 -->
 							<a href="#">
-								<img src="/img/like_heart.png" />
+								<img
+									src="https://image.toast.com/aaaaaqx/catchtable/shopinfo/sUK7s5qW1j99fY2FXaBjsDQ/uk7s5qw1j99fy2fxabjsdq_239122433357711_thumbMenuImage.jpg" />
 							</a>
-						</div>
-					</div>
 
-				</div>
+							<!-- 음식점 정보 -->
+							<div class="mypick-detail">
+								<a href="#">
+									<h4>문화시민 서울(강남)</h4>
+									<div class="mypick-rating">
+										<img src="/img/v26_89.png" />
+										<span>4.7</span>
+										<span>(722)</span>
+									</div>
+									<div class="mypick-category">
+										<span>카페 디저트</span>
+										<span>.</span>
+										<span>강남</span>
+									</div>
+								</a>
+							</div>
+
+							<!-- 북마크 -->
+							<div class="mypick-pick">
+								<a href="#">
+									<img src="/img/like_heart.png" />
+								</a>
+							</div>
+						</div>
+					</section>
+				</main>
 			</div>
 
+			<!-- 여백 -->
 			<div class="col-md-3"></div>
 		</div>
 	</div>
 
-	<!-- 자바 스크립트 모음 -->
-	<script th:replace="~{/memberinfo/fragments::script_bs}"></script>
+	<!-- java script -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+		crossorigin="anonymous"></script>
+	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
 </body>
 
 </html>
