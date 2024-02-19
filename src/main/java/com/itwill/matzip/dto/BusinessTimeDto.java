@@ -21,10 +21,10 @@ public class BusinessTimeDto {
     Integer endMinute;
     String day;
 
-    private String getStartTime() {
+    public String getStartTime() {
         return String.format("%02d", startHour) + ":" + String.format("%02d", startMinute);}
 
-    private String getEndTime() {
+    public String getEndTime() {
         return String.format("%02d", endHour) + ":" + String.format("%02d", endMinute);
     }
 
