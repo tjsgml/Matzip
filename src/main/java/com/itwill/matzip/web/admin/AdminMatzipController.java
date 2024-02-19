@@ -160,5 +160,12 @@ public class AdminMatzipController {
         return ResponseEntity.ok(updatedRestaurant);
     }
 
+    @ResponseBody
+    @PatchMapping("/restaurant/{restaurantId}/time")
+    public ResponseEntity<String> updateRestaurantBusinessTime(@RequestBody List<businessHourUpdateDto> businessHours) {
+
+
+        return ResponseEntity.ok("updated");
+    }
 
 }

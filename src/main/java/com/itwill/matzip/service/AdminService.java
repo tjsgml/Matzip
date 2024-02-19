@@ -70,16 +70,11 @@ public class AdminService {
 
         List<BusinessHour> bHours = businessHourDao.findByRestaurant(restaurant);
         Map<String, BusinessHour> businessHours = new HashMap<>();
-        bHours.forEach(el -> businessHours.put(el.getDays().getKor().trim(), el));
-        businessHours.keySet().forEach(e -> System.out.println(e));
+        bHours.forEach(el -> businessHours.put(el.getDays().name(), el));
         result.put("businessHours", businessHours);
 
-        List<BusinessDay> dayValue = Arrays.stream(BusinessDay.values()).toList();
-        List<String> days = new ArrayList<>();
-        dayValue.forEach(el -> days.add(el.getKor().trim()));
-//        days.forEach(System.out::println);
-        result.put("days", days);
-        log.info("businessHoursday222 = {}", businessHours.get(days.get(2)));
+        List<BusinessDay> dayList = Arrays.stream(BusinessDay.values()).toList();
+        result.put("dayList", dayList);
 
         return result;
     }
