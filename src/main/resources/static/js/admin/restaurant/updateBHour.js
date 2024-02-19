@@ -61,41 +61,46 @@ function mkFormatHourAndMinute(time, hourEl, minuteEl) {
 
 document.querySelector("button#save-change").addEventListener("click", updateBusinessHour);
 
-function updateBusinessHour() {
-    const datas = [];
+async function updateBusinessHour() {
+    const businessHours = [];
     let isValid = true;
 
     businessTimes.forEach(el => {
-            const bhourId = el.querySelector("input#bhour-id")?.value;
-            const bhourDay = el.querySelector("input#bhour-day")?.value;
+        const bhourId = el.querySelector("input#bhour-id")?.value;
+        const bhourDay = el.querySelector("input#bhour-day")?.value;
 
-            const inputStartHour = el.querySelector("input#input-start-hour");
-            const inputStartMinute = el.querySelector("input#input-start-minute");
-            const inputEndHour = el.querySelector("input#input-end-hour");
-            const inputEndMinute = el.querySelector("input#input-end-minute");
-            const isHoliday = el.querySelector("input#is-holiday-to-update").checked;
+        const inputStartHour = el.querySelector("input#input-start-hour");
+        const inputStartMinute = el.querySelector("input#input-start-minute");
+        const inputEndHour = el.querySelector("input#input-end-hour");
+        const inputEndMinute = el.querySelector("input#input-end-minute");
+        const isHoliday = el.querySelector("input#is-holiday-to-update").checked;
 
-            let data = {
-                bhourId: bhourId ?? null,
-                bhourDay: bhourDay ?? null,
-            }
-
-            if (isHoliday) {
-                data.isHoliday = isHoliday;
-            } else {
-                if (checkHourInputValid(inputStartHour) && checkHourInputValid(inputEndHour) && checkMinuteInputValid(inputStartMinute) && checkMinuteInputValid(inputEndMinute)) {
-                    data.isHoliday = isHoliday;
-                    data.startHour = inputStartHour.value;
-                    data.startMinute = inputStartMinute.value;
-                    data.endHour = inputEndHour.value;
-                    data.endMinute = inputEndMinute.value;
-                } else {
-                    data = null;
-                }
-            }
-            datas.push(data);
+        let data = {
+            bhourId: bhourId ?? null,
+            day: bhourDay ?? null,
         }
-    )
 
-    console.log(datas)
+        if (isHoliday) {
+            data.isHoliday = isHoliday;
+        } else {
+            if (checkHourInputValid(inputStartHour) && checkHourInputValid(inputEndHour) && checkMinuteInputValid(inputStartMinute) && checkMinuteInputValid(inputEndMinute)) {
+                data.isHoliday = isHoliday;
+                data.startHour = inputStartHour.value;
+                data.startMinute = inputStartMinute.value;
+                data.endHour = inputEndHour.value;
+                data.endMinute = inputEndMinute.value;
+            } else {
+                data = null;
+            }
+        }
+        businessHours.push(data);
+    })
+
+    const {data, status} = await axios.patch(location.href + "/time",  businessHours);
+
+    if (status === 200) {
+        location.reload();
+    } else {
+        alert("시간 변경에 문제가 발생했습니다. 다시 시도해주세요")
+    }
 }
