@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="kr">
+<script src="/js/admin/restaurant/searchLocation.js"></script>
+<script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
+<head th:replace="~{/layout/fragment-common.html::my-header('MAT.ZIP ADMIN | 맛집 추가')}"></head>
+<link href="/css/admin/admin-common.css" rel="stylesheet">
+<link href="/css/admin/admin-holiday.css" rel="stylesheet">
+<body>
+<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+
+<div class="mz-admin-container">
+    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <main>
+        <div class="mz-inner-container">
+            <div class="mz-main-comp">
+                <h4 class="page-main-desc">장소 추가하기</h4>
+                <div class="my-2">
+                    <div class="my-2"
+                         style="border: 1px #1B365C solid; padding : 20px; border-radius: 30px; background-color: #F2F5F5">
+                        <h5>장소 검색</h5>
+                        <div>
+                            <label class="mb-1" for="addrSearchInput">주소로 검색하기</label>
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="text" id="addrSearchInput" placeholder="주소"/>
+                                <button id="addrSearchBtn" class="btn input-group-text">검색</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="mb-1" for="keywordInput">장소로 검색하기</label>
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="text" id="keywordInput"
+                                       placeholder="추가하고 싶은 장소를 키워드로 검색하세요."/>
+                                <button id="keywordSearchBtn" class="btn input-group-text">검색</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label mt-3" for="select-category">카테고리 선택</label>
+                        <select id="select-category" class="form-select">
+                        <option th:each="category : ${categories}" th:value="${category.id}"
+                                th:text="${category.name}"></option>
+                    </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="mb-1" for="nameInput">가게명</label>
+                        <input class="form-control" type="text" id="nameInput" placeholder="가게이름"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="mb-1" for="addrInput">주소</label>
+                        <input class="form-control" type="text" id="addrInput" placeholder="주소" readonly/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="mb-1" for="detailAddrInput">상세주소</label>
+                        <input class="form-control" type="text" id="detailAddrInput" placeholder="상세 주소"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="mb-1" for="contactInput">전화번호</label>
+                        <input class="form-control" type="text" id="contactInput" placeholder="연락처"/>
+                    </div>
+                    <input class="form-control mb-3" type="hidden" id="lngInput"/>
+                    <input class="form-control mb-3" type="hidden" id="latInput"/>
+                </div>
+                <div id="business-time-container">
+                    <div>
+                        <ul id="placesList" style="padding: 0">
+                        </ul>
+
+                        <div id="pagination" class="pagination input-group d-flex">
+                        </div>
+                    </div>
+                    <hr class="border border-secondary border-2 opacity-50">
+                    <h5>영업 시간 등록하기</h5>
+                    <div class="text-secondary">선택 사항</div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='월', dayValue= 'MON')}"></div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='화', dayValue='TUE')}"></div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='수', dayValue= 'WED')}"></div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='목', dayValue= 'THU')}"></div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='금', dayValue= 'FRI')}"></div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='토', dayValue= 'SAT')}"></div>
+                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='일', dayValue= 'SUN')}"></div>
+                </div>
+            </div>
+            <div>
+                <div class="m-3" id="floating">
+                    <div class="text-end my-3">
+                        <div class="d-inline-block">
+                            <label class="mx-3" for="selectDistance">거리</label>
+                            <select id="selectDistance">
+                                <option value="1000">1km 이내</option>
+                                <option value="2000">2km 이내</option>
+                                <option value="5000">5km 이내</option>
+                                <option value="10000">10km 이내</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="map" class="mb-3"></div>
+                    <div class="input-group">
+                        <button class="form-control btn btn-outline-success active" id="draggable-btn">지도 드래그 활성화
+                        </button>
+                        <button class="form-control btn btn-outline-warning" id="un-draggable-btn">지도 드래그 비활성화</button>
+                    </div>
+                    <button id="submit-btn" class="btn btn-outline-primary mt-3 form-control">제출</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/admin/restaurant/variablesToCreateLocation.js"></script>
+<script src="/js/admin/restaurant/configMap.js"></script>
+<script src="/js/admin/restaurant/searchLocation.js"></script>
+<script src="/js/admin/restaurant/workingTime.js"></script>
+<script src="/js/admin/restaurant/submitInfoToRegisterRestaurant.js"></script>
+</body>
+</html>

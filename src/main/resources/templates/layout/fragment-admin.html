@@ -1,0 +1,96 @@
+<nav class="navbar navbar-expand-sm bg-dark d-flex"
+     style="justify-content:space-between;background-color: #292F3D" th:fragment="mz-top-nav">
+    <div class="container">
+        <a class="navbar-brand" href="/admin">
+            <img src="/image/admin/navy-bg-admin-logo.png" class="object-fit-cover" style="height: 50px"
+                 alt="logo"/>
+        </a>
+    </div>
+    <div class="collapse navbar-collapse justify-content-end mx-3" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item pe-2">
+                <a class="nav-link text-light" href="${memberMyPage}">
+                    <span class="bi bi-person fs-4"></span>
+                    <span class="navMenu"> My page</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="d-flex align-items-start bg-dark" style="height: 100%;" th:fragment="mz-nav">
+    <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <a class="mz-nav-link" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button"
+           th:href="@{/admin}"
+           role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>
+        <a class="mz-nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"
+           type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
+        <a class="mz-nav-link active" id="v-pills-disabled-tab" data-bs-toggle="pill" data-bs-target="#v-pills-disabled"
+           type="button" role="tab" aria-controls="v-pills-disabled" aria-selected="false">Disabled</a>
+        <a class="mz-nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages"
+           type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</a>
+        <a class="mz-nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings"
+           type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</a>
+    </div>
+</div>
+
+<div class="business-time my-4" th:fragment="businessTimeInput(day, dayValue)">
+    <div class="input-group">
+        <h6 th:text="${day}"> : </h6>
+        <input type="hidden" id="day-value" th:value="${dayValue}">
+        <input id="input-start-hour" type="number" class="time" min="0" max="23">
+        <label for="input-start-hour">시 </label>
+        <input id="input-start-minute" type="number" class="time" min="0" max="59">
+        <label for="input-start-minute">분 ~</label>
+        <input id="input-end-hour" type="number" class="time" min="0" max="23">
+        <label for="input-end-hour">시 </label>
+        <input id="input-end-minute" type="number" class="time" min="0" max="59">
+        <label for="input-end-minute">분</label>
+    </div>
+    <span class="fs-6 mx-4"><label for="is-holiday">휴일인가요?</label><input id="is-holiday" class="mx-2"
+                                                                         type="checkbox"></span>
+</div>
+
+<div class="business-time my-4" th:fragment="businessTimeInputToUpdate(day)">
+    <div class="input-group">
+        <h6><span th:text="${day.kor}"></span></h6>
+        <input class="form-control form-control-sm" id="bhour-id" type="hidden"
+               th:if="${businessHours.get(day.name()) != null}"
+               th:value="${businessHours.get(day.name()).id}"/>
+        <input class="form-control form-control-sm" id="bhour-day" type="hidden"
+               th:if="${businessHours.get(day.name()) == null}" th:value="${day.name()}"/>
+        <input class="form-control form-control-sm" id="open-time" type="hidden"
+               th:if="${businessHours.get(day.name()) != null}"
+               th:value="${businessHours.get(day.name()).openTime}"/>
+        <input class="form-control form-control-sm" id="open-time" type="hidden"
+               th:if="${businessHours.get(day.name()) == null}"/>
+        <input class="form-control form-control-sm" id="close-time" type="hidden"
+               th:if="${businessHours.get(day.name()) != null}"
+               th:value="${businessHours.get(day.name()).closeTime}"/>
+        <input id="close-time" type="hidden" class="form-control form-control-sm"
+               th:if="${businessHours.get(day.name()) == null}"/>
+        <input id="is-holiday" class="mx-2" th:if="${businessHours.get(day.name()) != null}" type="hidden" th:value="${businessHours.get(day.name()).isHoliday}">
+        <input id="is-holiday" class="mx-2" th:if="${businessHours.get(day.name()) == null}" type="hidden" th:value="${false}" />
+        <span class="mx-2">
+        <input id="input-start-hour" type="number" class="time form-control form-control-sm" min="0" max="23">
+        <label for="input-start-hour">시 </label>
+        </span>
+        <span class="mx-2">
+        <input id="input-start-minute" type="number" class="time form-control form-control-sm" min="0" max="59">
+        <label for="input-start-minute">분 ~</label>
+        </span>
+        <span class="mx-2">
+        <input id="input-end-hour" type="number" class="time form-control form-control-sm" min="0" max="23">
+        <label for="input-end-hour">시 </label>
+        </span>
+        <span class="mx-2">
+        <input id="input-end-minute" type="number" class="time form-control form-control-sm" min="0" max="59">
+        <label for="input-end-minute">분</label>
+        </span>
+        <span class="fs-6 mx-4"><label for="is-holiday-to-update">휴일인가요?</label>
+                <input id="is-holiday-to-update" class="mx-2" type="checkbox">
+            </span>
+    </div>
+    <div id="alert-error-comp" class="text-danger">
+    </div>
+</div>

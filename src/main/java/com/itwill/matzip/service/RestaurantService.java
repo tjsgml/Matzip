@@ -2,6 +2,8 @@ package com.itwill.matzip.service;
 
 import java.util.List;
 
+import com.itwill.matzip.repository.*;
+import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import org.springframework.stereotype.Service;
 
 import com.itwill.matzip.domain.BusinessHour;
@@ -11,12 +13,6 @@ import com.itwill.matzip.domain.MyPick;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.UpdateRequest;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
-import com.itwill.matzip.repository.BusinessHourRepository;
-import com.itwill.matzip.repository.MemberRepository;
-import com.itwill.matzip.repository.MenuRepository;
-import com.itwill.matzip.repository.MyPickRepository;
-import com.itwill.matzip.repository.RestaurantRepository;
-import com.itwill.matzip.repository.UpdateRequestRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +63,7 @@ public class RestaurantService {
 	//메뉴들 가져오기
 	public List<Menu> findMenus(Long id){
 		Restaurant rest = restDao.findById(id).orElseThrow();
-		
+
 		List<Menu> menuList = menuDao.findByRestaurant(rest);
 		
 		return menuList;

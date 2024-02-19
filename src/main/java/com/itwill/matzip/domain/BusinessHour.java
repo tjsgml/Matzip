@@ -1,22 +1,7 @@
 package com.itwill.matzip.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.itwill.matzip.domain.enums.BusinessDay;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,26 +19,36 @@ import lombok.ToString;
 @Entity
 @Table(name = "BUSINESS_HOUR")
 public class BusinessHour {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "BUSINESS_HOUR_PK")
-	private Long id;
-	
-	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "BUSINESS_HOUR_PK")
+    private Long id;
+
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "RESTAURNT_FK")
     private Restaurant restaurant;
-	
-	
-	@ToString.Exclude
+
+    @ToString.Exclude
     @Enumerated(EnumType.STRING)
     private BusinessDay days;
-	
-	private Boolean isHoliday;
-	
-	private String openTime;
-	
-	private String closeTime;
-}
 
+    private Boolean isHoliday;
+
+    private String openTime;
+
+    private String closeTime;
+
+    public void updateIsHoliday(Boolean isHoliday) {
+        this.isHoliday = isHoliday;
+    }
+
+    public void updateOpenTime(String openTime) {
+        this.openTime = openTime;
+    }
+
+    public void updateCloseTime(String closeTime) {
+        this.closeTime = closeTime;
+    }
+}

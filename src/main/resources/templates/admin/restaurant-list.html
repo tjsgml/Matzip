@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head th:replace="~{/layout/fragment-common::my-header('MAT.ZIP ADMIN | 레스토랑 리스트')}"></head>
+<link href="/css/admin/admin-common.css" rel="stylesheet">
+<style>
+    #restaurant-list {
+        width: 90%;
+        margin: 5px 40px 40px;
+    }
+</style>
+<body>
+<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+<div class="mz-admin-container">
+    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <main>
+        <div class="mz-inner-container">
+            <h3 class="page-main-desc">레스토랑 리스트</h3>
+        </div>
+
+        <div id="restaurant-list" class="m-5">
+            <div class="d-flex mb-3" style="justify-content: space-between">
+                <div class="d-flex mb-3" style="justify-content: space-between">
+                    <div>
+                        <label for="category-option">카테고리</label>
+                        <select id="category-option">
+                            <option value="" selected>전체</option>
+                            <th:block th:each="cate : ${categories}">
+                                <option th:if="${cate.id eq category}" th:value="${cate.id}" th:text="${cate.name}"
+                                        th:attr="selected=true">
+                                <option th:if="${cate.id != category}" th:value="${cate.id}"
+                                        th:text="${cate.name}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <div class="mx-3">
+                        <label for="status-option">운영상태</label>
+                        <select id="status-option">
+                            <option value="" selected>전체</option>
+                            <option th:if="${status == OPEN}" th:value="${OPEN}" th:attr="selected=true">영업중</option>
+                            <option th:if="${status != OPEN}" th:value="${OPEN}">영업중</option>
+                            <option th:if="${status == WAIT}" th:value="${WAIT}" th:attr="selected=true">대기</option>
+                            <option th:if="${status != WAIT}" th:value="${WAIT}">대기</option>
+                            <option th:if="${status == CLOSURE}" th:value="${CLOSURE}" th:attr="selected=true">폐업
+                            </option>
+                            <option th:if="${status != CLOSURE}" th:value="${CLOSURE}">폐업</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group" style="width: 300px">
+                    <select id="search-option" class="form-control">
+                        <option th:if="${param.keywordCriteria == 'ALL'}" value="ALL" selected>전체</option>
+                        <option th:if="${param.keywordCriteria != 'ALL'}" value="ALL">전체</option>
+                        <option th:if="${param.keywordCriteria == 'NAME'}" value="NAME">가게명</option>
+                        <option th:if="${param.keywordCriteria != 'NAME'}" value="NAME">가게명</option>
+                        <option  th:if="${param.keywordCriteria == 'ADDRESS'}" value="ADDRESS">위치</option>
+                        <option  th:if="${param.keywordCriteria != 'ADDRESS'}" value="ADDRESS">위치</option>
+                    </select>
+                    <input th:if="${param.keyword}" th:value="${param.keyword}" type="text" id="search-keyword" class="form-control" style="display: inline-block"/>
+                    <input th:if="!${param.keyword}" type="text" id="search-keyword" class="form-control" style="display: inline-block"/>
+                    <button id="submit-btn" class="btn btn-outline-success">검색</button>
+                </div>
+                <div>
+                    <label>
+                        <input th:if="${order eq 'createdTimeDESC'}" class="ml-3" type="radio" name="order"
+                               value="createdTimeDESC" checked="checked"/>
+                        <input th:if="${order ne 'createdTimeDESC'}" class="ml-3" type="radio" name="order"
+                               value="createdTimeDESC"/>
+                    </label>최신순
+                    <label>
+                        <input th:if="${order eq 'createdTimeASC'}" class="ml-3" type="radio" name="order"
+                               value="createdTimeASC" checked="checked"/>
+                        <input th:if="${order ne 'createdTimeASC'}" class="ml-3" type="radio" name="order"
+                               value="createdTimeASC"/>
+                    </label>오래된순
+                    <label>
+                        <input th:if="${order eq 'nameASC'}" class="ml-3" type="radio" name="order" value="nameASC"
+                               checked="checked"/>
+                        <input th:if="${order ne 'nameASC'}" class="ml-3" type="radio" name="order" value="nameASC"/>
+                    </label>이름순
+                </div>
+            </div>
+            <table class="table table-stripe" style="table-layout: fixed">
+                <thead>
+                <tr>
+                    <th scope="col" style="width:7%">카테고리</th>
+                    <th scope="col" style="width:10%">가게명</th>
+                    <th scope="col" style="width:30%">위치</th>
+                    <th scope="col" style="width:15%">전화번호</th>
+                    <th scope="col" style="width:10%">가게 상태</th>
+                    <th scope="col" style="width:7%">승인</th>
+                    <th scope="col" style="width:7%">업데이트</th>
+                    <th scope="col" style="width:10%">폐업/삭제</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="matzip : ${restaurants}" th:attr="data-id=${matzip.id}">
+                    <td th:text="${matzip.category.name}"></td>
+                    <td><a th:href="${'./' + matzip.id}" th:text="${matzip.name}"></a></td>
+                    <td th:text="${matzip.address + matzip.detailAddress}"></td>
+                    <!--                    <td th:text="${matzip.contact}">010-0000-0000</td>-->
+                    <td>010-0000-0000</td>
+                    <td th:if="${matzip.status eq CLOSURE}">폐업</td>
+                    <td th:if="${matzip.status eq OPEN}">영업중</td>
+                    <td th:if="${matzip.status eq WAIT}">승인 대기</td>
+                    <td th:if="${matzip.status ne WAIT}">
+                        <button class="btn btn-outline-secondary btn-sm confirm-restaurant disabled" disabled>승인</button>
+                    </td>
+                    <td th:if="${matzip.status eq WAIT}">
+                        <button class="btn btn-outline-secondary btn-sm confirm-restaurant">승인</button>
+                    </td>
+                    <td>
+                        <button th:if="${status eq OPEN}" class="btn btn-outline-secondary btn-sm ">수정</button>
+                        <button th:if="${status ne OPEN}" class="btn btn-outline-secondary btn-sm disabled" disabled>수정</button>
+                    </td>
+                    <td>
+                        <button th:if="${matzip.status eq OPEN}"
+                                class="btn btn-outline-secondary btn-sm close-restaurant">폐업전환
+                        </button>
+                        <button th:if="${matzip.status eq WAIT}"
+                                class="btn btn-outline-secondary btn-sm close-restaurant disabled" disabled>폐업전환
+                        </button>
+                        <button th:if="${matzip.status eq CLOSURE}"
+                                class="btn btn-outline-secondary btn-sm delete-restaurant">삭제
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!--
+                    정렬과 필터링이 변경될 때 현재 적용된 정렬을 그대로 적용함.
+                    + 페이지네이션은 1페이지로 돌아감
+            -->
+            <div style="display: flex; justify-content:center">
+                <nav id="pagination" aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled" th:if="${restaurants.getNumber() eq 0}">
+                            <button class="page-link" href="#" tabindex="-1" aria-disabled="true" cur-page=0 disabled>
+                                ≪
+                            </button>
+                        </li>
+                        <li class="page-item" th:if="${restaurants.getNumber() != 0}">
+                            <button class="page-link" href="#" tabindex="-1" cur-page=0>≪</button>
+                        </li>
+
+                        <li th:each="page : ${#numbers.sequence(1, restaurants.getTotalPages())}" class="page-item">
+                            <button th:if="${restaurants.getNumber() ne page - 1}" class="page-link" th:text="${page}"
+                                    th:attr="cur-page=${page - 1}">1
+                            </button>
+                            <button th:if="${restaurants.getNumber() eq page - 1}" class="page-link active"
+                                    th:text="${page}" th:attr="cur-page=${page - 1}">1
+                            </button>
+                        </li>
+
+                        <li class="page-item" th:if="${restaurants.getNumber() ne restaurants.getTotalPages()-1}">
+                            <button class="page-link" href="#" th:attr="cur-page=${restaurants.getTotalPages()-1}">≫
+                            </button>
+                        </li>
+                        <li class="page-item disabled"
+                            th:if="${restaurants.getNumber() eq restaurants.getTotalPages()-1}">
+                            <button class="page-link" href="#" aria-disabled="true"
+                                    th:attr="cur-page=${restaurants.getTotalPages()-1}">≫
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </main>
+
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/admin/restaurant/matzip-status-change.js"></script>
+<script src="/js/admin/restaurant/matzip-list.js"></script>
+<script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
+
+</body>
+</html>
