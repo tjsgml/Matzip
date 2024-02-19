@@ -87,16 +87,26 @@ public class ReviewService {
         Review savedReview = reviewDao.save(review);
 
         // 이미지 업로드..저장
-        if (dto.getImages() != null) {
-            for (MultipartFile image : dto.getImages()) {
-            	// 이미지 업로드(S3) & 업로드한 이미지 URL 받음
-                String imageUrl = s3Util.uploadImageToS3(image, s3Util.generateFileName());
-                
-                ReviewImage reviewImage = new ReviewImage(null, savedReview, imageUrl);
-                log.info(imageUrl);
-                reviewImageDao.save(reviewImage);
-            }
-        }
+		if (dto.getImages() != null && dto.getImages().length > 0) {
+			for (MultipartFile image : dto.getImages()) {
+				
+				// 이미지 비어있지 않은지 체크
+				if (!image.isEmpty()) {
+					try {
+						// 이미지 업로드(S3) & 업로드한 이미지 URL 받음
+						String imageUrl = s3Util.uploadImageToS3(image, s3Util.generateFileName());
+
+						ReviewImage reviewImage = new ReviewImage(null, savedReview, imageUrl);
+						log.info(imageUrl);
+						reviewImageDao.save(reviewImage);
+					} catch (Exception e) {
+						log.error("이미지 업로드 X", e);
+						e.printStackTrace();
+					}
+				}
+
+			}
+		}
         
         // 해시태그(목적/분위기/편의시설) 각각 저장
         saveHashtags(dto.getVisitPurposeTags(), HashtagCategoryName.VISIT_PURPOSE, savedReview);

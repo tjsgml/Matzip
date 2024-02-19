@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // 이 카테고리에 대한 별점 값 업데이트
                 container.setAttribute("data-rating", value.toString());
                 
-                // 바로 업데이트된 data-rating 값을 사용하여 처리 (예: 콘솔에 출력)
+                // 바로 업데이트된 data-rating 값을 사용하여 처리
                 processRating(container.id, value);
             });
 
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     
 /* 키워드(해시태그) */
-    // 태그 ID를 위한 글로벌 카운터나 타임스탬프 사용
+    // 태그 ID(삭제 시 필요)
     let tagIdCounter = 0;
 
     document.querySelectorAll('.tag-input').forEach(input => {
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     // 숨겨진 입력 필드 생성
                     const hiddenInput = document.createElement('input');
                     hiddenInput.type = 'hidden';
-                    // name 속성을 DTO의 변수명과 일치하게 수정
+                    // name 속성 DTO 변수명과 일치하게 수정
                     let inputName = '';
                     if (category === 'visit-purpose') {
                         inputName = 'visitPurposeTags[]';
@@ -205,13 +205,14 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
 /* 폼 제출  */
-    document.addEventListener("DOMContentLoaded", function() {
+    
         const reviewForm = document.getElementById("reviewForm");
         reviewForm.addEventListener("submit", function(e) {
             // 평점 입력 확인
             const tasteRating = document.getElementById('tasteRating').value;
             const priceRating = document.getElementById('priceRating').value;
             const serviceRating = document.getElementById('serviceRating').value;
+            console.log(tasteRating, priceRating, serviceRating);
             
             if (tasteRating === "0" || priceRating === "0" || serviceRating === "0") {
                 e.preventDefault();
@@ -226,9 +227,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 return;
             }
     
-            
         });
-    });
+    
     
     // 레스토랑 ID
     
