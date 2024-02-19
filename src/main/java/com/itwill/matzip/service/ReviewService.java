@@ -57,7 +57,7 @@ public class ReviewService {
         
     }
     
-//    @Transactional
+    @Transactional
     public void saveReview(ReviewCreateDto dto) {
     	
     	log.info("방문목적 태그: {}", dto.getVisitPurposeTags());
@@ -80,11 +80,7 @@ public class ReviewService {
                               .content(dto.getReviewContent())
                               .restaurant(restaurant)
                               .member(member)
-//                              .member(member)
-//                              .restaurant(dto.getRestaurantId())
-//                              .member(dto.getMemberId())
                               .build();
-        
         
         
         // 리뷰 저장
@@ -102,76 +98,36 @@ public class ReviewService {
             }
         }
         
-        
         // 해시태그(목적/분위기/편의시설) 각각 저장
         saveHashtags(dto.getVisitPurposeTags(), HashtagCategoryName.VISIT_PURPOSE, savedReview);
         saveHashtags(dto.getMoodTags(), HashtagCategoryName.MOOD, savedReview);
         saveHashtags(dto.getConvenienceTags(), HashtagCategoryName.CONVENIENCE, savedReview);
     }
 
+    
     private void saveHashtags(List<String> tags, HashtagCategoryName categoryEnum, Review savedReview) {
         if (tags == null || tags.isEmpty()) return; // 태그없으면
         
+        // 카테고리 조회
         HashtagCategory category = hashCategoryDao.findByName(categoryEnum.getCategoryName()).orElse(null);
-//                                                   .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다: " + categoryEnum.getCategoryName()));
         
         for (String tag : tags) {
         	log.info("saveHashtags() - 해시태그:{}, 태그카테고리: {}", tag, categoryEnum.getCategoryName());
         	
-            ReviewHashtag reviewHashtag = ReviewHashtag.builder()
-                                                        .keyword(tag)
-                                                        .htCategory(category)
-                                                        .build();
-            reviewHTDao.save(reviewHashtag);
-            savedReview.getHashtags().add(reviewHashtag);
+        	// 카테고리에 같은 키워드가 있는지 확인
+        	ReviewHashtag existingTag = reviewHTDao.findByKeywordAndHtCategory(tag, category).orElse(null);
+        	
+        	if(existingTag == null) { // 같은 키워드가 없으면 저장
+	            ReviewHashtag reviewHashtag = ReviewHashtag.builder()
+	                                                        .keyword(tag)
+	                                                        .htCategory(category) 
+	                                                        .build();
+	            reviewHTDao.save(reviewHashtag);
+        	}
         }
-        reviewDao.save(savedReview);
+        
     }
 
-
-
-
-//
-
-//
-//
-//	private void processHashtags(List<String> tags, String categoryName, Review savedReview) {
-//	    HashtagCategory category = hashtagCategoryRepository.findByName(categoryName)
-//	            .orElseGet(() -> new HashtagCategory(null, categoryName)); // 없으면 새로 생성..
-//
-//	    for (String tag : tags) {
-//	        ReviewHashtag reviewHashtag = new ReviewHashtag(null, tag, category);
-//	        reviewHashtagRepository.save(reviewHashtag);
-//	        savedReview.getHashtags().add(reviewHashtag);
-//	    }
-//	}
-
-	
-	
-	
-//	@Transactional
-//    public void saveReview(Review review, List<MultipartFile> images, List<String> hashtags) {
-//        // 리뷰저장
-//        Review savedReview = reviewDao.save(review);
-//
-//        // 이미지 업로드, ReviewImage 엔티티 저장
-//        images.forEach(image -> {
-//            String imageUrl = s3Util.uploadImageToS3(image, s3Util.generateFileName());
-//            ReviewImage reviewImage = new ReviewImage(null, savedReview, imageUrl);
-//            reviewImageDao.save(reviewImage);
-//        });
-//
-//        // 해시태그 저장
-//        hashtags.forEach(hashtag -> {
-//            ReviewHashtag reviewHashtag = new ReviewHashtag(); // 해시태그 생성/찾기
-//            reviewHTDao.save(reviewHashtag);
-//            savedReview.getHashtags().add(reviewHashtag);
-//        });
-//
-//        // 해시태그와 연결된 리뷰 업데이트
-//        reviewDao.save(savedReview);
-//    }
-	
 	
 
 }

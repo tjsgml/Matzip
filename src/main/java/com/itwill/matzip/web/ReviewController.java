@@ -27,12 +27,7 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-//    @GetMapping("/create")
-//    public String reviewCreateForm() {
-//    	log.info("GET - reviewCreateForm");
-//        return "review/create";
-//    }
-    
+    // 리뷰 등록 폼
     @GetMapping("/create")
     public String reviewCreateForm(@RequestParam("restaurantId") Long restaurantId, Model model) {
         log.info("GET - reviewCreateForm - restaurantId: {}", restaurantId);
@@ -40,7 +35,7 @@ public class ReviewController {
         return "review/create";
     }
 
-
+    // 리뷰 등록
     @PostMapping("/register")
     public String reviewRegister(@ModelAttribute ReviewCreateDto reviewDto, RedirectAttributes redirectAttributes) {
         try {
@@ -48,6 +43,7 @@ public class ReviewController {
             redirectAttributes.addFlashAttribute("message", "리뷰 등록 성공!");
         } catch (Exception e) {
         	log.info("review register 실패", reviewDto);
+        	e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage", "리뷰 등록 실패: " + e.getMessage());
             return "redirect:/review/create?restaurantId=" + reviewDto.getRestaurantId(); // 리다이렉트시 레스토랑ID 쿼리파라미터로 추가
 
