@@ -5,6 +5,7 @@ import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.dto.*;
 import com.itwill.matzip.service.AdminService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +14,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/admin/matzip")
 public class AdminMatzipController {
 
-    @Autowired
-    AdminService adminService;
+    private final AdminService adminService;
 
     //    레스토랑 추가 페이지로 이동
     @GetMapping("/restaurant")
@@ -95,7 +97,7 @@ public class AdminMatzipController {
     @ResponseBody
     @PostMapping("/restaurant/{restaurantId}/menu/one")
     public ResponseEntity<Long> addMenuToRestaurant(@RequestBody MenuToCreateDto menu, @PathVariable Long restaurantId) {
-        log.info("addMenuToRestaurant(MenuToCreateDto={})",menu);
+        log.info("addMenuToRestaurant(MenuToCreateDto={})", menu);
         Menu menuCreated = adminService.addMenuToRestaurant(restaurantId, menu);
 
         return ResponseEntity.ok(menuCreated.getId());
@@ -160,5 +162,14 @@ public class AdminMatzipController {
         return ResponseEntity.ok(updatedRestaurant);
     }
 
+    @ResponseBody
+    @PatchMapping("/restaurant/{restaurantId}/time")
+    public ResponseEntity<String> updateRestaurantBusinessTime(@RequestBody List<BusinessHourUpdateDto> businessHours, @PathVariable(name = "restaurantId") Long restaurantId) {
+        log.info("businessHours={}", businessHours);
+        log.info("restaurantId={}", restaurantId);
+
+        adminService.updateRestaurantBusinessTime(businessHours, restaurantId);
+        return ResponseEntity.ok("updated");
+    }
 
 }

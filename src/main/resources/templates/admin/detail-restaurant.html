@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="kr" xmlns:th="http://www.w3.org/1999/html">
-
-<head th:replace="~{/layout/fragment-common.html::my-header('MAT.ZIP ADMIN | 맛집')}"></head>
+<html lang="kr">
+<head th:replace="~{/layout/fragment-common::my-header('MAT.ZIP ADMIN | 레스토랑 리스트')}"></head>
 <link href="/css/admin/admin-common.css" rel="stylesheet">
 <link href="/css/admin/admin-holiday.css" rel="stylesheet">
 <body>
@@ -62,25 +61,26 @@
                 <div id="business-time-container">
                     <div class="d-flex justify-content-between">
                         <h5>영업 시간</h5>
-                        <a class="btn btn-sm">
-                            수정하기
-                        </a>
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                data-bs-target='#modifyBHourModal'>
+                            편집
+                        </button>
                     </div>
-                    <div th:if="${!businessHours.isEmpty()}" th:each="day : ${days}">
-                        <span th:if="${businessHours.get(day) != null}">
-                            <span th:if="${businessHours.get(day).isHoliday}" class="text-danger">
-                                [[${day}]] : 휴일입니다!
+                    <div class="d-flex justify-content-between my-2" th:if="${! businessHours.isEmpty()}"
+                         th:each="day : ${dayList}">
+                        <span th:if="${businessHours.get(day.name()) != null}">
+                            <span th:if="${businessHours.get(day.name()).isHoliday}" class="text-danger">
+                                [[${day.kor}]] : ⚠휴무일
                             </span>
-                            <span th:if="${!businessHours.get(day).isHoliday}" class="text-dark">
-                                [[${day}]] : [[${businessHours.get(day).openTime}]] ~ [[${businessHours.get(day).closeTime}]]
+                            <span th:if="${!businessHours.get(day.name()).isHoliday}" class="text-dark">
+                                [[${day.kor}]] : [[${businessHours.get(day.name()).openTime}]] ~ [[${businessHours.get(day.name()).closeTime}]]
                             </span>
                         </span>
-                        <span th:if="${businessHours.get(day) == null}" class="text-secondary">
-                            [[${day}]] : 등록된 일정이 없습니다.
+                        <span th:if="${businessHours.get(day.name()) == null}" class="text-secondary">
+                            <span class="text-secondary">
+                            [[${day.kor}]] : 등록된 일정이 없습니다.
+                            </span>
                         </span>
-                    </div>
-                    <div>
-
                     </div>
                     <div class="container card mt-4 border-0"
                          style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);"
@@ -180,10 +180,35 @@
             </div>
         </div>
     </main>
+
+    <div class="modal fade" id="modifyBHourModal" tabindex="-1" aria-labelledby="modifyBHourModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                    <h1 class="modal-title fs-5" id="modifyBHourModalLabel">영업 시간 수정하기</h1>
+                        <div class="font-secondary">*해당 페이지에서 작성한 대로 DB에 저장됩니다.</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div th:each="day : ${dayList}">
+                        <div th:replace="~{/layout/fragment-admin::businessTimeInputToUpdate(${day})}"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="save-change" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/js/admin/restaurant/searchLocation.js"></script>
 <script src="/js/admin/restaurant/updateMenuPrice.js"></script>
+<script src="/js/admin/restaurant/updateBHour.js"></script>
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
@@ -200,5 +225,6 @@
 
     const map = new kakao.maps.StaticMap(mapContainer, mapOption); // 지도를 생성합니다
 </script>
+
 </body>
 </html>

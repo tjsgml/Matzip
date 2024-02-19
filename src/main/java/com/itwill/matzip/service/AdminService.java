@@ -7,30 +7,27 @@ import com.itwill.matzip.repository.BusinessHourRepository;
 import com.itwill.matzip.repository.CategoryRepository;
 import com.itwill.matzip.repository.MenuRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.beans.Transient;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class AdminService {
 
-    @Autowired
-    RestaurantRepository restaurantDao;
-
-    @Autowired
-    CategoryRepository categoryDao;
-
-    @Autowired
-    MenuRepository menuDao;
-
-    @Autowired
-    BusinessHourRepository businessHourDao;
+    private final RestaurantRepository restaurantDao;
+    private final CategoryRepository categoryDao;
+    private final MenuRepository menuDao;
+    private final BusinessHourRepository businessHourDao;
 
     public List<Category> getCategories() {
         return categoryDao.findAll();
@@ -70,16 +67,15 @@ public class AdminService {
 
         List<BusinessHour> bHours = businessHourDao.findByRestaurant(restaurant);
         Map<String, BusinessHour> businessHours = new HashMap<>();
-        bHours.forEach(el -> businessHours.put(el.getDays().getKor().trim(), el));
-        businessHours.keySet().forEach(e -> System.out.println(e));
+        bHours.forEach(el -> {
+            if (el.getDays() != null) {
+                businessHours.put(el.getDays().name(), el);
+            }
+        });
         result.put("businessHours", businessHours);
 
-        List<BusinessDay> dayValue = Arrays.stream(BusinessDay.values()).toList();
-        List<String> days = new ArrayList<>();
-        dayValue.forEach(el -> days.add(el.getKor().trim()));
-//        days.forEach(System.out::println);
-        result.put("days", days);
-        log.info("businessHoursday222 = {}", businessHours.get(days.get(2)));
+        List<BusinessDay> dayList = Arrays.stream(BusinessDay.values()).toList();
+        result.put("dayList", dayList);
 
         return result;
     }
@@ -91,7 +87,7 @@ public class AdminService {
         });
     }
 
-    public Menu addMenuToRestaurant(Long restaurantId , MenuToCreateDto menu) {
+    public Menu addMenuToRestaurant(Long restaurantId, MenuToCreateDto menu) {
         Restaurant restaurant = restaurantDao.findById(restaurantId).orElseThrow();
         Menu menuToCreate = menu.toEntity(restaurant);
         menuDao.save(menuToCreate);
@@ -195,5 +191,41 @@ public class AdminService {
         Menu menu = menuDao.findById(menuId).orElseThrow();
         menu.updatePrice(price);
         return menu;
+    }
+
+    @Transactional
+    public void updateRestaurantBusinessTime(List<BusinessHourUpdateDto> businessHours, Long restaurantId) {
+        businessHours.forEach(el -> {
+            log.info("el = {}", el);
+            businessTime(el, restaurantId);
+        });
+    }
+
+
+    private void businessTime(BusinessHourUpdateDto el, Long restaurantId) {
+        if (el == null) return;
+
+        if (el.getBhourId() == null) {
+//            등록 flow
+            Restaurant restaurant = restaurantDao.findById(restaurantId).orElseThrow();
+            BusinessHour bHour = el.toBusinessHour(restaurant);
+
+            businessHourDao.save(bHour);
+            return;
+        }
+
+        BusinessHour bhour = businessHourDao.findById(el.getBhourId()).orElseThrow();
+
+        if (el.getIsHoliday()) {
+            bhour.updateIsHoliday(true);
+            bhour.updateOpenTime(null);
+            bhour.updateCloseTime(null);
+            return;
+        }
+
+        bhour.updateIsHoliday(false);
+        bhour.updateOpenTime(el.getStartTime());
+        bhour.updateCloseTime(el.getEndTime());
+//        수정 flow
     }
 }
