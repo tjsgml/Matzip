@@ -22,10 +22,10 @@ repositories {
 }
 
 dependencies {
-	//Sprinng Security  의존성, Thymeleaf 템플릿 엔진의 Spring Security 추가 기능
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-	testImplementation 'org.springframework.security:spring-security-test'
+    //Sprinng Security  의존성, Thymeleaf 템플릿 엔진의 Spring Security 추가 기능
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -81,5 +81,7 @@ tasks.withType(JavaCompile).configureEach {
 clean.doLast {
     file(querydslDir).deleteDir()
 }
+
+
 // -----------------------------
 
