@@ -75,20 +75,32 @@ function getRestList(data){
 		let htmlStr ='';
 	data.forEach(restaurant => {
 		htmlStr +=`
-		<a id="restPost" href="/rest/details?id=${restaurant.id}" id="restPost" data-id="${restaurant.id}">
-				 <div class="v26_78" data-id="${restaurant.id}"> 
-		        <div class="v26_79" > </div>
-		        <span class="v26_81" >${restaurant.name}</span>
-		        <span class="v26_82">${restaurant.category.name}</span>
-		        <div class="v26_89"></div>
-				<span class="v26_90">평점(@@명)</span>
-				<div class="name"></div>
-		    <div class="v26_98"></div>
-		    <span class="v26_99">좋아요수</span>
-		    <span class="v26_101">“@@@@@@@@랜덤으로 뽑은 리뷰 내용@@@@@@@@@@@@..”</span>
-		    <span class="v26_102">21명이 추천했습니다</span>
-		    <span class="v26_103">by. 닉네임</span>
-		   </div>
+		<a id="restPost" href="/rest/details?id=${restaurant.id}" data-id="${restaurant.id}">
+			<div id="post" data-id="${restaurant.id}">
+				<div class="container" id="container" data-id="${restaurant.id}">
+					<div class="item1"></div>
+					<div class="item2">${restaurant.name}</div>
+					<div class="item3">${restaurant.category.name}</div>
+					<div class="item4">
+							<img style="margin-bottom: 7px; width: 20px;height: 20px;"src="/img/v26_89.png">
+							4.7(34명)
+							<div class="v-line"></div>
+							<img src="/img/v26_98.png" style="margin-bottom: 4px; width: 22px;height: 22px;">
+							57
+					</div>
+				</div>
+				<div class="reviewDiv" >
+					<span class="reviewContent">“@@@@@@@@랜덤으로 뽑은 리뷰 내용@@@@@@@..”</span>
+				</div>
+				<div class="c1">
+					<div class="i1">
+						<span class="reviewLike">21</span><span class="reviewLike2">명이 추천했습니다.</spanstyle>
+					</div>
+					<div class="i2">
+						<span class="reviewNick" >by.닉네임</span>
+					</div>
+				</div>
+			</div>
 		</a>
 		   <hr style="margin:0;">
 				`;
@@ -96,16 +108,16 @@ function getRestList(data){
 	restList.innerHTML =htmlStr;
 	//음식점 게시물에 마우스를 올렸을 때 해당 지도 마커 변경 및 지도 이동,,,
 		const restPost = document.querySelectorAll('a#restPost');
-		restPost.forEach((restPost) =>{
-			restPost.addEventListener('mouseout',turnOffMarker);
-			restPost.addEventListener('mouseover',turnOnMarker);
+		restPost.forEach((post) =>{
+			post.addEventListener('mouseout',turnOffMarker);
+			post.addEventListener('mouseover',turnOnMarker);
 		});
 	
 }
 function turnOnMarker(e) {
 	console.log("마우스 온");
-	console.log(e.target);
-	const restPostId = e.target.getAttribute('data-id');
+	console.log(e.currentTarget);
+	const restPostId = e.currentTarget.getAttribute('data-id');
 	console.log("포스트 아이디:",restPostId);
 	console.log("마커 :",markers);
 	const targetMarker = markers.find(marker => marker.id.toString() === restPostId);
@@ -123,8 +135,8 @@ function turnOnMarker(e) {
 }
 function turnOffMarker(e){
 	console.log("마우스 오프");
-	console.log(e.target);
-	const restPostId = e.target.getAttribute('data-id');
+	console.log(e.currentTarget);
+	const restPostId = e.currentTarget.getAttribute('data-id');
 	console.log("포스트 아이디:",restPostId);
 	console.log("마커 :",markers);
 	const targetMarker = markers.find(marker => marker.id.toString() === restPostId);

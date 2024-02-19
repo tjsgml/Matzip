@@ -142,7 +142,6 @@ public class AdminMatzipController {
     public String getRestaurantDetail(@PathVariable Long restaurantId, Model model) {
         Map<String, Object> result = adminService.getRestaurantForDetail(restaurantId);
         model.addAllAttributes(result);
-
         return "admin/detail-restaurant";
     }
 

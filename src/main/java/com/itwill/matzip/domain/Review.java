@@ -62,6 +62,7 @@ public class Review extends BaseTimeEntity {
     private Integer priceScore;
 
     @OneToMany(mappedBy = "review")
+    @Builder.Default
     private List<ReviewImage> reviewImages = new ArrayList<>();
 
 }
