@@ -1,5 +1,8 @@
 package com.itwill.matzip.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -9,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,5 +42,8 @@ public class ReviewHashtag {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "HASHTAG_CATEGORY_FK")
 	private HashtagCategory htCategory;
+	
+	@ManyToMany(mappedBy = "hashtags", fetch = FetchType.LAZY)
+    private Set<Review> reviews = new HashSet<>();
 
 }

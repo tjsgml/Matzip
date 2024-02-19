@@ -41,4 +41,3 @@ public class BusinessHour {
 	
 	private String closeTime;
 }
-

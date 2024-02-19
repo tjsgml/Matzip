@@ -92,4 +92,3 @@ public class Restaurant extends BaseTimeEntity {
 
 
 }
-
