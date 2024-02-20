@@ -52,11 +52,13 @@
                         <option th:if="${param.keywordCriteria != 'ALL'}" value="ALL">전체</option>
                         <option th:if="${param.keywordCriteria == 'NAME'}" value="NAME">가게명</option>
                         <option th:if="${param.keywordCriteria != 'NAME'}" value="NAME">가게명</option>
-                        <option  th:if="${param.keywordCriteria == 'ADDRESS'}" value="ADDRESS">위치</option>
-                        <option  th:if="${param.keywordCriteria != 'ADDRESS'}" value="ADDRESS">위치</option>
+                        <option th:if="${param.keywordCriteria == 'ADDRESS'}" value="ADDRESS">위치</option>
+                        <option th:if="${param.keywordCriteria != 'ADDRESS'}" value="ADDRESS">위치</option>
                     </select>
-                    <input th:if="${param.keyword}" th:value="${param.keyword}" type="text" id="search-keyword" class="form-control" style="display: inline-block"/>
-                    <input th:if="!${param.keyword}" type="text" id="search-keyword" class="form-control" style="display: inline-block"/>
+                    <input th:if="${param.keyword}" th:value="${param.keyword}" type="text" id="search-keyword"
+                           class="form-control" style="display: inline-block"/>
+                    <input th:if="!${param.keyword}" type="text" id="search-keyword" class="form-control"
+                           style="display: inline-block"/>
                     <button id="submit-btn" class="btn btn-outline-success">검색</button>
                 </div>
                 <div>
@@ -79,90 +81,113 @@
                     </label>이름순
                 </div>
             </div>
-            <table class="table table-stripe" style="table-layout: fixed">
-                <thead>
-                <tr>
-                    <th scope="col" style="width:7%">카테고리</th>
-                    <th scope="col" style="width:10%">가게명</th>
-                    <th scope="col" style="width:30%">위치</th>
-                    <th scope="col" style="width:15%">전화번호</th>
-                    <th scope="col" style="width:10%">가게 상태</th>
-                    <th scope="col" style="width:7%">승인</th>
-                    <th scope="col" style="width:7%">업데이트</th>
-                    <th scope="col" style="width:10%">폐업/삭제</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="matzip : ${restaurants}" th:attr="data-id=${matzip.id}">
-                    <td th:text="${matzip.category.name}"></td>
-                    <td><a th:href="${'./' + matzip.id}" th:text="${matzip.name}"></a></td>
-                    <td th:text="${matzip.address + matzip.detailAddress}"></td>
-                    <!--                    <td th:text="${matzip.contact}">010-0000-0000</td>-->
-                    <td>010-0000-0000</td>
-                    <td th:if="${matzip.status eq CLOSURE}">폐업</td>
-                    <td th:if="${matzip.status eq OPEN}">영업중</td>
-                    <td th:if="${matzip.status eq WAIT}">승인 대기</td>
-                    <td th:if="${matzip.status ne WAIT}">
-                        <button class="btn btn-outline-secondary btn-sm confirm-restaurant disabled" disabled>승인</button>
-                    </td>
-                    <td th:if="${matzip.status eq WAIT}">
-                        <button class="btn btn-outline-secondary btn-sm confirm-restaurant">승인</button>
-                    </td>
-                    <td>
-                        <button th:if="${status eq OPEN}" class="btn btn-outline-secondary btn-sm ">수정</button>
-                        <button th:if="${status ne OPEN}" class="btn btn-outline-secondary btn-sm disabled" disabled>수정</button>
-                    </td>
-                    <td>
-                        <button th:if="${matzip.status eq OPEN}"
-                                class="btn btn-outline-secondary btn-sm close-restaurant">폐업전환
-                        </button>
-                        <button th:if="${matzip.status eq WAIT}"
-                                class="btn btn-outline-secondary btn-sm close-restaurant disabled" disabled>폐업전환
-                        </button>
-                        <button th:if="${matzip.status eq CLOSURE}"
-                                class="btn btn-outline-secondary btn-sm delete-restaurant">삭제
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <!--
-                    정렬과 필터링이 변경될 때 현재 적용된 정렬을 그대로 적용함.
-                    + 페이지네이션은 1페이지로 돌아감
-            -->
-            <div style="display: flex; justify-content:center">
-                <nav id="pagination" aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled" th:if="${restaurants.getNumber() eq 0}">
-                            <button class="page-link" href="#" tabindex="-1" aria-disabled="true" cur-page=0 disabled>
-                                ≪
+            <div th:if="${!restaurants.isEmpty()}">
+                <table class="table table-stripe" style="table-layout: fixed">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width:7%">카테고리</th>
+                        <th scope="col" style="width:10%">가게명</th>
+                        <th scope="col" style="width:30%">위치</th>
+                        <th scope="col" style="width:15%">전화번호</th>
+                        <th scope="col" style="width:10%">가게 상태</th>
+                        <th scope="col" style="width:7%">승인</th>
+                        <th scope="col" style="width:7%">업데이트</th>
+                        <th scope="col" style="width:10%">폐업/삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="matzip : ${restaurants}" th:attr="data-id=${matzip.id}">
+                        <td th:text="${matzip.category.name}"></td>
+                        <td><a th:href="${'./' + matzip.id}" th:text="${matzip.name}"></a></td>
+                        <td th:text="${matzip.address + matzip.detailAddress}"></td>
+                        <!--                    <td th:text="${matzip.contact}">010-0000-0000</td>-->
+                        <td>010-0000-0000</td>
+                        <td th:if="${matzip.status eq CLOSURE}">폐업</td>
+                        <td th:if="${matzip.status eq OPEN}">영업중</td>
+                        <td th:if="${matzip.status eq WAIT}">승인 대기</td>
+                        <td th:if="${matzip.status ne WAIT}">
+                            <button class="btn btn-outline-secondary btn-sm confirm-restaurant disabled" disabled>승인
                             </button>
-                        </li>
-                        <li class="page-item" th:if="${restaurants.getNumber() != 0}">
-                            <button class="page-link" href="#" tabindex="-1" cur-page=0>≪</button>
-                        </li>
+                        </td>
+                        <td th:if="${matzip.status eq WAIT}">
+                            <button class="btn btn-outline-secondary btn-sm confirm-restaurant">승인</button>
+                        </td>
+                        <td>
+                            <button th:if="${status eq OPEN}" class="btn btn-outline-secondary btn-sm ">수정</button>
+                            <button th:if="${status ne OPEN}" class="btn btn-outline-secondary btn-sm disabled"
+                                    disabled>
+                                수정
+                            </button>
+                        </td>
+                        <td>
+                            <button th:if="${matzip.status eq OPEN}"
+                                    class="btn btn-outline-secondary btn-sm close-restaurant">폐업전환
+                            </button>
+                            <button th:if="${matzip.status eq WAIT}"
+                                    class="btn btn-outline-secondary btn-sm close-restaurant disabled" disabled>폐업전환
+                            </button>
+                            <button th:if="${matzip.status eq CLOSURE}"
+                                    class="btn btn-outline-secondary btn-sm delete-restaurant">삭제
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!--
+                        정렬과 필터링이 변경될 때 현재 적용된 정렬을 그대로 적용함.
+                        + 페이지네이션은 1페이지로 돌아감
+                -->
+                <div th:if="${restaurants}" style="display: flex; justify-content:center">
+                    <nav id="pagination" aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled" th:if="${restaurants.getNumber() eq 0}">
+                                <button class="page-link" href="#" tabindex="-1" aria-disabled="true" cur-page=0
+                                        disabled>
+                                    ≪
+                                </button>
+                            </li>
+                            <li class="page-item" th:if="${restaurants.getNumber() != 0}">
+                                <button class="page-link" href="#" tabindex="-1" cur-page=0>≪</button>
+                            </li>
 
-                        <li th:each="page : ${#numbers.sequence(1, restaurants.getTotalPages())}" class="page-item">
-                            <button th:if="${restaurants.getNumber() ne page - 1}" class="page-link" th:text="${page}"
-                                    th:attr="cur-page=${page - 1}">1
-                            </button>
-                            <button th:if="${restaurants.getNumber() eq page - 1}" class="page-link active"
-                                    th:text="${page}" th:attr="cur-page=${page - 1}">1
-                            </button>
-                        </li>
+                            <li th:each="page : ${#numbers.sequence(1, restaurants.getTotalPages())}" class="page-item">
+                                <button th:if="${restaurants.getNumber() ne page - 1}" class="page-link"
+                                        th:text="${page}"
+                                        th:attr="cur-page=${page - 1}">1
+                                </button>
+                                <button th:if="${restaurants.getNumber() eq page - 1}" class="page-link active"
+                                        th:text="${page}" th:attr="cur-page=${page - 1}">1
+                                </button>
+                            </li>
 
-                        <li class="page-item" th:if="${restaurants.getNumber() ne restaurants.getTotalPages()-1}">
-                            <button class="page-link" href="#" th:attr="cur-page=${restaurants.getTotalPages()-1}">≫
-                            </button>
-                        </li>
-                        <li class="page-item disabled"
-                            th:if="${restaurants.getNumber() eq restaurants.getTotalPages()-1}">
-                            <button class="page-link" href="#" aria-disabled="true"
-                                    th:attr="cur-page=${restaurants.getTotalPages()-1}">≫
-                            </button>
-                        </li>
-                    </ul>
-                </nav>
+                            <li class="page-item" th:if="${restaurants.getNumber() ne restaurants.getTotalPages()-1}">
+                                <button class="page-link" href="#" th:attr="cur-page=${restaurants.getTotalPages()-1}">≫
+                                </button>
+                            </li>
+                            <li class="page-item disabled"
+                                th:if="${restaurants.getNumber() eq restaurants.getTotalPages()-1}">
+                                <button class="page-link" href="#" aria-disabled="true"
+                                        th:attr="cur-page=${restaurants.getTotalPages()-1}">≫
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <div class="container card mt-4 border-0"
+                 style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);"
+                 th:if="${restaurants.isEmpty()}">
+                <div class="card-body pt-5">
+                    <div class="row fw-semibold text-center"
+                         style="font-size: 20px;">
+                        <div class="col my-5">
+                            <p style="font-size: 50px">🌮🍣🍢🍛🍝🍮</p>
+                            <div>
+                                해당 검색 결과에 알맞은 레스토랑이 없습니다.
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
