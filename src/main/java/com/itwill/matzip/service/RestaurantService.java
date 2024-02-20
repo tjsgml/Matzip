@@ -11,6 +11,7 @@ import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.MyPick;
 import com.itwill.matzip.domain.Restaurant;
+import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.domain.UpdateRequest;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
 
@@ -34,6 +35,7 @@ public class RestaurantService {
 	private final MemberRepository memberDao;
 	//UPDATE_REQUEST 테이블
 	private final UpdateRequestRepository URdao;
+	
 	
 	//음식점 전체 목록 가져오기
 	public List<Restaurant> findAllMaps(){
@@ -117,4 +119,14 @@ public class RestaurantService {
 										.build();
 		URdao.save(ur);
 	}
+	
+	/* 은겸 추가 */
+	private final ReviewRepository reviewDao;
+	
+	public List<Review> findReviewsByRestaurantId(Long restaurantId) {
+	    return reviewDao.findByRestaurantId(restaurantId);
+	}
+
+	
+	
 }
