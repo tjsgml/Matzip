@@ -22,7 +22,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "RESTAURANT")
-public class Restaurant extends BaseTimeEntity  {
+public class Restaurant extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,6 +88,10 @@ public class Restaurant extends BaseTimeEntity  {
 
     public void updateCategory(Category category) {
         this.category = category;
+    }
+
+    public void updateStatus(RestaurantStatus status) {
+        this.status = status;
     }
 
 }

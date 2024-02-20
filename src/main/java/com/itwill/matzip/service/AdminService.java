@@ -172,6 +172,8 @@ public class AdminService {
         List<Category> categories = getCategories();
         result.put("categories", categories);
 
+        List<RestaurantStatus> restaurantStatuses = List.of(RestaurantStatus.values());
+        result.put("restaurantStatuses", restaurantStatuses);
         return result;
     }
 
@@ -187,6 +189,7 @@ public class AdminService {
         restaurant.updateContact(restaurantUpdateDto.getContact());
         restaurant.updateLon(restaurantUpdateDto.getLon());
         restaurant.updateLat(restaurantUpdateDto.getLat());
+        restaurant.updateStatus(restaurantUpdateDto.getStatus());
 
         return restaurant;
     }

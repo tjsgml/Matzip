@@ -25,6 +25,17 @@
                             </th:block>
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label mt-3" for="select-category">카테고리 선택</label>
+                        <select id="select-status" class="form-select">
+                            <th:block th:each="status : ${restaurantStatuses}">
+                                <option th:if="${status != restaurant.status}" th:value="${status}"
+                                        th:text="${status.kor}"></option>
+                                <option th:if="${status == restaurant.status}" th:value="${status}"
+                                        th:text="${status.kor}" selected></option>
+                            </th:block>
+                        </select>
+                    </div>
                     <input type="hidden" id="restaurantIdInput" th:value="${restaurant.id}"/>
                     <div class="mb-3">
                         <label class="mb-1" for="nameInput">가게명</label>
