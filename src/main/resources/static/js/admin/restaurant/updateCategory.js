@@ -11,11 +11,13 @@ async function configUpdatePage() {
         listItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-start");
         listItem.draggable = true;
 
+        const hrefToRestaurantList = `./restaurant/all?categoryCond=${e.id}`;
+
         listItem.innerHTML = `
                         <input type="hidden" id="categoryId" value="${e.id}" />
                         <input type="hidden" id="categoryOrder" value="${e.order}" />
                         <div class="ms-2 me-auto">
-                            <div id="category-name-div" class="fw-bold fs-5">${e.name}</div>
+                        <a href="${hrefToRestaurantList}" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"><div id="category-name-div" class="fw-bold fs-5">${e.name}</div></a>
                         </div>
                         <div>
                             <span class="badge bg-primary rounded-pill">${e.restaurantCnt}</span>
@@ -169,12 +171,13 @@ document.querySelector("button#add-category-btn").addEventListener("click", asyn
     const listItem = document.createElement("li");
     listItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-start");
     listItem.draggable = true;
+    const hrefToRestaurantList = `./restaurant/all?categoryCond=${data.id}`;
 
     listItem.innerHTML = `
                         <input type="hidden" id="categoryId" value="${data.id}" />
                         <input type="hidden" id="categoryOrder" value="${data.listOrder}" />
                         <div class="ms-2 me-auto">
-                            <div id="category-name-div" class="fw-bold fs-5">${categoryName}</div>
+                            <a href="${hrefToRestaurantList}" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"><div id="category-name-div" class="fw-bold fs-5">${categoryName}</div></a>
                         </div>
                         <div>
                             <span class="badge bg-primary rounded-pill">${0}</span>
