@@ -41,12 +41,11 @@ async function submitRestaurantInfo() {
         lat,
         category,
         status
-    }
+    };
 
     console.log("data = {}", data);
 
     const {data :result} = await axios.patch("../"+restaurantId, data);
-    console.log("result = " + result)
-
-    location.reload();
+    console.log("result = " + result);
+    location.href = `../${restaurantId}`;
 }

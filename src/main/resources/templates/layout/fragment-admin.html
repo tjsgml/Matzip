@@ -20,17 +20,10 @@
 
 <div class="d-flex align-items-start bg-dark" style="height: 100%;" th:fragment="mz-nav">
     <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-        <a class="mz-nav-link" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button"
-           th:href="@{/admin}"
-           role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>
-        <a class="mz-nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"
-           type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
-        <a class="mz-nav-link active" id="v-pills-disabled-tab" data-bs-toggle="pill" data-bs-target="#v-pills-disabled"
-           type="button" role="tab" aria-controls="v-pills-disabled" aria-selected="false">Disabled</a>
-        <a class="mz-nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages"
-           type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</a>
-        <a class="mz-nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings"
-           type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</a>
+        <a class="mz-nav-link" th:href="@{/admin}">어드민홈</a>
+        <a class="mz-nav-link" th:href="@{/admin/matzip/restaurant/all}">레스토랑 리스트</a>
+        <a class="mz-nav-link" th:href="@{/admin/matzip/restaurant}">레스토랑 등록</a>
+        <a class="mz-nav-link" th:href="@{/admin/matzip/category}">카테고리 관리</a>
     </div>
 </div>
 
@@ -51,9 +44,10 @@
                                                                          type="checkbox"></span>
 </div>
 
-<div class="business-time my-4" th:fragment="businessTimeInputToUpdate(day)">
-    <div class="input-group">
+<div id="business-time-container" class="business-time my-4" th:fragment="businessTimeInputToUpdate(day)">
+    <div class="input-group" style="width: 130%">
         <h6><span th:text="${day.kor}"></span></h6>
+        <!--   Hidden Input 시작     -->
         <input class="form-control form-control-sm" id="bhour-id" type="hidden"
                th:if="${businessHours.get(day.name()) != null}"
                th:value="${businessHours.get(day.name()).id}"/>
@@ -69,8 +63,11 @@
                th:value="${businessHours.get(day.name()).closeTime}"/>
         <input id="close-time" type="hidden" class="form-control form-control-sm"
                th:if="${businessHours.get(day.name()) == null}"/>
-        <input id="is-holiday" class="mx-2" th:if="${businessHours.get(day.name()) != null}" type="hidden" th:value="${businessHours.get(day.name()).isHoliday}">
-        <input id="is-holiday" class="mx-2" th:if="${businessHours.get(day.name()) == null}" type="hidden" th:value="${false}" />
+        <input id="is-holiday" class="mx-2" th:if="${businessHours.get(day.name()) != null}" type="hidden"
+               th:value="${businessHours.get(day.name()).isHoliday}">
+        <input id="is-holiday" class="mx-2" th:if="${businessHours.get(day.name()) == null}" type="hidden"
+               th:value="${false}"/>
+        <!--   Hidden Input 끝     -->
         <span class="mx-2">
         <input id="input-start-hour" type="number" class="time form-control form-control-sm" min="0" max="23">
         <label for="input-start-hour">시 </label>

@@ -64,7 +64,10 @@ body {
 .column-grid-double {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    height: 300px;
+}
+
+.column-grid-double-item{
+    height: 150px;
 }
 
 .row-grid {
