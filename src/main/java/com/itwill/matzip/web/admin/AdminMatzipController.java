@@ -184,6 +184,7 @@ public class AdminMatzipController {
     @GetMapping("/category/all")
     public ResponseEntity<List<CategoryListDto>> getCategories() {
         List<CategoryListDto> categoryListItems = adminService.getCategoryListItems();
+
         return ResponseEntity.ok(categoryListItems);
     }
 
