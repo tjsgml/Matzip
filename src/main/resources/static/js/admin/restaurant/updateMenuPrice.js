@@ -118,7 +118,11 @@ const menuList = document.getElementById("menuList");
 const createMenu = document.getElementById("create-menu-input-group");
 
 addMenuBtn.addEventListener("click", e => {
-    createMenu.classList.remove("d-none");
+    if (createMenu.classList.contains("d-none")) {
+        createMenu.classList.remove("d-none");
+        return;
+    }
+    createMenu.classList.add("d-none");
 })
 
 const createMenuBtn = document.getElementById("create-menu-btn");
