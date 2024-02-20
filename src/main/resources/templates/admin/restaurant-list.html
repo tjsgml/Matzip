@@ -102,9 +102,7 @@
                         <td th:text="${matzip.address + matzip.detailAddress}"></td>
                         <!--                    <td th:text="${matzip.contact}">010-0000-0000</td>-->
                         <td>010-0000-0000</td>
-                        <td th:if="${matzip.status eq CLOSURE}">폐업</td>
-                        <td th:if="${matzip.status eq OPEN}">영업중</td>
-                        <td th:if="${matzip.status eq WAIT}">승인 대기</td>
+                        <td th:text="${matzip.status.kor}">승인 대기</td>
                         <td th:if="${matzip.status ne WAIT}">
                             <button class="btn btn-outline-secondary btn-sm confirm-restaurant disabled" disabled>승인
                             </button>

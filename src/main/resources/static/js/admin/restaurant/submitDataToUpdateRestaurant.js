@@ -20,6 +20,7 @@ async function submitRestaurantInfo() {
     const lon = lngInput.value;
     const lat = latInput.value;
     const category = categorySelect.value;
+    const status = statusSelect.value;
 
     if (placeName.trim() === ''
         || address.trim() === ''
@@ -38,7 +39,8 @@ async function submitRestaurantInfo() {
         contact,
         lon,
         lat,
-        category
+        category,
+        status
     }
 
     console.log("data = {}", data);
