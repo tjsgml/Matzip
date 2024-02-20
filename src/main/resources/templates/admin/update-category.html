@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head th:replace="~{/layout/fragment-common::my-header('MAT.ZIP ADMIN | 레스토랑 리스트')}"></head>
+<link href="/css/admin/admin-common.css" rel="stylesheet">
+<link href="/css/admin/admin-holiday.css" rel="stylesheet">
+<body>
+<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+
+<div class="mz-admin-container">
+    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <main class="mx-4">
+        <h3 class="page-main-desc">카테고리 관리</h3>
+        <div>
+            <div>
+                <button id="show-add-category-comp-btn" class="fw-bold form-control btn btn-outline-primary">추가하기
+                </button>
+                <ul id="category-list" class="list-group">
+                </ul>
+                <div>
+                    <div id="add-category-form" class="my-3  d-none">
+                        <input type="text" class="form-control" id="category-name-to-create"
+                               placeholder="카테고리명 ex)한식, 일식.."/>
+                        <div class="input-group">
+                            <button class="btn btn-success form-control" id="add-category-btn">생성</button>
+                            <button class="btn btn-warning form-control" id="cancel-add-category-btn">취소</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group mt-3" role="group" aria-label="Basic radio toggle button group"
+                     style="width: 100%">
+                    <input type="radio" class="btn-check" value="Y" name="changeable" id="btnradio1"
+                           autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btnradio1">드래그로 순서 변경</label>
+
+                    <input type="radio" class="btn-check" value="N" name="changeable" id="btnradio2"
+                           autocomplete="off" checked>
+                    <label class="btn btn-outline-primary" for="btnradio2">순서 변경 불가능</label>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
+<script src="/js/admin/restaurant/updateCategory.js"></script>
+<script>
+</script>
+
+</body>
+</html>

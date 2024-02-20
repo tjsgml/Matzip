@@ -90,5 +90,8 @@ public class Restaurant extends BaseTimeEntity {
         this.category = category;
     }
 
+    public void updateStatus(RestaurantStatus status) {
+        this.status = status;
+    }
 
 }

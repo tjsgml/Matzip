@@ -156,8 +156,8 @@ function setMarker(el) {
                 <input id="placename-Input-${el.id}" type="hidden" value="${el.place_name || ''}" />
                 <input id="address-Input-${el.id}" type="hidden" value="${el.address_name || ''}" />
                 <input id="phone-Input-${el.id}" type="hidden" value="${el.phone || ''}" />
-                <input id="lat-Input-${el.id}" type="hidden" value="${el.x}" />
-                <input id="lng-Input-${el.id}" type="hidden" value="${el.y}" />
+                <input id="lat-Input-${el.id}" type="hidden" value="${el.y}" />
+                <input id="lng-Input-${el.id}" type="hidden" value="${el.x}" />
        `;
 
     console.log(`lng-Input-${el.id}`)

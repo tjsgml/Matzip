@@ -83,6 +83,11 @@ body {
     grid-template-columns: 4fr 6fr;
 }
 
+.mz-inner-container-half {
+    display: grid;
+    grid-template-columns: 5fr 5fr;
+}
+
 .mz-main-comp{
     margin: 20px 20px 0 20px;
 }

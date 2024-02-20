@@ -1,6 +1,7 @@
 package com.itwill.matzip.dto;
 
 import com.itwill.matzip.domain.Category;
+import com.itwill.matzip.domain.RestaurantStatus;
 import lombok.*;
 import org.springframework.lang.NonNull;
 
@@ -33,6 +34,9 @@ public class RestaurantUpdateDto {
 
     @NonNull
     private Integer category;
+
+    @NonNull
+    private RestaurantStatus status;
 
     public Category getCategoryToUpdate () {
         return Category.builder()

@@ -24,6 +24,7 @@ const contactInput = document.getElementById("contactInput");
 const lngInput = document.getElementById("lngInput");
 const latInput = document.getElementById("latInput");
 const categorySelect = document.querySelector("select#select-category");
+const statusSelect = document.querySelector("select#select-status");
 
 const originRestaurantInfo = {
     name: nameInput.value,
