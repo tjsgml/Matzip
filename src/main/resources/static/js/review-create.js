@@ -69,46 +69,76 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-    /* 이미지 */
+/* 이미지 */
     const imageInput = document.getElementById('image-input');
     const imagePreviewContainer = document.querySelector('.image-preview-container');
     const imagePreviewText = document.querySelector('.image-preview-text');
     
 
-    imageInput.addEventListener('change', function() {
-
-        if (this.files && this.files.length > 0) {
-            imagePreviewText.remove();
-        }
-
-        for (const file of this.files) {
+    imageInput.addEventListener('change', function(event) {
+        // 이미 선택된 파일을 확인하고 새로운 파일만 DataTransfer 객체에 추가합니다.
+        let existingFiles = Array.from(imageInput.files);
+        let newFiles = Array.from(event.target.files);
+    
+        // 새로운 파일들을 기존 파일 목록에 추가합니다.
+        newFiles.forEach(file => {
+            // 중복 검사를 통해 기존 파일 목록에 없는 파일만 추가합니다.
+            if (!existingFiles.find(f => f.name === file.name && f.size === file.size)) {
+                existingFiles.push(file);
+            }
+        });
+    
+        // input의 files 속성 업데이트
+        updateInputFiles(existingFiles);
+    
+        // 미리보기 업데이트
+        updateImagePreviews();
+    });
+    
+    function updateInputFiles(files) {
+        let dataTransfer = new DataTransfer();
+        files.forEach(file => dataTransfer.items.add(file));
+        imageInput.files = dataTransfer.files;
+    }
+    
+    function updateImagePreviews() {
+        imagePreviewContainer.innerHTML = ''; // 기존 미리보기를 클리어합니다.
+    
+        // 새롭게 업데이트된 파일 목록으로 미리보기를 생성
+        Array.from(imageInput.files).forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const imagePreviewWrap = document.createElement('div');
                 imagePreviewWrap.classList.add('image-preview-wrap');
-
+    
                 const imagePreview = document.createElement('img');
                 imagePreview.src = e.target.result;
-
+    
                 const deleteButton = document.createElement('a');
-                deleteButton.innerHTML = '<i class="fas fa-times"></i>'; 
+                deleteButton.innerHTML = '<i class="fas fa-times"></i>';
                 deleteButton.classList.add('delete-image');
                 deleteButton.href = 'javascript:void(0);';
-
+    
                 deleteButton.addEventListener('click', function() {
-                    imagePreviewWrap.remove(); 
+                    // 해당 파일을 목록에서 제거하고 미리보기 업데이트
+                    removeFileFromInput(index);
                 });
-
-                // 이미지 & 삭제 버튼 wrap에 추가
+    
                 imagePreviewWrap.appendChild(imagePreview);
                 imagePreviewWrap.appendChild(deleteButton);
-
-                // wrap을 imagePreviewContainer에 추가
+    
                 imagePreviewContainer.appendChild(imagePreviewWrap);
             };
             reader.readAsDataURL(file);
-        }
-    });
+        });
+    }
+    
+    function removeFileFromInput(indexToRemove) {
+        let updatedFiles = Array.from(imageInput.files).filter((_, index) => index !== indexToRemove);
+        updateInputFiles(updatedFiles);
+        updateImagePreviews();
+    }
+    
     
     
 /* 키워드(해시태그) */

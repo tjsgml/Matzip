@@ -75,4 +75,16 @@ public class Review extends BaseTimeEntity{
     )
     private Set<ReviewHashtag> hashtags = new HashSet<>();
 
+		
+	public void updateReview(Integer flavorScore, Integer priceScore, Integer serviceScore, String content) {
+		   if(flavorScore != null) this.flavorScore = flavorScore;
+		   if(priceScore != null) this.priceScore = priceScore;
+		   if(serviceScore != null) this.serviceScore = serviceScore;
+		   if(content != null && !content.isEmpty()) this.content = content;
+	}
+
+		
+	
+	
+
 }

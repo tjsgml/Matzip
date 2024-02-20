@@ -5,12 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwill.matzip.domain.Restaurant;
+import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.dto.ReviewCreateDto;
 import com.itwill.matzip.service.RestaurantService;
 import com.itwill.matzip.service.ReviewService;
@@ -58,6 +60,30 @@ public class ReviewController {
         }
         
         return "redirect:/map/list";
+    }
+    
+    // 리뷰 수정
+    @GetMapping("/update/{reviewId}")
+    public String reviewUpdate(@PathVariable Long reviewId,  Model model) {
+        log.info("GET - reviewEditForm - reviewId: {}", reviewId);
+        
+        // 리뷰 정보 조회 
+        Review review = reviewSvc.findReviewById(reviewId);
+        if (review == null) {
+            // 리뷰 정보가 없으면
+            return "redirect:/error";
+        }
+        
+//        // 리뷰와 연관된 레스토랑 정보 가져옴
+//        Restaurant restaurant = restaurantSvc.findOneRest(review.getRestaurant().getId());
+//        
+//        // 리뷰 정보, 레스토랑 정보 추가
+//        model.addAttribute("reviewForm", review); // ReviewCreateDto 대신 사용된 리뷰 객체, 적절한 DTO로 변환 필요
+//        model.addAttribute("restaurantName", restaurant.getName());
+//        model.addAttribute("restaurantId", restaurant.getId());
+        model.addAttribute("review", review);
+        
+        return "review/update"; // 리뷰 수정 페이지
     }
     
     
