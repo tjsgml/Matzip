@@ -7,7 +7,7 @@ import com.itwill.matzip.dto.*;
 import com.itwill.matzip.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -171,5 +171,51 @@ public class AdminMatzipController {
         adminService.updateRestaurantBusinessTime(businessHours, restaurantId);
         return ResponseEntity.ok("updated");
     }
+
+    @GetMapping("/category")
+    public String moveToControlCategory(Model model) {
+        List<Category> categories = adminService.getCategories();
+        model.addAttribute("categories", categories);
+        log.info("categories={}", categories);
+        return "admin/update-category";
+    }
+
+    @ResponseBody
+    @GetMapping("/category/all")
+    public ResponseEntity<List<CategoryListDto>> getCategories() {
+        List<CategoryListDto> categoryListItems = adminService.getCategoryListItems();
+        return ResponseEntity.ok(categoryListItems);
+    }
+
+    @ResponseBody
+    @PostMapping("/category")
+    public ResponseEntity<Category> createCategory(@RequestParam(name = "categoryName") String categoryName) {
+        log.info("categoryNamecategoryName={}", categoryName);
+        Category category = adminService.createCategory(categoryName);
+        return ResponseEntity.status(HttpStatus.CREATED).body(category);
+    }
+
+    @ResponseBody
+    @PatchMapping("/category/order")
+    public ResponseEntity<String> updateCategoryOrder(@RequestBody List<CategoryOrderUpdateDto> categoryOrderUpdateDto) {
+        adminService.updateCategoryOrder(categoryOrderUpdateDto);
+        return ResponseEntity.ok("order_updated");
+    }
+
+    @ResponseBody
+    @DeleteMapping("/category/{categoryId}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable(name = "categoryId") Integer categoryId) {
+        adminService.deleteCategory(categoryId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ResponseBody
+    @PatchMapping("/category/{categoryId}")
+    public ResponseEntity<String> updateCategoryName(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "categoryName") String categoryName) {
+        log.info("categoryId= {}, @RequestParam(name ={}", categoryId, categoryName);
+        adminService.updateCategoryName(categoryId, categoryName);
+        return ResponseEntity.ok("order_updated");
+    }
+
 
 }

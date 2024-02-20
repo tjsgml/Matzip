@@ -1,5 +1,6 @@
 package com.itwill.matzip.repository.restaurant;
 
+import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
