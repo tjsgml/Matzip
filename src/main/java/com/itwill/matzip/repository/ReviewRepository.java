@@ -8,8 +8,6 @@ import com.itwill.matzip.domain.Review;
 
 public interface ReviewRepository extends JpaRepository<Review, Long>{
 
-	List<Review> findByRestaurantId(Long restaurantId);
-	
 	//멤버 아이디에 대한 총 리뷰 수 구하기
 	Long countAllByMemberId(Long memberid);
 	

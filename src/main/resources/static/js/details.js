@@ -50,13 +50,18 @@
 											<div class="profile_img" style="background-image: url('${review.memberImg}');">
 											</div>
 											<div class="item2">
-													<p style="font-size: 23px; margin-left: 20px; font-weight: bold; margin-top: 15px; margin-bottom: 0;">${review.memberNickname}</p>
-													${[1, 2, 3, 4, 5].map(index => `<img class="star" data-index="${index}" src="/img/star_${index <= review.flavorScore ? 'on' : 'off'}.png">`).join('')}
-													<span style="font-size: 20px; color:rgb(94, 94, 94);">${review.reviewRegisterDate}</span>
-													<div class="review_scores">
-															<span class="detail_rating">맛: <img src="/img/miniStar.png" class="miniStar">${review.flavorScore}</span>
-															<span class="detail_rating">가격: <img src="/img/miniStar.png" class="miniStar">${review.priceScore}</span>
-															<span class="detail_rating">서비스: <img src="/img/miniStar.png" class="miniStar">${review.serviceScore}</span>
+													<p style="font-size: 23px; margin-left: 20px; font-weight: bold; margin-top: 15px; margin-bottom: 0;">
+													   ${review.memberNickname}
+													</p>
+													${[1, 2, 3, 4, 5].map((index, arrIndex) => `<img class="star" data-index="${index}" src="/img/star_${index <= review.flavorScore ? 'on' : 'off'}.png"${arrIndex === 0 ? ' style="margin-left: 20px;"' : ''}>`).join('')}
+
+													<span style="font-size: 20px; color:rgb(94, 94, 94);">
+													   ${review.formattedRegisterDate}
+													</span>
+													<div class="review_scores" style="margin-left: 10px;">
+															<span class="detail_rating">맛 <img src="/img/miniStar.png" class="miniStar">${review.flavorScore}</span>
+															<span class="detail_rating">가격 <img src="/img/miniStar.png" class="miniStar">${review.priceScore}</span>
+															<span class="detail_rating">서비스 <img src="/img/miniStar.png" class="miniStar">${review.serviceScore}</span>
 													</div>
 											</div>
 									</div>

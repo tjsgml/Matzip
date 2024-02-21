@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import com.itwill.matzip.repository.*;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
+import com.itwill.matzip.util.DateTimeUtil;
+
 import org.springframework.stereotype.Service;
 
 import com.itwill.matzip.domain.BusinessHour;
@@ -128,25 +130,25 @@ public class RestaurantService {
 	private final ReviewRepository reviewDao;
 	
 	public List<ReviewListDto> getReviewsForRestaurant(Long restaurantId) {
-	    List<Review> reviews = reviewDao.findByRestaurantId(restaurantId);
-	    return reviews.stream().map(review -> ReviewListDto.builder()
-	            .id(review.getId())
-	            .content(review.getContent())
-	            .flavorScore(review.getFlavorScore())
-	            .serviceScore(review.getServiceScore())
-	            .priceScore(review.getPriceScore())
-	            .reviewRegisterDate(review.getCreatedTime())
-	            .memberNickname(review.getMember().getNickname())
-	            .memberImg(review.getMember().getImg())
-	            .reviewImages(review.getReviewImages().stream()
-	                    .map(ReviewImage::getImgUrl)
-	                    .collect(Collectors.toList()))
-	            .hashtags(review.getHashtags().stream()
-	                    .map(ReviewHashtag::getKeyword)
-	                    .collect(Collectors.toSet()))
-	            .build())
-	    .collect(Collectors.toList());
-	}
+        List<Review> reviews = reviewDao.findByRestaurantId(restaurantId);
+        return reviews.stream().map(review -> ReviewListDto.builder()
+                .id(review.getId())
+                .content(review.getContent())
+                .flavorScore(review.getFlavorScore())
+                .serviceScore(review.getServiceScore())
+                .priceScore(review.getPriceScore())
+                .formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime())) // 포맷팅된 날짜
+                .memberNickname(review.getMember().getNickname())
+                .memberImg(review.getMember().getImg())
+                .reviewImages(review.getReviewImages().stream()
+                        .map(ReviewImage::getImgUrl)
+                        .collect(Collectors.toList()))
+                .hashtags(review.getHashtags().stream()
+                        .map(ReviewHashtag::getKeyword)
+                        .collect(Collectors.toSet()))
+                .build())
+        .collect(Collectors.toList());
+    }
 
 
 	

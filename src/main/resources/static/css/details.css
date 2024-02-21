@@ -239,16 +239,21 @@
 
 .miniStar{
 	margin-bottom: 7px;
+	width: 15px; /* 원하는 너비로 조정 */
+    height: 15px; /* 원하는 높이로 조정 */
+    margin-bottom: 3px; /* 필요에 따라 조정 */
 }
 .detail_rating{
 	margin-left: 10px;
-	font-size: 18px;
+	font-size: 15px;
+	color:rgb(94, 94, 94);
 }
 .reviewImgList{
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	grid-template-rows: repeat(1,200px);
 }
+
 .img1{
 	grid-column: 1/2;
 	grid-row:1/2;
