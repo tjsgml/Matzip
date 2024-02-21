@@ -4,7 +4,15 @@
 }
 
 .margin-side-lr {
-  padding: 0 50px;
+  padding: 0 70px;
+}
+
+.padding-second-r {
+	padding-right: 255px;
+}
+
+.post-center {
+	justify-self: center;
 }
 
 .main-bg-color {
