@@ -1,16 +1,22 @@
 package com.itwill.matzip.repository.restaurant;
 
+import java.util.List;  
+import java.util.Objects;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+
 import com.itwill.matzip.domain.QRestaurant;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.dto.RestaurantSearchCond;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import java.util.List;
-import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class RestaurantQuerydslImpl extends QuerydslRepositorySupport implements RestaurantQuerydsl {

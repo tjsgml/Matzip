@@ -11,6 +11,7 @@ import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.MyPick;
 import com.itwill.matzip.domain.Restaurant;
+import com.itwill.matzip.domain.RestaurantStatus;
 import com.itwill.matzip.domain.UpdateRequest;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
 
@@ -38,7 +39,7 @@ public class RestaurantService {
 	//음식점 전체 목록 가져오기
 	public List<Restaurant> findAllMaps(){
 		log.info("@@@ findAllMaps");
-		List<Restaurant> list =restDao.findAll();
+		List<Restaurant> list =restDao.findAllByStatus(RestaurantStatus.OPEN);
 		log.info(list.toString());
 		return list;
 	}
