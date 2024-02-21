@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,11 +34,22 @@ public class AdminService {
         return categoryDao.findAll();
     }
 
+    public List<CategoryListDto> getCategoryListItems() {
+        List<Category> categories = categoryDao.findByOrderByListOrderAsc();
+        List<CategoryListDto> categoryListItems = new ArrayList<>();
+
+        categories.forEach(el -> {
+            CategoryListDto item = CategoryListDto.fromCategory(el);
+            categoryListItems.add(item);
+        });
+
+        return categoryListItems;
+    }
+
     public Restaurant addMatzip(RestaurantToCreateDto restaurantToAdd) {
         Restaurant restaurant = restaurantToAdd.toEntity();
         restaurantDao.save(restaurant);
         Map<String, BusinessTimeDto> businessTimes = restaurantToAdd.getBusinessTimes();
-        log.info("businessTimes11={}", businessTimes);
 
         for (String day : businessTimes.keySet()) {
             log.info("day={}", day);
@@ -160,6 +172,8 @@ public class AdminService {
         List<Category> categories = getCategories();
         result.put("categories", categories);
 
+        List<RestaurantStatus> restaurantStatuses = List.of(RestaurantStatus.values());
+        result.put("restaurantStatuses", restaurantStatuses);
         return result;
     }
 
@@ -175,6 +189,7 @@ public class AdminService {
         restaurant.updateContact(restaurantUpdateDto.getContact());
         restaurant.updateLon(restaurantUpdateDto.getLon());
         restaurant.updateLat(restaurantUpdateDto.getLat());
+        restaurant.updateStatus(restaurantUpdateDto.getStatus());
 
         return restaurant;
     }
@@ -228,4 +243,44 @@ public class AdminService {
         bhour.updateCloseTime(el.getEndTime());
 //        수정 flow
     }
+
+    @Transactional
+    public void updateCategoryOrder(List<CategoryOrderUpdateDto> categoryOrderUpdateList) {
+        log.info("CategoryOrderUpdateDtos = {}", categoryOrderUpdateList);
+        for (CategoryOrderUpdateDto categoryToUpdate : categoryOrderUpdateList) {
+            Category category = categoryDao.findById(categoryToUpdate.getId()).orElseThrow();
+            category.changeOrderToShow(categoryToUpdate.getOrder());
+        }
+    }
+
+    private final static Integer DEFAULT_CATEGORY = 1;
+
+    //    TODO : 수정 필요 => restaurant 삭제되지 않고 기본 값으로 들어갈 수 있도록 해야 함.
+    @Transactional
+    public void deleteCategory(Integer categoryId) {
+        log.info("deleteCategory(Integer categoryId = {} )", categoryId);
+        categoryDao.deleteById(categoryId);
+        restaurantDao.updateCategoryToDefaultCategory(categoryId, DEFAULT_CATEGORY);
+    }
+
+    public Category createCategory(String categoryName) {
+        log.info("createCategory (String categoryName = {} )", categoryName);
+        Category categoryFinal = categoryDao.findTop1ByOrderByListOrderDesc();
+        Category category = Category.builder()
+                .name(categoryName)
+                .listOrder(categoryFinal.getListOrder() + 1)
+                .build();
+
+        categoryDao.save(category);
+
+        return category;
+    }
+
+    @Transactional
+    public void updateCategoryName(Integer categoryId, String categoryName) {
+        Category category = categoryDao.findById(categoryId).orElseThrow();
+
+        category.changeName(categoryName);
+    }
+
 }

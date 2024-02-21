@@ -93,4 +93,13 @@ public class RestaurantQuerydslImpl extends QuerydslRepositorySupport implements
 
         return page;
     }
+
+    @Override
+    public void updateCategoryToDefaultCategory(Integer categoryId, Integer categoryIdToChange) {
+        QRestaurant restaurant = QRestaurant.restaurant;
+                update(restaurant)
+                .set(restaurant.category.id, categoryIdToChange)
+                .where(restaurant.category.id.eq(categoryId))
+                        .execute();
+    }
 }

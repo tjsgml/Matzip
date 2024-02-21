@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>mat.zip</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+	<link rel="stylesheet" href="/css/memberinfo-style.css" />
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<!-- 여백 -->
+			<div class="col-md-3"></div>
+
+			<div class="col-md-6 main-bg-color">
+				<header class="mypage-header margin-side-lr">
+					<span>마이페이지</span>
+				</header>
+
+				<main>
+					<section class="profile-header margin-side-lr">
+						<div class="profile-header__meta">
+							<div class="meta-pic">
+								<img th:src="${info.img}" />
+							</div>
+							<div class="meta-info">
+								<h4 th:text="${info.nickname}"></h4>
+								<div class="meta-info__count">
+									<dl>
+										<dd>마이 픽</dd>
+										<dt th:text="${info.pickCnt}"></dt>
+									</dl>
+									<span>|</span>
+									<dl>
+										<dd>리뷰</dd>
+										<dt th:text="${info.reviewCnt}"></dt>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div class="profile-header__btn">
+							<a th:href="@{/memberinfo/profilemodify}">프로필 수정</a>
+						</div>
+					</section>
+
+					<section class="tab-menu">
+						<ul>
+							<li>
+								<a th:href="@{/memberinfo/mymain}">마이 픽</a>
+							</li>
+							<li class="active"><a th:href="@{/memberinfo/myreview}">리뷰</a></li>
+						</ul>
+					</section>
+
+					<section class="overall-avg margin-side-lr">
+						<dl>
+							<dt>평균 별점</dt>
+							<dd th:if="${reviews != null}">
+								<strong
+									th:text="${reviews[0].totalAllReviewRating!=null}?${reviews[0].totalAllReviewRating}:0"></strong>
+								<div class="stars">
+									<th:block th:each="num:${#numbers.sequence(0,reviews[0].totalAllReviewRating-1)}">
+										<img src="/img/star_on.png" />
+									</th:block>
+									<th:block th:each="num:${#numbers.sequence(reviews[0].totalAllReviewRating+1, 5)}">
+										<img src="/img/star_off.png" />
+									</th:block>
+								</div>
+							</dd>
+							<dd th:if="${reviews == null}">
+								<strong>0.0</strong>
+								<th:block th:each="num:${#numbers.sequence(0,4)}">
+									<div class="stars">
+										<img src="/img/star_off.png" />
+									</div>
+								</th:block>
+							</dd>
+						</dl>
+					</section>
+
+					<!-- 포스트 전체 -->
+					<section class="myreview-list">
+						<!-- 리뷰 포스트 1개 -->
+
+						<div th:each="review:${reviews}" th:object="${review}" class="review-post margin-side-lr">
+							<div class="review-post_column">
+								<a th:href="@{/rest/details(id=*{restaurantId})}">
+									<img th:if="*{mainImg != null}" class="img-sm" th:src="*{mainImg}" />
+									<div th:if="*{mainImg == null}" class="emptyMainImg img-sm">
+									</div>
+									<div class="review-info">
+										<h4 th:text="*{restaurantName}"></h4>
+										<div th:text="|*{categoryName} . *{location}|"></div>
+									</div>
+								</a>
+							</div>
+
+							<!-- 이미지 뿌리는 곳 -->
+							<div class="review-post_column">
+								<div class="review-img_pic">
+									<!-- 이미지 1개 -->
+									<div th:if="${#lists.size(review.reviewImg) == 1}" class="imgContainer">
+										<a class="imgEnl">
+											<div class="imgContainer_box">
+												<img th:src="*{reviewImg[0]}" th:data-id="*{reviewId}" />
+											</div>
+										</a>
+									</div>
+									<!-- 이미지 2개 -->
+									<div th:if="${#lists.size(review.reviewImg) == 2}" class="imgContainer">
+										<a class="imgEnl">
+											<div class="imgContainer_box" th:each="img:*{reviewImg}">
+												<img th:src="${img}" th:data-id="*{reviewId}" />
+											</div>
+										</a>
+									</div>
+									<!-- 이미지 3개 -->
+									<div th:if="${#lists.size(review.reviewImg) == 3}"
+										class="imgContainer di-grid three-pic">
+										<a class="imgEnl">
+											<div class="imgContainer_box" th:each="img:*{reviewImg}">
+												<img th:src="${img}" th:data-id="*{reviewId}" />
+											</div>
+										</a>
+									</div>
+									<!-- 이미지 4개 -->
+									<div th:if="${#lists.size(review.reviewImg) == 4}" class="imgContainer di-grid">
+										<a class="imgEnl">
+											<div class="imgContainer_box" th:each="img:*{reviewImg}">
+												<img th:src="${img}" th:data-id="*{reviewId}" />
+											</div>
+										</a>
+									</div>
+									<!-- 이미지 4개 이상 -->
+									<div th:if="${#lists.size(review.reviewImg) > 4}" class="imgContainer di-grid">
+										<a class="imgEnl">
+											<div class="imgContainer_box more-pic"
+												th:each="num:${#numbers.sequence(0,3)}">
+												<div class="moreImg" th:if="${num}==3" id="moreImgView"
+													th:data-id="*{reviewId}">
+													<i class="fa-solid fa-camera" th:data-id="*{reviewId}"></i>+
+													<span th:text="${#lists.size(review.reviewImg) -4}"
+														th:data-id="*{reviewId}"></span>
+												</div>
+												<img th:src="${review.reviewImg[num]}" th:data-id="*{reviewId}" />
+											</div>
+										</a>
+									</div>
+								</div>
+							</div>
+							<div class="review-post_column">
+								<div class="review-rating">
+									<div>
+										<span>맛</span>
+										<span>
+											<img src="/img/v26_89.png" />
+											<strong th:text="*{flavorScore}"></strong>
+										</span>
+									</div>
+									<div>
+										<span>가격</span>
+										<span>
+											<img src="/img/v26_89.png" />
+											<strong th:text="*{priceScore}"></strong>
+										</span>
+									</div>
+									<div>
+										<span>서비스</span>
+										<span>
+											<img src="/img/v26_89.png" />
+											<strong th:text="*{serviceScore}"></strong>
+										</span>
+									</div>
+								</div>
+								<div th:text="*{createTime}"></div>
+							</div>
+							<div class="review-post_column">
+								<h3></h3>
+								<p th:text="*{content}"></p>
+							</div>
+
+							<div class="review-post_column dropdown text-end">
+								<div class="d-block link-body-emphasis text-decoration-none" data-bs-toggle="dropdown"
+									aria-expanded="false">
+									<img src="/img/icon_null.png" />
+								</div>
+								<ul class="dropdown-menu text-small dropdown-menu-end">
+									<li>
+										<a class="dropdown-item" href="#">리뷰 수정</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="#">리뷰 삭제</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+					</section>
+
+					<!-- 이미지 크게 볼 수 있는 모달 띄우기 -->
+
+					<div id="gallryModal" class="modal fade show" tabindex="-1">
+						<div class=" modal-dialog  modal-lg">
+							<div class="modal-content">
+								<div class="modal-body">
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+									<!--이미지 넣기 -->
+									<div class="imgContainer">
+										<div class="imgContainer_img">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> <!-- end modal -->
+
+					<!---->
+
+				</main>
+			</div>
+
+			<!-- 여백 -->
+			<div class="col-md-3"></div>
+		</div>
+	</div>
+
+	<!-- java script -->
+	<!-- Bootstrap 자바스크립트 모듈 -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+		crossorigin="anonymous"></script>
+
+	<!-- Axios 자바스크립트 모듈 -->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+	<!-- 아이콘 모듈 -->
+	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
+
+	<!-- 수제 모듈 -->
+	<script src="../js/info-moreImgView.js"></script>
+</body>
+
+</html>

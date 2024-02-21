@@ -1,36 +1,40 @@
 package com.itwill.matzip.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.dto.ReviewCreateDto;
+import com.itwill.matzip.service.MemberInfoService;
 import com.itwill.matzip.service.RestaurantService;
 import com.itwill.matzip.service.ReviewService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/review")
 public class ReviewController {
+	private final MemberInfoService miSvc;		//memberinfo 서비스 빈 생성
 
     private final ReviewService reviewSvc;
     
     @Autowired
     private RestaurantService restaurantSvc;
-
-    @Autowired
-    public ReviewController(ReviewService reviewService) {
-        this.reviewSvc = reviewService;
-    }
 
     // 리뷰 등록 폼
     @GetMapping("/create")
@@ -61,5 +65,11 @@ public class ReviewController {
     }
     
     
-    
+    @ResponseBody
+    @GetMapping("/img/{reviewId}")
+    public ResponseEntity<List<String>> getReviewImg(@PathVariable("reviewId") Long reviewId){
+    	List<String> list = miSvc.getReviewImg(reviewId);
+    	
+    	return ResponseEntity.ok(list);
+    }
 }
