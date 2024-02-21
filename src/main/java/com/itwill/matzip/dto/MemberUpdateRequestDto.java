@@ -20,7 +20,7 @@ public class MemberUpdateRequestDto {
 	
 	public Member toEntity() {
 		return Member.builder()
-										.kakaoClientId(username)
+										.username(username) 		/*02.14 수정 - kakaoClient로 되어 있었음*/
 										.email(email)
 										.nickname(nickname)
 										.birth(birth)
