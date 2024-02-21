@@ -44,7 +44,7 @@ public class MemberRepositoryTest {
 		
 		log.info("save 전 : {} ", m );
 		
-		memberDao.save(m);
+//		memberDao.save(m);
 		
 		log.info("save 후 : {}", m);
 	}

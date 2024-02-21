@@ -16,11 +16,13 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
 @Getter
 @ToString
 @EqualsAndHashCode
@@ -40,4 +42,8 @@ public class ReviewImage {
 	
 	@Basic(optional = false)
 	private String imgUrl;
+	
+	public String getImagePath() {
+        return this.imgUrl;
+    }
 }

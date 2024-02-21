@@ -1,3 +1,4 @@
+
 package com.itwill.matzip.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
