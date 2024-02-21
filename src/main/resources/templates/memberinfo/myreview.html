@@ -59,15 +59,25 @@
 					<section class="overall-avg margin-side-lr">
 						<dl>
 							<dt>평균 별점</dt>
-							<dd>
+							<dd th:if="${reviews != null}">
 								<strong
 									th:text="${reviews[0].totalAllReviewRating!=null}?${reviews[0].totalAllReviewRating}:0"></strong>
 								<div class="stars">
 									<th:block th:each="num:${#numbers.sequence(0,reviews[0].totalAllReviewRating-1)}">
 										<img src="/img/star_on.png" />
 									</th:block>
-									<th:block th:each="num:${#numbers.sequence(reviews[0].totalAllReviewRating+1, 5)}"><img src="/img/star_off.png" /></th:block>
+									<th:block th:each="num:${#numbers.sequence(reviews[0].totalAllReviewRating+1, 5)}">
+										<img src="/img/star_off.png" />
+									</th:block>
 								</div>
+							</dd>
+							<dd th:if="${reviews == null}">
+								<strong>0.0</strong>
+								<th:block th:each="num:${#numbers.sequence(0,4)}">
+									<div class="stars">
+										<img src="/img/star_off.png" />
+									</div>
+								</th:block>
 							</dd>
 						</dl>
 					</section>

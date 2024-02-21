@@ -13,6 +13,7 @@
 	</th:block>
 	<th:block sec:authorize="isAuthenticated()">
 		<a th:href="@{/logout}">로그아웃</a>
+		<a th:href="@{/memberinfo/mymain}">마이페이지</a>
 	</th:block>
 	
 	<a th:href="@{/map/list}">지도</a>
