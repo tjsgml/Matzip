@@ -3,164 +3,130 @@ body {
   font-size: 14px;
 }
 
-.v26_78 {
-  width:100%;
-  height: 230px;
-  background: rgba(255,255,255,1);
-  position: relative;
-  opacity: 1;
-  top: 0px;
-  left: 0px;
-  overflow: hidden;
-}
-.v26_79 {
-  width: 121px;
-  height: 112px;
-  background: rgba(164,164,164,1);
-  position: absolute;
-  opacity: 1;
-  top: 23px;
-  left: 24px;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
-  overflow: hidden;
-}
-.v26_81 {
-  width: 200px;
-  color: rgba(0,0,0,1);
-  top: 27px;
-  left: 164px;
-  font-weight: Bold;
-  position: absolute;
-  font-size: 24px;
-   position: absolute;
-  opacity: 1;
-}
-.v26_82 {
-  width: 100px;
-  color: rgba(136,117,127,1);
-  top: 63px;
-  left: 169px;
-  font-weight: Medium;
-  position: absolute;
-  font-size: 20px;
-  opacity: 1;
-}
-.v26_83 {
-  width: 100px;
-  color: rgba(158,158,158,1);
-  top: 79px;
-  left: 164px;
-  font-weight: Medium;
-  position: absolute;
-  font-size: 17px;
-  opacity: 1;
-}
-.v26_89 {
-  width: 21px;
-  height: 21px;
-  background: url("../img/v26_89.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  position: absolute;
-  opacity: 1;
-  top: 100px;
-  left: 166px;
-  overflow: hidden;
-}
-.v26_90 {
-  width: 90px;
-  color: rgba(0,0,0,1);
-  top: 100px;
-  left: 191px;
-  font-weight: Medium;
-  position: absolute;
-  font-size: 17px;
-  opacity: 1;
-  text-align: center;
-}
-.name {
-  color: #fff;
-}
-.v26_98 {
-  width: 23px;
-  height: 23px;
-  background: url("../img/v26_98.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  position: absolute;
-  opacity: 1;
-  top: 100px;
-  left: 295px;
-  overflow: hidden;
-}
-.v26_99 {
-  width: 70px;
-  color: rgba(0,0,0,1);
-  top: 100px;
-  left: 319px;
-  font-weight: Medium;
-  position: absolute;
-  font-size: 17px;
-  opacity: 1;
-  text-align: center;
-}
-.v26_101 {
-  width: 700px;
-  color: rgba(106,106,113,1);
-  top: 157px;
-  left: 24px;
-  font-weight: Regular;
-  position: absolute;
-  font-size: 20px;
-  opacity: 1;
-}
-.v26_102 {
-  width: 200px;
-  color: url("../img/v26_102.png");
-  top: 197px;
-  left: 25px;
-  font-weight: Medium;
-  position: absolute;
-  font-size: 17px;
-  opacity: 1;
-}
-.v26_103 {
-  width: 80px;
-  color: rgba(0,0,0,1);
-  top: 197px;
-  left: 220px;
-  font-weight: Regular;
-  position: absolute;
-  font-size: 17px;
-  opacity: 1;
-  text-align: center;
-}
+
 .col-md-3::-webkit-scrollbar{
 				display: none;
 			}
-#restPost:hover{
-	background-color: azure;
+#restPost{
+	 text-decoration: none;
+	 color: inherit; /* 링크 색상을 부모 요소의 색상으로 상속 */
 }
-#restPost:hover .v26_81{
+#restPost:hover{
+	background-color: rgb(255, 255, 128);
+}
+
+
+#restPost:hover #post .container .item2{
 	color: #FF230A;
 }
-.v26_78:hover {
-  background-color: #F5F5F5; /* 원하는 배경색으로 변경 */
-  /* 추가적인 스타일 변경을 원한다면 여기에 추가하세요 */
+#post{
+	padding-top: 10px; 
+	padding-bottom: 10px;
 }
-@media (max-width: 768px) {
-  .v26_81 {
-    font-size: 18px; /* 미디어 쿼리에 따라 폰트 크기 변경 */
-  }
-  
-  .v26_82 {
-    font-size: 16px; /* 미디어 쿼리에 따라 폰트 크기 변경 */
-  }
-  
-  /* ... 다른 요소들에 대해서도 필요한 조치를 취할 수 있습니다 ... */
+#post:hover{
+	background-color: rgb(250, 250, 250);
 }
+.container{
+	display: grid;
+	grid-template-columns: repeat(3,1fr);
+	grid-template-rows: repeat(3,1fr);
+	column-gap: 5px;
+}
+.reviewDiv{
+	margin-top:10px;
+}
+.reviewContent{
+	 margin-left:25px; 
+	 color:rgba(106,106,113,1); 
+	 font-size: 15px;
+}
+.reviewLike{
+	font-weight: bold; 
+	font-size: 14px;
+}
+.reviewLike2{
+	font-weight:normal; 
+	color: rgb(164, 164, 168); 
+	font-size: 14px;
+}
+.reviewNick{
+	font-size: 14px;
+}
+.c1{
+	margin-top:5px;
+	display: grid;
+	grid-template-columns: repeat(2,1fr);
+}
+.i1{
+	grid-column: 1/2;
+	margin-left: 27px;
+	margin-right: 27px;
+}
+.i2{
+	grid-column: 2/3;
+	text-align: end;
+	margin-right: 27px;
+	}
+.item1{
+	grid-column: 1/2;
+	margin-left: 10px;
+	grid-row: 1/4;
+	background-color: rgb(255, 255, 255);
+	width: 121px;
+  	height: 112px;
+  	border-radius: 2cap;
+  	background-size: cover;
+	}
+.item1.nullImg{
+grid-column: 1/2;
+margin-left: 10px;
+grid-row: 1/4;
+background-color: rgb(255, 255, 255);
+width: 121px;
+height: 112px;
+border-radius: 2cap;
+background-size: cover;
+border:solid 2px #FF230A;
+ display: flex; /* 부모 요소를 플렉스 박스로 설정하여 가운데 정렬을 수행 */
+  justify-content: center; /* 가로 방향으로 가운데 정렬 */
+  align-items: center; /* 세로 방향으로 가운데 정렬 */
+}
+.reviewNullImg{
+	width: 49px;
+	height:32px;
+}
+
+.item2{
+	font-weight: bold;
+	margin-top:10px;
+	font-size: 19px;
+	grid-column: 2/4;
+	grid-row: 1/2;
+
+	}
+.item3{
+	margin-top:7px;
+	margin-left: 3px;
+	font-size:16px;
+	color:rgba(158,158,158,1);
+	grid-column: 2/4;
+	grid-row: 2/3;
+	}
+.v-line {
+	display: inline-block;
+	vertical-align: middle; 
+	height: 12px; 
+	width: 1px;
+	margin-bottom:2px;
+	background-color: rgb(208, 208, 208);
+	margin-left: 5px; 
+	margin-right: 5px;
+  }
+.item4{
+	margin-left: 3px;
+	margin-top:0;
+	font-size:16px;
+	grid-column: 2/4;
+	grid-row: 3/4;
+	}
+

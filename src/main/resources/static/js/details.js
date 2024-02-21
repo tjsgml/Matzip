@@ -119,6 +119,7 @@
 	resizeMap();
 	map.relayout();
 	
+	//지도보기 버튼 클릭시
 	btnShowModal.addEventListener('click',() => {
 	toggleMap(true,markerPosition);
 	console.log(mapModal);
@@ -132,8 +133,8 @@
 	function resizeMap() {
 	    const mapContainer = document.getElementById('map');
 	   	mapModal.style.display = 'true';
-	    mapContainer.style.width = '100%';
-	    mapContainer.style.height = '700px'; 
+	    mapContainer.style.width = '798px';
+	    mapContainer.style.height = '500px'; 
 	}
 	
 	function relayout() {    
