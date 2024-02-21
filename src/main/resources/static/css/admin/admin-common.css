@@ -64,7 +64,10 @@ body {
 .column-grid-double {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    height: 300px;
+}
+
+.column-grid-double-item{
+    height: 150px;
 }
 
 .row-grid {
@@ -81,6 +84,11 @@ body {
 .mz-inner-container {
     display: grid;
     grid-template-columns: 4fr 6fr;
+}
+
+.mz-inner-container-half {
+    display: grid;
+    grid-template-columns: 5fr 5fr;
 }
 
 .mz-main-comp{

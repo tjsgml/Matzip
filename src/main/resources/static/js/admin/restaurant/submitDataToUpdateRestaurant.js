@@ -20,6 +20,7 @@ async function submitRestaurantInfo() {
     const lon = lngInput.value;
     const lat = latInput.value;
     const category = categorySelect.value;
+    const status = statusSelect.value;
 
     if (placeName.trim() === ''
         || address.trim() === ''
@@ -38,13 +39,13 @@ async function submitRestaurantInfo() {
         contact,
         lon,
         lat,
-        category
-    }
+        category,
+        status
+    };
 
     console.log("data = {}", data);
 
     const {data :result} = await axios.patch("../"+restaurantId, data);
-    console.log("result = " + result)
-
-    location.reload();
+    console.log("result = " + result);
+    location.href = `../${restaurantId}`;
 }
