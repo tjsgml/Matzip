@@ -22,6 +22,7 @@ import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.dto.MyPickRegisterDto;
+import com.itwill.matzip.dto.ReviewListDto;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
 import com.itwill.matzip.service.RestaurantService;
 
@@ -138,11 +139,11 @@ public class RestaurantController {
 	}
 	
 //	/* 은겸 추가 */
-//	@GetMapping("/details/reviews/{restId}")
-//	public ResponseEntity<List<Review>> findReviews(@PathVariable("restId") Long restId) {
-//	    List<Review> reviews = restSvc.findReviewsByRestaurantId(restId);
-//	    return ResponseEntity.ok(reviews);
-//	}
+	@GetMapping("/details/reviews/{restaurantId}")
+    public ResponseEntity<List<ReviewListDto>> findReviews(@PathVariable("restaurantId") Long restaurantId) {
+        List<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId);
+        return ResponseEntity.ok(reviews);
+    }
 
 	
 	

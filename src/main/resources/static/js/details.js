@@ -19,6 +19,7 @@
 	 
 	checkLogin();
 	
+	
 	const restId = document.querySelector('input#restId').value;//음식점 아이디
 	
 	const btnReportInfo = document.getElementById('btnReportInfo');//폐업신고,정보수정제안 버튼
@@ -27,6 +28,56 @@
 	
 	// 평가하기 버튼 클릭 이벤트 수정
     const btnEval = document.getElementById('btnEval');
+    
+    reviewListLoad(restId);
+    
+    // 리뷰 목록 ----------------------------------------------------------------------
+    async function reviewListLoad(restaurantId) {
+			try {
+					// 서버에서 리뷰 데이터를 불러옵니다
+					const response = await axios.get(`/rest/details/reviews/${restaurantId}`);
+					const reviews = response.data;
+	
+					const reviewListContainer = document.getElementById('reviewListContainer');
+					reviewListContainer.innerHTML = ''; // 초기화
+	
+					// 컨테이너에 추가
+					reviews.forEach(review => {
+							const reviewElement = document.createElement('div');
+							reviewElement.className = 'review_post'; // 기존 CSS 클래스 이름 사용
+							reviewElement.innerHTML = `
+									<div class="ht_container">
+											<div class="profile_img" style="background-image: url('${review.memberImg}');">
+											</div>
+											<div class="item2">
+													<p style="font-size: 23px; margin-left: 20px; font-weight: bold; margin-top: 15px; margin-bottom: 0;">${review.memberNickname}</p>
+													${[1, 2, 3, 4, 5].map(index => `<img class="star" data-index="${index}" src="/img/star_${index <= review.flavorScore ? 'on' : 'off'}.png">`).join('')}
+													<span style="font-size: 20px; color:rgb(94, 94, 94);">${review.reviewRegisterDate}</span>
+													<div class="review_scores">
+															<span class="detail_rating">맛: <img src="/img/miniStar.png" class="miniStar">${review.flavorScore}</span>
+															<span class="detail_rating">가격: <img src="/img/miniStar.png" class="miniStar">${review.priceScore}</span>
+															<span class="detail_rating">서비스: <img src="/img/miniStar.png" class="miniStar">${review.serviceScore}</span>
+													</div>
+											</div>
+									</div>
+									<p class="review_contents btxt" style="font-size: 18px; margin-top:10px;">${review.content}</p>
+									<div class="reviewImgList">
+											${review.reviewImages.map(imgUrl => `<div class="img" style="background-image: url('${imgUrl}');"></div>`).join('')}
+									</div>
+									<div class="review_ht_list">
+											${review.hashtags.map(hashtag => `<span class="ht_POV badge rounded-pill">${hashtag}</span>`).join(' ')}
+									</div>
+									<button class="btn btn-outline-danger">공감</button>
+							`;
+							reviewListContainer.appendChild(reviewElement);
+					});
+			} catch (error) {
+					console.error('리뷰 목록을 불러오는 데 실패했습니다:', error);
+			}
+	
+	
+    }//--------------------------------------------------------------------------------------------------------
+
     
     btnEval.addEventListener('click', () => {
         if(isLoggedin){
