@@ -50,15 +50,102 @@
                     >등록된 전화번호가 없습니다.
                     </div>
                 </div>
-                <div class="my-2"
-                     style="border: 1px #646566 solid; padding : 10px; background-color: #F2F5F5">
-                    <h5>위치 확인하기</h5>
-                    <div id="map" style="width: 500px; height: 200px; margin: 7px"></div>
-                    <input type="hidden" id="lon" th:value="${restaurant.lon}"/>
-                    <input type="hidden" id="lat" th:value="${restaurant.lat}"/>
+                <div class="container card mt-4"
+                     style="border: 1px #a1a6a7 solid; background-color: #F2F5F5">
+                    <h5 class="card-header">위치 확인하기</h5>
+                    <div class="card-body">
+                        <div id="map" style="width: 100%; height:200px;"></div>
+                        <input type="hidden" id="lon" th:value="${restaurant.lon}"/>
+                        <input type="hidden" id="lat" th:value="${restaurant.lat}"/>
+                    </div>
                 </div>
-                <hr class="border border-secondary border-2 opacity-50">
-                <div id="business-time-container">
+            </div>
+            <div class="mz-main-comp p-4">
+                <div id="menu-header" class="d-flex justify-content-between">
+                    <h5>메뉴 확인하기</h5>
+                    <button class="btn btn-sm btn-outline-success" id="add-menu-btn">메뉴 추가</button>
+                    <!--                    th:href="${'./' + restaurantId+ '/menu'}" -->
+                </div>
+                <div>
+                    <th:block th:if="${! #lists.isEmpty(restaurant.menus)}">
+                        <div class="container card mt-4 border-0"
+                             style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);">
+                            <div id="item-none-found" class="card-body py-5 d-none">
+                                <div class="row fw-semibold text-center"
+                                     style="font-size: 20px;">
+                                    <div class="col my-5">
+                                        <p style="font-size: 50px">🍴</p>
+                                        <div>
+                                            등록된 메뉴가 없습니다.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="menuList" class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                th:each="menu : ${restaurant.menus}" th:object="${menu}">
+                                <div>
+                                    <span th:attr="id=*{'name-' + id}" th:text="*{name}"></span>
+                                    <button class="btn btn-sm btn-update-menu-name">이름 변경</button>
+                                    <div class="input-group d-none" id="update-menu-name-comp" th:attr="data-id=*{id}">
+                                        <input id="nameToUpdate" class="form-control form-control-sm" type="text"
+                                               placeholder="변경할 이름을 입력해주세요."/>
+                                        <button id="updateNameBtn" class="btn btn-sm btn-outline-primary">확인</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <div class="text-end">
+                                    <span th:attr="id=*{'price-' + id}" class="badge bg-primary rounded-pill"
+                                          th:text="*{price}"></span>
+                                        <button class="btn btn-sm btn-update-menu-price">가격 변경</button>
+                                        <div class="input-group d-none" id="update-menu-price-comp"
+                                             th:attr="data-id=*{id}">
+                                            <input id="priceToUpdate" class="form-control form-control-sm" type="text"
+                                                   placeholder="변경할 가격 입력"/>
+                                            <button id="updatePriceBtn" class="btn btn-sm btn-outline-primary">확인
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button th:attr="data-id=*{id}" class="btn btn-sm btn-del btn">X</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </th:block>
+                    <th:block th:if="${#lists.isEmpty(restaurant.menus)}">
+                        <div class="container card mt-4 border-0"
+                             style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);">
+                            <div id="item-none-found" class="card-body py-5">
+                                <div class="row fw-semibold text-center"
+                                     style="font-size: 20px;">
+                                    <div class="col my-5">
+                                        <p style="font-size: 50px">🍴</p>
+                                        <div>
+                                            등록된 메뉴가 없습니다.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="menuList" th:if="${#lists.isEmpty(restaurant.menus)}" class="list-group">
+                        </ul>
+                    </th:block>
+                    <div id="create-menu-input-group"
+                         class="container card mt-4 border-0 d-none"
+                         style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);">
+                        <div id="item-none-found" class="card-body">
+                            <h5>메뉴 추가하기</h5>
+                            <div class="input-group py-2">
+                                <input id="menu-name-to-create" class="form-control form-control-sm" type="text"
+                                       placeholder="추가할 이름 입력"/>
+                                <input id="menu-price-to-create" class="form-control form-control-sm" type="text"
+                                       placeholder="추가할 가격 입력"/>
+                                <button id="create-menu-btn" class="btn btn-sm btn-outline-primary">확인</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="business-time-container" class="mt-4">
                     <div class="d-flex justify-content-between">
                         <h5>영업 시간</h5>
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
@@ -82,6 +169,7 @@
                             </span>
                         </span>
                     </div>
+
                     <div class="container card mt-4 border-0"
                          style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);"
                          th:if="${businessHours.isEmpty()}">
@@ -99,85 +187,6 @@
                     </div>
                 </div>
             </div>
-            <div class="mz-main-comp p-4">
-                <div id="menu-header" class="d-flex justify-content-between">
-                    <h5>메뉴 확인하기</h5>
-                    <button class="btn btn-sm btn-outline-success" id="add-menu-btn">메뉴 추가</button>
-                    <!--                    th:href="${'./' + restaurantId+ '/menu'}" -->
-                </div>
-                <th:block th:if="${! #lists.isEmpty(restaurant.menus)}">
-                    <div class="container card mt-4 border-0"
-                         style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);">
-                        <div id="item-none-found" class="card-body py-5 d-none">
-                            <div class="row fw-semibold text-center"
-                                 style="font-size: 20px;">
-                                <div class="col my-5">
-                                    <p style="font-size: 50px">🍴</p>
-                                    <div>
-                                        등록된 메뉴가 없습니다.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <ul id="menuList" class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-center"
-                            th:each="menu : ${restaurant.menus}" th:object="${menu}">
-                            <div>
-                                <span th:attr="id=*{'name-' + id}" th:text="*{name}"></span>
-                                <button class="btn btn-sm btn-update-menu-name">이름 변경</button>
-                                <div class="input-group d-none" id="update-menu-name-comp" th:attr="data-id=*{id}">
-                                    <input id="nameToUpdate" class="form-control form-control-sm" type="text"
-                                           placeholder="변경할 이름을 입력해주세요."/>
-                                    <button id="updateNameBtn" class="btn btn-sm btn-outline-primary">확인</button>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="text-end">
-                                    <span th:attr="id=*{'price-' + id}" class="badge bg-primary rounded-pill"
-                                          th:text="*{price}"></span>
-                                    <button class="btn btn-sm btn-update-menu-price">가격 변경</button>
-                                    <div class="input-group d-none" id="update-menu-price-comp" th:attr="data-id=*{id}">
-                                        <input id="priceToUpdate" class="form-control form-control-sm" type="text"
-                                               placeholder="변경할 가격 입력"/>
-                                        <button id="updatePriceBtn" class="btn btn-sm btn-outline-primary">확인</button>
-                                    </div>
-                                </div>
-                                <button th:attr="data-id=*{id}" class="btn btn-sm btn-del btn">X</button>
-                            </div>
-                        </li>
-                    </ul>
-                </th:block>
-                <th:block th:if="${#lists.isEmpty(restaurant.menus)}">
-                    <div class="container card mt-4 border-0"
-                         style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);">
-                        <div id="item-none-found" class="card-body py-5">
-                            <div class="row fw-semibold text-center"
-                                 style="font-size: 20px;">
-                                <div class="col my-5">
-                                    <p style="font-size: 50px">🍴</p>
-                                    <div>
-                                        등록된 메뉴가 없습니다.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <ul id="menuList" th:if="${#lists.isEmpty(restaurant.menus)}" class="list-group">
-                    </ul>
-                </th:block>
-                <div id="create-menu-input-group"
-                     class="align-items-center d-none p-5 card card-body" style="background-color: white; margin:10px;">
-                    <h5>메뉴 추가하기</h5>
-                    <div class="input-group">
-                        <input id="menu-name-to-create" class="form-control form-control-sm" type="text"
-                               placeholder="추가할 이름 입력"/>
-                        <input id="menu-price-to-create" class="form-control form-control-sm" type="text"
-                               placeholder="추가할 가격 입력"/>
-                        <button id="create-menu-btn" class="btn btn-sm btn-outline-primary">확인</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </main>
 
@@ -187,7 +196,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <div>
-                    <h1 class="modal-title fs-5" id="modifyBHourModalLabel">영업 시간 수정하기</h1>
+                        <h1 class="modal-title fs-5" id="modifyBHourModalLabel">영업 시간 수정하기</h1>
                         <div class="font-secondary">*해당 페이지에서 작성한 대로 DB에 저장됩니다.</div>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -214,7 +223,7 @@
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
 <script>
     console.log(document.getElementById("lat").value)
-    const center = new kakao.maps.LatLng(document.getElementById("lon").value, document.getElementById("lat").value);
+    const center = new kakao.maps.LatLng(document.getElementById("lat").value, document.getElementById("lon").value);
     const marker = new kakao.maps.Marker();
     const mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {

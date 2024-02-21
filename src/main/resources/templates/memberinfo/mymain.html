@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>mat.zip</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+	<link rel="stylesheet" href="../css/memberinfo-style.css" />
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<!-- 여백 -->
+			<div class="col-md-3"></div>
+
+			<div class="col-md-6 main-bg-color">
+				<header class="mypage-header margin-side-lr">
+					<span>마이페이지</span>
+				</header>
+
+				<main>
+					<section class="profile-header margin-side-lr">
+						<div class="profile-header__meta">
+							<div class="meta-pic">
+								<img th:src="${info.img}" />
+							</div>
+							<div class="meta-info">
+								<h4 th:text="${info.nickname}"></h4>
+								<div class="meta-info__count">
+									<dl>
+										<dd>마이 픽</dd>
+										<dt th:text="${info.pickCnt}"></dt>
+									</dl>
+									<span>|</span>
+									<dl>
+										<dd>리뷰</dd>
+										<dt th:text="${info.reviewCnt}"></dt>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div class="profile-header__btn">
+							<a th:href="@{/memberinfo/profilemodify}">프로필 수정</a>
+						</div>
+					</section>
+
+					<section class="tab-menu">
+						<ul>
+							<li class="active">
+								<a th:href="@{/memberinfo/mymain}">마이 픽</a>
+							</li>
+							<li><a th:href="@{/memberinfo/myreview}">리뷰</a></li>
+						</ul>
+					</section>
+
+					<section class="list-all margin-side-lr">
+						<a href="#">
+							<span>전체보기</span>
+							<span><i class="fa-solid fa-angle-right"></i></span>
+						</a>
+					</section>
+
+					<!-- 포스트 전체 -->
+					<section class="mypick-list " th:if="${mypicks !=null}">
+						<!-- 포스트 1개-->
+						<div th:each="pick : ${mypicks}" th:object="${pick}" class="mypick-post_one margin-side-lr">
+							<!-- 음식점 사진 -->
+							<a th:href="@{/rest/details(id=*{restaurantId})}">
+								<div th:if="*{imgUrl != null}">
+								<img th:src="*{imgUrl}" />
+							</div>
+							<div th:if="*{imgUrl == null}">
+							<div class="emptyImg"></div>	
+							</div>
+							</a>
+
+							<!-- 음식점 정보 -->
+							<div class="mypick-detail">
+								<a th:href="@{/rest/details(id=*{restaurantId})}">
+									<h4 th:text="*{restaurantName}"></h4>
+									<div class="mypick-rating">
+										<img src="/img/v26_89.png" />
+										<div th:text="*{totalSart}"></div>
+										<div>(<span th:text="*{reviewAllCount}"></span>)</div>
+									</div>
+									<div class="mypick-category">
+										<span th:text="*{categoryName}"></span>
+										<span>.</span>
+										<span th:text="*{location}"></span>
+									</div>
+								</a>
+							</div>
+
+							<!-- 북마크 -->
+							<div class="mypick-pick">
+								<a th:href="@{/memberinfo/delete(id=*{pickId})}">
+									<img src="/img/like_heart.png" />
+								</a>
+							</div>
+						</div>
+
+					</section>
+				</main>
+			</div>
+
+			<!-- 여백 -->
+			<div class="col-md-3"></div>
+		</div>
+	</div>
+
+	<!-- java script -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+		crossorigin="anonymous"></script>
+	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
