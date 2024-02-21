@@ -9,7 +9,7 @@ import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.MyPick;
 import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.domain.ReviewImage;
-import com.itwill.matzip.dto.MemberProfileInfoRequestDto;
+import com.itwill.matzip.dto.MemberMainHeaderRequestDto;
 import com.itwill.matzip.dto.MyPickRestaurantRequestDto;
 import com.itwill.matzip.dto.MyReviewRequestDto;
 import com.itwill.matzip.repository.MemberRepository;
@@ -36,14 +36,14 @@ public class MemberInfoService {
 	}
 
 	// 프로필 사진, 닉네임, 북마크, 리뷰 수 정보 가져옴
-	public MemberProfileInfoRequestDto getProfileInfo(Member member) {
+	public MemberMainHeaderRequestDto getProfileInfo(Member member) {
 		log.info("getProfileInfo : member - {}", member);
 
 
 		Long reviewCnt = reviewDao.countAllByMemberId(member.getId());
 		Long myPickCnt = pickDao.countAllByMemberId(member.getId());
 
-		return MemberProfileInfoRequestDto.builder().nickname(member.getNickname()).img(member.getImg())
+		return MemberMainHeaderRequestDto.builder().nickname(member.getNickname()).img(member.getImg())
 				.reviewCnt(reviewCnt).pickCnt(myPickCnt).build();
 	}
 
@@ -155,4 +155,17 @@ public class MemberInfoService {
 
 		return Math.floor(((double)temp / list.size())*10.0)/10.0;
 	}
+
+	public String changeProfileImg(String name) {
+		String result = "N";
+		
+		Member entity = memDao.findByUsername(name).orElse(null);
+		
+		if(entity != null) {
+			entity.profileImgUpdate("https://domain-web-storage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20240219_111445259.jpg");			
+			result = "Y";
+		}
+		return result;
+	}
+
 }

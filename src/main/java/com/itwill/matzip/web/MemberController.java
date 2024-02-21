@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.dto.MemberSignupRequestDto;
-import com.itwill.matzip.dto.MemberUpdateRequestDto;
+import com.itwill.matzip.dto.MemberSocialUpdateDto;
 import com.itwill.matzip.service.MailService;
 import com.itwill.matzip.service.MemberService;
 import com.itwill.matzip.service.SocialMemberService;
@@ -96,7 +96,7 @@ public class MemberController {
 
 	// 소셜 로그인 회원 추가 정보 저장
 	@PostMapping("/addinfo")
-	public String addinfo(MemberUpdateRequestDto dto, HttpSession session) {
+	public String addinfo(MemberSocialUpdateDto dto, HttpSession session) {
 		log.info("addInfo(dto : {})", dto);
 
 		socialSvc.updateMember(dto, session);

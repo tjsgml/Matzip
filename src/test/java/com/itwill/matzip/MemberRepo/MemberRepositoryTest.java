@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.enums.Gender;
 import com.itwill.matzip.domain.enums.MemberRole;
-import com.itwill.matzip.dto.MemberUpdateRequestDto;
+import com.itwill.matzip.dto.MemberSocialUpdateDto;
 import com.itwill.matzip.repository.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +66,7 @@ public class MemberRepositoryTest {
 	public void updateSocialMember() {
 		Member entity = memberDao.findBykakaoClientId("11111").orElseThrow();
 		
-		MemberUpdateRequestDto dto = MemberUpdateRequestDto.builder()
+		MemberSocialUpdateDto dto = MemberSocialUpdateDto.builder()
 																				.email("aa@aa")
 																				.gender(Gender.F)
 																				.birth(LocalDate.of(1993, 7, 20))

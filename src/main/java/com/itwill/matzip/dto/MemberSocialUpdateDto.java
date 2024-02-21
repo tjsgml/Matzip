@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Data
-public class MemberUpdateRequestDto {
+public class MemberSocialUpdateDto {
 	private String username;
 	private String email;
 	private String nickname;

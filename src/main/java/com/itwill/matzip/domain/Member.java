@@ -79,4 +79,11 @@ public class Member {
 
 		return this;
 	}
+	
+	//이미지 변경 메서드
+	public Member profileImgUpdate(String profileUrl) {
+		this.img = profileUrl;
+		
+		return this;
+	}
 }

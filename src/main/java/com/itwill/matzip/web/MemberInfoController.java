@@ -3,18 +3,15 @@ package com.itwill.matzip.web;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.itwill.matzip.domain.Member;
-import com.itwill.matzip.dto.MemberProfileInfoRequestDto;
-import com.itwill.matzip.dto.MyPickRestaurantRequestDto;
-import com.itwill.matzip.dto.MyReviewRequestDto;
-import com.itwill.matzip.service.MemberInfoService;
-import com.itwill.matzip.service.RestaurantService;
+import com.itwill.matzip.dto.*;
+import com.itwill.matzip.service.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +32,7 @@ public class MemberInfoController {
 		Member member = miSvc.getMember(username);
 
 		// 헤더에 있는 프로필 정보 가져옴
-		MemberProfileInfoRequestDto dto = miSvc.getProfileInfo(member);
+		MemberMainHeaderRequestDto dto = miSvc.getProfileInfo(member);
 
 		// 북마크한 레스토랑 리스트 가져오기
 		List<MyPickRestaurantRequestDto> pickList = miSvc.getMyPickRestaurant(member);
@@ -51,7 +48,7 @@ public class MemberInfoController {
 		Member member = miSvc.getMember(username);
 
 		// 헤더에 있는 프로필 정보 가져옴
-		MemberProfileInfoRequestDto dto = miSvc.getProfileInfo(member);
+		MemberMainHeaderRequestDto dto = miSvc.getProfileInfo(member);
 		
 		//내가 쓴 리뷰 리스트 가져오기
 		List<MyReviewRequestDto> reviewlist = miSvc.getReviews(member);
@@ -61,8 +58,13 @@ public class MemberInfoController {
 	}
 
 	@GetMapping("/profilemodify")
-	public void profileModify() {
+	public void profileModify(Principal principal, Model model) {
 		log.info("마이 페이지 [프로필 수정]");
+		
+		String username = principal.getName().toString();
+		Member member = miSvc.getMember(username);
+		
+		model.addAttribute("memberinfo", member);
 	}
 
 	@GetMapping("/pwdmodify")
@@ -77,5 +79,19 @@ public class MemberInfoController {
 		resSvc.deleteMyPick(pickId);
 
 		return "redirect:/memberinfo/mymain";
+	}
+	
+	@ResponseBody
+	@GetMapping("changeDefaultImg/{imgFile}")
+	public ResponseEntity<String> changeDefaultImg(@PathVariable("imgFile")MultipartFile file,Principal principal){
+		log.info("프로필 이미지 변경");
+		
+		if(file.isEmpty()) {
+			String result = miSvc.changeProfileImg(principal.getName());
+		}else {
+			
+		}
+		
+		return ResponseEntity.ok(null);
 	}
 }
