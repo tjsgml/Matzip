@@ -1,6 +1,7 @@
 package com.itwill.matzip.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.itwill.matzip.repository.*;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
@@ -12,7 +13,10 @@ import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.MyPick;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
+import com.itwill.matzip.domain.ReviewHashtag;
+import com.itwill.matzip.domain.ReviewImage;
 import com.itwill.matzip.domain.UpdateRequest;
+import com.itwill.matzip.dto.ReviewListDto;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
 
 import lombok.RequiredArgsConstructor;
@@ -123,9 +127,27 @@ public class RestaurantService {
 	/* 은겸 추가 */
 	private final ReviewRepository reviewDao;
 	
-	public List<Review> findReviewsByRestaurantId(Long restaurantId) {
-	    return reviewDao.findByRestaurantId(restaurantId);
+	public List<ReviewListDto> getReviewsForRestaurant(Long restaurantId) {
+	    List<Review> reviews = reviewDao.findByRestaurantId(restaurantId);
+	    return reviews.stream().map(review -> ReviewListDto.builder()
+	            .id(review.getId())
+	            .content(review.getContent())
+	            .flavorScore(review.getFlavorScore())
+	            .serviceScore(review.getServiceScore())
+	            .priceScore(review.getPriceScore())
+	            .reviewRegisterDate(review.getCreatedTime())
+	            .memberNickname(review.getMember().getNickname())
+	            .memberImg(review.getMember().getImg())
+	            .reviewImages(review.getReviewImages().stream()
+	                    .map(ReviewImage::getImgUrl)
+	                    .collect(Collectors.toList()))
+	            .hashtags(review.getHashtags().stream()
+	                    .map(ReviewHashtag::getKeyword)
+	                    .collect(Collectors.toSet()))
+	            .build())
+	    .collect(Collectors.toList());
 	}
+
 
 	
 	

@@ -137,12 +137,12 @@ public class RestaurantController {
 		return ResponseEntity.ok(1);
 	}
 	
-	/* 은겸 추가 */
-	@GetMapping("/details/reviews/{restId}")
-	public ResponseEntity<List<Review>> findReviews(@PathVariable("restId") Long restId) {
-	    List<Review> reviews = restSvc.findReviewsByRestaurantId(restId);
-	    return ResponseEntity.ok(reviews);
-	}
+//	/* 은겸 추가 */
+//	@GetMapping("/details/reviews/{restId}")
+//	public ResponseEntity<List<Review>> findReviews(@PathVariable("restId") Long restId) {
+//	    List<Review> reviews = restSvc.findReviewsByRestaurantId(restId);
+//	    return ResponseEntity.ok(reviews);
+//	}
 
 	
 	
