@@ -22,38 +22,39 @@ import lombok.*;
 @Entity
 public class Member {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@EqualsAndHashCode.Include
-	@NaturalId
-	@Basic(optional = false)
-	@Column(updatable = false)
-	private String username;
+    @EqualsAndHashCode.Include
+    @NaturalId
+    @Basic(optional = false)
+    @Column(updatable = false)
+    private String username;
 
-	@Basic(optional = false)
-	private String password;
+    @Basic(optional = false)
+    private String password;
 
-	private String email;
+    private String email;
 
-	private String kakaoClientId;
+    private String kakaoClientId;
 
-	private LocalDate birth;
+    private LocalDate birth;
 
-	private String nickname;
+    private String nickname;
 
 	private String img;
 
-	@Enumerated(EnumType.STRING)
-	private Gender gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
-	@Builder.Default
-	@ToString.Exclude
-	@ElementCollection(fetch = FetchType.LAZY)
-	@Enumerated(EnumType.STRING)
-	private Set<MemberRole> roles = new HashSet<>();
+    @Builder.Default
+    @ToString.Exclude
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
+    private Set<MemberRole> roles = new HashSet<>();
 
+    //member 메서드 ----------------------------------------------------
 	//권한 추가
 	public Member addRole(MemberRole role) {
 		roles.add(role);
