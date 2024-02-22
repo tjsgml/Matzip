@@ -16,6 +16,7 @@ import com.itwill.matzip.repository.MemberRepository;
 import com.itwill.matzip.repository.MyPickRepository;
 import com.itwill.matzip.repository.ReviewImageRepository;
 import com.itwill.matzip.repository.ReviewRepository;
+import com.itwill.matzip.util.DateTimeUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -102,7 +103,8 @@ public class MemberInfoService {
 						.categoryName(review.getRestaurant().getCategory().getName())
 						.location(review.getRestaurant().getAddress())
 						.reviewId(review.getId())
-						.createTime(review.getCreatedTime())
+//						.createTime(review.getCreatedTime())
+						.formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime()))
 						.flavorScore((double)review.getFlavorScore())
 						.serviceScore((double)review.getServiceScore())
 						.priceScore((double)review.getPriceScore())

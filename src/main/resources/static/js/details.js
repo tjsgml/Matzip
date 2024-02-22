@@ -42,16 +42,15 @@
 					reviewListContainer.innerHTML = ''; // 초기화
 	
 					// 컨테이너에 추가
-					reviews.forEach(review => {
+					reviews.forEach((review, reviewIndex) => {
 							const reviewElement = document.createElement('div');
-							reviewElement.className = 'review_post'; // 기존 CSS 클래스 이름 사용
+							reviewElement.className = 'review_post'; 
 							reviewElement.innerHTML = `
 									<div class="ht_container">
-											<div class="profile_img" style="background-image: url('${review.memberImg}');">
-											</div>
+											<div class="profile_img" style="background-image: url('${review.memberImg}');"></div>
 											<div class="item2">
 													<p style="font-size: 23px; margin-left: 20px; font-weight: bold; margin-top: 15px; margin-bottom: 0;">
-													   ${review.memberNickname}
+														${review.memberNickname}
 													</p>
 													${[1, 2, 3, 4, 5].map((index, arrIndex) => `<img class="star" data-index="${index}" src="/img/star_${index <= review.flavorScore ? 'on' : 'off'}.png"${arrIndex === 0 ? ' style="margin-left: 20px;"' : ''}>`).join('')}
 
@@ -66,9 +65,27 @@
 											</div>
 									</div>
 									<p class="review_contents btxt" style="font-size: 18px; margin-top:10px;">${review.content}</p>
-									<div class="reviewImgList">
-											${review.reviewImages.map(imgUrl => `<div class="img" style="background-image: url('${imgUrl}');"></div>`).join('')}
+									
+									<!--@@@ Review IMG @@@ -->
+									<div id="carouselExampleIndicators${reviewIndex}" class="carousel carousel-dark slide" data-bs-interval="false">
+										<div class="carousel-indicators">
+												${review.reviewImages.map((_, index) => `<button type="button" data-bs-target="#carouselExampleIndicators${reviewIndex}" data-bs-slide-to="${index}" ${index === 0 ? 'class="active"' : ''} aria-current="true" aria-label="Slide ${index + 1}"></button>`).join('')}
+										</div>
+										<div class="carousel-inner">
+												${review.reviewImages.map((imgUrl, index) => `<div class="carousel-item ${index === 0 ? 'active' : ''}">
+														<img src="${imgUrl}" class="d-block w-100 carousel-img" alt="...">
+												</div>`).join('')}
+										</div>
+										<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators${reviewIndex}" data-bs-slide="prev">
+												<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+												<span class="visually-hidden">Previous</span>
+										</button>
+										<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators${reviewIndex}" data-bs-slide="next">
+												<span class="carousel-control-next-icon" aria-hidden="true"></span>
+												<span class="visually-hidden">Next</span>
+										</button>
 									</div>
+									
 									<div class="review_ht_list">
 											${review.hashtags.map(hashtag => `<span class="ht_POV badge rounded-pill">${hashtag}</span>`).join(' ')}
 									</div>
@@ -79,9 +96,8 @@
 			} catch (error) {
 					console.error('리뷰 목록을 불러오는 데 실패했습니다:', error);
 			}
-	
-	
-    }//--------------------------------------------------------------------------------------------------------
+	}
+	//--------------------------------------------------------------------------------------------------------
 
     
     btnEval.addEventListener('click', () => {

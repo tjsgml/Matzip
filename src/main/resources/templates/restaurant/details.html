@@ -233,66 +233,9 @@
                                         </div>
                                     </div>
                                 
-                                    <!-- reviewPost -->
-                                
-                                    <div th:each="review : ${reviews}">
-                                        <div class="ht_container">
-                                        <div class="profile_img">
-                                            <img th:src="@{${review.memberImg}}" alt="Member Profile Image">
-                                        </div>
-                                        <div class="item2" >
-                                            <p style="font-size: 23px; margin-left: 20px; font-weight: bold; margin-top: 15px; margin-bottom: 0;" th:text="${review.memberNickname}"></p>
-
-                                            <img style="margin-left: 20px;"class="star" data-index="1" src="/img/star_on.png">
-                                            <img class="star"data-index="2" src="/img/star_on.png">
-                                            <img class="star" data-index="3" src="/img/star_on.png">
-                                            <img class="star" data-index="4" src="/img/star_on.png">
-                                            <img class="star" data-index="5" src="/img/star_off.png">
-                                            <span style="font-size: 20px; color:rgb(94, 94, 94); ">review_modifiedTime[2023년 2월 21일]</span>
-                                            <br>
-                                            <span class="detail_rating" style="margin-left: 20px;"> 
-                                                맛
-                                                <img src="/img/miniStar.png"class="miniStar">
-                                                <span th:text="${review.flavorScore}"></span>
-                                            </span>
-                                            <span class="detail_rating">
-                                                가격
-                                                <img src="/img/miniStar.png" class="miniStar">
-                                                <span th:text="${review.priceScore}"></span>
-                                            </span>
-                                            <span class="detail_rating">
-                                                서비스
-                                                <img src="/img/miniStar.png" class="miniStar">
-                                                <span th:text="${review.serviceScore}"></span>
-                                            </span>
-                                                
-                                        </div>
-                                    </div>
-                                        <!-- 리뷰 글 부분-->
-                                        <p class="review_contents btxt" th:text="${review.content}" style="font-size: 18px; margin-top:10px;">
-                                            (review-content)
-                                        </p>
-                                        <!--리뷰 이미지 리스트 부분 -->
-                                        <div class="reviewImgList">
-                                            <div class="img1"></div>
-                                            <div  class="img2"></div>
-                                            <div  class="img3"></div>
-                                            <div  class="img4"></div>
-                                        </div>
-                                        <!--리뷰 : 해시태그 리스트  -->
-                                        <div class="review_ht_list">
-                                            <span class=" ht_POV badge rounded-pill">술모임</span>
-                                            <span class=" ht_POV badge rounded-pill">점심식사</span>
-                                            <span class=" ht_POV badge rounded-pill">저녁식사</span>
-                                            <span class=" ht_POV badge rounded-pill">식사모임</span>
-                                            <span class=" ht_POV badge rounded-pill">접대</span>
-                                            <span class=" ht_POV badge rounded-pill">회식</span>
-                                            <span class=" ht_POV badge rounded-pill">가족외식</span>
-                                        </div>
-                                        <button class="btn btn-outline-danger">공감</button>
-                                </div><!-- ReviewPost End -->
+                                <!-- reviewPost -->    
                                 <div id="reviewListContainer">
-                                    <!-- 리뷰 목록 -->
+                                    <!-- 리뷰 목록 생성 부분 -->
                                 </div>
                             
                             <h3>디자인확인용 리뷰 리스트</h3>

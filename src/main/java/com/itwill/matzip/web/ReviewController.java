@@ -22,6 +22,7 @@ import com.itwill.matzip.service.MemberInfoService;
 import com.itwill.matzip.service.RestaurantService;
 import com.itwill.matzip.service.ReviewService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,8 +63,9 @@ public class ReviewController {
 
         }
         
-        return "redirect:/map/list";
-    }
+        return "redirect:/rest/details?id=" + reviewDto.getRestaurantId();
+    } 
+    
     
     // 리뷰 수정
     @GetMapping("/update/{reviewId}")
