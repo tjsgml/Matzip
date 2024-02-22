@@ -22,7 +22,7 @@ import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.enums.MemberRole;
 import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MemberUpdateRequestDto;
-import com.itwill.matzip.repository.MemberRepository;
+import com.itwill.matzip.repository.member.MemberRepository;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;

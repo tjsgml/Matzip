@@ -12,7 +12,7 @@ import com.itwill.matzip.domain.ReviewImage;
 import com.itwill.matzip.dto.MemberProfileInfoRequestDto;
 import com.itwill.matzip.dto.MyPickRestaurantRequestDto;
 import com.itwill.matzip.dto.MyReviewRequestDto;
-import com.itwill.matzip.repository.MemberRepository;
+import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.MyPickRepository;
 import com.itwill.matzip.repository.ReviewImageRepository;
 import com.itwill.matzip.repository.ReviewRepository;
