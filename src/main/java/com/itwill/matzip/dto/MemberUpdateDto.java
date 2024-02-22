@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Data
-public class MemberSocialUpdateDto {
+public class MemberUpdateDto {
 	private String username;
 	private String email;
 	private String nickname;
@@ -20,7 +20,7 @@ public class MemberSocialUpdateDto {
 	
 	public Member toEntity() {
 		return Member.builder()
-										.username(username) 		/*02.14 수정 - kakaoClient로 되어 있었음*/
+										.username(username)
 										.email(email)
 										.nickname(nickname)
 										.birth(birth)

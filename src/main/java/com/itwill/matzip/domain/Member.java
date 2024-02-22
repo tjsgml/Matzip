@@ -43,7 +43,6 @@ public class Member {
 
 	private String nickname;
 
-	// @ColumnDefault("'default.png'")
 	private String img;
 
 	@Enumerated(EnumType.STRING)
@@ -55,35 +54,36 @@ public class Member {
 	@Enumerated(EnumType.STRING)
 	private Set<MemberRole> roles = new HashSet<>();
 
+	//권한 추가
 	public Member addRole(MemberRole role) {
 		roles.add(role);
 		return this;
 	}
 
+	//권한 다 지움
 	public Member clearRoles() {
 		roles.clear();
 		return this;
 	}
 
-	public Member socialMemUpdate(Member dto) {
+	//회원 정보 수정
+	public Member memUpdate(Member dto) {
 		this.email = dto.getEmail();
 		this.nickname = dto.getNickname();
 		this.birth = dto.getBirth();
 		this.gender = dto.getGender();
-
 		return this;
 	}
 
+	//비밀번호 변경
 	public Member pwdUpdate(String pwd) {
 		this.password = pwd;
-
 		return this;
 	}
 	
-	//이미지 변경 메서드
+	//프로필 이미지 변경
 	public Member profileImgUpdate(String profileUrl) {
 		this.img = profileUrl;
-		
 		return this;
 	}
 }

@@ -12,8 +12,6 @@ import com.itwill.matzip.dto.MostLikedReviewDto;
 
 public interface ReviewRepository extends JpaRepository<Review, Long>{
 
-
-	
 	//멤버 아이디에 대한 총 리뷰 수 구하기
 	Long countAllByMemberId(Long memberid);
 	
@@ -21,5 +19,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long>{
 	List<Review> findByRestaurantId(Long restaurantId);
 	
 	//멤버 아이디에 대한 리뷰 리스트 구하기
-	List<Review> findByMemberId(Long userId);
+	List<Review> findByMemberIdOrderById(Long userId);
 }

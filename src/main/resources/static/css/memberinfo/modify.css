@@ -156,7 +156,21 @@ div.select {
 	cursor: pointer;
 }
 
-
-.imgBody>div:first-child {
+.imgBody div:first-child {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.cul {
+	width: 100%;
+}
+
+.not-modify>div>div,
+.not-modify>i {
+	color: #aaaaaa;
+}
+
+
+.error-texts {
+	color: #EA4037;
+	font-size: 12px;
 }

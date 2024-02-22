@@ -4,19 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.MyPick;
 import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.domain.ReviewImage;
 import com.itwill.matzip.dto.MemberMainHeaderRequestDto;
-import com.itwill.matzip.dto.MyPickRestaurantRequestDto;
+import com.itwill.matzip.dto.MyPickRequestDto;
 import com.itwill.matzip.dto.MyReviewRequestDto;
 import com.itwill.matzip.repository.MemberRepository;
 import com.itwill.matzip.repository.MyPickRepository;
 import com.itwill.matzip.repository.ReviewImageRepository;
 import com.itwill.matzip.repository.ReviewRepository;
+import com.itwill.matzip.util.S3Utility;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +32,7 @@ public class MemberInfoService {
 	private final ReviewRepository reviewDao;
 	private final MyPickRepository pickDao;
 	private final ReviewImageRepository rlmgDao;
+    private final S3Utility s3Util;
 	
 	public Member getMember(String username) {
 		Member member = memDao.findByUsername(username).orElse(null);
@@ -48,12 +52,12 @@ public class MemberInfoService {
 	}
 
 	// 내가 저장한 레스토랑 정보 가져오기
-	public List<MyPickRestaurantRequestDto> getMyPickRestaurant(Member member) {
+	public List<MyPickRequestDto> getMyPickRestaurant(Member member) {
 		log.info("getMyPickRestaurant : member - {}", member);
 
-		List<MyPickRestaurantRequestDto> dto = null; // 북마크 된 레스토랑 저장
+		List<MyPickRequestDto> dto = null; // 북마크 된 레스토랑 저장
 
-		List<MyPick> list = pickDao.findByMemberId(member.getId());
+		List<MyPick> list = pickDao.findByMemberIdOrderById(member.getId());
 		
 		if (list != null) {
 			dto = new ArrayList<>();
@@ -74,7 +78,7 @@ public class MemberInfoService {
 					img = getImgUrl(p.getRestaurant().getId());
 				}
 				
-				dto.add(MyPickRestaurantRequestDto.builder().memberId(member.getId()).imgUrl(img)
+				dto.add(MyPickRequestDto.builder().memberId(member.getId()).imgUrl(img)
 						.restaurantId(p.getRestaurant().getId()).restaurantName(p.getRestaurant().getName())
 						.categoryName(p.getRestaurant().getCategory().getName())
 						.location(p.getRestaurant().getAddress()).totalSart(avgRatingReview).reviewAllCount(totalReview)
@@ -89,7 +93,7 @@ public class MemberInfoService {
 		log.info("getReviews : member - {}", member);
 		List<MyReviewRequestDto> dto = null;
 		
-		List<Review> reviews = reviewDao.findByMemberId(member.getId());
+		List<Review> reviews = reviewDao.findByMemberIdOrderById(member.getId());
 		
 		if(!reviews.isEmpty()) {
 			dto = new ArrayList<MyReviewRequestDto>();
@@ -115,6 +119,41 @@ public class MemberInfoService {
 		}
 		
 		return dto;
+	}
+	
+	//프로필 이미지 기본 이미지로 변경
+	@Transactional
+	public String changeProfileDefaultImg(String name) {
+		String imgUrl =null;
+		Member entity = memDao.findByUsername(name).orElse(null);
+		
+		
+		if(entity != null) {
+			entity.profileImgUpdate("https://domain-web-storage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20240219_111445259.jpg");			
+			imgUrl = "https://domain-web-storage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20240219_111445259.jpg";
+		}
+		
+		return imgUrl;
+	}
+	
+	//프로필 이미지 커스텀 변경
+	@Transactional
+	public String changeProfileCtmImg(String name, MultipartFile imgFile) {
+		String imgUrl =null;
+		Member entity = memDao.findByUsername(name).orElse(null);
+		
+		if(!imgFile.isEmpty()) {
+			try {
+				imgUrl = s3Util.uploadImageToS3(imgFile, s3Util.generateFileName());	
+				
+				if(entity != null) {
+					entity.profileImgUpdate(imgUrl);
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return imgUrl;
 	}
 	
 	//----------------------------------------------------------------------------------------------------------------
@@ -155,17 +194,4 @@ public class MemberInfoService {
 
 		return Math.floor(((double)temp / list.size())*10.0)/10.0;
 	}
-
-	public String changeProfileImg(String name) {
-		String result = "N";
-		
-		Member entity = memDao.findByUsername(name).orElse(null);
-		
-		if(entity != null) {
-			entity.profileImgUpdate("https://domain-web-storage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20240219_111445259.jpg");			
-			result = "Y";
-		}
-		return result;
-	}
-
 }

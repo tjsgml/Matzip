@@ -1,99 +1,114 @@
 @charset "UTF-8";
+
 .list-all {
-  margin-top: 20px;
-  display: flex;
-  justify-content: end;
+	margin-top: 20px;
+	display: flex;
+	justify-content: end;
 }
 
 .list-all a {
-  gap: 5px;
-  font-size: 12px;
-  color: black;
+	gap: 5px;
+	font-size: 12px;
+	color: black;
 }
 
 .mypick-list,
 .myreview-list {
-  margin-top: 20px;
-  background-color: white;
-  width: 100%;
+	margin-top: 20px;
+	background-color: white;
+	width: 100%;
 }
 
 .mypick-post_one {
-  display: flex;
-  margin: 20px 0px;
-  padding-bottom: 15px;
+	display: flex;
+	margin: 20px 0px;
+	padding-bottom: 15px;
 }
 
-.mypick-post_one > a >div> img,
+.mypick-post_one>a>div>img,
 .emptyImg {
-  width: 78px;
-  height: 104px;
-  border-radius: 4px;
-  background-size: cover;
-  object-fit: cover;
-  box-sizing: border-box;
-  border: 1px solid #f1f1f1;
-  margin-right: 15px;
+	width: 78px;
+	height: 104px;
+	border-radius: 4px;
+	background-size: cover;
+	object-fit: cover;
+	box-sizing: border-box;
+	border: 1px solid #f1f1f1;
+	margin-right: 15px;
 }
-.emptyImg{
-	background-color: #f1f1f1;
+
+.emptyImg {
+	background-color: white;
+	border: solid 1px #FF230A;
+	display: flex;
+	/* 부모 요소를 플렉스 박스로 설정하여 가운데 정렬을 수행 */
+	justify-content: center;
+	/* 가로 방향으로 가운데 정렬 */
+	align-items: center;
+	/* 세로 방향으로 가운데 정렬 */
+	background-size: cover;
+}
+
+.emptyImg img {
+	width: 35px;
+	height: 20px;
 }
 
 .mypick-detail {
-  width: 100%;
-  align-self: center;
+	width: 100%;
+	align-self: center;
 }
 
-.mypick-detail > a > h4 {
-  font-size: 20px;
-  font-weight: 600;
+.mypick-detail>a>h4 {
+	font-size: 20px;
+	font-weight: 600;
 }
 
 .mypick-pick {
-  padding-left: 20px;
+	padding-left: 20px;
 }
 
-.mypick-pick > a {
-  margin-top: 15px;
-  display: block;
-  width: 30px;
-  height: 30px;
-  border: 1.2px solid #aaaaaa;
-  border-radius: 100%;
-  position: relative;
+.mypick-pick>a {
+	margin-top: 15px;
+	display: block;
+	width: 30px;
+	height: 30px;
+	border: 1.2px solid #aaaaaa;
+	border-radius: 100%;
+	position: relative;
 }
 
-.mypick-pick > a img {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  top: 6px;
-  left: 6px;
+.mypick-pick>a img {
+	position: absolute;
+	width: 18px;
+	height: 18px;
+	top: 6px;
+	left: 5px;
 }
 
 .mypick-rating {
 	display: flex;
-	gap:3px;
+	gap: 3px;
 	align-items: center;
 }
 
-.mypick-rating > img {
-  width: 15px;
-  height: 15px;
+.mypick-rating>img {
+	width: 15px;
+	height: 15px;
 }
 
-.mypick-rating > div {
-  font-size: 12px;
-  color: #999999;
+.mypick-rating>div {
+	font-size: 12px;
+	color: #999999;
 }
 
-.mypick-rating > div:nth-child(2) {
-  font-weight: bolder;
-  color: black;
-  font-size: 14px;
+.mypick-rating>div:nth-child(2) {
+	font-weight: bolder;
+	color: black;
+	font-size: 14px;
 }
 
 .mypick-category {
-  color: #aaaaaa;
-  font-size: 11px;
+	color: #aaaaaa;
+	font-size: 11px;
 }

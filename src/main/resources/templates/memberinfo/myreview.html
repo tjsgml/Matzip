@@ -103,7 +103,7 @@
 							<div class="review-post_column">
 								<div class="review-img_pic">
 									<!-- 이미지 1개 -->
-									<div th:if="${#lists.size(review.reviewImg) == 1}" class="imgContainer">
+									<div th:if="${#lists.size(review.reviewImg) == 1}" class="imgContainer one-pic">
 										<a class="imgEnl">
 											<div class="imgContainer_box">
 												<img th:src="*{reviewImg[0]}" th:data-id="*{reviewId}" />
@@ -111,7 +111,7 @@
 										</a>
 									</div>
 									<!-- 이미지 2개 -->
-									<div th:if="${#lists.size(review.reviewImg) == 2}" class="imgContainer">
+									<div th:if="${#lists.size(review.reviewImg) == 2}" class="imgContainer two-pic">
 										<a class="imgEnl">
 											<div class="imgContainer_box" th:each="img:*{reviewImg}">
 												<img th:src="${img}" th:data-id="*{reviewId}" />
@@ -180,7 +180,7 @@
 							</div>
 							<div class="review-post_column">
 								<h3></h3>
-								<p th:text="*{content}"></p>
+								<pre th:text="*{content}" class="review-content"></pre>
 							</div>
 
 							<div class="review-post_column dropdown text-end">
@@ -242,7 +242,7 @@
 	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
 
 	<!-- 커스텀 모듈 -->
-	<script src="../js/info-moreImgView.js"></script>
+	<script src="../js/member/info-moreImgView.js"></script>
 </body>
 
 </html>
