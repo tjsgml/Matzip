@@ -468,24 +468,6 @@
 		
 	}
 
-	// 리뷰 이미지 클릭 이벤트 리스너 추가 
-	function addReviewImageClickListener() {
-		document.querySelectorAll('.carousel-img').forEach(image => {
-				image.addEventListener('click', function () {
-						showImageInModal(image.src);
-				});
-		});
-}
-
-	// 이미지를 모달에 표시
-	function showImageInModal(imageSrc) {
-			const modalImageContainer = document.querySelector('.imgContainer_img');
-			modalImageContainer.innerHTML = '';
-			const imgElement = document.createElement('img');
-			imgElement.src = imageSrc;
-			imgElement.style.width = '100%';
-			modalImageContainer.appendChild(imgElement);
-			$('#gallryModal').modal('show');
-	}
+	
 
  });//end document
