@@ -306,9 +306,27 @@
                     <div class="col-md-3"></div>
                 </div>
             </div>
+                    <!-- 이미지 크게 볼 수 있는 모달 띄우기 -->
+                    <div id="gallryModal" class="modal fade show" tabindex="-1">
+                        <div class=" modal-dialog  modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                    <!--이미지 넣기 -->
+                                    <div class="imgContainer">
+                                        <div class="imgContainer_img">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end modal -->
+                   
              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
              <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
              <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
              <script src="../js/details.js"></script>
+             <script src="../js/details-reviewList.js"></script>
         </body>
 </html>

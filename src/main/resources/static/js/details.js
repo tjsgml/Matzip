@@ -29,74 +29,7 @@
 	// 평가하기 버튼 클릭 이벤트 수정
     const btnEval = document.getElementById('btnEval');
     
-    reviewListLoad(restId);
-    
-    // 리뷰 목록 ----------------------------------------------------------------------
-    async function reviewListLoad(restaurantId) {
-			try {
-					// 서버에서 리뷰 데이터를 불러옵니다
-					const response = await axios.get(`/rest/details/reviews/${restaurantId}`);
-					const reviews = response.data;
-	
-					const reviewListContainer = document.getElementById('reviewListContainer');
-					reviewListContainer.innerHTML = ''; // 초기화
-	
-					// 컨테이너에 추가
-					reviews.forEach((review, reviewIndex) => {
-							const reviewElement = document.createElement('div');
-							reviewElement.className = 'review_post'; 
-							reviewElement.innerHTML = `
-									<div class="ht_container">
-											<div class="profile_img" style="background-image: url('${review.memberImg}');"></div>
-											<div class="item2">
-													<p style="font-size: 23px; margin-left: 20px; font-weight: bold; margin-top: 15px; margin-bottom: 0;">
-														${review.memberNickname}
-													</p>
-													${[1, 2, 3, 4, 5].map((index, arrIndex) => `<img class="star" data-index="${index}" src="/img/star_${index <= review.flavorScore ? 'on' : 'off'}.png"${arrIndex === 0 ? ' style="margin-left: 20px;"' : ''}>`).join('')}
 
-													<span style="font-size: 20px; color:rgb(94, 94, 94);">
-													   ${review.formattedRegisterDate}
-													</span>
-													<div class="review_scores" style="margin-left: 10px;">
-															<span class="detail_rating">맛 <img src="/img/miniStar.png" class="miniStar">${review.flavorScore}</span>
-															<span class="detail_rating">가격 <img src="/img/miniStar.png" class="miniStar">${review.priceScore}</span>
-															<span class="detail_rating">서비스 <img src="/img/miniStar.png" class="miniStar">${review.serviceScore}</span>
-													</div>
-											</div>
-									</div>
-									<p class="review_contents btxt" style="font-size: 18px; margin-top:10px;">${review.content}</p>
-									
-									<!--@@@ Review IMG @@@ -->
-									<div id="carouselExampleIndicators${reviewIndex}" class="carousel carousel-dark slide" data-bs-interval="false">
-										<div class="carousel-indicators">
-												${review.reviewImages.map((_, index) => `<button type="button" data-bs-target="#carouselExampleIndicators${reviewIndex}" data-bs-slide-to="${index}" ${index === 0 ? 'class="active"' : ''} aria-current="true" aria-label="Slide ${index + 1}"></button>`).join('')}
-										</div>
-										<div class="carousel-inner">
-												${review.reviewImages.map((imgUrl, index) => `<div class="carousel-item ${index === 0 ? 'active' : ''}">
-														<img src="${imgUrl}" class="d-block w-100 carousel-img" alt="...">
-												</div>`).join('')}
-										</div>
-										<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators${reviewIndex}" data-bs-slide="prev">
-												<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-												<span class="visually-hidden">Previous</span>
-										</button>
-										<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators${reviewIndex}" data-bs-slide="next">
-												<span class="carousel-control-next-icon" aria-hidden="true"></span>
-												<span class="visually-hidden">Next</span>
-										</button>
-									</div>
-									
-									<div class="review_ht_list">
-											${review.hashtags.map(hashtag => `<span class="ht_POV badge rounded-pill">${hashtag}</span>`).join(' ')}
-									</div>
-									<button class="btn btn-outline-danger">공감</button>
-							`;
-							reviewListContainer.appendChild(reviewElement);
-					});
-			} catch (error) {
-					console.error('리뷰 목록을 불러오는 데 실패했습니다:', error);
-			}
-	}
 	//--------------------------------------------------------------------------------------------------------
 
     
@@ -533,6 +466,26 @@
 		
 		const response = axios.post('/rest/details/update',data);
 		
+	}
+
+	// 리뷰 이미지 클릭 이벤트 리스너 추가 
+	function addReviewImageClickListener() {
+		document.querySelectorAll('.carousel-img').forEach(image => {
+				image.addEventListener('click', function () {
+						showImageInModal(image.src);
+				});
+		});
+}
+
+	// 이미지를 모달에 표시
+	function showImageInModal(imageSrc) {
+			const modalImageContainer = document.querySelector('.imgContainer_img');
+			modalImageContainer.innerHTML = '';
+			const imgElement = document.createElement('img');
+			imgElement.src = imageSrc;
+			imgElement.style.width = '100%';
+			modalImageContainer.appendChild(imgElement);
+			$('#gallryModal').modal('show');
 	}
 
  });//end document
