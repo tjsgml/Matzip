@@ -24,9 +24,10 @@
   font-size: 21px;
   height: 60px;
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   margin-bottom: 15px;
+  gap: 10px;
 }
 
 .profile-header__meta {

@@ -16,6 +16,6 @@ public interface MyPickRepository extends JpaRepository<MyPick, Long>{
 	Long countAllByMemberId(Long memberid);
 	
 	//member가 가지고 있는 북마크 모두 가져오기
-	List<MyPick> findByMemberId(Long memberid);
+	List<MyPick> findByMemberIdOrderById(Long memberid);
 
 }

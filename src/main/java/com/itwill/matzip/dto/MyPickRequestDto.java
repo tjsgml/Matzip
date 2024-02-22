@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class MyPickRestaurantRequestDto {
+public class MyPickRequestDto {
 	private Long memberId;
 	private Long pickId;
 	private String imgUrl;

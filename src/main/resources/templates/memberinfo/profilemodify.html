@@ -18,6 +18,7 @@
 
 			<div class="col-md-6 main-bg-color">
 				<header class="mypage-header margin-side-lr">
+					<span><a th:href="@{/memberinfo/mymain}"><i class="fa-solid fa-angle-left"></i></a></span>
 					<span>프로필 수정</span>
 					<span><!--<a href="#"><i class="fa-sharp fa-solid fa-gear"></i></a>--></span>
 				</header>
@@ -26,10 +27,9 @@
 
 					<section class="profile-header">
 						<div class="profile-header__modify">
-							<a href="#">
+							<a id="selectImg">
 								<div class="modify-pic">
-									<img
-										src="http://k.kakaocdn.net/dn/bE8FLr/btsDdGvLHbV/xFH85Q2DVQhNvM69GJXkGk/img_640x640.jpg" />
+									<img th:src="${memberinfo.img}" />
 									<i class="fa-solid fa-pen"></i>
 								</div>
 							</a>
@@ -37,19 +37,25 @@
 					</section>
 
 					<section class="profile-update margin-side-lr">
-						<form>
+						<form id="memberinfoModifyForm" method="post" th:action="@{/member/modifyInfo}">
 							<div>
 								<label>닉네임</label>
-								<input type="text" />
-								<div id="nickname-check"></div>
+								<input type="text" th:value="${memberinfo.nickname}" name="nickname" id="nickname" />
+								<div id="nickname-check" class="error-texts"></div>
 							</div>
 							<div>
 								<label>생년월일</label>
-								<input type="date" />
+								<input type="date" th:value="${memberinfo.birth}" name="birth" />
 							</div>
 							<div>
 								<label>성별</label>
-								<div class="select">
+								<div class="select" th:if="${memberinfo.gender.name() == 'F'}">
+									<input type="radio" id="gender_m" name="gender" value="M"><label
+										for="gender_m">남자</label>
+									<input type="radio" id="gender_f" name="gender" value="F" checked><label
+										for="gender_f">여자</label>
+								</div>
+								<div class="select" th:if="${memberinfo.gender.name() == 'M'}">
 									<input type="radio" id="gender_m" name="gender" value="M" checked><label
 										for="gender_m">남자</label>
 									<input type="radio" id="gender_f" name="gender" value="F"><label
@@ -58,17 +64,26 @@
 							</div>
 							<div>
 								<label>이메일</label>
-								<input type="email" />
-								<div id="email-check"></div>
+								<input type="email" th:value="${memberinfo.email}" name="email" id="email" />
+								<div id="email-check" class="error-texts"></div>
 							</div>
 
 						</form>
 
-						<a th:href="@{/memberinfo/pwdmodify}">
+						<a th:href="@{/memberinfo/pwdmodify}" th:if="${memberinfo.kakaoClientId == null}">
 							<section class="pwd-modify">
 								<div>
 									<label>비밀번호</label>
 									<div>*********</div>
+								</div>
+								<i class="fa-solid fa-angle-right"></i>
+							</section>
+						</a>
+						<a th:if="${memberinfo.kakaoClientId != null}">
+							<section class="pwd-modify not-modify">
+								<div>
+									<label>비밀번호</label>
+									<div>카카오 로그인 사용자</div>
 								</div>
 								<i class="fa-solid fa-angle-right"></i>
 							</section>
@@ -85,12 +100,43 @@
 			<div class="col-md-3"></div>
 		</div>
 	</div>
+	<!-- 프로필 변경 모달 띄우기 -->
+	<input type="file" id="customProfile" class="d-none" accept="image/*" />
+
+	<div id="proImgModal" class="modal show" tabindex="-1">
+		<div class=" modal-dialog modal-dialog-centered modal-sm">
+			<div class="modal-content">
+				<div class="modal-header imgHeader">프로필 이미지 변경</div>
+				<div class="modal-body imgBody">
+					<div class="selectImgFile defaultImg">기본 이미지로 변경</div>
+					<label class="cul" for="customProfile">
+						<div class="selectImgFile customImg">앨범에서 선택</div>
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div> <!-- end modal -->
+
+	<!---->
 
 	<!-- java script -->
+	<!-- Bootstrap 자바스크립트 모듈 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
 		crossorigin="anonymous"></script>
+
+	<!-- Axios 자바스크립트 모듈 -->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+	<!-- 아이콘 모듈 -->
 	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
+
+	<!-- 커스텀 모듈 -->
+	<!-- 이미지 변경 모듈 -->
+	<script src="../js/member/change-profileImg.js"></script>
+	<!-- 닉네임, 이메일 유효성 검사 모듈 -->
+	<script src="../js/member/validation-check.js"></script>
 </body>
 
 </html>
