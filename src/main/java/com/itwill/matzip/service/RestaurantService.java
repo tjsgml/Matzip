@@ -3,6 +3,7 @@ package com.itwill.matzip.service;
 import java.util.List;
 
 import com.itwill.matzip.repository.*;
+import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import org.springframework.stereotype.Service;
 

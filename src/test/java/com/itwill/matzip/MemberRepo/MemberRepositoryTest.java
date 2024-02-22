@@ -14,7 +14,7 @@ import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.enums.Gender;
 import com.itwill.matzip.domain.enums.MemberRole;
 import com.itwill.matzip.dto.MemberUpdateRequestDto;
-import com.itwill.matzip.repository.MemberRepository;
+import com.itwill.matzip.repository.member.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
