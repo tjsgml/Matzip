@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head th:replace="~{/layout/fragment-common::my-header('MAT.ZIP ADMIN | 멤버 리스트')}"></head>
+<link href="/css/admin/admin-common.css" rel="stylesheet">
+<style>
+    #member-list {
+        width: 90%;
+        margin: 5px 40px 40px;
+    }
+
+    .input-group {
+        width: 20vw;
+    }
+</style>
+<body>
+<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+<div class="mz-admin-container">
+    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <main>
+        <div class="mz-inner-container">
+            <h3 class="page-main-desc">멤버 리스트</h3>
+        </div>
+
+        <div id="member-list" class="m-5">
+            <div class="d-flex justify-content-between mb-3">
+                <div class="d-flex justify-content-between mb-3">
+                    <div>
+                        <label for="authorize-option">권한</label>
+                        <select id="authorize-option">
+                            <option value="">전체</option>
+                            <option th:each="role : ${memberRoles}" th:value="${role.authority}" th:text="${role.kor}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <select id="search-option" class="input-group-text">
+                        <option name="default" value="">전체</option>
+                        <option value="USERNAME">아이디</option>
+                        <option value="NICKNAME">닉네임</option>
+                        <option value="EMAIL">이메일</option>
+                    </select>
+                    <input type="text" id="search-keyword" class="form-control form-control-sm" />
+                    <button id="submit-btn" class="btn btn-outline-success btn-sm">검색</button>
+                </div>
+                <div class="d-flex justify-content-between" style="height: 100%">
+                    <kbd>VIEW</kbd>
+                    <label>
+                        <input class="ml-3" type="radio" name="viewCnt" value="10" checked />
+                    </label>10개
+                    <label>
+                        <input class="ml-3" type="radio" name="viewCnt" value="20"/>
+                    </label>20개
+                    <label>
+                        <input class="ml-3" type="radio" name="viewCnt" value="30"/>
+                    </label>30개
+                </div>
+            </div>
+            <div>
+                <table class="table table-stripe" style="table-layout: fixed">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width:7%">번호</th>
+                        <th scope="col" style="width:13%">아이디</th>
+                        <th scope="col" style="width:10%">닉네임</th>
+                        <th scope="col" style="width:20%">이메일</th>
+                        <th scope="col" style="width:15%">등급</th>
+                        <th scope="col" class="p-2" style="width:10%">리뷰관리</th>
+                        <th scope="col" style="width:10%">삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody id="member-list-table">
+                    </tbody>
+                </table>
+                <!--
+                        정렬과 필터링이 변경될 때 현재 적용된 정렬을 그대로 적용함.
+                        + 페이지네이션은 1페이지로 돌아감
+                -->
+                <div style="display: flex; justify-content:center">
+                    <nav id="pagination" aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <button class="page-link" href="#" tabindex="-1" aria-disabled="true" cur-page=0
+                                        disabled>
+                                    ≪
+                                </button>
+                            </li>
+                            <li class="page-item disabled">
+                                <button class="page-link" href="#" aria-disabled="true">≫
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
+<script src="/js/admin/member/config-member-list.js"></script>
+
+</body>
+</html>

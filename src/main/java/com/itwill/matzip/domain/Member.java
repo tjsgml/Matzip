@@ -1,6 +1,8 @@
 package com.itwill.matzip.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.annotations.NaturalId;
@@ -22,61 +24,61 @@ import lombok.*;
 @Entity
 public class Member {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@EqualsAndHashCode.Include
-	@NaturalId
-	@Basic(optional = false)
-	@Column(updatable = false)
-	private String username;
+    @EqualsAndHashCode.Include
+    @NaturalId
+    @Basic(optional = false)
+    @Column(updatable = false)
+    private String username;
 
-	@Basic(optional = false)
-	private String password;
+    @Basic(optional = false)
+    private String password;
 
-	private String email;
+    private String email;
 
-	private String kakaoClientId;
+    private String kakaoClientId;
 
-	private LocalDate birth;
+    private LocalDate birth;
 
-	private String nickname;
+    private String nickname;
 
-	// @ColumnDefault("'default.png'")
-	private String img;
+    // @ColumnDefault("'default.png'")
+    private String img;
 
-	@Enumerated(EnumType.STRING)
-	private Gender gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
-	@Builder.Default
-	@ToString.Exclude
-	@ElementCollection(fetch = FetchType.LAZY)
-	@Enumerated(EnumType.STRING)
-	private Set<MemberRole> roles = new HashSet<>();
+    @Builder.Default
+    @ToString.Exclude
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
+    private Set<MemberRole> roles = new HashSet<>();
 
-	public Member addRole(MemberRole role) {
-		roles.add(role);
-		return this;
-	}
+    public Member addRole(MemberRole role) {
+        roles.add(role);
+        return this;
+    }
 
-	public Member clearRoles() {
-		roles.clear();
-		return this;
-	}
+    public Member clearRoles() {
+        roles.clear();
+        return this;
+    }
 
-	public Member socialMemUpdate(Member dto) {
-		this.email = dto.getEmail();
-		this.nickname = dto.getNickname();
-		this.birth = dto.getBirth();
-		this.gender = dto.getGender();
+    public Member socialMemUpdate(Member dto) {
+        this.email = dto.getEmail();
+        this.nickname = dto.getNickname();
+        this.birth = dto.getBirth();
+        this.gender = dto.getGender();
 
-		return this;
-	}
+        return this;
+    }
 
-	public Member pwdUpdate(String pwd) {
-		this.password = pwd;
+    public Member pwdUpdate(String pwd) {
+        this.password = pwd;
 
-		return this;
-	}
+        return this;
+    }
 }
