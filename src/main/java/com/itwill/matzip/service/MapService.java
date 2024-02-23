@@ -8,14 +8,20 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.MyPick;
 import com.itwill.matzip.domain.QReview;
+import com.itwill.matzip.domain.Restaurant;
+import com.itwill.matzip.domain.RestaurantStatus;
 import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.domain.ReviewImage;
 import com.itwill.matzip.dto.MapReviewDto;
 import com.itwill.matzip.dto.MostLikedReviewDto;
+import com.itwill.matzip.repository.CategoryRepository;
 import com.itwill.matzip.repository.MyPickRepository;
 import com.itwill.matzip.repository.ReviewRepository;
+import com.itwill.matzip.repository.restaurant.RestaurantQuerydsl;
+import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -33,6 +39,14 @@ public class MapService {
 	
 	//마이픽 테이블
 	private final MyPickRepository mpDao;
+	
+	//카테고리 테이블
+	private final CategoryRepository ctDao;
+	
+	//레스토랑 테이블
+	private final RestaurantRepository restDao;
+	
+
 	
 	 @Autowired
 	    private EntityManager entityManager;
@@ -100,5 +114,27 @@ public class MapService {
     	List<MyPick> myPicks = mpDao.findByRestaurantId(restaurantId);
     	
     	return myPicks.size();
+    }
+    
+    //카테고리 목록 가져오기.
+    public List<Category> getAllCategory(){
+    	List<Category> list = ctDao.findByOrderByListOrderAsc();
+    	
+    	return list;
+    }
+    //카테고리에 따른 음식점 리스트 가져오기.
+    
+    public List<Restaurant> getRestaurantsByCategory(Integer categoryId){
+    	return restDao.findByStatusAndCategoryId(RestaurantStatus.OPEN,categoryId);
+    }
+    
+    //전체 검색 결과
+    public List<Restaurant> searchAllByKeyword(String keyword){
+    	return restDao.searchAllByKeyword(keyword);
+    }
+    
+    //카테고리별 검색 결과
+    public List<Restaurant> searchByCategoryAndKeyword(Integer categoryId, String keyword){
+    	return restDao.searchByCategoryAndKeyword(categoryId,keyword);
     }
 }
