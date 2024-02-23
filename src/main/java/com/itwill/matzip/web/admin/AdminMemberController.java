@@ -42,4 +42,15 @@ public class AdminMemberController {
         return ResponseEntity.ok(memberList);
     }
 
+    @GetMapping("/{memberId}")
+    public String getMemberDetail(@PathVariable Long memberId, Model model) {
+        Member member = memberService.getMember(memberId);
+        model.addAttribute("member", member);
+
+        List<MemberRole> memberRoles = memberService.getMemberRoles();
+        model.addAttribute("memberRoles", memberRoles);
+
+        return "admin/detail-member";
+    }
+
 }

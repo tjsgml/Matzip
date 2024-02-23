@@ -28,7 +28,11 @@ public class AdminMemberService {
         return members;
     }
 
-    public List<MemberRole> getMemberRoles () {
+    public Member getMember(Long memberId) {
+        return memberDao.findById(memberId).orElseThrow();
+    }
+
+    public List<MemberRole> getMemberRoles() {
         return List.of(MemberRole.values());
     }
 }

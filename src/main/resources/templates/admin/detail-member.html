@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head th:replace="~{/layout/fragment-common::my-header('MAT.ZIP ADMIN | 멤버 리스트')}"></head>
+<link href="/css/admin/admin-common.css" rel="stylesheet">
+<style>
+    .miniStar {
+        margin-bottom: 7px;
+    }
+
+    .detail_rating {
+        margin-right: 10px;
+        font-size: 18px;
+    }
+</style>
+<body>
+<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+<div class="mz-admin-container">
+    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <main class="mz-inner-container">
+        <div id="first-div" class="m-3">
+            <div class="card">
+                <img th:src="${member.img}" class="card-img-top" alt="프로필 이미지">
+                <div class="card-body">
+                    <h5 class="card-title"><span th:text="${member.nickname}"></span></h5>
+                    <div class="d-flex justify-content-between">
+                        <span th:text="${member.username}"></span>
+                        <p class="card-text text-secondary" th:text="${member.email}"></p>
+                    </div>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:if="${! #strings.isEmpty(member.kakaoClientId)}">소셜 로그인 <span
+                            class="badge text-bg-warning">Kakao</span></li>
+                    <li class="list-group-item" th:if="${#strings.isEmpty(member.kakaoClientId)}">플랫폼 로그인</li>
+                    <li class="list-group-item" th:text="${member.birth}"></li>
+                    <li class="list-group-item d-flex">
+                        <span class="badge text-bg-primary" th:each="role :${member.roles}" th:text="${role.kor}"
+                              style="margin-right: 5px;"></span>
+                    </li>
+                </ul>
+                <div class="card-body d-flex justify-content-between">
+                    <button href="#" class="card-link btn btn-outline-secondary">권한 수정</button>
+                    <button href="#" class="card-link btn btn-outline-secondary">리뷰 보기</button>
+                </div>
+            </div>
+        </div>
+        <div id="second-div" class="m-3">
+
+            <div class="card">
+                <div class="card-body p-4 d-flex justify-content-between">
+                    <div>
+                        <h3>권한 수정하기</h3>
+                        <div class="form-check form-check-inline" th:each="role : ${memberRoles}">
+                            <input class="form-check-input" type="checkbox" th:id="${'memberRoleCheck' + role.name}"
+                                   th:value="${role.name}">
+                            <label class="form-check-label" th:for="${'memberRoleCheck' + role.name}"
+                                   th:text="${role.kor}">1</label>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary">제출</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <div class="card">
+                    <div class="card-box p-4">
+                        <h3 class="ms-3">리뷰 리스트</h3>
+                        <ul id="review-list" class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold"></div>
+    <div>1997.02.49</div>
+                                    <div>
+                                    <span class="detail_rating">
+												맛
+												<img src="/img/miniStar.png" class="miniStar"/>
+												3
+											</span>
+                                        <span class="detail_rating">
+												서비스
+												<img src="/img/miniStar.png" class="miniStar"/>
+												3
+											</span>
+                                        <span class="detail_rating">
+												가격
+												<img src="/img/miniStar.png" class="miniStar"/>
+												3
+											</span>
+                                    </div>
+                                    <div class="mt-3">
+                                        토요일 점심으로 찾았다.
+                                        식당에 도착하기 40분전에 테이블링으로 원격줄서기를 했음에도 도착하고 나서도 20분을 더 기다렸다.
+                                        외관에서도 살짝 느껴지지만 안에 들어서면 미국미국한 인테리어가 반긴다.
+                                        요즘 핫한 미국보다는 그 어떤 스테레오타입의 미국풍이 물씬 나는 뉴트로 느낌이랄까.
+
+                                    </div>
+                                </div>
+                                <button class="btn badge text-bg-primary rounded-pill">삭제</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
+<script>
+    document.getElementById("review-list");
+</script>
+</body>
+</html>
