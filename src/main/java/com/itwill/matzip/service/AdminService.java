@@ -268,7 +268,7 @@ public class AdminService {
         Category categoryFinal = categoryDao.findTop1ByOrderByListOrderDesc();
         Category category = Category.builder()
                 .name(categoryName)
-                .listOrder(categoryFinal.getListOrder() + 1)
+                .listOrder(categoryFinal == null ? 1 : categoryFinal.getListOrder() + 1)
                 .build();
 
         categoryDao.save(category);

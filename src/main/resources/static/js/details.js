@@ -19,6 +19,7 @@
 	 
 	checkLogin();
 	
+	
 	const restId = document.querySelector('input#restId').value;//음식점 아이디
 	
 	const btnReportInfo = document.getElementById('btnReportInfo');//폐업신고,정보수정제안 버튼
@@ -27,6 +28,10 @@
 	
 	// 평가하기 버튼 클릭 이벤트 수정
     const btnEval = document.getElementById('btnEval');
+    
+
+	//--------------------------------------------------------------------------------------------------------
+
     
     btnEval.addEventListener('click', () => {
         if(isLoggedin){
@@ -467,5 +472,7 @@
 	function fillRestImg(restId){
 		
 	}
+
+	
 
  });//end document
