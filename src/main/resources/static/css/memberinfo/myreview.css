@@ -130,6 +130,14 @@
 	font-size: 12px;
 }
 
+.review-content {
+	margin-top: 15px;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	font-family: Pretendard, ui-sans-serif, system-ui;
+	font-size: 15px;
+}
+
 .review-img_pic {
 	margin-top: 20px;
 }
@@ -149,11 +157,23 @@
 	border-radius: 6px;
 }
 
+.one-pic>a img {
+	width: 450px;
+}
+
+.two-pic>a {
+	gap: 1px;
+}
+
+.two-pic>a img {
+	width: 225px;
+}
+
 .di-grid>a {
 	display: grid;
 	grid-template-columns: 225px 225px;
 	grid-template-rows: 170px 170px;
-	gap:1px;
+	gap: 1px;
 }
 
 .three-pic>a>.imgContainer_box:first-child {
@@ -163,20 +183,6 @@
 .more-pic>a {
 	position: relative;
 }
-
-.more-pic:first-child img {
-	border-bottom-right-radius: 0px;
-}
-.more-pic:nth-child(2) img {
-	border-bottom-left-radius: 0px;
-}
-.more-pic:nth-child(3) img {
-	border-top-right-radius: 0px;
-}
-.more-pic:last-child img{
-	border-top-left-radius: 0px;
-}
-
 
 .moreImg {
 	position: absolute;

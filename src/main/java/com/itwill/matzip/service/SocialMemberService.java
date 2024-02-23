@@ -21,7 +21,8 @@ import org.springframework.stereotype.Service;
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.enums.MemberRole;
 import com.itwill.matzip.dto.MemberSecurityDto;
-import com.itwill.matzip.dto.MemberUpdateRequestDto;
+
+import com.itwill.matzip.dto.MemberUpdateDto;
 import com.itwill.matzip.repository.member.MemberRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -74,15 +75,23 @@ public class SocialMemberService extends DefaultOAuth2UserService {
 
 	// 카카오 로그인 추가 정보 업데이트 및 권한 수정
 	@Transactional
-	public void updateMember(MemberUpdateRequestDto dto, HttpSession session) {
+	public void updateMember(MemberUpdateDto dto, String username) {
 		log.info("Svc - updateMember(dto = {})", dto);
+		
+		Member entity = memberDao.findByUsername(username).orElseThrow();
+		entity.memUpdate(dto.toEntity());
 
-		Member entity = memberDao.findByUsername(dto.getUsername()).orElseThrow();
-		entity.socialMemUpdate(dto.toEntity());
-		entity.clearRoles();
-		entity.addRole(MemberRole.USER);
+		//권한이 GUEST(소셜 로그인으로 처음 가입한 사람)이면 권한 변경 작업
+		List<String> roleNames = new ArrayList<String>();
+		entity.getRoles().forEach((auth) -> {
+			roleNames.add(auth.getAuthority());
+		});
 
-		sessionReset(entity);
+		if (roleNames.contains("ROLE_GUEST")) {
+			entity.clearRoles();
+			entity.addRole(MemberRole.USER);
+			sessionReset(entity);
+		}
 	}
 
 	// 로그인 상태의 유저 세션 정보를 변경 - 권한 변경해줌

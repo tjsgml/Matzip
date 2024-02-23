@@ -18,6 +18,7 @@
 
 			<div class="col-md-6 main-bg-color">
 				<header class="mypage-header margin-side-lr">
+					<span><a th:href="@{/memberinfo/profilemodify}"><i class="fa-solid fa-angle-left"></i></a></span>
 					<span>비밀번호 수정</span>
 					<span><!--<a href="#"><i class="fa-sharp fa-solid fa-gear"></i></a>--></span>
 				</header>
@@ -25,16 +26,17 @@
 				<main>
 
 					<section class="profile-update margin-side-lr">
-						<form>
+						<form th:action="@{/member/modifypwd}" method="post" id="pwdModifyForm">
 							<div>
 								<label>현재 비밀번호</label>
-								<input type="password" />
+								<input type="password" id="oldPwd" />
+								<div id="oldPwd-check" class="error-texts"></div>
 							</div>
 							<div>
 								<label>새로운 비밀번호</label>
-								<input type="password" />
+								<input type="password" name="pwd" id="newPwd" />
+								<div id="newPwd-check" class="error-texts"></div>
 							</div>
-							<div id="pwd-check"></div>
 						</form>
 						<button id="modifyBtn">변경</button>
 					</section>
@@ -49,10 +51,20 @@
 	</div>
 
 	<!-- java script -->
+	<!-- Bootstrap 자바스크립트 모듈 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
 		crossorigin="anonymous"></script>
+
+	<!-- Axios 자바스크립트 모듈 -->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+	<!-- 아이콘 모듈 -->
 	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
+
+	<!-- 커스텀 모듈 -->
+	<!--- 비밀번호 유효성 및 현재 비밀번호 검사 -->
+	<script src="../js/member/validation-pwd.js"></script>
 </body>
 
 </html>

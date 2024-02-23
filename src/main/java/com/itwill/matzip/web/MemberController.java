@@ -1,5 +1,7 @@
 package com.itwill.matzip.web;
 
+import java.security.Principal;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -9,7 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.dto.MemberSignupRequestDto;
-import com.itwill.matzip.dto.MemberUpdateRequestDto;
+import com.itwill.matzip.dto.MemberUpdateDto;
 import com.itwill.matzip.service.MailService;
 import com.itwill.matzip.service.MemberService;
 import com.itwill.matzip.service.SocialMemberService;
@@ -50,43 +52,6 @@ public class MemberController {
 		return "redirect:/member/login";
 	}
 
-	// 유저네임 중복 체크
-	@GetMapping("/checkid")
-	@ResponseBody
-	public ResponseEntity<String> checkId(@RequestParam(name = "username") String username) {
-		log.info("checkId(username = {})", username);
-
-		String result = memberSvc.checkUsername(username);
-
-		return ResponseEntity.ok(result);
-	}
-
-	// 닉네임 중복 체크
-	@GetMapping("/checknick")
-	@ResponseBody
-	public ResponseEntity<String> checkNick(@RequestParam(name = "nickname") String nickname) {
-		log.info("checkNick(nickname = {})", nickname);
-
-		String result = memberSvc.checkNickname(nickname);
-
-		return ResponseEntity.ok(result);
-	}
-
-	// 이메일 중복 체크
-	@GetMapping("/checkemail")
-	public ResponseEntity<String> checkEmail(@RequestParam(name = "email") String email) {
-		log.info("checkEmail(email = {})", email);
-
-		String result = "N";
-
-		Member m = memberSvc.checkEmail(email);
-		if (m != null) {
-			result = "Y";
-		}
-
-		return ResponseEntity.ok(result);
-	}
-
 	// 소셜 로그인 회원 추가 정보 입력 폼으로 이동
 	@PreAuthorize("hasRole('GUEST')")
 	@GetMapping("/addinfo")
@@ -94,12 +59,12 @@ public class MemberController {
 		log.info("추가 정보 창 띄움");
 	}
 
-	// 소셜 로그인 회원 추가 정보 저장
-	@PostMapping("/addinfo")
-	public String addinfo(MemberUpdateRequestDto dto, HttpSession session) {
-		log.info("addInfo(dto : {})", dto);
+	// 소셜 첫가입 회원 추가 정보 추가/기존 회원의 정보 수정
+	@PostMapping({ "/addinfo", "/modifyInfo" })
+	public String updateMemberInfo(MemberUpdateDto dto, Principal principal) {
+		log.info("updateMemberInfo(dto : {})", dto);
 
-		socialSvc.updateMember(dto, session);
+		socialSvc.updateMember(dto, principal.getName());
 
 		return "redirect:/";
 	}
@@ -131,9 +96,10 @@ public class MemberController {
 		}
 	}
 
-	// 비밀번호 변경 폼으로 이동
+	//비밀번호 변경 폼으로 이동
 	@GetMapping("/password")
-	public String passwordForm(@RequestParam(required = false, name="key") String key, HttpSession session, Model model) {
+	public String passwordForm(@RequestParam(required = false, name = "key") String key, HttpSession session,
+			Model model) {
 		log.info("Get - changePassword(key = {}, session[username] = {})", key, session.getAttribute("username"));
 
 		String valid = "N";
@@ -153,7 +119,7 @@ public class MemberController {
 		return "/member/password";
 	}
 
-	// 비밀번호 변경하기
+	//비밀번호 찾기로 해서 비밀번호 변경하기
 	@PostMapping("/successpwd")
 	public String changePassword(@ModelAttribute("password") String pwd, HttpSession session) {
 		log.info("Post - changePassword (password : {}, username : {})", pwd,
@@ -177,6 +143,61 @@ public class MemberController {
 	@GetMapping("/successpwd")
 	public void successForm() {
 		log.info("Get - successForm");
+	}
+	
+	//비밀번호 변경
+	@PostMapping("/modifypwd")
+	public String changePwd(@ModelAttribute("pwd") String pwd, Principal principal) {
+		log.info("changePwd : username - {}", pwd);
+		
+		memberSvc.updatePwd(principal.getName(), pwd);
+		
+		return "redirect:/memberinfo/profilemodify";
+	}
 
+	// 레스트 컨트롤러 모음 ---------------------------------------------------------------
+	// 유저네임 중복 체크
+	@ResponseBody
+	@GetMapping("/checkid")
+	public ResponseEntity<String> checkId(@RequestParam(name = "username") String username) {
+		log.info("checkId(username = {})", username);
+		String result = memberSvc.checkUsername(username);
+
+		return ResponseEntity.ok(result);
+	}
+
+	// 닉네임 중복 체크
+	@ResponseBody
+	@GetMapping("/checknick")
+	public ResponseEntity<String> checkNick(@RequestParam(name = "nickname") String nickname) {
+		log.info("checkNick(nickname = {})", nickname);
+		String result = memberSvc.checkNickname(nickname);
+
+		return ResponseEntity.ok(result);
+	}
+
+	// 이메일 중복 체크
+	@ResponseBody
+	@GetMapping("/checkemail")
+	public ResponseEntity<String> checkEmail(@RequestParam(name = "email") String email) {
+		log.info("checkEmail(email = {})", email);
+		String result = "N";
+
+		Member m = memberSvc.checkEmail(email);
+		if (m != null) {
+			result = "Y";
+		}
+		return ResponseEntity.ok(result);
+	}
+	
+	//비밀번호 변경시, 현재 비밀번호가 맞는지 확인
+	@ResponseBody
+	@PostMapping("/checkpwd")
+	public ResponseEntity<String> checkPwd(@RequestBody String oldPwd, Principal principal){
+		log.info("현재 비밀번호가 맞는지 확인 : oldPwd : {}", oldPwd);
+		
+		String result = memberSvc.checkPassword(oldPwd, principal.getName());
+		
+		return ResponseEntity.ok(result);
 	}
 }
