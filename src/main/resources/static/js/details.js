@@ -41,7 +41,7 @@
         } else {
             // 로그인이 필요한 경우
             if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
-                window.location.href = 'admin/member/login';
+                window.location.href = '/member/login';
             } else {
                 alert('로그인이 취소되었습니다.');
             }

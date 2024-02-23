@@ -35,26 +35,26 @@ document.addEventListener('DOMContentLoaded', async()=>{
                     <div class="profile_img" style="background-image: url('${review.memberImg}');"></div>
                     <div class="item2">
                         <p style="font-size: 23px; margin-left: 20px; font-weight: bold; margin-top: 15px; margin-bottom: 0;">${review.memberNickname}</p>
+                        <div style="margin-left: 20px;">
+                        <span class="total_score" style="font-size:17px; font-weight: bold; color:rgb(94, 94, 94);">${roundedTotalScore}점</span>
                         ${[1, 2, 3, 4, 5].map(index => {
                             if (index <= Math.floor(roundedTotalScore)) {
                                 // 총 평점의 정수 부분에 해당하는 별은 모두 색칠
-                                return `<img class="star" data-index="${index}" src="/img/star_on.png" ${index === 1 ? 'style="margin-left: 20px;"' : ''}>`;
+                                return `<img class="star" data-index="${index}" src="/img/star_on.png" ${index === 1 ? 'style="margin-left: 0px;"' : ''}>`;
                             } else if (index === Math.ceil(roundedTotalScore) && roundedTotalScore % 1 >= 0.5) {
                                 // 소수점이 0.5 이상인 경우에만 별 반개
-                                return `<img class="star" data-index="${index}" src="/img/star_half.png" ${index === 1 ? 'style="margin-left: 20px;"' : ''}>`;
+                                return `<img class="star" data-index="${index}" src="/img/star_half.png" ${index === 1 ? 'style="margin-left: 0px;"' : ''}>`;
                             } else {
                                 // 그 외
-                                return `<img class="star" data-index="${index}" src="/img/star_off.png" ${index === 1 ? 'style="margin-left: 20px;"' : ''}>`;
+                                return `<img class="star" data-index="${index}" src="/img/star_off.png" ${index === 1 ? 'style="margin-left: 0px;"' : ''}>`;
                             }
                         }).join('')}
-                        
-                        <span style="font-size: 20px; color:rgb(94, 94, 94);">${review.formattedRegisterDate}</span>
-                        
+                        <span style="margin-left: 5px; font-size: 18px; color:rgb(94, 94, 94);">${review.formattedRegisterDate}</span>
+                        </div>
                         <div class="review_scores" style="margin-left: 10px;">
                             <span class="detail_rating">맛 <img src="/img/miniStar.png" class="miniStar">${review.flavorScore}</span>
                             <span class="detail_rating">가격 <img src="/img/miniStar.png" class="miniStar">${review.priceScore}</span>
                             <span class="detail_rating">서비스 <img src="/img/miniStar.png" class="miniStar">${review.serviceScore}</span>
-                            <span class="total_score" style="font-size: 20px; color:rgb(94, 94, 94);">총 평점: ${roundedTotalScore}</span>
                         </div>
                     </div>
                 </div>
