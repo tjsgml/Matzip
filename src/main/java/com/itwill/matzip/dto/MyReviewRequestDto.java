@@ -20,7 +20,8 @@ public class MyReviewRequestDto {
 	private Double totalAllReviewRating;	//모든 리뷰의 총점을 구함.. 여러 개의 리스트여도 똑같은 값을 가짐
 	
 	private Long reviewId;
-	private LocalDateTime createTime;
+//	private LocalDateTime createTime;
+	private String formattedRegisterDate;
 	private Double flavorScore; 
 	private Double serviceScore;
 	private Double priceScore;

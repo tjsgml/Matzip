@@ -15,6 +15,7 @@ import com.itwill.matzip.domain.ReviewHashtag;
 import com.itwill.matzip.domain.ReviewImage;
 import com.itwill.matzip.domain.enums.HashtagCategoryName;
 import com.itwill.matzip.dto.ReviewCreateDto;
+import com.itwill.matzip.dto.ReviewUpdateDto;
 import com.itwill.matzip.repository.HashtagCategoryRepository;
 import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.ReviewHashtagRepository;
@@ -53,6 +54,26 @@ public class ReviewService {
         this.s3Util = s3Util;
         
     }
+    
+    // ReviewId 조회
+    public Review findReviewById(Long reviewId) {
+    	return reviewDao.findById(reviewId)
+    			.orElseThrow(() -> new IllegalArgumentException("존재하지않는 리뷰 ID" + reviewId));
+    }
+    
+    // 리뷰 업데이트
+    public void updateReview(Long reviewId, ReviewUpdateDto dto) {
+    	Review review = findReviewById(reviewId);
+    	
+    	review.updateReview(
+    		dto.getTasteRating(),
+    		dto.getPriceRating(),
+    		dto.getServiceRating(),
+    		dto.getReviewContent()
+    	);
+    	
+    }
+    
     
     @Transactional
     public void saveReview(ReviewCreateDto dto) {
@@ -133,7 +154,12 @@ public class ReviewService {
         	}
         }
         
+  
     }
+    
+    
+    
+    
 
 	
 

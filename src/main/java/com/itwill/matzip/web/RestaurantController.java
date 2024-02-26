@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.itwill.matzip.domain.BusinessHour;
 import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.Restaurant;
+import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.dto.MyPickRegisterDto;
+import com.itwill.matzip.dto.ReviewListDto;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
 import com.itwill.matzip.service.RestaurantService;
 
@@ -135,4 +137,15 @@ public class RestaurantController {
 		restSvc.updateRequest(dto);
 		return ResponseEntity.ok(1);
 	}
+	
+//	/* 은겸 추가 */
+	@GetMapping("/details/reviews/{restaurantId}")
+    public ResponseEntity<List<ReviewListDto>> findReviews(@PathVariable("restaurantId") Long restaurantId) {
+        List<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId);
+        return ResponseEntity.ok(reviews);
+    }
+
+	
+	
+	
 }
