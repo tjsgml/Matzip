@@ -1,5 +1,6 @@
 package com.itwill.matzip.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -36,6 +37,7 @@ public class ReviewImage {
 	private Long id;
 	
 	@ToString.Exclude
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	@JoinColumn(name = "REVIEW_FK")
 	private Review review;

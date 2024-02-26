@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Data
-public class MemberProfileInfoRequestDto {
+public class MemberMainHeaderRequestDto {
 	private String nickname;
 	private String img;
 	private Long pickCnt;

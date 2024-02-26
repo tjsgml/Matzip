@@ -45,11 +45,13 @@ public class Review extends BaseTimeEntity{
 	
 	@EqualsAndHashCode.Include
 	@ToString.Exclude
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "RESTAURANT_FK", nullable = false)
 	private Restaurant restaurant;
 	
 	@ToString.Exclude
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "MEMBER_FK", nullable = false)
 	private Member member;

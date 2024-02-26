@@ -12,10 +12,14 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 import com.itwill.matzip.domain.QRestaurant;
 import com.itwill.matzip.domain.Restaurant;
+import com.itwill.matzip.domain.RestaurantStatus;
 import com.itwill.matzip.dto.RestaurantSearchCond;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -102,4 +106,28 @@ public class RestaurantQuerydslImpl extends QuerydslRepositorySupport implements
                 .where(restaurant.category.id.eq(categoryId))
                         .execute();
     }
+    //전체 리스트에서 키워드 검색
+    @Override
+    public List<Restaurant> searchAllByKeyword(String keyword) {
+    	QRestaurant restaurant = QRestaurant.restaurant;
+    	
+    	JPQLQuery<Restaurant> query = from(restaurant)
+    								  .where(restaurant.name.containsIgnoreCase(keyword)
+    								  .and(restaurant.status.eq(RestaurantStatus.OPEN)));
+    	return query.fetch();
+    	
+    }
+    //카테고리별 키워드 검색
+    @Override
+    public List<Restaurant> searchByCategoryAndKeyword(Integer categoryId, String keyword) {
+        QRestaurant restaurant = QRestaurant.restaurant;
+        JPQLQuery<Restaurant> query = from(restaurant)
+        						     .where(restaurant.name.containsIgnoreCase(keyword)
+        						     .and(restaurant.category.id.eq(categoryId))
+                					 .and(restaurant.status.eq(RestaurantStatus.OPEN)));
+					     	
+        
+        return query.fetch();
+    }
+    
 }

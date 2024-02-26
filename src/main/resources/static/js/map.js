@@ -2,17 +2,45 @@
  * home.html
  *  
  * 지도를 불러와서 DB 안에 있는 음식점들 마커로 표시하기.
+ * @@@@@@@@@@@@@@ 카테고리 검색시 0 음식점 상태 체크하는 걸로 바꾸기.!!!!!
  */
-document.addEventListener('DOMContentLoaded',async() =>{
+document.addEventListener('DOMContentLoaded',() =>{
 	console.log('home.js...');
 	
 	//로그인 상태인지 확인
 	isLoggedin = false;
 	//회원의 아이디
 	let memberId ='';
-	
+	//로그인 중인지 확인.
 	checkLogin();
 	
+	//카테고리 셀렉트 요소
+	const selectBox = document.querySelector('.btnCategory');
+	
+	selectBox.addEventListener('change',()=>{
+		const selectedValue = selectBox.value;
+		console.log('카테고리 아이디:',selectedValue);
+		if(selectedValue==='전체'){
+			getAllRestaurant();	
+		}else{
+			getRestaurantsByCategory(selectedValue);
+		}
+	});
+	
+	//음식점 검색 input
+	const searchInput = document.querySelector('.searchInput');
+	
+	searchInput.addEventListener('keydown',(event) => {
+		if (event.key === 'Enter') {
+			
+			if(searchInput.value ===''){
+				alert("검색어를 입력해주세요!");			
+			}else{
+				getRestByCategoryAndKeyword(selectBox.value,searchInput.value);
+			}
+		}
+	});
+	let customOverlay;
 	const container = document.getElementById('map');
 	const options = {
 		center: new kakao.maps.LatLng(37.49822016965648, 127.02970793807465),
@@ -22,76 +50,94 @@ document.addEventListener('DOMContentLoaded',async() =>{
 	const map = new kakao.maps.Map(container, options);
 	
 	//마커를 저장할 배열
-	const markers=[];
+	let markers=[];
 	
 	
-												
+	//전체 리스트 그리기.
+		getAllRestaurant();		
+										
 	// DB의 restaurant 테이블의 정보들을 불러오기...
-	try{
-		const response = await axios.get('/map/all');
-		//console.log(response);
-	    // DB에서 받은 음식점 정보를 이용하여 마커 생성
-	    //리뷰들 가져오기.
-	    response.data.forEach(restaurant => {
-			const overlayPosition = new kakao.maps.LatLng(restaurant.lat, restaurant.lon);
-			
-			//리뷰 평점 가져오기
-			getReviews(restaurant.id);
-			
-			//추천수 제일 높은 리뷰 가져오기.
-			getMostLikedReview(restaurant.id);
-			
-			//음식점 좋아요 수 가져오기.
-			getTotalMypicks(restaurant.id);
-			
-			//음식점 좋아요 상태 확인하기
-			changeMyPick(restaurant.id);
-			
-            // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-            const content = `<div class="customoverlay" id="customoverlay-${restaurant.id}" data-id=${restaurant.id}>
-                                <a  href="/rest/details?id=${restaurant.id}" id="v15_44" class="v15_44 btnMarker" type="button">
-                                    <div class="v14_20"></div>
-                                    <div class="v14_19"></div>
-                                    <span class="v15_42">${restaurant.name}</span>
-                                    <span class="v15_43">${restaurant.category.name}</span>
-                                </a>
-                            </div>`;
-
-            // 커스텀 오버레이 생성
-            const  customOverlay = new kakao.maps.CustomOverlay({
-                map: map,
-                position: overlayPosition,
-                content: content,
-                xAnchor: 0.15, // 기본값은 0.5, 오른쪽으로 이동하려면 작은 값으로 설정하면 됨.
-				yAnchor: 1,
-				zIndex:0
+	
 				
-            });	
-            
-            //마커를 배열에 저장.
-            markers.push({id: restaurant.id, overlay: customOverlay});
-            
-            const aa = document.getElementById(`customoverlay-${restaurant.id}`);
-            //console.log(aa)
-            aa.addEventListener('mouseover', () => {
-				customOverlay.setZIndex(10);
-				//console.log("들어옴")
+//--------------------------------함수들-----------------------------------
+	//전체 데이터 가져오기.
+	async function getAllRestaurant(){
+		try{
+			const response = await axios.get('/map/all');
+			//console.log(response);
+		    // DB에서 받은 음식점 정보를 이용하여 마커 생성
+		    //리뷰들 가져오기.
+		    
+		     // 음식점에 대한 지도에 마커 그리기
+	         drawMarkers(response.data);
+		    response.data.forEach(restaurant => {
+				
+				
+				//리뷰 평점 가져오기
+				getReviews(restaurant.id);
+				
+				//추천수 제일 높은 리뷰 가져오기.
+				getMostLikedReview(restaurant.id);
+				
+				//음식점 좋아요 수 가져오기.
+				getTotalMypicks(restaurant.id);
+				
+				//음식점 좋아요 상태 확인하기
+				changeMyPick(restaurant.id);
+				
+	           
+				
+				//지도 옆에 있는 음식점 리스트 그리기
+				getRestList(response.data);	
+						
 			});
-			document.getElementById(`customoverlay-${restaurant.id}`).addEventListener('mouseout', () => {
-				customOverlay.setZIndex(0);
-				//console.log("나감")
-			});
-             
-			//--------------------------------------------------
-			//지도 옆에 있는 음식점 리스트 그리기
-			getRestList(response.data);	
-					
-		});
-	}catch(error){
-		console.log(error);
+		}catch(error){
+			console.log(error);
+		}
 	}
-				
-//---------------함수들-------------------
+	//지도에 음식점에 대한 마커 그리기.
+	function drawMarkers(data){
+			
+			data.forEach((restaurant)=>{
+				   const overlayPosition = new kakao.maps.LatLng(restaurant.lat, restaurant.lon);
+				   const content = `<div class="customoverlay" id="customoverlay-${restaurant.id}" data-id=${restaurant.id}>
+			                                <a  href="/rest/details?id=${restaurant.id}" id="v15_44" class="v15_44 btnMarker" type="button">
+			                                    <div class="v14_20"></div>
+			                                    <div class="v14_19"></div>
+			                                    <span class="v15_42">${restaurant.name}</span>
+			                                    <span class="v15_43">${restaurant.category.name}</span>
+			                                </a>
+			                            </div>`;
+			
+		            // 커스텀 오버레이 생성
+		            customOverlay = new kakao.maps.CustomOverlay({
+		                map: map,
+		                position: overlayPosition,
+		                content: content,
+		                xAnchor: 0.15, // 기본값은 0.5, 오른쪽으로 이동하려면 작은 값으로 설정하면 됨.
+						yAnchor: 1,
+						zIndex:0
+						
+		            });	
+		            
+		            //마커를 배열에 저장.
+		            markers.push({id: restaurant.id, overlay: customOverlay});
+		            
+		            const aa = document.getElementById(`customoverlay-${restaurant.id}`);
+		            //console.log(aa)
+		            aa.addEventListener('mouseover', () => {
+						customOverlay.setZIndex(10);
+						//console.log("들어옴")
+					});
+					document.getElementById(`customoverlay-${restaurant.id}`).addEventListener('mouseout', () => {
+						customOverlay.setZIndex(0);
+						//console.log("나감")
+					});
+			});
+
+             
+	}
+	//음식점 리스트 그리기.
 	function getRestList(data){
 		const restList = document.querySelector('div#restList');
 			let htmlStr ='';
@@ -141,6 +187,8 @@ document.addEventListener('DOMContentLoaded',async() =>{
 			btn.addEventListener('click',(event)=>{
 				
 			    event.preventDefault(); // 기본 동작 중지
+			    
+			    //로그인이 되어 있다면 
 			    if(isLoggedin ){
 					 // 클릭된 버튼의 data-id 값을 가져옴
 			        const restId = event.currentTarget.getAttribute('data-id');
@@ -161,7 +209,14 @@ document.addEventListener('DOMContentLoaded',async() =>{
 					    btnMyPick.src="/img/icon_myPickOn.png";
 					}
 		        }else{
-					
+					//로그인 안 한 상태
+					 if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
+				        // 로그인 페이지로 이동
+				        window.location.href = '/member/login';
+				    } else {
+				        // 사용자가 취소한 경우
+				        alert('로그인이 취소되었습니다.');
+				    }
 				}
 			});
 		});	
@@ -424,5 +479,221 @@ document.addEventListener('DOMContentLoaded',async() =>{
 			
 		}	
 	}
+	//카테고리에 따른 음식점 리스트 가져오기
+	function getRestaurantsByCategory(categoryId){
+		console.log("카테고리 아이디:",categoryId);
+		
+		$.ajax({
+	        url: '/map/getRestaurantsByCategory',
+	        type: 'GET',
+	        data: { category: categoryId },
+	        success: function(response) {
+	            console.log(response);
+	            if(response && response.length !== 0){
+					// 음식점에 대한 지도에 마커 그리기
+		            drawCategoryMarkers(response);
+					response.forEach((restaurant)=>{
+						console.log('들어옴');
+					//리뷰 평점 가져오기
+					getReviews(restaurant.id);
+					
+					//추천수 제일 높은 리뷰 가져오기.
+					getMostLikedReview(restaurant.id);
+					
+					//음식점 좋아요 수 가져오기.
+					getTotalMypicks(restaurant.id);
+					
+					//음식점 좋아요 상태 확인하기
+					changeMyPick(restaurant.id);
+					
+		            
+					
+					//지도 옆에 있는 음식점 리스트 그리기
+					getRestList(response);	
+					});
+				}else{
+					drawNullRestaurant();
+				}
+	            
+	        },
+	        error: function(xhr, status, error) {
+	            // 에러 처리 코드 작성
+	            console.error(error);
+	        }
+	    });
+	}
+	//기존에 있는 마커들 모두 지우기.
+	function removeAllMarkers() {
+	    // 저장된 모든 마커들을 제거
+	    markers.forEach(marker => {
+	        marker.overlay.setMap(null); // 지도에서 제거
+	    });
+	    // 배열 비우기
+	    markers = [];
+	}
+	//지도에 음식점에 대한 마커 그리기.
+	function drawCategoryMarkers(data){
+			
+		   removeAllMarkers();
+		   data.forEach((restaurant)=>{
+			   const overlayPosition = new kakao.maps.LatLng(restaurant.lat, restaurant.lon);
+			   const content = `<div class="customoverlay" id="customoverlay-${restaurant.id}" data-id=${restaurant.id}>
+		                                <a  href="/rest/details?id=${restaurant.id}" id="v15_44" class="v15_44 btnMarker" type="button">
+		                                    <div class="v14_20"></div>
+		                                    <div class="v14_19"></div>
+		                                    <span class="v15_42">${restaurant.name}</span>
+		                                    <span class="v15_43">${restaurant.category.name}</span>
+		                                </a>
+		                            </div>`;
+		
+	            // 커스텀 오버레이 생성
+	            const customOverlay = new kakao.maps.CustomOverlay({
+	                map: map,
+	                position: overlayPosition,
+	                content: content,
+	                xAnchor: 0.15, // 기본값은 0.5, 오른쪽으로 이동하려면 작은 값으로 설정하면 됨.
+					yAnchor: 1,
+					zIndex:0
+					
+	            });	
+	            
+	            //마커를 배열에 저장.
+	            markers.push({id: restaurant.id, overlay: customOverlay});
+	            
+	            const aa = document.getElementById(`customoverlay-${restaurant.id}`);
+	            //console.log(aa)
+	            aa.addEventListener('mouseover', () => {
+					customOverlay.setZIndex(10);
+					//console.log("들어옴")
+				});
+				document.getElementById(`customoverlay-${restaurant.id}`).addEventListener('mouseout', () => {
+					customOverlay.setZIndex(0);
+					//console.log("나감")
+				});
+		   });
+             
+	}
 	
+	// 카테고리에 들어가있는 음식점이 없는 경우.
+	function drawNullRestaurant(){
+		removeAllMarkers();
+		const restList = document.querySelector('div#restList');
+		restList.innerHTML =`
+							<div  style="display: flex; justify-content: center; align-items: center; margin-top:150px;">
+							    <div>
+									<span style="display: flex; justify-content: center;">
+										<img src="/img/icon_nullWarning.png" style="width: 45px; height: 45px;">
+									</span>
+									<br>
+									<span style="font-size: 20px; font-weight: bold;">검색 결과가 없습니다.</span>
+								</div>
+							</div>
+							`;
+	}
+	
+	
+	function getRestByCategoryAndKeyword(category,keyword){
+		
+		// 검색어를 소문자로 변환하여 대소문자 구분 없이 검색하도록 함
+    	const lowercaseKeyword = keyword.toLowerCase();
+    	
+		console.log('검색어:',keyword);
+		console.log('카테고리 :',category);
+		if(category === '전체'){//키워드만 보내기
+			$.ajax({
+				url:'/map/searchAllByKeyword',
+				type:'GET',
+				data:{keyword : lowercaseKeyword},
+				success: function(response){
+					console.log('전체 검색 결과:',response);
+					if(response && response.length){
+						// 음식점에 대한 지도에 마커 그리기
+			            drawCategoryMarkers(response);
+			            
+						response.forEach((restaurant)=>{
+							
+						//리뷰 평점 가져오기
+						getReviews(restaurant.id);
+						
+						//추천수 제일 높은 리뷰 가져오기.
+						getMostLikedReview(restaurant.id);
+						
+						//음식점 좋아요 수 가져오기.
+						getTotalMypicks(restaurant.id);
+						
+						//음식점 좋아요 상태 확인하기
+						changeMyPick(restaurant.id);
+						
+			            
+						
+						//지도 옆에 있는 음식점 리스트 그리기
+						getRestList(response);	
+						});
+					}else{
+						drawNullKeywordRestaurant(keyword);
+					}
+					
+				},
+				  error: function(xhr, status, error) {
+		            console.error('전체 검색 중 에러 발생 :', error);
+		            
+		        }
+			});
+		}else{
+			$.ajax({//키워드와 카테고리 아이디 둘다 보내기.
+				url:'/map/searchByCategoryAndKeyword',
+				type:'GET',
+				data:{category:category,keyword:lowercaseKeyword},
+				success: function(response){
+					if(response && response.length !== 0){
+						// 음식점에 대한 지도에 마커 그리기
+			            drawCategoryMarkers(response);
+			            response.forEach((restaurant)=>{
+							
+							//리뷰 평점 가져오기
+							getReviews(restaurant.id);
+							
+							//추천수 제일 높은 리뷰 가져오기.
+							getMostLikedReview(restaurant.id);
+							
+							//음식점 좋아요 수 가져오기.
+							getTotalMypicks(restaurant.id);
+							
+							//음식점 좋아요 상태 확인하기
+							changeMyPick(restaurant.id);
+							
+				            
+							
+							//지도 옆에 있는 음식점 리스트 그리기
+							getRestList(response);	
+						});
+					}else{
+						drawNullKeywordRestaurant(keyword);
+					}
+				},
+				  error: function(xhr, status, error) {
+		            console.error('카테고리+ 키워드 검색 중 에러 발생 :', error);
+		        }
+			});
+		}
+		
+	}
+	
+	// 검색결과 음식점이 없는 경우.
+	function drawNullKeywordRestaurant(keyword){
+		removeAllMarkers();
+		const restList = document.querySelector('div#restList');
+		restList.innerHTML =`
+							<div  style="display: flex; justify-content: center; align-items: center; margin-top:150px;">
+							    <div>
+									<span style="display: flex; justify-content: center;">
+										<img src="/img/icon_nullWarning.png" style="width: 45px; height: 45px;">
+									</span>
+									<br>
+									<span style="font-size: 20px; font-weight: bold; color:#FF230A;" >'${keyword}'</span>
+									<span style="font-size: 20px; font-weight: bold;">에 대한 검색 결과가 없습니다.</span>
+								</div>
+							</div>
+							`;
+	}
 });

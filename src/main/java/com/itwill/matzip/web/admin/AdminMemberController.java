@@ -1,6 +1,7 @@
 package com.itwill.matzip.web.admin;
 
 import com.itwill.matzip.domain.Member;
+import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.domain.enums.MemberRole;
 import com.itwill.matzip.dto.MemberFilterDto;
 import com.itwill.matzip.service.AdminMemberService;
@@ -10,6 +11,7 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,5 +54,13 @@ public class AdminMemberController {
 
         return "admin/detail-member";
     }
+
+    @ResponseBody
+    @GetMapping("/{memberId}/review")
+    public ResponseEntity<List<Review>> getReviewListByMember(@PathVariable Long memberId, @RequestParam(name = "curPage",defaultValue = "0") Integer curPage) {
+        List<Review> reviews = memberService.getReviewListByMember(memberId, curPage);
+        return ResponseEntity.ok(reviews);
+    }
+
 
 }

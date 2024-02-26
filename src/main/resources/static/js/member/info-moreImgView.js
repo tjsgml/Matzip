@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	//----------------------------------------------
 	async function functionShowMoreImg(e){
 		const reviewId = e.target.getAttribute('data-id');
-		console.log("리뷰 아이디 : ", reviewId);
 		
 		try{
 			const response = await axios.get(`../review/img/${reviewId}`);
@@ -37,7 +36,5 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 		
 		divImg.innerHTML = htmlStr;
-		
-		console.log(htmlStr);
 	}
 })

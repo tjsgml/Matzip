@@ -70,11 +70,13 @@
 							<!-- 음식점 사진 -->
 							<a th:href="@{/rest/details(id=*{restaurantId})}">
 								<div th:if="*{imgUrl != null}">
-								<img th:src="*{imgUrl}" />
-							</div>
-							<div th:if="*{imgUrl == null}">
-							<div class="emptyImg"></div>	
-							</div>
+									<img th:src="*{imgUrl}" />
+								</div>
+								<div th:if="*{imgUrl == null}">
+									<div class="emptyImg">
+										<img src="/img/reviewNullImg.png"/>
+									</div>
+								</div>
 							</a>
 
 							<!-- 음식점 정보 -->

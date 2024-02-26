@@ -11,6 +11,23 @@
         margin-right: 10px;
         font-size: 18px;
     }
+
+    .review-img-box{
+        width: 500px;
+        padding: 20px;
+        overflow: scroll;
+        border: 1px solid #000;
+        white-space: nowrap;
+    }
+    .review-img-box img{
+        height: 200px;
+    }
+    .review-img-box button{
+        width: 30px;
+    }
+    .review-img-box::-webkit-scrollbar {
+        display: none;
+    }
 </style>
 <body>
 <nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
@@ -38,14 +55,13 @@
                     </li>
                 </ul>
                 <div class="card-body d-flex justify-content-between">
-                    <button href="#" class="card-link btn btn-outline-secondary">권한 수정</button>
-                    <button href="#" class="card-link btn btn-outline-secondary">리뷰 보기</button>
+                    <button id="btn-update-authorization" class="card-link btn btn-outline-secondary">권한 수정</button>
+                    <button id="btn-show-review-list" class="card-link btn btn-outline-secondary">리뷰 보기</button>
                 </div>
             </div>
         </div>
         <div id="second-div" class="m-3">
-
-            <div class="card">
+            <div class="card d-none" id="update-authorization">
                 <div class="card-body p-4 d-flex justify-content-between">
                     <div>
                         <h3>권한 수정하기</h3>
@@ -62,7 +78,7 @@
                 </div>
             </div>
 
-            <div class="mt-3">
+            <div id="review-comp" class="d-none">
                 <div class="card">
                     <div class="card-box p-4">
                         <h3 class="ms-3">리뷰 리스트</h3>
@@ -70,7 +86,7 @@
                             <li class="list-group-item d-flex justify-content-between align-items-start">
                                 <div class="ms-2 me-auto">
                                     <div class="fw-bold"></div>
-    <div>1997.02.49</div>
+                                    <div>1997년 02월 49일</div>
                                     <div>
                                     <span class="detail_rating">
 												맛
@@ -101,7 +117,6 @@
                         </ul>
                     </div>
                 </div>
-
             </div>
         </div>
     </main>
@@ -109,8 +124,6 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
-<script>
-    document.getElementById("review-list");
-</script>
+<script src="/js/admin/member/config-member-detail.js"></script>
 </body>
 </html>
