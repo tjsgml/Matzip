@@ -57,10 +57,24 @@ public class AdminMemberController {
 
     @ResponseBody
     @GetMapping("/{memberId}/review")
-    public ResponseEntity<List<Review>> getReviewListByMember(@PathVariable Long memberId, @RequestParam(name = "curPage",defaultValue = "0") Integer curPage) {
+    public ResponseEntity<List<Review>> getReviewListByMember(@PathVariable Long memberId, @RequestParam(name = "curPage", defaultValue = "0") Integer curPage) {
         List<Review> reviews = memberService.getReviewListByMember(memberId, curPage);
+
         return ResponseEntity.ok(reviews);
     }
 
+    @ResponseBody
+    @DeleteMapping("/review/img/{reviewImgId}")
+    public ResponseEntity<List<String>> getReviewImgId(@PathVariable("reviewImgId") Long reviewImgId) {
+        memberService.deleteReviewImg(reviewImgId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ResponseBody
+    @DeleteMapping("/review/{reviewId}")
+    public ResponseEntity<List<String>> getReviewById(@PathVariable("reviewId") Long reviewId) {
+        memberService.deleteReview(reviewId);
+        return ResponseEntity.noContent().build();
+    }
 
 }

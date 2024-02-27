@@ -6,63 +6,145 @@ const reviewList = document.querySelector("ul#review-list");
 
 let curPage = 0;
 
-btnShowReviewList.addEventListener("click", () => {
-    if (!updateAuthorizationComp.classList.contains("d-none")) {
-        updateAuthorizationComp.classList.add("d-none");
-    }
+const reviewUrl = new URL(window.location.href)
+const review = reviewUrl.searchParams.get("review");
 
+console.log(reviewUrl)
+if (review === "Y") {
     configReviewList();
     reviewComp.classList.remove("d-none");
+}
+
+btnShowReviewList.addEventListener("click", () => {
+    if (!reviewComp.classList.contains("d-none")) {
+        reviewComp.classList.add("d-none");
+    } else {
+        reviewComp.classList.remove("d-none");
+    }
+    configReviewList();
+    updateAuthorizationComp.classList.add("d-none");
 })
 
 btnUpdateAuthorization.addEventListener("click", () => {
-    if (!reviewComp.classList.contains("d-none")) {
-        reviewComp.classList.add("d-none");
+    if (!updateAuthorizationComp.classList.contains("d-none")) {
+        updateAuthorizationComp.classList.add("d-none");
+    } else {
+        updateAuthorizationComp.classList.remove("d-none");
     }
-
-    updateAuthorizationComp.classList.remove("d-none");
+    reviewComp.classList.add("d-none");
 })
 
 async function configReviewList() {
     reviewList.innerHTML = "";
+    console.log("요청 보냅니다.");
+    const {data} = await axios.get(location.origin + location.pathname + `/review?curPage=${curPage}`);
 
-    const {data} = await axios.get(location.href + "/review?curPage=" + curPage);
+
+
+    if (data === null || !data.length) {
+        reviewComp.innerHTML = `<div class="container card mt-4 border-0"
+                             style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);">
+                            <div id="item-none-found" class="card-body py-5">
+                                <div class="row fw-semibold text-center"
+                                     style="font-size: 20px;">
+                                    <div class="col my-5">
+                                        <p style="font-size: 50px">💬</p>
+                                        <div>
+                                            해당 유저가 작성한 리뷰가 없습니다.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+
+        return;
+    }
+
+
     data.forEach(el => {
         const listItem = document.createElement("li");
         listItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-start");
 
-        const imgs = el.reviewImages.map(image => `
+        const createdTime = new Date(el.createdTime);
+
+        const imgs = el.reviewImages?.map(image => `
                 <div class="d-inline-block position-relative">
-                    <button class="position-absolute top-0 end-0" data-id="${image.id}">X</button>
+                    <button class="btn-delete-image position-absolute top-0 end-0" data-id="${image.id}">X</button>
                     <img src="${image.imgUrl}" alt="이미지"/>
-                </div>`).join("")
+                </div>`).join("");
 
         listItem.innerHTML = `<div class="ms-2 me-auto">
-                                    <div>1997년 02월 49일</div>
+                                    <div>${createdTime.getFullYear()}년 ${String(createdTime.getMonth()).padStart(2, 0)}월 ${String(createdTime.getDay()).padStart(2, 0)}일</div>
                                     <div>
                                         <span class="detail_rating">맛
-                                            <img src="/img/miniStar.png" class="miniStar"/>3
+                                            <img src=${el.flavorScore ? "/img/star_on.png" : "/img/star_off.png"} class="miniStar"/>${el.flavorScore}
                                         </span>
                                         <span class="detail_rating">서비스
-                                            <img src="/img/miniStar.png" class="miniStar"/>3
+                                            <img src=${el.flavorScore ? "/img/star_on.png" : "/img/star_off.png"} class="miniStar"/>${el.serviceScore}
                                         </span>
                                         <span class="detail_rating">가격
-                                            <img src="/img/miniStar.png" class="miniStar"/>3
+                                            <img src=${el.flavorScore ? "/img/star_on.png" : "/img/star_off.png"} class="miniStar"/>${el.priceScore}
                                         </span>
+                                    </div>
+                                    <div class="review-img-box">
+                                         ${imgs ?? ""}
+                                    </div>
+                                    <div class="mt-3">
+                                        ${el.content}
+                                    </div>
                                </div>
-                               <div class="review-img-box">
-                                    ${imgs}
-                               </div>
-                               <div class="mt-3">
-                                   토요일 점심으로 찾았다.
-                                   식당에 도착하기 40분전에 테이블링으로 원격줄서기를 했음에도 도착하고 나서도 20분을 더 기다렸다.
-                                   외관에서도 살짝 느껴지지만 안에 들어서면 미국미국한 인테리어가 반긴다.
-                                   요즘 핫한 미국보다는 그 어떤 스테레오타입의 미국풍이 물씬 나는 뉴트로 느낌
-                               </div>
-                               </div>
-                               <button class="btn badge text-bg-primary rounded-pill">삭제</button>
+                               <button class="btn-delete-review btn badge text-bg-primary rounded-pill" data-id="${el.id}">삭제</button>
                             `;
 
         reviewList.append(listItem);
     });
+
+    document.querySelectorAll("button.btn-delete-image").forEach(el => {
+        el.addEventListener("click", deleteImg);
+    })
+
+    document.querySelectorAll("button.btn-delete-review").forEach(el => {
+        el.addEventListener("click", deleteReview);
+    })
+}
+
+
+async function deleteImg(e) {
+    if(! confirm("해당 이미지를 삭제하시겠습니까?")) {
+        alert("이미지 삭제가 취소되었습니다.");
+        return;
+    }
+
+    const imgId = e.target.getAttribute("data-id");
+
+    const {status} = await axios.delete(`./review/img/${imgId}`);
+
+    if (status !== 204) {
+        alert("이미지를 삭제하는데 실패하였습니다. 다시 시도해주세요!");
+        return;
+    }
+
+    const imgsContainer = e.target.parentNode.parentNode;
+    const imgBox = e.target.parentNode;
+
+    imgsContainer.removeChild(imgBox);
+}
+
+async function deleteReview(e) {
+
+    if(!confirm("해당 리뷰를 삭제하시겠습니까?")) {
+        alert("리뷰가 삭제가 취소되었습니다.");
+        return;
+    }
+    const reviewId = e.target.getAttribute("data-id");
+
+    const {status} = await axios.delete(`./review/${reviewId}`);
+
+    if (status !== 204) {
+        alert("리뷰를 삭제하는데 실패하였습니다. 다시 시도해주세요!");
+        return;
+    }
+
+    const reviewItem = e.target.parentNode;
+    reviewList.removeChild(reviewItem)
 }

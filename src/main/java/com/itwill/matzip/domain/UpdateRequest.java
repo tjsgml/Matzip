@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
@@ -21,7 +23,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Entity
 @Table(name = "UPDATE_REQUEST")
-public class UpdateRequest {
+public class UpdateRequest implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package com.itwill.matzip.domain;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +29,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @Entity
-public class ReviewHashtag {
+public class ReviewHashtag implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -86,7 +86,7 @@ async function renderMemberList() {
                    <td>${listItem.email}</td>
                    <td>${listItem.roles.join(", ")}</td>
                    <td>
-                       <a class="btn btn-outline-success p-1" href="./member/${listItem.id}/review">회원 리뷰</a>
+                       <a class="btn btn-outline-success p-1" href="./member/${listItem.id}?review=Y">회원 리뷰</a>
                    </td>
                    <td>
                        <button class="btn-del btn btn-outline-secondary p-1">사용자 삭제

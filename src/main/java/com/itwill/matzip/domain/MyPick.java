@@ -1,5 +1,6 @@
 package com.itwill.matzip.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -15,7 +16,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @Entity
-public class MyPick {
+public class MyPick implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

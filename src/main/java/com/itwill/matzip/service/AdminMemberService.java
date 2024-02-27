@@ -2,9 +2,11 @@ package com.itwill.matzip.service;
 
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.Review;
+import com.itwill.matzip.domain.ReviewImage;
 import com.itwill.matzip.domain.enums.MemberRole;
 import com.itwill.matzip.dto.MemberFilterDto;
 import com.itwill.matzip.dto.NickRespDto;
+import com.itwill.matzip.repository.ReviewImageRepository;
 import com.itwill.matzip.repository.ReviewRepository;
 import com.itwill.matzip.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class AdminMemberService {
 
     private final MemberRepository memberDao;
     private final ReviewRepository reviewDao;
+    private final ReviewImageRepository rlmgDao;
 
     private final static Integer REVIEW_LIST_SIZE = 10;
 
@@ -35,6 +38,10 @@ public class AdminMemberService {
         Page<Member> members = memberDao.findMemberList(filterDto);
         log.info("members={}", members);
         return members;
+    }
+
+    public void deleteReviewImg(Long reviewImg) {
+        rlmgDao.deleteById(reviewImg);
     }
 
     public Member getMember(Long memberId) {
@@ -47,5 +54,9 @@ public class AdminMemberService {
 
     public List<Review> getReviewListByMember(Long memberId, Integer curPage) {
         return reviewDao.findByMemberIdOrderByCreatedTime(memberId, PageRequest.of(curPage, REVIEW_LIST_SIZE));
+    }
+
+    public void deleteReview(Long reviewId) {
+        reviewDao.deleteById(reviewId);
     }
 }

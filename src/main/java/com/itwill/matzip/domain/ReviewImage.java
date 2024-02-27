@@ -20,6 +20,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -29,7 +31,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Entity
 @Table(name = "REVIEW_IMG")
-public class ReviewImage {
+public class ReviewImage implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +40,7 @@ public class ReviewImage {
 	
 	@ToString.Exclude
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REVIEW_FK")
 	private Review review;
 	
