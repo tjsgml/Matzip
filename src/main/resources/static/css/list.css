@@ -87,9 +87,9 @@ height: 112px;
 border-radius: 2cap;
 background-size: cover;
 border:solid 2px #FF230A;
- display: flex; /* 부모 요소를 플렉스 박스로 설정하여 가운데 정렬을 수행 */
-  justify-content: center; /* 가로 방향으로 가운데 정렬 */
-  align-items: center; /* 세로 방향으로 가운데 정렬 */
+display: flex; /* 부모 요소를 플렉스 박스로 설정하여 가운데 정렬을 수행 */
+justify-content: center; /* 가로 방향으로 가운데 정렬 */
+align-items: center; /* 세로 방향으로 가운데 정렬 */
 }
 .reviewNullImg{
 	width: 49px;
