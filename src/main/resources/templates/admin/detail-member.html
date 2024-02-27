@@ -37,6 +37,9 @@
     <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
     <main class="mz-inner-container">
         <div id="first-div" class="m-3">
+            <div class="d-flex justify-content-start mb-3">
+                <button class="btn btn-outline-success" onclick="history.back()">목록으로</button>
+            </div>
             <div class="card">
                 <img th:src="${member.img}" class="card-img-top" alt="프로필 이미지">
                 <div class="card-body">
@@ -67,15 +70,15 @@
                 <div class="card-body p-4 d-flex justify-content-between">
                     <div>
                         <h3>권한 수정하기</h3>
-                        <div class="form-check form-check-inline" th:each="role : ${memberRoles}">
+                        <div class="form-check form-check-inline" th:each="role : ${memberRoles}" th:if="${role.name() != 'GUEST'}">
                             <input class="form-check-input" type="checkbox" th:id="${'memberRoleCheck' + role.name}"
                                    th:value="${role.name}">
                             <label class="form-check-label" th:for="${'memberRoleCheck' + role.name}"
-                                   th:text="${role.kor}">1</label>
+                                   th:text="${role.kor}"></label>
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-primary">제출</button>
+                        <button id="modify-role-btn" class="btn btn-primary">제출</button>
                     </div>
                 </div>
             </div>

@@ -40,7 +40,6 @@ async function configReviewList() {
     const {data} = await axios.get(location.origin + location.pathname + `/review?curPage=${curPage}`);
 
 
-
     if (data === null || !data.length) {
         reviewComp.innerHTML = `<div class="container card mt-4 border-0"
                              style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);">
@@ -110,7 +109,7 @@ async function configReviewList() {
 
 
 async function deleteImg(e) {
-    if(! confirm("해당 이미지를 삭제하시겠습니까?")) {
+    if (!confirm("해당 이미지를 삭제하시겠습니까?")) {
         alert("이미지 삭제가 취소되었습니다.");
         return;
     }
@@ -132,7 +131,7 @@ async function deleteImg(e) {
 
 async function deleteReview(e) {
 
-    if(!confirm("해당 리뷰를 삭제하시겠습니까?")) {
+    if (!confirm("해당 리뷰를 삭제하시겠습니까?")) {
         alert("리뷰가 삭제가 취소되었습니다.");
         return;
     }
@@ -146,5 +145,25 @@ async function deleteReview(e) {
     }
 
     const reviewItem = e.target.parentNode;
-    reviewList.removeChild(reviewItem)
+    reviewList.removeChild(reviewItem);
 }
+
+const roleCheckBoxes = document.querySelectorAll("input[type='checkbox'].form-check-input");
+const modifyRoleBtn = document.querySelector("button#modify-role-btn");
+
+modifyRoleBtn.addEventListener("click", async () => {
+    const rolesToModify = [];
+
+    roleCheckBoxes.forEach(el => {
+        if (el.checked) {
+            rolesToModify.push(el.value);
+        }
+    })
+
+    if (rolesToModify.length <= 0) {
+        return;
+    }
+
+    const {status} = await axios.put(location.href + "/role", rolesToModify);
+    console.log("status = ", status);
+})
