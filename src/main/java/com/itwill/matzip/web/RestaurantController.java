@@ -138,7 +138,7 @@ public class RestaurantController {
 		return ResponseEntity.ok(1);
 	}
 	
-//	/* 은겸 추가 */
+	/* 은겸 추가 */
 	@GetMapping("/details/reviews/{restaurantId}")
     public ResponseEntity<List<ReviewListDto>> findReviews(@PathVariable("restaurantId") Long restaurantId) {
         List<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId);

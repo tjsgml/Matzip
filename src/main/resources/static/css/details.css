@@ -194,6 +194,11 @@
 	margin-bottom: 8px;
 }
 
+.bigStar {
+    width: 30px;
+    height: 30px;
+}
+
 
 .review_name{
 	font-size: 17px;
@@ -461,4 +466,13 @@
     align-items: center;
     gap: 10px;
 }
+
+.evalAvg1,
+.evalAvg2 {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+
+
 

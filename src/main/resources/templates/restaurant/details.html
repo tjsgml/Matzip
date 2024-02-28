@@ -37,15 +37,13 @@
                                 <div style="margin: 5px;" >
                                     <span class="locAndMenu" th:text="*{category.name}"></span>
                                 </div>
-                                <div style="margin:5px;">
-                                    <span class="evalCnt">2명의 평가</span>
-                                    <span class="evalAvg"> 5점</span>
-                                    <img style="margin-left: 5px;"class="star" data-index="1" src="/img/star_on.png">
-                                    <img class="star"data-index="2" src="/img/star_on.png">
-                                    <img class="star" data-index="3" src="/img/star_on.png">
-                                    <img class="star" data-index="4" src="/img/star_on.png">
-                                    <img class="star" data-index="5" src="/img/star_off.png">
+                                <div style="display: flex; align-items: center; margin: 5px;" class="rating-container">
+                                <div class="rating_star">
+                                    <!-- big Star -->
                                 </div>
+                                <span class="evalAvg1" style="padding-left: 10px; padding-bottom: 1px;"></span>
+                                <span class="evalCnt" style="padding-left: 10px; margin-bottom: 1px;"></span>
+                            </div>
                             </div>
                             <div class="restInfo" >
                                 <hr>
@@ -166,14 +164,14 @@
                             <!-- 리뷰 리스트 -->
                             <div class="layout_1">
                                 <div class="restInfo">
-                                    <span class="title total-review"> 2건의 방문자 평가</span>
+                                    <span class="title total-review"></span>
                                     <hr class="div_day" style="margin:10px;">
-                                    <span class="evalAvg"> 4점</span><!-- 가게 총 평점 -->
+                                    <span class="evalAvg2"><!-- 가게 총 평점 --></span>
                                     <img style="margin-left: 5px;"class="star" data-index="1" src="/img/star_on.png">
-                                    <img class="star"data-index="2" src="/img/star_on.png">
-                                    <img class="star" data-index="3" src="/img/star_on.png">
-                                    <img class="star" data-index="4" src="/img/star_on.png">
-                                    <img class="star" data-index="5" src="/img/star_off.png">
+                                    <img class="bigStar"data-index="2" src="/img/star_on.png">
+                                    <img class="bigStar" data-index="3" src="/img/star_on.png">
+                                    <img class="bigStar" data-index="4" src="/img/star_on.png">
+                                    <img class="bigStar" data-index="5" src="/img/star_off.png">
                                     <br>
                                     <span class="review_name">맛</span>
                                     <img  class="review_star" src="/img/star_on.png">

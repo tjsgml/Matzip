@@ -1,6 +1,7 @@
 package com.itwill.matzip.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -132,30 +133,37 @@ public class ReviewService {
         saveHashtags(dto.getConvenienceTags(), HashtagCategoryName.CONVENIENCE, savedReview);
     }
 
-    
+
     private void saveHashtags(List<String> tags, HashtagCategoryName categoryEnum, Review savedReview) {
         if (tags == null || tags.isEmpty()) return; // 태그없으면
-        
+
         // 카테고리 조회
         HashtagCategory category = hashCategoryDao.findByName(categoryEnum.getCategoryName()).orElse(null);
-        
+
         for (String tag : tags) {
-        	log.info("saveHashtags() - 해시태그:{}, 태그카테고리: {}", tag, categoryEnum.getCategoryName());
-        	
-        	// 카테고리에 같은 키워드가 있는지 확인
-        	ReviewHashtag existingTag = reviewHTDao.findByKeywordAndHtCategory(tag, category).orElse(null);
-        	
-        	if(existingTag == null) { // 같은 키워드가 없으면 저장
-	            ReviewHashtag reviewHashtag = ReviewHashtag.builder()
-	                                                        .keyword(tag)
-	                                                        .htCategory(category) 
-	                                                        .build();
-	            reviewHTDao.save(reviewHashtag);
-        	}
+            log.info("saveHashtags() - 해시태그:{}, 태그카테고리: {}", tag, categoryEnum.getCategoryName());
+
+            // 카테고리에 같은 키워드가 있는지 확인
+            ReviewHashtag existingTag = reviewHTDao.findByKeywordAndHtCategory(tag, category)
+                                                    .orElseGet(() -> {
+                                                        // 같은 키워드가 없으면 새로 저장
+                                                        ReviewHashtag newTag = ReviewHashtag.builder()
+                                                                                             .keyword(tag)
+                                                                                             .htCategory(category)
+                                                                                             .build();
+                                                        reviewHTDao.save(newTag);
+                                                        return newTag;
+                                                    });
+
+            savedReview.getHashtags().add(existingTag); // Review에 해시태그 추가
+            existingTag.getReviews().add(savedReview); // 해시태그에 Review 추가
         }
-        
-  
     }
+
+
+
+
+
     
     
     

@@ -43,7 +43,8 @@ public class ReviewHashtag {
 	@JoinColumn(name = "HASHTAG_CATEGORY_FK")
 	private HashtagCategory htCategory;
 	
+	@Builder.Default
 	@ManyToMany(mappedBy = "hashtags", fetch = FetchType.LAZY)
     private Set<Review> reviews = new HashSet<>();
-
+	
 }

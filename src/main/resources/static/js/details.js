@@ -165,7 +165,6 @@
 		console.log('findBusinessHour 호출');
 		try{
 			const response = await axios.get(`/rest/details/businessHour/${restId}`);
-			console.log(response.data);
 			
 			//영업시간이 NULL 영업시간 정보가 아직 없다는 div 그리기,,,
 			if (response.data.length === 0) {
@@ -228,7 +227,7 @@
 			            bsHoursElementForDay.appendChild(closeTimeSpan);
 						}
 				}else{
-				// 영업 정보가 없는 경우\
+				// 영업 정보가 없는 경우
 				console.log('정보없음');
                     const noInfoImage = document.createElement('img');
                     noInfoImage.src = '/img/icon_null1.png';

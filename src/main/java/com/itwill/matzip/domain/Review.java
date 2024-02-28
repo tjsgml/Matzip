@@ -69,11 +69,12 @@ public class Review extends BaseTimeEntity{
 	@OneToMany(mappedBy = "review")
 	private List<ReviewImage> reviewImages = new ArrayList<>();
 	
+	@Builder.Default
 	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "REVIEW_HASHTAG_REL", // 중간 테이블 이름 
-        joinColumns = @JoinColumn(name = "REVIEW_PK"), // 현재 엔티티 참조 컬럼이름
-        inverseJoinColumns = @JoinColumn(name = "REVIEW_HASHTAG_PK") // 반대 엔티티 참조 컬럼이름
+        joinColumns = @JoinColumn(name = "REVIEW_FK"), // 현재 엔티티 참조 컬럼이름
+        inverseJoinColumns = @JoinColumn(name = "REVIEW_HASHTAG_FK") // 반대 엔티티 참조 컬럼이름
     )
     private Set<ReviewHashtag> hashtags = new HashSet<>();
 
@@ -84,9 +85,10 @@ public class Review extends BaseTimeEntity{
 		   if(serviceScore != null) this.serviceScore = serviceScore;
 		   if(content != null && !content.isEmpty()) this.content = content;
 	}
-
-		
 	
-	
+	public void addHashtag(ReviewHashtag hashtag) {
+	    this.hashtags.add(hashtag);
+	    hashtag.getReviews().add(this); 
+	}
 
 }

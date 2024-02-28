@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.itwill.matzip.domain.Review;
-import com.itwill.matzip.dto.MapReviewDto;
-import com.itwill.matzip.dto.MostLikedReviewDto;
 
 public interface ReviewRepository extends JpaRepository<Review, Long>{
 
@@ -20,4 +18,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long>{
 	
 	//멤버 아이디에 대한 리뷰 리스트 구하기
 	List<Review> findByMemberIdOrderById(Long userId);
+	
+    @Query("SELECT r FROM Review r LEFT JOIN FETCH r.hashtags WHERE r.restaurant.id = :restaurantId")
+    List<Review> findByRestaurantIdWithHashtags(@Param("restaurantId") Long restaurantId);
+	
+	
 }

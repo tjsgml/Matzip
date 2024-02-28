@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded',() =>{
 	                    }
 	                });	
 	                
-	                const avgScore = (totalScore / (reviews.length * 3)).toFixed(1);
+	                const avgScore = (totalScore / (reviews.length * 3)).toFixed(1); 
 	                const totalReviews = reviews.length;
 	                	
 	                const reviewInfoElement = document.getElementById(`review-info-grade-${id}`);

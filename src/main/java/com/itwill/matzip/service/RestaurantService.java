@@ -132,14 +132,15 @@ public class RestaurantService {
 	private final ReviewRepository reviewDao;
 	
 	public List<ReviewListDto> getReviewsForRestaurant(Long restaurantId) {
-        List<Review> reviews = reviewDao.findByRestaurantId(restaurantId);
+        List<Review> reviews = reviewDao.findByRestaurantIdWithHashtags(restaurantId);
+
         return reviews.stream().map(review -> ReviewListDto.builder()
                 .id(review.getId())
                 .content(review.getContent())
                 .flavorScore(review.getFlavorScore())
                 .serviceScore(review.getServiceScore())
                 .priceScore(review.getPriceScore())
-                .formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime())) // 포맷팅된 날짜
+                .formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime()))
                 .memberNickname(review.getMember().getNickname())
                 .memberImg(review.getMember().getImg())
                 .reviewImages(review.getReviewImages().stream()
