@@ -86,6 +86,7 @@ public class Review extends BaseTimeEntity{
 		   if(content != null && !content.isEmpty()) this.content = content;
 	}
 	
+	// Review에 ReveiwHashtag 추가할 때(hashtags에 ReviewHashtag객체 추가 & ReviewHashtag에 Review객체 추가)
 	public void addHashtag(ReviewHashtag hashtag) {
 	    this.hashtags.add(hashtag);
 	    hashtag.getReviews().add(this); 
