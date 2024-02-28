@@ -59,7 +59,7 @@ async function configReviewList() {
         return;
     }
 
-    renderPagination(totalPages, number, configReviewList, page);
+    renderPagination(paginationList, totalPages, number, configReviewList, page);
 
     listItems.forEach(el => {
         const listItem = document.createElement("li");

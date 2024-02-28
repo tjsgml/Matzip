@@ -20,15 +20,7 @@
                         <div class="layout_1">
                             <!-- 음식점 이미지 넣는 곳-->
                             <ul class="container">
-                                <li class="box" data-index="0"></li>
-                                <li class="box" data-index="1"></li >
-                                <li class="box" data-index="2"></li >
-                                <li class="box" data-index="3"></li >
-                                <li class="box" data-index="4"></li>
-                                <li class="box" data-index="5"></li>
-                                <li class="box" data-index="6"></li>
-                                <li class="box" data-index="7"></li>
-                                <li class="box" data-index="8"></li>
+                               
                             </ul>
                             <!-- 음식점 정보들,,-->
                             <div class="restInfo" th:object="${rest}">
@@ -63,7 +55,7 @@
                                 <div class="restInfo_2">
                                     <img src="/img/icon_loc.png" style="margin-left: 5px;">
                                     <span style="margin-bottom: 10px;" th:text="*{address} + (${#strings.isEmpty(rest.detailAddress) ? '' : ' ' + rest.detailAddress})"></span>
-                                    <button class="showMap btn rounded" data-bs-toggle="modal" data-bs-target="#mapModal" >지도보기</button>
+                                    <button id="showMap" class="showMap btn rounded" data-bs-toggle="modal" data-bs-target="#mapModal" >지도보기</button>
                                     <!-- mapModal -->
                                     <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                           <div  class="modal-dialog modal-lg modal-dialog-centered" style=" height: 700px;">
@@ -307,13 +299,12 @@
                 </div>
             </div>
                     <!-- 이미지 크게 볼 수 있는 모달 띄우기 -->
-                    <div id="gallryModal" class="modal fade show" tabindex="-1">
+                    <div id="gallryModal" class="modal fade" tabindex="-1">
                         <div class=" modal-dialog  modal-lg">
                             <div class="modal-content">
                                 <div class="modal-body">
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
-                                    <!--이미지 넣기 -->
                                     <div class="imgContainer">
                                         <div class="imgContainer_img">
                                         </div>

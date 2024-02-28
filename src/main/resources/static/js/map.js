@@ -2,7 +2,6 @@
  * home.html
  *  
  * 지도를 불러와서 DB 안에 있는 음식점들 마커로 표시하기.
- * @@@@@@@@@@@@@@ 카테고리 검색시 0 음식점 상태 체크하는 걸로 바꾸기.!!!!!
  */
 document.addEventListener('DOMContentLoaded',() =>{
 	console.log('home.js...');
@@ -267,39 +266,58 @@ document.addEventListener('DOMContentLoaded',() =>{
 		}
 	}		
 	
-	//음식점들의 리뷰들 가져오기.-> 평점 수
+	//음식점들의 리뷰들 가져오기.-> 평점 수 / 이미지
 	function getReviews(id) {
 	    console.log('포스트 아이디:', id);
-	    
+	    let imgArray =[];
 	    $.ajax({
 	        url: `/map/reviews/${id}`,
 	        method: 'GET',
 	        dataType: 'json',
 	        success: function(response) {
+				
 	            const reviews = response;
 	            if (reviews && reviews.length !== 0) {
+					console.log('이미지 있음');
+					console.log('리뷰 배열:',response);
 	                let totalScore = 0;
 	                reviews.forEach(rv => {
 	                    totalScore += rv.flavorScore + rv.serviceScore + rv.priceScore;
 	                    
 	                    // 리뷰 이미지가 있는지 확인 후 이미지가 있다면 해당 이미지를 추가합니다.
 	                   if (rv.reviewImages && rv.reviewImages.length > 0) {
+						    imgArray.push(rv.reviewImages);
 	                        const reviewImgElement = document.getElementById(`review-info-img-${id}`);
 	                        const firstImageUrl = rv.reviewImages[0]; // 첫 번째 이미지만 사용
-	                        
 	                        reviewImgElement.style.backgroundImage = `url('${firstImageUrl}')`;
 	                
 	                    }
 	                });	
 	                
-	                const avgScore = (totalScore / (reviews.length * 3)).toFixed(1);
+	                const avgScore = Math.floor((totalScore / (reviews.length * 3))*10)/10; 
 	                const totalReviews = reviews.length;
 	                	
 	                const reviewInfoElement = document.getElementById(`review-info-grade-${id}`);
-	                reviewInfoElement.innerHTML = `${avgScore}(${totalReviews}명)`;
+	                reviewInfoElement.innerHTML = `${avgScore}점(${totalReviews}명)`;
 	            }else{
 					const reviewInfoElement = document.getElementById(`review-info-grade-${id}`);
 	                reviewInfoElement.innerHTML = `0(0명)`;
+				}
+				
+				if(imgArray.length == 0){
+					// 새로운 img 요소 생성
+					const imgElement = document.createElement('img');
+					
+					// img 요소에 필요한 속성 설정
+					imgElement.src = '/img/reviewNullImg.png'; // 이미지 경로 또는 URL 설정
+					imgElement.alt = 'nullImg'; // 이미지 대체 텍스트 설정 (필요한 경우)
+					imgElement.classList.add('reviewNullImg');
+					
+					// 원하는 요소에 img 요소 추가
+					const reviewImgElement = document.getElementById(`review-info-img-${id}`);
+					reviewImgElement.appendChild(imgElement);
+					
+					reviewImgElement.classList.add('nullImg');
 				}
 	        },
 	        error: function(xhr, status, error) {
@@ -342,8 +360,8 @@ document.addEventListener('DOMContentLoaded',() =>{
 						if (reviewDiv) {
 						 reviewC1.parentNode.removeChild(reviewC1);
 						}
-						
-						// 새로운 img 요소 생성
+						//getReviews 함수에서 리뷰 이미지 없을 때 처리함.
+						/*// 새로운 img 요소 생성
 						const imgElement = document.createElement('img');
 						
 						// img 요소에 필요한 속성 설정
@@ -355,7 +373,7 @@ document.addEventListener('DOMContentLoaded',() =>{
 						const reviewImgElement = document.getElementById(`review-info-img-${id}`);
 						reviewImgElement.appendChild(imgElement);
 						
-						reviewImgElement.classList.add('nullImg');
+						reviewImgElement.classList.add('nullImg');*/
 					}
 		        },
 		        error: function(xhr, status, error) {

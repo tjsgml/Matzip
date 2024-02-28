@@ -65,7 +65,7 @@ async function renderMemberList() {
     let {data} = await axios.get(location.href + "/list?" + mkRequestQuery());
     const {totalPages, number, content: listItems} = data;
 
-    renderPagination(totalPages, number, renderMemberList);
+    renderPagination(paginationList, totalPages, number, renderMemberList);
 
     if (!listItems || listItems.length === 0) {
         memberListNav.appendChild(nothingDiv);
