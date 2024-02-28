@@ -5,13 +5,9 @@ import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.domain.enums.MemberRole;
 import com.itwill.matzip.dto.MemberFilterDto;
 import com.itwill.matzip.service.AdminMemberService;
-import com.itwill.matzip.service.AdminService;
-import com.itwill.matzip.service.MemberInfoService;
-import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,9 +53,10 @@ public class AdminMemberController {
 
     @ResponseBody
     @GetMapping("/{memberId}/review")
-    public ResponseEntity<List<Review>> getReviewListByMember(@PathVariable Long memberId, @RequestParam(name = "curPage", defaultValue = "0") Integer curPage) {
-        List<Review> reviews = memberService.getReviewListByMember(memberId, curPage);
+    public ResponseEntity<Page<Review>> getReviewListByMember(@PathVariable Long memberId, @RequestParam(name = "curPage", defaultValue = "0") Integer curPage) {
+        Page<Review> reviews = memberService.getReviewListByMember(memberId, curPage);
 
+        log.info("reviews={}", reviews.getContent());
         return ResponseEntity.ok(reviews);
     }
 
@@ -72,9 +69,16 @@ public class AdminMemberController {
 
     @ResponseBody
     @DeleteMapping("/review/{reviewId}")
-    public ResponseEntity<List<String>> getReviewById(@PathVariable("reviewId") Long reviewId) {
+    public ResponseEntity<Void> getReviewById(@PathVariable("reviewId") Long reviewId) {
         memberService.deleteReview(reviewId);
         return ResponseEntity.noContent().build();
     }
 
+    @ResponseBody
+    @PatchMapping("/{memberId}/role")
+    public ResponseEntity<Void> updateUserRole(@PathVariable("memberId") Long memberId, @RequestBody List<MemberRole> roles) {
+        log.info("roles={}", roles);
+        memberService.updateMemberRole(memberId, roles);
+        return ResponseEntity.noContent().build();
+    }
 }

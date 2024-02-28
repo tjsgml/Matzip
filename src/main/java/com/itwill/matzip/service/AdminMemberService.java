@@ -32,7 +32,7 @@ public class AdminMemberService {
     private final ReviewRepository reviewDao;
     private final ReviewImageRepository rlmgDao;
 
-    private final static Integer REVIEW_LIST_SIZE = 10;
+    private final static Integer REVIEW_LIST_SIZE = 5;
 
     public Page<Member> getMemberList(MemberFilterDto filterDto) {
         Page<Member> members = memberDao.findMemberList(filterDto);
@@ -52,11 +52,21 @@ public class AdminMemberService {
         return List.of(MemberRole.values());
     }
 
-    public List<Review> getReviewListByMember(Long memberId, Integer curPage) {
+    public Page<Review> getReviewListByMember(Long memberId, Integer curPage) {
         return reviewDao.findByMemberIdOrderByCreatedTime(memberId, PageRequest.of(curPage, REVIEW_LIST_SIZE));
     }
 
     public void deleteReview(Long reviewId) {
         reviewDao.deleteById(reviewId);
+    }
+
+    @Transactional
+    public void updateMemberRole(Long memberId, List<MemberRole> roles) {
+        Member member = memberDao.findById(memberId).orElseThrow();
+
+        member.clearRoles();
+        for (MemberRole role : roles) {
+            member.addRole(role);
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.itwill.matzip.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,5 +23,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     //멤버 아이디에 대한 리뷰 리스트 구하기
     List<Review> findByMemberIdOrderById(Long userId);
 
-    List<Review> findByMemberIdOrderByCreatedTime(Long userId, Pageable pageable);
+    Page<Review> findByMemberIdOrderByCreatedTime(Long userId, Pageable pageable);
 }

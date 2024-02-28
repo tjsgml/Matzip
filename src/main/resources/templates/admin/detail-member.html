@@ -72,7 +72,7 @@
                         <h3>권한 수정하기</h3>
                         <div class="form-check form-check-inline" th:each="role : ${memberRoles}" th:if="${role.name() != 'GUEST'}">
                             <input class="form-check-input" type="checkbox" th:id="${'memberRoleCheck' + role.name}"
-                                   th:value="${role.name}">
+                                   th:value="${role.name}" th:checked="${#arrays.contains(member.roles, role)}">
                             <label class="form-check-label" th:for="${'memberRoleCheck' + role.name}"
                                    th:text="${role.kor}"></label>
                         </div>
@@ -120,6 +120,13 @@
                                 <button class="btn badge text-bg-primary rounded-pill">삭제</button>
                             </li>
                         </ul>
+
+                        <div style="display: flex; justify-content:center">
+                            <nav id="pagination" aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -130,5 +137,6 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
 <script src="/js/admin/member/config-member-detail.js"></script>
+<script src="/js/admin/pagination-util.js"></script>
 </body>
 </html>

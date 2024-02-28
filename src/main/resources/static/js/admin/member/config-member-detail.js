@@ -3,13 +3,13 @@ const updateAuthorizationComp = document.querySelector("div#update-authorization
 const btnShowReviewList = document.querySelector("button#btn-show-review-list");
 const btnUpdateAuthorization = document.querySelector("button#btn-update-authorization");
 const reviewList = document.querySelector("ul#review-list");
+const paginationList = document.querySelector("ul.pagination");
 
-let curPage = 0;
+let page = 0;
 
 const reviewUrl = new URL(window.location.href)
 const review = reviewUrl.searchParams.get("review");
 
-console.log(reviewUrl)
 if (review === "Y") {
     configReviewList();
     reviewComp.classList.remove("d-none");
@@ -19,6 +19,7 @@ btnShowReviewList.addEventListener("click", () => {
     if (!reviewComp.classList.contains("d-none")) {
         reviewComp.classList.add("d-none");
     } else {
+        page = 0;
         reviewComp.classList.remove("d-none");
     }
     configReviewList();
@@ -36,11 +37,10 @@ btnUpdateAuthorization.addEventListener("click", () => {
 
 async function configReviewList() {
     reviewList.innerHTML = "";
-    console.log("요청 보냅니다.");
-    const {data} = await axios.get(location.origin + location.pathname + `/review?curPage=${curPage}`);
+    const {data} = await axios.get(location.origin + location.pathname + `/review?curPage=${page}`);
+    const {totalPages, number, content: listItems} = data;
 
-
-    if (data === null || !data.length) {
+    if (!listItems || !listItems.length) {
         reviewComp.innerHTML = `<div class="container card mt-4 border-0"
                              style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);">
                             <div id="item-none-found" class="card-body py-5">
@@ -59,8 +59,9 @@ async function configReviewList() {
         return;
     }
 
+    renderPagination(totalPages, number, configReviewList, page);
 
-    data.forEach(el => {
+    listItems.forEach(el => {
         const listItem = document.createElement("li");
         listItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-start");
 
@@ -164,6 +165,6 @@ modifyRoleBtn.addEventListener("click", async () => {
         return;
     }
 
-    const {status} = await axios.put(location.href + "/role", rolesToModify);
-    console.log("status = ", status);
+    const {status} = await axios.patch(location.href + "/role", rolesToModify);
+    location.reload();
 })
