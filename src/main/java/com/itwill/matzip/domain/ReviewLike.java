@@ -16,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -23,7 +25,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @Entity
-public class ReviewLike {
+public class ReviewLike  implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

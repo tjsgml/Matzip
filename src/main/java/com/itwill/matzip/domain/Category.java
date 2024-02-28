@@ -3,6 +3,7 @@ package com.itwill.matzip.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ import org.hibernate.annotations.ColumnDefault;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
 @Entity
-public class Category {
+public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CATEGORY_PK")
