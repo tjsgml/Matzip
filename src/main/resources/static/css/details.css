@@ -249,7 +249,10 @@
     height: 15px; /* 원하는 높이로 조정 */
     margin-bottom: 3px; /* 필요에 따라 조정 */
 }
-.detail_rating{
+.detail_rating,
+.flavor_rating_avg,
+.price_rating_avg, 
+.service_rating_avg{
 	margin-left: 10px;
 	font-size: 15px;
 	color:rgb(94, 94, 94);

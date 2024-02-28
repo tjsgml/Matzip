@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', async()=>{
             console.log(reviews);
 
             let totalScoreSum = 0;
+            let flavorScoreSum = 0;
+            let priceScoreSum = 0;
+            let serviceScoreSum = 0;
    
             const reviewListContainer = document.getElementById('reviewListContainer');
             reviewListContainer.innerHTML = ''; // 초기화
@@ -31,6 +34,11 @@ document.addEventListener('DOMContentLoaded', async()=>{
                 const roundedTotalScore = Math.floor(totalScore * 10) / 10;
 
                 totalScoreSum += totalScore;
+
+                // 카테고리별 평점 합산(맛, 가격, 서비스)
+                flavorScoreSum += review.flavorScore;
+                priceScoreSum += review.priceScore;
+                serviceScoreSum += review.serviceScore;
 
                 // 리뷰 기본 정보
                 let innerHTML = `
@@ -51,13 +59,10 @@ document.addEventListener('DOMContentLoaded', async()=>{
                             }).join('')}
                             <span style="margin-left: 5px; font-size: 18px; color:rgb(94, 94, 94);">${review.formattedRegisterDate}</span>
                         </div>
-                        ${[1, 2, 3, 4, 5].map((index, arrIndex) => `<img class="star" data-index="${index}" src="/img/star_${index <= review.flavorScore ? 'on' : 'off'}.png"${arrIndex === 0 ? ' style="margin-left: 20px;"' : ''}>`).join('')}
-                        <span style="font-size: 20px; color:rgb(94, 94, 94);">${review.formattedRegisterDate}</span>
                         <div class="review_scores" style="margin-left: 10px;">
                             <span class="detail_rating">맛 <img src="/img/miniStar.png" class="miniStar">${review.flavorScore}</span>
                             <span class="detail_rating">가격 <img src="/img/miniStar.png" class="miniStar">${review.priceScore}</span>
                             <span class="detail_rating">서비스 <img src="/img/miniStar.png" class="miniStar">${review.serviceScore}</span>
-                            <span class="total_score" style="font-size: 20px; color:rgb(94, 94, 94);">총 평점: ${roundedTotalScore}</span>
                         </div>
                     </div>
                 </div>
@@ -107,7 +112,21 @@ document.addEventListener('DOMContentLoaded', async()=>{
             evalAvg1Element1.textContent = `${roundedAverageScore}점`;
             evalAvg1Element2.textContent = `${roundedAverageScore}점`;
 
-            displayAverageRatingStars(roundedAverageScore); // 별점 표시 함수 여기서 호출
+            displayAverageRatingStars(roundedAverageScore); // 별점 표시 함수
+
+            // 카테고리별 평점 평균
+            const flavorScoreAvg = flavorScoreSum / reviews.length;
+            const priceScoreAvg = priceScoreSum / reviews.length;
+            const serviceScoreAvg = serviceScoreSum / reviews.length;
+
+            const ratingCategoryAvgContainer = document.querySelector('.rating_category_avg');
+            ratingCategoryAvgContainer.innerHTML = `
+            <div class="review_scores_all" >
+                <span class="flavor_rating_avg">맛 <img src="/img/miniStar.png" class="miniStar">${flavorScoreAvg.toFixed(1)}</span> 
+                <span class="price_rating_avg">가격 <img src="/img/miniStar.png" class="miniStar">${priceScoreAvg.toFixed(1)}</span>
+                <span class="service_rating_avg">서비스 <img src="/img/miniStar.png" class="miniStar">${serviceScoreAvg.toFixed(1)}</span>
+            </div>`;
+
 
             // 리뷰 이미지 클릭 이벤트 리스너 추가
             addReviewImageClickListener();
@@ -135,25 +154,32 @@ document.addEventListener('DOMContentLoaded', async()=>{
     }
 
     // 별점 표시 함수
-    function displayAverageRatingStars(roundedAverageScore) {
-        const ratingStarContainer = document.querySelector('.rating_star'); // 별점을 표시할 컨테이너
-        ratingStarContainer.innerHTML = ''; // 이전 별점 초기화
+function displayAverageRatingStars(roundedAverageScore) {
+    // 첫 번째 별점 컨테이너 선택
+    const ratingStarContainer = document.querySelector('.rating_star');
+    ratingStarContainer.innerHTML = ''; // 이전 별점 초기화
 
-        let starsHTML = '';
+    // 두 번째 별점 컨테이너 선택
+    const ratingStarContainer2 = document.querySelector('.rating_star2');
+    ratingStarContainer2.innerHTML = ''; // 이전 별점 초기화
 
-        for (let index = 1; index <= 5; index++) {
-            
-            if (index <= Math.floor(roundedAverageScore)) {
-                starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_on.png">`;
-            } else if (index === Math.ceil(roundedAverageScore) && roundedAverageScore % 1 >= 0.5) {
-                starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_half.png">`;
-            } else {
-                starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_off.png">`;
-            }
+    let starsHTML = '';
+
+    for (let index = 1; index <= 5; index++) {
+        if (index <= Math.floor(roundedAverageScore)) {
+            starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_on.png">`;
+        } else if (index === Math.ceil(roundedAverageScore) && roundedAverageScore % 1 >= 0.5) {
+            starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_half.png">`;
+        } else {
+            starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_off.png">`;
         }
-
-        ratingStarContainer.innerHTML = starsHTML; 
     }
+
+    // 두 컨테이너에 동일한 별점 HTML 삽입
+    ratingStarContainer.innerHTML = starsHTML;
+    ratingStarContainer2.innerHTML = starsHTML;
+}
+
     
 });//end document
 
