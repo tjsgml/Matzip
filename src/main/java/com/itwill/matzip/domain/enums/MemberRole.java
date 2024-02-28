@@ -3,6 +3,8 @@ package com.itwill.matzip.domain.enums;
 import lombok.Data;
 import lombok.Getter;
 
+import java.sql.ClientInfoStatus;
+
 @Getter
 public enum MemberRole {
     USER("ROLE_USER", "유저"),

@@ -1,8 +1,15 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    const restId = document.querySelector('input#restId').value; //음식점 아이디
+/**
+ * details.html에 포함
+ * details 페이지의 리뷰 리스트
+ */
 
-    await reviewListLoad(restId);
+document.addEventListener('DOMContentLoaded', async()=>{
+    //회원의 아이디
+    let memberId ='';
+    const restId = document.querySelector('input#restId').value;//음식점 아이디
 
+    reviewListLoad(restId);
+    
     // 리뷰 목록 ----------------------------------------------------------------------
     async function reviewListLoad(restaurantId) {
         try {
@@ -11,10 +18,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log(reviews);
 
             let totalScoreSum = 0;
-
+   
             const reviewListContainer = document.getElementById('reviewListContainer');
             reviewListContainer.innerHTML = ''; // 초기화
-
+            
             reviews.forEach((review, reviewIndex) => {
                 const reviewElement = document.createElement('div');
                 reviewElement.className = 'review_post';
@@ -44,15 +51,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                             }).join('')}
                             <span style="margin-left: 5px; font-size: 18px; color:rgb(94, 94, 94);">${review.formattedRegisterDate}</span>
                         </div>
+                        ${[1, 2, 3, 4, 5].map((index, arrIndex) => `<img class="star" data-index="${index}" src="/img/star_${index <= review.flavorScore ? 'on' : 'off'}.png"${arrIndex === 0 ? ' style="margin-left: 20px;"' : ''}>`).join('')}
+                        <span style="font-size: 20px; color:rgb(94, 94, 94);">${review.formattedRegisterDate}</span>
                         <div class="review_scores" style="margin-left: 10px;">
                             <span class="detail_rating">맛 <img src="/img/miniStar.png" class="miniStar">${review.flavorScore}</span>
                             <span class="detail_rating">가격 <img src="/img/miniStar.png" class="miniStar">${review.priceScore}</span>
                             <span class="detail_rating">서비스 <img src="/img/miniStar.png" class="miniStar">${review.serviceScore}</span>
+                            <span class="total_score" style="font-size: 20px; color:rgb(94, 94, 94);">총 평점: ${roundedTotalScore}</span>
                         </div>
                     </div>
                 </div>
                 <p class="review_contents btxt" style="font-size: 18px; margin-top:10px;">${review.content}</p>`;
-                
+
                 // 리뷰 이미지 캐러셀
                 if (review.reviewImages.length > 0) {
                     innerHTML += `
@@ -106,15 +116,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }// -- reviewListLoad END --
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     // 리뷰 이미지 클릭 이벤트 리스너 함수
     function addReviewImageClickListener() {
@@ -152,4 +154,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         ratingStarContainer.innerHTML = starsHTML; 
     }
-});
+    
+});//end document
+

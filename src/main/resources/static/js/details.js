@@ -4,8 +4,10 @@
  */
 
  document.addEventListener('DOMContentLoaded', async()=>{
+	 
+	 
 	const mapModal = document.getElementById('mapModal');
-	const btnShowModal = document.querySelector('button.showMap');
+	const btnShowModal = document.getElementById('showMap');
 	let lat ='';
 	let lon='';
 	//좋아요 상태(false - 좋아요X, true - 좋아요O )
@@ -21,6 +23,8 @@
 	
 	
 	const restId = document.querySelector('input#restId').value;//음식점 아이디
+	
+	fillRestImg(restId);
 	
 	const btnReportInfo = document.getElementById('btnReportInfo');//폐업신고,정보수정제안 버튼
 	//좋아요 버튼
@@ -79,7 +83,7 @@
 		}else{
 			 if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
 			        // 로그인 페이지로 이동
-			        window.location.href = 'admin/member/login';
+			        window.location.href = '/member/login';
 			    } else {
 			        // 사용자가 취소한 경우
 			        alert('로그인이 취소되었습니다.');
@@ -158,6 +162,7 @@
 			map.relayout();
 			mapModal.className='modal';
 			map.setCenter(position);
+		}else{
 		}
 	}
     //영업일 가져오기
@@ -466,7 +471,238 @@
 		const response = axios.post('/rest/details/update',data);
 		
 	}
-
+	
+	//이미지 사진들 채우기-----------------------------------
+	async function fillRestImg(restId){
+		let imgNum = 0;
+		let imgArray =[];
+		  try {
+	            const response = await axios.get(`/rest/details/reviews/${restId}`);
+	            const reviews = response.data;
+	            
+	            reviews.forEach((rv)=>{
+					if(rv.reviewImages.length > 0){//리뷰 이미지가 한개라도 있으면 
+					console.log('이미지:',rv.reviewImages);
+						rv.reviewImages.forEach((img)=>{
+							 imgArray.push(img);
+							 imgNum++; 
+						});
+					}
+					
+				});
+				console.log("이미지 개수:",imgNum);
+				console.log("이미지 배열:",imgArray);
+				
+				// 그리드 레이아웃 조정
+		        const container = document.querySelector('.container');
+		        let numColumns = 4;
+		        let numRows = 2;
+		        
+		        if (imgNum > 1 && imgNum <= 4 && imgNum != 3) {
+		            numColumns = 4;
+		            numRows = 2;
+		        } else if ( imgNum ==3) {
+		            numColumns = 3;
+		            numRows = 2;
+		        }else if(imgNum === 5){
+					 numColumns = 8;
+		            numRows = 2;
+				}else if (imgNum >= 6) {
+		            numColumns = 3;
+		            numRows = 2;
+		            imgNum=6;
+		        }
+				
+				container.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
+        		container.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
+        		
+        		switch(imgNum){
+					case 0://총 이미지 개수가 1개일 때
+					    container.remove();
+			        
+			        break;
+					case 1://총 이미지 개수가 1개일 때
+					    for (let i = 0; i < imgNum; i++) {
+			            let imgBox = document.createElement('div');
+			            imgBox.classList.add('box');
+			            imgBox.dataset.index = i;
+			            imgBox.style.backgroundImage = `url('${imgArray[i]}')`;
+			            imgBox.style.backgroundSize = 'cover';
+			            imgBox.style.backgroundPosition ='center center';
+			            imgBox.style.gridColumn = "2 / 4";
+			            imgBox.style.gridRow = "1/3";
+			            container.appendChild(imgBox);
+			        }
+			        break;
+					case 2://총 이미지 개수가 2개일 때.
+						 imgBox = document.createElement('div');
+							for (let i = 0; i < imgNum; i++) {
+				            let imgBox = document.createElement('div');
+				            imgBox.classList.add('box');
+				            imgBox.dataset.index = i;
+				            
+				            switch (i) {
+				                case 0:
+				                    imgBox.style.gridColumn = "1 / 3";
+				                    imgBox.style.gridRow = "1/3";
+				                    break;
+				                case 1:
+				                    imgBox.style.gridColumn = "3 / 5";
+				                    imgBox.style.gridRow = "1 / 3 ";
+				                    break;
+				            }
+				            
+				            imgBox.style.backgroundImage = `url('${imgArray[i]}')`;
+				            imgBox.style.backgroundSize = 'cover';
+				            imgBox.style.backgroundPosition ='center center';
+				            container.appendChild(imgBox);
+				        }
+			        break;
+					case 3://총 이미지 개수가 3개일 때.
+						 imgBox = document.createElement('div');
+							for (let i = 0; i < imgNum; i++) {
+				            let imgBox = document.createElement('div');
+				            imgBox.classList.add('box');
+				            imgBox.dataset.index = i;
+				            
+				            switch (i) {
+				                case 0:
+				                    imgBox.style.gridColumn = "1 / 3";
+				                    imgBox.style.gridRow = "1/3";
+				                    break;
+				                case 1:
+				                    imgBox.style.gridColumn = "3 / 5";
+				                    break;
+				                case 2:
+				                    imgBox.style.gridColumn = "3 / 5";
+				                    break;
+				            }
+				            
+				            imgBox.style.backgroundImage = `url('${imgArray[i]}')`;
+				            imgBox.style.backgroundSize = 'cover';
+				            container.appendChild(imgBox);
+				        }
+			        break;
+					case 4://총 이미지 개수가 4개일 때.
+						 imgBox = document.createElement('div');
+							for (let i = 0; i < imgNum; i++) {
+				            let imgBox = document.createElement('div');
+				            imgBox.classList.add('box');
+				            imgBox.dataset.index = i;
+				            
+				            switch (i) {
+				                case 0:
+				                    imgBox.style.gridColumn = "1 / 3";
+				                    imgBox.style.gridRow = " 1 / 2";
+				                    break;
+				                case 1:
+				                    imgBox.style.gridColumn = "3 / 5";
+				                    break;
+				                case 2:
+				                    imgBox.style.gridColumn = "1 / 3";
+				                    imgBox.style.gridRow = " 2 / 3";
+				                    break;
+				                case 3:
+				                    imgBox.style.gridColumn = "3 / 5";
+				                    imgBox.style.gridRow = " 2 / 3";
+				                    break;
+				            }
+				            
+				            imgBox.style.backgroundImage = `url('${imgArray[i]}')`;
+				            imgBox.style.backgroundSize = 'cover';
+				            imgBox.style.backgroundPosition ='center center';
+				            container.appendChild(imgBox);
+				        }
+			        break;
+					case 5://총 이미지 개수가 5개일 때.
+						 imgBox = document.createElement('div');
+							for (let i = 0; i < imgNum; i++) {
+				            let imgBox = document.createElement('div');
+				            imgBox.classList.add('box');
+				            imgBox.dataset.index = i;
+				            
+				            switch (i) {
+				                case 0:
+				                    imgBox.style.gridColumn = "1 / 5";
+				                    imgBox.style.gridRow = " 1 / 3";
+				                    break;
+				                case 1:
+				                    imgBox.style.gridColumn = "5 / 7";
+				                    imgBox.style.gridRow = " 1 / 2";
+				                    break;
+				                case 2:
+				                    imgBox.style.gridColumn = "7 / 9";
+				                    imgBox.style.gridRow = " 1 / 2";
+				                    break;
+				                case 3:
+				                    imgBox.style.gridColumn = "5 / 7";
+				                    imgBox.style.gridRow = " 2 / 3";
+				                    break;
+				                case 4:
+				                    imgBox.style.gridColumn = "7 / 9";
+				                    imgBox.style.gridRow = " 2 / 3";
+				                    break;
+				            }
+				            
+				            imgBox.style.backgroundImage = `url('${imgArray[i]}')`;
+				            imgBox.style.backgroundSize = 'cover';
+				            imgBox.style.backgroundPosition ='center center';
+				            container.appendChild(imgBox);
+				        }
+			        break;
+					case 6://총 이미지 개수가 5개일 때.
+						 imgBox = document.createElement('div');
+							for (let i = 0; i < imgNum; i++) {
+					            let imgBox = document.createElement('div');
+					            imgBox.classList.add('box');
+					            imgBox.dataset.index = i;
+					             switch (i) {
+				                case 0:
+				                    imgBox.style.gridColumn = "1 / 2";
+				                    break;
+				                case 1:
+				                    imgBox.style.gridColumn = "2 / 3";
+				                    break;
+				                case 2:
+				                    imgBox.style.gridColumn = "3 / 4";
+				                    break;
+				                case 3:
+				                    imgBox.style.gridColumn = "1 / 2";
+				                    imgBox.style.gridRow = " 2 / 3";
+				                    break;
+				                case 4:
+				                    imgBox.style.gridColumn = "2 / 3";
+				                    imgBox.style.gridRow = " 2 / 3";
+				                    break;
+				                case 5:
+									imgBox.style.gridColumn = "3 / 4";
+				                    imgBox.style.gridRow = " 2 / 3";
+				                    break;
+				            }
+					            imgBox.style.backgroundImage = `url('${imgArray[i]}')`;
+					            imgBox.style.backgroundSize = 'cover';
+					            imgBox.style.backgroundPosition ='center center';
+					            container.appendChild(imgBox);
+				        }
+			        break;
+						
+				}
+					
+        		 // 이미지 박스 동적 생성 및 배치
+		         /*for (let i = 0; i < imgNum; i++) {
+		            const imgBox = document.createElement('div');
+		            imgBox.classList.add('box');
+		            imgBox.dataset.index = i;
+		            imgBox.style.backgroundImage = `url('${imgArray[i]}')`;
+		            imgBox.style.backgroundSize = 'cover';
+		            container.appendChild(imgBox);
+		          }*/
+	            
+	        } catch (error) {
+	            console.error('리뷰 목록을 불러오는 데 실패했습니다:', error);
+	        }
+	}
+	 // End Function fillRestImg --------------------------------------------------
 	
 
  });//end document

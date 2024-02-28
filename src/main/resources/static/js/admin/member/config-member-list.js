@@ -32,7 +32,6 @@ const query = {
 }
 
 viewCntRadio.forEach(el => {
-    console.log(el)
     el.addEventListener("change", (e) => {
         query.viewCnt = e.target.value;
         query.page = 0;
@@ -63,11 +62,10 @@ function resetMemberList() {
 
 async function renderMemberList() {
     resetMemberList();
-    console.log(query);
     let {data} = await axios.get(location.href + "/list?" + mkRequestQuery());
     const {totalPages, number, content: listItems} = data;
-    renderPagination(totalPages, number);
 
+    renderPagination(paginationList, totalPages, number, renderMemberList);
 
     if (!listItems || listItems.length === 0) {
         memberListNav.appendChild(nothingDiv);
@@ -86,7 +84,7 @@ async function renderMemberList() {
                    <td>${listItem.email}</td>
                    <td>${listItem.roles.join(", ")}</td>
                    <td>
-                       <a class="btn btn-outline-success p-1" href="./member/${listItem.id}/review">회원 리뷰</a>
+                       <a class="btn btn-outline-success p-1" href="./member/${listItem.id}?review=Y">회원 리뷰</a>
                    </td>
                    <td>
                        <button class="btn-del btn btn-outline-secondary p-1">사용자 삭제
@@ -98,37 +96,9 @@ async function renderMemberList() {
 
         tableRow.querySelector("button.btn-del").addEventListener("click", async () => {
             const {status} = axios.delete(location.href + "/" + listItem.id);
-            console.log(status);
         })
     });
 
-}
-
-function renderPagination(totalPages, curPage) {
-    paginationList.innerHTML = "";
-    mkPaginationListItem(0, curPage, "≪");
-
-    for (let i = 0; i < totalPages; i++) {
-        mkPaginationListItem(i, curPage, i + 1);
-    }
-    mkPaginationListItem(totalPages - 1, curPage, "≫");
-}
-
-function mkPaginationListItem(num, curPage, txt) {
-    const paginationListItem = document.createElement("li");
-    paginationListItem.classList.add("page-item");
-    if (curPage === num) paginationListItem.classList.add("disabled");
-
-    paginationListItem.innerHTML = `
-    <button class="page-link" ${curPage === num ? "disabled" : ""}>${txt}</button>
-    `;
-
-    paginationList.appendChild(paginationListItem);
-
-    paginationListItem.querySelector("button.page-link").addEventListener("click", () => {
-        query.page = num;
-        renderMemberList();
-    })
 }
 
 function mkRequestQuery() {
@@ -149,7 +119,6 @@ searchKeywordBtn.addEventListener("click", () => {
         query.searchKeyword = searchKeyword.value;
 
         renderMemberList();
-        renderPagination();
         return;
     }
     alert("검색어를 입력해주세요.")

@@ -12,6 +12,7 @@
 }
 
 .restInfo{
+	margin-top : 20px;
 	margin-left: 50px;
 	margin-right: 50px;
 }
@@ -294,59 +295,14 @@
 /*음식적 대표 이미지 리스트 처리*/
 .container {
 	display: grid;
-	grid-template-columns: repeat(4,200px);
-	grid-template-rows:repeat(3,140px);
+
 	list-style-type: none; 
 	justify-content: center;
-	 padding: 10px; 
+	 padding: 10px;
+	  
+	 height: 420px;
 }
-.box[data-index="0"]{
-	grid-column: 1/3;
-	grid-row: 1/3;
-	background: url("https://d12zq4w4guyljn.cloudfront.net/20230904022649618_photo_85aa07219f05.jpg");
-	background-position: center center;
-  	background-size: cover;
-}
-.box[data-index="1"]{
-	background: url("https://d12zq4w4guyljn.cloudfront.net/750_750_20230904021256790_menu_85aa07219f05.jpg");
-	background-position: center center;
-  	background-size: cover;
-}
-.box[data-index="2"]{
-	background: url("https://d12zq4w4guyljn.cloudfront.net/300_300_20210425101017296_photo_bd96390afea4.jpg");
-	background-position: center center;
-  	background-size: cover;
-}
-.box[data-index="3"]{
-	background: url("https://d12zq4w4guyljn.cloudfront.net/300_300_20230904022724043_photo_85aa07219f05.jpg");
-	background-position: center center;
-  	background-size: cover;
-}
-.box[data-index="4"]{
-	background: url("https://d12zq4w4guyljn.cloudfront.net/300_300_20210425101017761_photo_bd96390afea4.jpg");
-	background-position: center center;
-  	background-size: cover;
-}
-.box[data-index="5"]{
-	background: url("https://d12zq4w4guyljn.cloudfront.net/20210425101018317_photo_bd96390afea4.jpg");
-	background-position: center center;
-  	background-size: cover;
-}
-.box[data-index="6"]{
-	background: url("https://d12zq4w4guyljn.cloudfront.net/20210425101034568_menu_bd96390afea4.jpg");
-	background-position: center center;
-  	background-size: cover;
-}
-.box[data-index="7"]{
-	background: url("https://d12zq4w4guyljn.cloudfront.net/20210425101020080_photo_bd96390afea4.jpg");
-	background-position: center center;
-  	background-size: cover;
-}
-.box[data-index="8"]{
-	background: url("https://d12zq4w4guyljn.cloudfront.net/20230904022649618_photo_85aa07219f05.jpg");
-	background-position: center center;
-  	background-size: cover;
-}
+
 
 .imgContainer>a {
     display: flex;

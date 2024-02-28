@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum RestaurantStatus {
+public enum  RestaurantStatus {
     WAIT("승인 대기"),
     OPEN("영업중"),
     CLOSURE("폐업");
