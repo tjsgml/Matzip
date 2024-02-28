@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', async()=>{
    
             const reviewListContainer = document.getElementById('reviewListContainer');
             reviewListContainer.innerHTML = ''; // 초기화
+
+            reviews.hashtag
             
             reviews.forEach((review, reviewIndex) => {
                 const reviewElement = document.createElement('div');

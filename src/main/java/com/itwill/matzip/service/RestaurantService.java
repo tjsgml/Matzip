@@ -1,6 +1,11 @@
 package com.itwill.matzip.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.itwill.matzip.repository.*;
@@ -8,6 +13,7 @@ import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import com.itwill.matzip.util.DateTimeUtil;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.itwill.matzip.domain.BusinessHour;
@@ -20,7 +26,9 @@ import com.itwill.matzip.domain.ReviewHashtag;
 import com.itwill.matzip.domain.ReviewImage;
 import com.itwill.matzip.domain.RestaurantStatus;
 import com.itwill.matzip.domain.UpdateRequest;
+import com.itwill.matzip.dto.HashtagCategoryDto;
 import com.itwill.matzip.dto.ReviewListDto;
+import com.itwill.matzip.dto.ReviewWithHashtagsDto;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
 
 import lombok.RequiredArgsConstructor;
@@ -132,26 +140,56 @@ public class RestaurantService {
 	private final ReviewRepository reviewDao;
 	
 	public List<ReviewListDto> getReviewsForRestaurant(Long restaurantId) {
-        List<Review> reviews = reviewDao.findByRestaurantIdWithHashtags(restaurantId);
+	  List<Review> reviews = reviewDao.findByRestaurantIdWithHashtags(restaurantId);
+	
+	  return reviews.stream().map(review -> ReviewListDto.builder()
+	          .id(review.getId())
+	          .content(review.getContent())
+	          .flavorScore(review.getFlavorScore())
+	          .serviceScore(review.getServiceScore())
+	          .priceScore(review.getPriceScore())
+	          .formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime()))
+	          .memberNickname(review.getMember().getNickname())
+	          .memberImg(review.getMember().getImg())
+	          .reviewImages(review.getReviewImages().stream()
+	                  .map(ReviewImage::getImgUrl)
+	                  .collect(Collectors.toList()))
+	          .hashtags(review.getHashtags().stream()
+	                  .map(ReviewHashtag::getKeyword)
+	                  .collect(Collectors.toSet()))
+	          .build())
+	  .collect(Collectors.toList());
+	}
 
-        return reviews.stream().map(review -> ReviewListDto.builder()
-                .id(review.getId())
-                .content(review.getContent())
-                .flavorScore(review.getFlavorScore())
-                .serviceScore(review.getServiceScore())
-                .priceScore(review.getPriceScore())
-                .formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime()))
-                .memberNickname(review.getMember().getNickname())
-                .memberImg(review.getMember().getImg())
-                .reviewImages(review.getReviewImages().stream()
-                        .map(ReviewImage::getImgUrl)
-                        .collect(Collectors.toList()))
-                .hashtags(review.getHashtags().stream()
-                        .map(ReviewHashtag::getKeyword)
-                        .collect(Collectors.toSet()))
-                .build())
-        .collect(Collectors.toList());
-    }
+	
+//	@Autowired
+//	private final ReviewHashtagRepository reviewHTDao;
+//	
+//	public List<ReviewWithHashtagsDto> getReviewsWithCategorizedHashtags(Long restaurantId) {
+//	    List<Review> reviews = reviewDao.findByRestaurantId(restaurantId);
+//	    List<ReviewWithHashtagsDto> resultDtos = new ArrayList<>();
+//
+//	    for (Review review : reviews) {
+//	        List<Object[]> hashtagsWithCategories = reviewHTDao.findHashtagsAndCategoriesByReviewId(review.getId());
+//	        Map<String, Set<String>> categorizedHashtags = new HashMap<>();
+//
+//	        for (Object[] row : hashtagsWithCategories) {
+//	            String keyword = (String) row[0];
+//	            String category = (String) row[1];
+//	            categorizedHashtags.computeIfAbsent(category, k -> new HashSet<>()).add(keyword);
+//	        }
+//
+//	        List<HashtagCategoryDto> categoryDtos = categorizedHashtags.entrySet().stream()
+//	            .map(entry -> new HashtagCategoryDto(entry.getKey(), entry.getValue()))
+//	            .collect(Collectors.toList());
+//
+//	        resultDtos.add(new ReviewWithHashtagsDto(review.getId(), review.getContent(), categoryDtos));
+//	    }
+//
+//	    return resultDtos;
+//	}
+	
+	
 
 
 	
