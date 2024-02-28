@@ -1,7 +1,7 @@
 package com.itwill.matzip.repository.restaurant;
 
 import com.itwill.matzip.domain.Restaurant;
-import com.itwill.matzip.dto.RestaurantSearchCond;
+import com.itwill.matzip.dto.admin.RestaurantSearchCond;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

@@ -1,9 +1,8 @@
 package com.itwill.matzip.web.admin;
 
-import com.itwill.matzip.domain.Category;
-import com.itwill.matzip.domain.Menu;
-import com.itwill.matzip.domain.Restaurant;
+import com.itwill.matzip.domain.*;
 import com.itwill.matzip.dto.*;
+import com.itwill.matzip.dto.admin.*;
 import com.itwill.matzip.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -217,5 +215,44 @@ public class AdminMatzipController {
         return ResponseEntity.ok("order_updated");
     }
 
+    @GetMapping("/hashtag/control")
+    public String getHashtagControlPage() {
+        return "admin/hashtag";
+    }
 
+    @ResponseBody
+    @GetMapping("/hashtag/categories")
+    public ResponseEntity<List<HashtagCategory>> getHashtagCategory() {
+        List<HashtagCategory> hashtagCategories = adminService.getHashtagCategories();
+        return ResponseEntity.ok(hashtagCategories);
+    }
+
+    @ResponseBody
+    @GetMapping("/hashtag")
+    public ResponseEntity<List<ReviewHashtag>> getHashtagCategory(@ModelAttribute HashtagSearchDto searchDto) {
+        log.info("HashtagSearchDto={}", searchDto);
+        List<ReviewHashtag> reviewHashtags = adminService.getReviewHashtags(searchDto);
+        return ResponseEntity.ok(reviewHashtags);
+    }
+
+    @ResponseBody
+    @GetMapping("/hashtag/{tagId}")
+    public ResponseEntity<ReviewHashtag> getHashtagCategoryById(@PathVariable(name = "tagId") Long tagId) {
+        ReviewHashtag hashtag = adminService.getReviewHashtagById(tagId);
+        return ResponseEntity.ok(hashtag);
+    }
+
+    @ResponseBody
+    @PatchMapping("/hashtag/{tagId}")
+    public ResponseEntity<Void> updateHashtagCategoryById(@PathVariable Long tagId, @RequestBody HashtagUpdateDto updateDto) {
+        adminService.updateHashtag(tagId, updateDto);
+        return ResponseEntity.ok(null);
+    }
+
+    @ResponseBody
+    @DeleteMapping("/hashtag")
+    public ResponseEntity<Void> deleteHashtag(@RequestParam(name = "tagId") Long... tagId) {
+        adminService.deleteReviewHashtagById(tagId);
+        return ResponseEntity.noContent().build();
+    }
 }

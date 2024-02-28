@@ -1,4 +1,4 @@
-package com.itwill.matzip.dto;
+package com.itwill.matzip.dto.admin;
 
 import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.Restaurant;

@@ -8,31 +8,29 @@
     <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
     <main class="m-2">
         <h5 class="my-3" style="padding-left: 10px">
-            💪🏼심땡땡님 오늘도 득근💪🏼<br />
-            심땡땡님 오늘도 월루🥸</h5>
+            💪🏼<span th:text="${#authentication.name}"></span>님 오늘도 득근💪🏼<br />
+            <span th:text="${#authentication.name}"></span>님 오늘도 월루🥸</h5>
         <div class="row-grid">
             <div>
                 <h3 class="text-center">레스토랑 리뷰</h3>
                 <div class="column-grid-double">
                     <a th:href="@{/admin/matzip/restaurant}" class="btn column-grid-item column-grid-double-item">레스토랑 등록</a>
-                    <a th:href="@{/admin/matzip/restaurant/all}" cl swtiass="btn column-grid-item column-grid-double-item">레스토랑 관리</a>
+                    <a th:href="@{/admin/matzip/restaurant/all}" class="btn column-grid-item column-grid-double-item">레스토랑 검색</a>
                     <a th:href="@{/admin/matzip/category}" class="btn column-grid-item column-grid-double-item">카테고리 관리</a>
+                    <a th:href="@{/admin/matzip/hashtag/control}" class="btn column-grid-item column-grid-double-item">해시태그 관리</a>
                 </div>
             </div>
             <div>
-                <h3 class="text-center">Get 꿀조합</h3>
+                <h3 class="text-center">유저 관리</h3>
                 <div class="column-grid-double">
-                    <a class="btn column-grid-item column-grid-double-item">Get꿀조합</a>
-                    <a class="btn column-grid-item column-grid-double-item">레스토랑 등록하기</a>
-                    <a class="btn column-grid-item column-grid-double-item">버튼</a>
+                    <a class="btn column-grid-item column-grid-double-item" th:href="@{/admin/member}">레스토랑 등록하기</a>
                 </div>
             </div>
             <div>
                 <h3 class="text-center" >어드민 관리</h3>
                 <div class="column-grid-double">
-                    <a class="btn column-grid-item">Get꿀조합</a>
-                    <a class="btn column-grid-item">레스토랑 등록하기</a>
-                    <a class="btn column-grid-item">버튼</a>
+                    <a class="btn column-grid-item">어드민 리스트</a>
+                    <a class="btn column-grid-item">어드민 추가하기</a>
                 </div>
             </div>
         </div>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head th:replace="~{/layout/fragment-common.html::my-header('MAT.ZIP ADMIN | 해쉬태그 관리')}"></head>
+<link href="/css/admin/admin-common.css" rel="stylesheet">
+<body>
+<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+<div class="mz-admin-container">
+    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <main class="mx-4 container">
+        <h3 class="page-main-desc">해쉬태그 관리</h3>
+
+        <div class="container text-center">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <select id="hashtag-select" class="">
+                        <option value="">전체</option>
+                    </select>
+                </div>
+                <div>
+                    <button id="btn-clear-all" class="btn btn-sm btn-outline-primary">전체 해제</button>
+                    <button id="btn-remove-selected" class="btn btn-sm btn-outline-primary">선택 삭제</button>
+                    <button id="btn-remove-all" class="btn btn-sm btn-outline-primary">전체 삭제</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 mt-3">
+
+                    <input type="text" id="tag-keyword" class="form-control form-control-sm"
+                           placeholder="키워드를 입력하여 검색하세요!"/>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th><input id="check-all-tags" type="checkbox"/></th>
+                            <th>카테고리</th>
+                            <th>해시태그</th>
+                            <th>레스토랑 개수</th>
+                            <th>수정</th>
+                            <th>삭제</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div id="none-data-div" class="card-body pt-5 d-none">
+                        <div class="row fw-semibold text-center"
+                             style="font-size: 20px;">
+                            <div class="col my-5">
+                                <p style="font-size: 50px">😂👀😳😦</p>
+                                <div>
+                                    해당 검색 결과에 알맞은 유저가 없습니다.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-2">
+                    <div id="update-div-form" class="d-none my-3">
+                        <input id="tag-id-to-update" class="form-control" type="hidden"/>
+                        <label for="tag-name-to-update">이름</label><input id="tag-name-to-update" class="form-control"
+                                                                         type="text"/>
+                        <label for="tag-category-to-update">카테고리</label><select id="tag-category-to-update"
+                                                                                class="form-control">
+                    </select>
+                        <button id="btn-update-submit" class="mt-2 btn btn-sm btn-primary form-control">수정하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/admin/restaurant/config-hashtag-control.js"></script>
+</body>
+</html>
