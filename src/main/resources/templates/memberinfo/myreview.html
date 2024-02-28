@@ -37,7 +37,7 @@
 									<span>|</span>
 									<dl>
 										<dd>리뷰</dd>
-										<dt th:text="${info.reviewCnt}"></dt>
+										<dt id="reviewCnt" th:text="${info.reviewCnt}"></dt>
 									</dl>
 								</div>
 							</div>
@@ -58,7 +58,7 @@
 
 					<section class="overall-avg margin-side-lr">
 						<dl>
-							<dt>평균 별점</dt>
+							<dt>평균 별점</dt><!--
 							<dd th:if="${reviews != null}">
 								<strong
 									th:text="${reviews[0].totalAllReviewRating!=null}?${reviews[0].totalAllReviewRating}:0"></strong>
@@ -78,7 +78,7 @@
 										<img src="/img/star_off.png" />
 									</div>
 								</th:block>
-							</dd>
+							</dd>-->
 						</dl>
 					</section>
 
@@ -91,6 +91,7 @@
 								<a th:href="@{/rest/details(id=*{restaurantId})}">
 									<img th:if="*{mainImg != null}" class="img-sm" th:src="*{mainImg}" />
 									<div th:if="*{mainImg == null}" class="emptyMainImg img-sm">
+										<img src="/img/reviewNullImg.png"/>
 									</div>
 									<div class="review-info">
 										<h4 th:text="*{restaurantName}"></h4>
@@ -102,6 +103,7 @@
 							<!-- 이미지 뿌리는 곳 -->
 							<div class="review-post_column">
 								<div class="review-img_pic">
+									
 									<!-- 이미지 1개 -->
 									<div th:if="${#lists.size(review.reviewImg) == 1}" class="imgContainer one-pic">
 										<a class="imgEnl">
@@ -110,6 +112,7 @@
 											</div>
 										</a>
 									</div>
+									
 									<!-- 이미지 2개 -->
 									<div th:if="${#lists.size(review.reviewImg) == 2}" class="imgContainer two-pic">
 										<a class="imgEnl">
@@ -118,6 +121,7 @@
 											</div>
 										</a>
 									</div>
+									
 									<!-- 이미지 3개 -->
 									<div th:if="${#lists.size(review.reviewImg) == 3}"
 										class="imgContainer di-grid three-pic">
@@ -127,6 +131,7 @@
 											</div>
 										</a>
 									</div>
+									
 									<!-- 이미지 4개 -->
 									<div th:if="${#lists.size(review.reviewImg) == 4}" class="imgContainer di-grid">
 										<a class="imgEnl">
@@ -135,6 +140,7 @@
 											</div>
 										</a>
 									</div>
+									
 									<!-- 이미지 4개 이상 -->
 									<div th:if="${#lists.size(review.reviewImg) > 4}" class="imgContainer di-grid">
 										<a class="imgEnl">
@@ -150,8 +156,11 @@
 											</div>
 										</a>
 									</div>
+									
 								</div>
-							</div>
+							</div><!-- 이미지 뿌리는 곳 끝나는 div -->
+							
+							
 							<div class="review-post_column">
 								<div class="review-rating">
 									<div>
@@ -219,8 +228,6 @@
 						</div>
 					</div> <!-- end modal -->
 
-					<!---->
-
 				</main>
 			</div>
 
@@ -242,7 +249,7 @@
 	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
 
 	<!-- 커스텀 모듈 -->
-	<script src="../js/member/info-moreImgView.js"></script>
+	<script src="../js/member/review-scroll.js"></script>
 </body>
 
 </html>

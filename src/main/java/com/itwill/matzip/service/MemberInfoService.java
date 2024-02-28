@@ -3,6 +3,9 @@ package com.itwill.matzip.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -90,14 +93,15 @@ public class MemberInfoService {
 	}
 
 	//내가 쓴 리뷰 정보 가져오기
-	public List<MyReviewRequestDto> getReviews(Member member) {
+	public Page<MyReviewRequestDto> getReviews(Member member, int p) {
 		log.info("getReviews : member - {}", member);
-		List<MyReviewRequestDto> dto = null;
+		List<MyReviewRequestDto> dto = null;	//레스토랑 엔터티와 리뷰 엔터티의 필요한 필드들을 저장하는 dto
 		
+		//멤버가 가지고 있는 리뷰들 정보 가져오기
 		List<Review> reviews = reviewDao.findByMemberIdOrderById(member.getId());
 		
 		if(!reviews.isEmpty()) {
-			dto = new ArrayList<MyReviewRequestDto>();
+			dto = new ArrayList<>();
 			Double a = getTotalRating(reviews);
 			
 			for(Review review: reviews) {
@@ -120,7 +124,13 @@ public class MemberInfoService {
 			}
 		}
 		
-		return dto;
+		PageRequest pageRequest = PageRequest.of(p, 1);
+		int start = (int)pageRequest.getOffset();
+		int end = Math.min((start+pageRequest.getPageSize()), dto.size());
+		
+		Page<MyReviewRequestDto> list = new PageImpl<>(dto.subList(start, end), pageRequest, dto.size());
+		
+		return list;
 	}
 	
 	//프로필 이미지 기본 이미지로 변경
