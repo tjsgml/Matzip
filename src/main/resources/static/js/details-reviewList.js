@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async()=>{
     const restId = document.querySelector('input#restId').value;//음식점 아이디
 
     reviewListLoad(restId);
+    loadHashtagsByCategory(restId);
     
     // 리뷰 목록 ----------------------------------------------------------------------
     async function reviewListLoad(restaurantId) {
@@ -136,7 +137,78 @@ document.addEventListener('DOMContentLoaded', async()=>{
             console.error('리뷰 목록을 불러오는 데 실패했습니다:', error);
         }
     }// -- reviewListLoad END --
+
+    // 카테고리와 카테고리 이름을 매핑하는 객체
+const categoryNames = {
+  'visitPurpose': '방문 목적',
+  'mood': '분위기',
+  'convenience': '편의시설'
+};
+
+    // 순서대로 정렬하기 위한 배열
+    const orderedCategories = ['visitPurpose', 'mood', 'convenience'];
     
+    async function loadHashtagsByCategory(restaurantId) {
+        try {
+            const response = await axios.get(`/rest/details/hashtags/${restaurantId}`);
+            const hashtagsByCategory = response.data;
+            console.log(hashtagsByCategory);
+    
+            const htContainer = document.querySelector('.ht_container');
+            htContainer.innerHTML = ''; 
+    
+            Object.keys(hashtagsByCategory).forEach((category, index) => {
+                const hashtags = hashtagsByCategory[category];
+                const categoryDiv = document.createElement('div');
+                const categoryName = categoryNames[category] || category; // 카테고리 이름 매핑
+    
+                categoryDiv.classList.add('category-section');
+                categoryDiv.innerHTML = `
+                    <div class="category-title" style="margin-top: 10px;">
+                        <span class="HT_${category}_All" style="font-size: 20px;">${categoryName}</span>
+                    </div>
+                    <div class="item2" id="hashtags-${index}">`;
+    
+                // 해시태그 추가
+                hashtags.forEach((hashtag, hashtagIndex) => {
+                    const span = document.createElement('span');
+                    span.classList.add('ht_POV', 'badge', 'rounded-pill');
+                    if (hashtagIndex >= 5) span.classList.add('hidden'); // 5개 초과하는 해시태그 숨김
+                    span.textContent = hashtag;
+                    categoryDiv.querySelector('.item2').appendChild(span);
+                });
+    
+                // 해시태그가 5개 이상이면 '더보기'/'접기' 버튼 추가
+                if (hashtags.length > 5) {
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.classList.add('more-button-container');
+                
+                    const moreButton = document.createElement('button');
+                    moreButton.classList.add('btnMoreHt', 'btn');
+                    moreButton.textContent = '더보기';
+                    moreButton.onclick = function() {
+                        // '더보기'/'접기' 상태 토글
+                        this.classList.toggle('expanded');
+                        // 버튼 텍스트 업데이트
+                        this.textContent = this.classList.contains('expanded') ? '접기' : '더보기';
+                        // 해시태그 표시 상태 토글
+                        const hashtagsDiv = this.parentElement.previousElementSibling;
+                        const hashtags = hashtagsDiv.querySelectorAll('.ht_POV');
+                        hashtags.forEach((tag, index) => {
+                            if (index >= 5) tag.classList.toggle('hidden');
+                        });
+                    };
+                    buttonContainer.appendChild(moreButton);
+                    categoryDiv.appendChild(buttonContainer);
+                }
+    
+                htContainer.appendChild(categoryDiv);
+            });
+        } catch (error) {
+            console.error('해시태그 정보를 불러오는 데 실패했습니다:', error);
+        }
+    }
+
 
     
     // 리뷰 이미지 클릭 이벤트 리스너 함수

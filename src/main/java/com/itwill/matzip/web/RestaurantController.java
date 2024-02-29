@@ -1,7 +1,9 @@
 package com.itwill.matzip.web;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -139,12 +141,20 @@ public class RestaurantController {
 	}
 	
 	/* 은겸 추가 */
+	
+	// 리뷰 리스트 
 	@GetMapping("/details/reviews/{restaurantId}")
     public ResponseEntity<List<ReviewListDto>> findReviews(@PathVariable("restaurantId") Long restaurantId) {
         List<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId);
         return ResponseEntity.ok(reviews);
     }
-
+	
+	// 카테고리별 해시태그 
+    @GetMapping("/details/hashtags/{restaurantId}")
+    public ResponseEntity<Map<String, Set<String>>> findHashTagsAndCategory(@PathVariable("restaurantId") Long restaurantId){
+    	Map<String, Set<String>> hashtagsByCategory = restSvc.getReviewHashtagsByCategory(restaurantId);
+    	return ResponseEntity.ok(hashtagsByCategory);
+    }
 	
 	
 	

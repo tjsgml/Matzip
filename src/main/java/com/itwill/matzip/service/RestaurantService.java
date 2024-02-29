@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import com.itwill.matzip.repository.*;
 import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
+import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.util.DateTimeUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,8 +144,10 @@ public class RestaurantService {
 		URdao.save(ur);
 	}
 	
-	/* 은겸 추가 */
+	/* 은겸 추가 ---------------------------------------------------------------------------- */
 	private final ReviewRepository reviewDao;
+	
+	private final ReviewHashtagRepository reviewHashtagDao;
 	
 	public List<ReviewListDto> getReviewsForRestaurant(Long restaurantId) {
 	  List<Review> reviews = reviewDao.findByRestaurantIdWithHashtags(restaurantId);
@@ -168,38 +171,19 @@ public class RestaurantService {
 	  .collect(Collectors.toList());
 	}
 	
-
+	public Map<String, Set<String>> getReviewHashtagsByCategory(Long restaurantId) {
+	    List<ReviewHashtag> hashtags = reviewHashtagDao.findAllByRestaurantId(restaurantId);
+	    
+	    Map<String, Set<String>> hashtagsByCategory = new HashMap<>();
+	    for (ReviewHashtag hashtag : hashtags) {
+	        String categoryName = hashtag.getHtCategory().getName();
+	        hashtagsByCategory.computeIfAbsent(categoryName, k -> new HashSet<>()).add(hashtag.getKeyword());
+	    }
+	    
+	    return hashtagsByCategory;
+	}
 	
-	
-//	@Autowired
-//	private final ReviewHashtagRepository reviewHTDao;
-//	
-//	public List<ReviewWithHashtagsDto> getReviewsWithCategorizedHashtags(Long restaurantId) {
-//	    List<Review> reviews = reviewDao.findByRestaurantId(restaurantId);
-//	    List<ReviewWithHashtagsDto> resultDtos = new ArrayList<>();
-//
-//	    for (Review review : reviews) {
-//	        List<Object[]> hashtagsWithCategories = reviewHTDao.findHashtagsAndCategoriesByReviewId(review.getId());
-//	        Map<String, Set<String>> categorizedHashtags = new HashMap<>();
-//
-//	        for (Object[] row : hashtagsWithCategories) {
-//	            String keyword = (String) row[0];
-//	            String category = (String) row[1];
-//	            categorizedHashtags.computeIfAbsent(category, k -> new HashSet<>()).add(keyword);
-//	        }
-//
-//	        List<HashtagCategoryDto> categoryDtos = categorizedHashtags.entrySet().stream()
-//	            .map(entry -> new HashtagCategoryDto(entry.getKey(), entry.getValue()))
-//	            .collect(Collectors.toList());
-//
-//	        resultDtos.add(new ReviewWithHashtagsDto(review.getId(), review.getContent(), categoryDtos));
-//	    }
-//
-//	    return resultDtos;
-//	}
-	
-	
-
+	/*------------------------------------------------------------------------------------------- */
 
     // 내가 저장한 레스토랑 정보 가져오기
     public Page<MyPickRequestDto> getMyPickRestaurant(Long id, int p) {
@@ -244,4 +228,6 @@ public class RestaurantService {
 
         return list;
     }
+
+	
 }
