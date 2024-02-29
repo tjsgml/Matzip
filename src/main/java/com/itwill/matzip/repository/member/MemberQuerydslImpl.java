@@ -3,7 +3,7 @@ package com.itwill.matzip.repository.member;
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.QMember;
 import com.itwill.matzip.domain.enums.MemberRole;
-import com.itwill.matzip.dto.MemberFilterDto;
+import com.itwill.matzip.dto.admin.MemberFilterDto;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.Page;
