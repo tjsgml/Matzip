@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,11 +22,13 @@ import com.itwill.matzip.domain.BusinessHour;
 import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
+import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MyPickRegisterDto;
 import com.itwill.matzip.dto.ReviewListDto;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
 import com.itwill.matzip.service.RestaurantService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -85,7 +88,6 @@ public class RestaurantController {
 		//현재 인증된 사용자의 정보를 가져온다.
 	     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	     
-	     log.info("@@@@ 로그인 정보 ={}",auth.toString());
 	     
 
 	        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
@@ -95,6 +97,10 @@ public class RestaurantController {
 	        } else {
 	            // 사용자가 로그인되어 있으면 사용자의 이름을 반환
 	            String username = auth.getName();
+	            
+	            MemberSecurityDto memberDto = (MemberSecurityDto) auth.getPrincipal();
+	           
+	            log.info("@@@@ 로그인 정보 ={}",memberDto.getNickname());
 	            
 	            Long memberId = restSvc.findMemberId(username);
 	            

@@ -1,9 +1,12 @@
 package com.itwill.matzip.web;
 
+import java.io.IOException;
 import java.security.Principal;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +19,10 @@ import com.itwill.matzip.service.MailService;
 import com.itwill.matzip.service.MemberService;
 import com.itwill.matzip.service.SocialMemberService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +41,23 @@ public class MemberController {
 	public void login() {
 		log.info("Get - login()");
 	}
-
+	// 로그인을 한 후에 이전 페이지로 리다이렉트
+	@PreAuthorize("hasRole('USER')")
+	@GetMapping("/detailLogin")
+	public void detailLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.info("Get - login()");
+		 // 이전 페이지의 URL을 가져옴
+        String redirectUrl = request.getParameter("redirect");
+        if (redirectUrl != null) {
+            // 리다이렉트할 URL이 있으면 해당 페이지로 리다이렉트
+            response.sendRedirect(redirectUrl);
+        } else {
+            // 리다이렉트할 URL이 없으면 기본적으로 설정된 페이지로 리다이렉트
+            response.sendRedirect("/");
+        }
+		
+	}
+	
 	// 회원가입 폼으로 이동
 	@GetMapping("/signup")
 	public void signup() {

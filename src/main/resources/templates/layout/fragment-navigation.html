@@ -1,0 +1,51 @@
+			<div th:fragment="homeLogo" style="display: flex; justify-content: flex-end;  align-items: center;">
+				<span style="margin-right: 40px;" >
+					<a href="/">
+						<img src="/img/matzip_logo.png" style="width: 88px; height: 47.41px; margin: 20px 10px;">
+					</a>
+				</span>
+			</div>
+			
+			<div th:fragment="searchBar" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+				<span  style=" margin-left: 20px; position: relative; width: 100%;">
+					<input id="navSearchInput" placeholder="맛집을 검색해보세요! (예)청담이상 강남점">
+					<img type="button" src="/img/search.png" id="navSearchInputImg">
+				</span>
+			</div>
+			
+			<div th:fragment="mapList" style="display: flex; align-items: center; justify-content:center;  height: 100%;">
+				<span  style=" margin-top: 5px;">
+					<a id="navMapList" th:href="@{/map/list}">
+						<span>맛집 둘러보기</span>
+						<img src="/img/eyes.png" style="width: 26px; height: 26px; margin-bottom: 3px;">
+					</a>
+				</span>
+			</div>
+			
+			<div th:fragment="navLogin" style="display: flex; justify-content:start; align-items: center; height: 100%;">
+					<th:block sec:authorize="isAnonymous()"><!-- 로그아웃 상태 -->
+						<a type="button" id="btnLogin">
+							로그인
+							<img src="/img/navLogin.png" style="width: 20px; height: 20px; margin-left: 3px; margin-bottom: 4px;">
+						</a>
+						<a id="btnSignUp" th:href="@{/member/signup}">
+							회원가입
+							<img src="/img/enter.png" style="width: 20px; height: 20px; margin-left: 3px; margin-bottom: 4px;">
+						</a>
+					</th:block>
+					<th:block sec:authorize="isAuthenticated()">
+							<span class="nav-item dropdown" style="margin-left: 10px;">
+								<a  class="nav-link " href="#" role="button" data-bs-toggle="dropdown"  >
+									<img  src="/img/user.png" style="width: 45px; height: 45px;">
+								</a>
+								<ul class="dropdown-menu">
+									
+						            <li><a type="button" class="dropdown-item" th:href="@{/memberinfo/mymain}">마이페이지</a></li>
+						            <li><a type="button" class="dropdown-item" id="logoutButton">로그아웃</a></li>
+					            </ul>
+							</span>
+							<span sec:authentication="principal.nickname" style="font-weight: bold; margin-left: 10px; "></span>
+							<span style="color: rgb(78, 78, 99); ">님 안녕하세요!</span>
+							<!--<a th:href="@{/logout}" style="margin-left: 50px;">로그아웃</a>-->
+					</th:block>
+			</div>

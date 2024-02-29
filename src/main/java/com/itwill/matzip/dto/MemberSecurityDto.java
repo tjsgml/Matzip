@@ -14,11 +14,16 @@ import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.enums.MemberRole;
 
 public class MemberSecurityDto extends User implements OAuth2User {
-
+	
+	private String nickname;
+	
 	private static final long serialVersionUID = 1L;
 
-	public MemberSecurityDto(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-		super(username, password, authorities);
+	public MemberSecurityDto(String username, String password,String nickname, Collection<? extends GrantedAuthority> authorities) {
+		super(username, password,authorities);
+		
+		this.nickname = nickname;
+		
 	}
 	
 	public static MemberSecurityDto fromEntity(Member entity) {
@@ -30,7 +35,7 @@ public class MemberSecurityDto extends User implements OAuth2User {
 			authorities.add(auth);
 		}
 		
-		return new MemberSecurityDto(entity.getUsername(), entity.getPassword(), authorities);
+		return new MemberSecurityDto(entity.getUsername(), entity.getPassword(),entity.getNickname(),authorities);
 	}
 
 	@Override
@@ -43,5 +48,9 @@ public class MemberSecurityDto extends User implements OAuth2User {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	public String getNickname() {
+		return this.nickname;
+	}
+	
 }
