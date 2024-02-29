@@ -68,7 +68,7 @@ function mkTableRow(data) {
         <td><input data-id="${data.id}" class="select-tag" type="checkbox"/></td>
         <td class="category">${hashtagCategory[data.htCategory.name]}</td>
         <td>${data.keyword}</td>
-        <td>${data.reviews.length}</td>
+        <td>${data.expose}</td>
         <td><button class="btn-update form-control" data-id="${data.id}">수정</button></td>
         <td><button class="btn-delete form-control" data-id="${data.id}">삭제</button></td>
     `;
@@ -109,6 +109,8 @@ async function getTagInfoToUpdate(ev) {
 
     document.querySelector("input#tag-id-to-update").value = data.id;
     document.querySelector("input#tag-name-to-update").value = data.keyword;
+    console.log(data.expose)
+    document.querySelector(`input#tag-expose-to-update-${data.expose}`).checked = true;
 
     Array.from(categoryUpdateSelect.options).forEach(el => {
         el.selected = (parseInt(el.value) === data.htCategory.id);
@@ -145,10 +147,13 @@ async function deleteTag(ev) {
 btnUpdateSubmit.addEventListener("click", updateTagInfo)
 
 async function updateTagInfo(ev) {
+
     const tagId = document.querySelector("input#tag-id-to-update").value.trim();
+
     const request = {
         tagName: document.querySelector("input#tag-name-to-update").value.trim(),
         categoryId: document.querySelector("select#tag-category-to-update").value.trim(),
+       expose:  Array.from(document.querySelectorAll("input[name='expose']")).filter(e => e.checked)[0].value
     }
 
     const {status} = await axios.patch(`./${tagId}`, request);

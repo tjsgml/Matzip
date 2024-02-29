@@ -1,6 +1,5 @@
 package com.itwill.matzip.dto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Builder;

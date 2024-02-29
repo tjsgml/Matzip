@@ -12,11 +12,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.dto.ReviewCreateDto;
-import com.itwill.matzip.service.MemberInfoService;
 import com.itwill.matzip.service.RestaurantService;
 import com.itwill.matzip.service.ReviewService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/review")
 public class ReviewController {
-    private final MemberInfoService miSvc;        //memberinfo 서비스 빈 생성
 
     private final ReviewService reviewSvc;
 
@@ -82,5 +79,15 @@ public class ReviewController {
 //        model.addAttribute("restaurantId", restaurant.getId());
         model.addAttribute("review", review);
         return "review/update"; // 리뷰 수정 페이지
+    }
+    
+    //레스트 컨트롤러-------------------------------
+    //내가 쓴 리뷰의 이미지 가져오기
+    @ResponseBody
+    @GetMapping("/img/{reviewId}")
+    public ResponseEntity<List<String>> getReviewImg(@PathVariable("reviewId") Long reviewId){
+    	List<String> list = reviewSvc.getReviewImg(reviewId);
+
+    	return ResponseEntity.ok(list);
     }
 }

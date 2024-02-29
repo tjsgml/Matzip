@@ -14,6 +14,9 @@ import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import com.itwill.matzip.util.DateTimeUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.itwill.matzip.domain.BusinessHour;
@@ -28,6 +31,7 @@ import com.itwill.matzip.domain.ReviewImage;
 import com.itwill.matzip.domain.RestaurantStatus;
 import com.itwill.matzip.domain.UpdateRequest;
 import com.itwill.matzip.dto.HashtagCategoryDto;
+import com.itwill.matzip.dto.MyPickRequestDto;
 import com.itwill.matzip.dto.ReviewListDto;
 import com.itwill.matzip.dto.ReviewWithHashtagsDto;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
@@ -52,6 +56,8 @@ public class RestaurantService {
 	private final MemberRepository memberDao;
 	//UPDATE_REQUEST 테이블
 	private final UpdateRequestRepository URdao;
+	//리뷰 서비스 - 리뷰에 있는 총점 메서드 사용하기 위함
+	private final ReviewService reviewSvc;
 	
 	
 	//음식점 전체 목록 가져오기
@@ -195,6 +201,47 @@ public class RestaurantService {
 	
 
 
-	
-	
+    // 내가 저장한 레스토랑 정보 가져오기
+    public Page<MyPickRequestDto> getMyPickRestaurant(Long id, int p) {
+        log.info("getMyPickRestaurant : member - {}, p - {}", id, p);
+
+        List<MyPickRequestDto> dto = null; // 북마크 된 레스토랑 저장
+
+        List<MyPick> pList = myPickDao.findByMemberIdOrderById(id);
+
+        if (pList != null) {
+            dto = new ArrayList<>();
+
+            for (MyPick pick : pList) {
+                Long totalReview = 0L; // 총 리뷰수
+                Double avgRatingReview = 0.0; // 리뷰 총 평균
+                String img = null; // 리뷰 이미지 저장
+
+                List<Review> reviews = reviewDao.findByRestaurantId(pick.getRestaurant().getId());
+
+                //식당 평점 구하기
+                if (!reviews.isEmpty()) {
+                    totalReview = (long) reviews.size();
+
+                    // 총 별점 구하기
+                    avgRatingReview = reviewSvc.getTotalRating(reviews);
+                    img = reviewSvc.getImgUrl(pick.getRestaurant().getId());
+                }
+
+                dto.add(MyPickRequestDto.builder().memberId(id).imgUrl(img)
+                        .restaurantId(pick.getRestaurant().getId()).restaurantName(pick.getRestaurant().getName())
+                        .categoryName(pick.getRestaurant().getCategory().getName())
+                        .location(pick.getRestaurant().getAddress()).totalSart(avgRatingReview).reviewAllCount(totalReview)
+                        .pickId(pick.getId()).build());
+            }
+        }
+        
+		PageRequest pageRequest = PageRequest.of(p, 1);
+		int start = (int)pageRequest.getOffset();
+		int end = Math.min((start+pageRequest.getPageSize()), dto.size());
+		
+		Page<MyPickRequestDto> list = new PageImpl<>(dto.subList(start, end), pageRequest, dto.size());
+
+        return list;
+    }
 }

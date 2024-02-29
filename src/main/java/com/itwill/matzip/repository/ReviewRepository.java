@@ -23,8 +23,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Page<Review> findByMemberIdOrderByCreatedTime(Long userId, Pageable pageable);
 
-	
     @Query("SELECT r FROM Review r LEFT JOIN FETCH r.hashtags WHERE r.restaurant.id = :restaurantId")
     List<Review> findByRestaurantIdWithHashtags(@Param("restaurantId") Long restaurantId);
     
+    void deleteAllByMemberId (Long userId);
 }

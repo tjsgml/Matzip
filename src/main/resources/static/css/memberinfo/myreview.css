@@ -58,8 +58,21 @@
 	margin-right: 15px;
 }
 
+.emptyMainImg img {
+	width: 20px;
+	height: 12px;
+}
+
 .emptyMainImg {
-	background-color: #f1f1f1;
+	background-color: white;
+	border: solid 1px #FF230A;
+	display: flex;
+	/* 부모 요소를 플렉스 박스로 설정하여 가운데 정렬을 수행 */
+	justify-content: center;
+	/* 가로 방향으로 가운데 정렬 */
+	align-items: center;
+	/* 세로 방향으로 가운데 정렬 */
+	background-size: cover;
 }
 
 .img-sm {
