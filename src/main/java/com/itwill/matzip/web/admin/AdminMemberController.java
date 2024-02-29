@@ -41,7 +41,7 @@ public class AdminMemberController {
     }
 
     @GetMapping("/{memberId}")
-    public String getMemberDetail(@PathVariable Long memberId, Model model) {
+    public String getMemberDetail(@PathVariable(name = "memberId") Long memberId, Model model) {
         Member member = memberService.getMember(memberId);
         model.addAttribute("member", member);
 
@@ -52,8 +52,15 @@ public class AdminMemberController {
     }
 
     @ResponseBody
+    @DeleteMapping("/{memberId}")
+    public ResponseEntity<Object> deleteMember(@PathVariable(name = "memberId") Long memberId) {
+        memberService.deleteMember(memberId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ResponseBody
     @GetMapping("/{memberId}/review")
-    public ResponseEntity<Page<Review>> getReviewListByMember(@PathVariable Long memberId, @RequestParam(name = "curPage", defaultValue = "0") Integer curPage) {
+    public ResponseEntity<Page<Review>> getReviewListByMember(@PathVariable(name = "memberId") Long memberId, @RequestParam(name = "curPage", defaultValue = "0") Integer curPage) {
         Page<Review> reviews = memberService.getReviewListByMember(memberId, curPage);
 
         log.info("reviews={}", reviews.getContent());
