@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,8 +29,5 @@ public class HashtagCategory implements Serializable {
 	@Basic(optional = false)
 	private String name;
 
-	@Builder.Default
-	@OneToMany(fetch = FetchType.LAZY)
-//	@JoinColumn(name="HASHTAG_CATEGORY_FK")
-	private List<ReviewHashtag> reviewHashtags = new ArrayList<>();
+	
 }

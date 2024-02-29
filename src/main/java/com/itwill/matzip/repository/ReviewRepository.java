@@ -24,4 +24,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByMemberIdOrderById(Long userId);
 
     Page<Review> findByMemberIdOrderByCreatedTime(Long userId, Pageable pageable);
+
+    void deleteAllByMemberId (Long userId);
 }

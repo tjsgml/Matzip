@@ -45,6 +45,11 @@ public class AdminMemberService {
         return List.of(MemberRole.values());
     }
 
+    public void deleteMember(Long memberId) {
+        reviewDao.deleteAllByMemberId(memberId);
+        memberDao.deleteById(memberId);
+    }
+
     public Page<Review> getReviewListByMember(Long memberId, Integer curPage) {
         return reviewDao.findByMemberIdOrderByCreatedTime(memberId, PageRequest.of(curPage, REVIEW_LIST_SIZE));
     }
