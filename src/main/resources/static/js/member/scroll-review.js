@@ -1,5 +1,6 @@
 /**
  * mymain.html 포함
+ * 리뷰 리스트 데이터 가져옴
  * 무한 스크롤 기능 구현 자바 스크립트
  * 이미지 더 크게 볼 수 있는 모달 띄우기
  */
@@ -7,25 +8,28 @@
 document.addEventListener('DOMContentLoaded', function() {
 	const post_list = document.querySelector("section.myreview-list");		//부모 태그
 	let post_one = document.querySelector("div.review-post:last-child");		//마지막 위치에 있는 자식 태그
-	let count = post_list.children.length;	//현재 부모 태그가 가지고 있는 자식 수
 
 	const reviewCnt = document.querySelector('dt#reviewCnt');	//리뷰 수
 
-
 	const modal = new bootstrap.Modal('div#gallryModal', { backdrop: true });
+
+	getReveiwList(0);
+
 
 	const io = new IntersectionObserver(
 		(entry, observer) => {
 			const ioTarget = entry[0].target;
 
 			if (entry[0].isIntersecting) {
-				if (reviewCnt.innerHTML > count) {
+				const count = post_list.children.length;	//현재 부모 태그가 가지고 있는 자식 수
+
+				if (reviewCnt.innerHTML >= count) {
 					console.log("현재 보이는 타겟", ioTarget);
 
 					io.unobserve(post_one);		//현재 태그의 옵저버를 끊음
 
-					//리뷰 1개씩 가져오기
-					getReveiwList(++count);
+					//리뷰 1개 가져오기
+					getReveiwList(count);
 				}
 			}
 		},
@@ -35,17 +39,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	);
 
-	io.observe(post_one);
-
 
 
 	//----------------------------------------------------------
 	//리뷰들 가져오기
 	async function getReveiwList(cnt) {
 		try {
-			const res = await axios.get(`../memberinfo/myreviewaa?p=${cnt - 1}`);
+			const res = await axios.get(`../memberinfo/api/myreview?p=${cnt}`);
 
-			console.log(res.data.content[0]);
 			makeHtmlPostOne(res.data.content[0]);
 
 			//a태그에 이벤트 리스너 등록하기
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			});
 
 			post_one = document.querySelector("div.review-post:last-child");
-			io.observe(post_one);
+			io.observe(post_one);		//새 자식 옵저버 연결
 
 		} catch (error) {
 			console.log(error);
@@ -184,7 +185,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		strHtml += `</div>
 							</div><!-- 이미지 뿌리는 곳 끝나는 div -->
-							
 							
 							<div class="review-post_column">
 								<div class="review-rating">
