@@ -18,7 +18,9 @@
 
 			<div class="col-md-6 main-bg-color">
 				<header class="mypage-header margin-side-lr">
+					<span><a th:href="@{/}"><i class="fa-solid fa-angle-left"></i></a></span>
 					<span>마이페이지</span>
+					<span></span>
 				</header>
 
 				<main>
@@ -32,7 +34,7 @@
 								<div class="meta-info__count">
 									<dl>
 										<dd>마이 픽</dd>
-										<dt th:text="${info.pickCnt}"></dt>
+										<dt id="pickCnt" th:text="${info.pickCnt}"></dt>
 									</dl>
 									<span>|</span>
 									<dl>
@@ -64,45 +66,9 @@
 					</section>
 
 					<!-- 포스트 전체 -->
-					<section class="mypick-list " th:if="${mypicks !=null}">
-						<!-- 포스트 1개-->
-						<div th:each="pick : ${mypicks}" th:object="${pick}" class="mypick-post_one margin-side-lr">
-							<!-- 음식점 사진 -->
-							<a th:href="@{/rest/details(id=*{restaurantId})}">
-								<div th:if="*{imgUrl != null}">
-									<img th:src="*{imgUrl}" />
-								</div>
-								<div th:if="*{imgUrl == null}">
-									<div class="emptyImg">
-										<img src="/img/reviewNullImg.png"/>
-									</div>
-								</div>
-							</a>
-
-							<!-- 음식점 정보 -->
-							<div class="mypick-detail">
-								<a th:href="@{/rest/details(id=*{restaurantId})}">
-									<h4 th:text="*{restaurantName}"></h4>
-									<div class="mypick-rating">
-										<img src="/img/v26_89.png" />
-										<div th:text="*{totalSart}"></div>
-										<div>(<span th:text="*{reviewAllCount}"></span>)</div>
-									</div>
-									<div class="mypick-category">
-										<span th:text="*{categoryName}"></span>
-										<span>.</span>
-										<span th:text="*{location}"></span>
-									</div>
-								</a>
-							</div>
-
-							<!-- 북마크 -->
-							<div class="mypick-pick">
-								<a th:href="@{/memberinfo/delete(id=*{pickId})}">
-									<img src="/img/like_heart.png" />
-								</a>
-							</div>
-						</div>
+					<section class="mypick-list">
+						
+						<!-- 북마크가 들어갈 부분-->
 
 					</section>
 				</main>
@@ -114,10 +80,19 @@
 	</div>
 
 	<!-- java script -->
+	<!-- Bootstrap 자바스크립트 모듈 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
 		crossorigin="anonymous"></script>
+
+	<!-- Axios 자바스크립트 모듈 -->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+	<!-- 아이콘 모듈 -->
 	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
+
+	<!-- 커스텀 모듈 -->
+	<script src="../js/member/scroll-mypick.js"></script>
 </body>
 
 </html>
