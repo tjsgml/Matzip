@@ -1,8 +1,11 @@
 package com.itwill.matzip.domain;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.NaturalId;
 
 import java.util.HashSet;
@@ -20,7 +23,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
-public class Member {
+public class Member implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +53,8 @@ public class Member {
 
     @Builder.Default
     @ToString.Exclude
-    @ElementCollection(fetch = FetchType.LAZY)
+	@JsonInclude
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<MemberRole> roles = new HashSet<>();
 

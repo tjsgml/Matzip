@@ -13,13 +13,10 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import com.itwill.matzip.domain.QRestaurant;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.RestaurantStatus;
-import com.itwill.matzip.dto.RestaurantSearchCond;
+import com.itwill.matzip.dto.admin.RestaurantSearchCond;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

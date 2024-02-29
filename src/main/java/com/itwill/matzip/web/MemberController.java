@@ -6,13 +6,17 @@ import java.security.Principal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+<<<<<<< HEAD
 import org.springframework.security.core.userdetails.UserDetails;
+=======
+>>>>>>> main
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwill.matzip.domain.Member;
+import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MemberSignupRequestDto;
 import com.itwill.matzip.dto.MemberUpdateDto;
 import com.itwill.matzip.service.MailService;
@@ -104,16 +108,18 @@ public class MemberController {
 
 		Member m = memberSvc.checkEmail(email);
 
-		if (m != null) {
-			// 이메일에 해당하는 유저 존재
-			reAtt.addFlashAttribute("email", m.getEmail());
-			session.setAttribute("username", m.getUsername());
+		if (m != null) {			// 이메일에 해당하는 유저 존재
+			if(m.getKakaoClientId()==null) {			//카카오 사용자가 아님
+				reAtt.addFlashAttribute("email", m.getEmail());
+				session.setAttribute("username", m.getUsername());
 
-			mailService.sendHtmlEmail(m);
+				mailService.sendHtmlEmail(m);
 
-			return "redirect:/member/forgot";
-		} else {
-			// 이메일에 해당하는 유저 존재하지 않음
+				return "redirect:/member/forgot";
+			}else {		//카카오 사용자임
+				return "redirect:/member/forgot?another";
+			}
+		} else {			// 이메일에 해당하는 유저 존재하지 않음
 			return "redirect:/member/forgot?error";
 		}
 	}
@@ -215,10 +221,10 @@ public class MemberController {
 	//비밀번호 변경시, 현재 비밀번호가 맞는지 확인
 	@ResponseBody
 	@PostMapping("/checkpwd")
-	public ResponseEntity<String> checkPwd(@RequestBody String oldPwd, Principal principal){
+	public ResponseEntity<String> checkPwd(@RequestBody String oldPwd, @AuthenticationPrincipal MemberSecurityDto msd){
 		log.info("현재 비밀번호가 맞는지 확인 : oldPwd : {}", oldPwd);
 		
-		String result = memberSvc.checkPassword(oldPwd, principal.getName());
+		String result = memberSvc.checkPassword(oldPwd, msd.getUserid());
 		
 		return ResponseEntity.ok(result);
 	}

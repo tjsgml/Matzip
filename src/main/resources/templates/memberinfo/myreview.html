@@ -18,6 +18,7 @@
 
 			<div class="col-md-6 main-bg-color">
 				<header class="mypage-header margin-side-lr">
+					<span><a th:href="@{/}"><i class="fa-solid fa-angle-left"></i></a></span>
 					<span>마이페이지</span>
 				</header>
 
@@ -37,7 +38,7 @@
 									<span>|</span>
 									<dl>
 										<dd>리뷰</dd>
-										<dt th:text="${info.reviewCnt}"></dt>
+										<dt id="reviewCnt" th:text="${info.reviewCnt}"></dt>
 									</dl>
 								</div>
 							</div>
@@ -59,146 +60,21 @@
 					<section class="overall-avg margin-side-lr">
 						<dl>
 							<dt>평균 별점</dt>
-							<dd th:if="${reviews != null}">
-								<strong
-									th:text="${reviews[0].totalAllReviewRating!=null}?${reviews[0].totalAllReviewRating}:0"></strong>
-								<div class="stars">
-									<th:block th:each="num:${#numbers.sequence(0,reviews[0].totalAllReviewRating-1)}">
-										<img src="/img/star_on.png" />
-									</th:block>
-									<th:block th:each="num:${#numbers.sequence(reviews[0].totalAllReviewRating+1, 5)}">
-										<img src="/img/star_off.png" />
-									</th:block>
+							<dd>
+								<strong th:text="${totalRating}"></strong>
+								<div class="stars"><img src="/img/star_on.png" />
+								<img src="/img/star_on.png" />
+								<img src="/img/star_on.png" />
+								<img src="/img/star_off.png" />
+								<img src="/img/star_off.png" />
 								</div>
-							</dd>
-							<dd th:if="${reviews == null}">
-								<strong>0.0</strong>
-								<th:block th:each="num:${#numbers.sequence(0,4)}">
-									<div class="stars">
-										<img src="/img/star_off.png" />
-									</div>
-								</th:block>
 							</dd>
 						</dl>
 					</section>
 
-					<!-- 포스트 전체 -->
+					<!-- 포스트 리스트 전체 -->
 					<section class="myreview-list">
-						<!-- 리뷰 포스트 1개 -->
-
-						<div th:each="review:${reviews}" th:object="${review}" class="review-post margin-side-lr">
-							<div class="review-post_column">
-								<a th:href="@{/rest/details(id=*{restaurantId})}">
-									<img th:if="*{mainImg != null}" class="img-sm" th:src="*{mainImg}" />
-									<div th:if="*{mainImg == null}" class="emptyMainImg img-sm">
-									</div>
-									<div class="review-info">
-										<h4 th:text="*{restaurantName}"></h4>
-										<div th:text="|*{categoryName} . *{location}|"></div>
-									</div>
-								</a>
-							</div>
-
-							<!-- 이미지 뿌리는 곳 -->
-							<div class="review-post_column">
-								<div class="review-img_pic">
-									<!-- 이미지 1개 -->
-									<div th:if="${#lists.size(review.reviewImg) == 1}" class="imgContainer one-pic">
-										<a class="imgEnl">
-											<div class="imgContainer_box">
-												<img th:src="*{reviewImg[0]}" th:data-id="*{reviewId}" />
-											</div>
-										</a>
-									</div>
-									<!-- 이미지 2개 -->
-									<div th:if="${#lists.size(review.reviewImg) == 2}" class="imgContainer two-pic">
-										<a class="imgEnl">
-											<div class="imgContainer_box" th:each="img:*{reviewImg}">
-												<img th:src="${img}" th:data-id="*{reviewId}" />
-											</div>
-										</a>
-									</div>
-									<!-- 이미지 3개 -->
-									<div th:if="${#lists.size(review.reviewImg) == 3}"
-										class="imgContainer di-grid three-pic">
-										<a class="imgEnl">
-											<div class="imgContainer_box" th:each="img:*{reviewImg}">
-												<img th:src="${img}" th:data-id="*{reviewId}" />
-											</div>
-										</a>
-									</div>
-									<!-- 이미지 4개 -->
-									<div th:if="${#lists.size(review.reviewImg) == 4}" class="imgContainer di-grid">
-										<a class="imgEnl">
-											<div class="imgContainer_box" th:each="img:*{reviewImg}">
-												<img th:src="${img}" th:data-id="*{reviewId}" />
-											</div>
-										</a>
-									</div>
-									<!-- 이미지 4개 이상 -->
-									<div th:if="${#lists.size(review.reviewImg) > 4}" class="imgContainer di-grid">
-										<a class="imgEnl">
-											<div class="imgContainer_box more-pic"
-												th:each="num:${#numbers.sequence(0,3)}">
-												<div class="moreImg" th:if="${num}==3" id="moreImgView"
-													th:data-id="*{reviewId}">
-													<i class="fa-solid fa-camera" th:data-id="*{reviewId}"></i>+
-													<span th:text="${#lists.size(review.reviewImg) -4}"
-														th:data-id="*{reviewId}"></span>
-												</div>
-												<img th:src="${review.reviewImg[num]}" th:data-id="*{reviewId}" />
-											</div>
-										</a>
-									</div>
-								</div>
-							</div>
-							<div class="review-post_column">
-								<div class="review-rating">
-									<div>
-										<span>맛</span>
-										<span>
-											<img src="/img/v26_89.png" />
-											<strong th:text="*{flavorScore}"></strong>
-										</span>
-									</div>
-									<div>
-										<span>가격</span>
-										<span>
-											<img src="/img/v26_89.png" />
-											<strong th:text="*{priceScore}"></strong>
-										</span>
-									</div>
-									<div>
-										<span>서비스</span>
-										<span>
-											<img src="/img/v26_89.png" />
-											<strong th:text="*{serviceScore}"></strong>
-										</span>
-									</div>
-								</div>
-								<div th:text="*{formattedRegisterDate}"></div>
-							</div>
-							<div class="review-post_column">
-								<h3></h3>
-								<pre th:text="*{content}" class="review-content"></pre>
-							</div>
-
-							<div class="review-post_column dropdown text-end">
-								<div class="d-block link-body-emphasis text-decoration-none" data-bs-toggle="dropdown"
-									aria-expanded="false">
-									<img src="/img/icon_null.png" />
-								</div>
-								<ul class="dropdown-menu text-small dropdown-menu-end">
-									<li>
-										<a class="dropdown-item" href="#">리뷰 수정</a>
-									</li>
-									<li>
-										<a class="dropdown-item" href="#">리뷰 삭제</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-
+						<!-- 리뷰 포스트가 작성될 부분 -->
 					</section>
 
 					<!-- 이미지 크게 볼 수 있는 모달 띄우기 -->
@@ -218,8 +94,6 @@
 							</div>
 						</div>
 					</div> <!-- end modal -->
-
-					<!---->
 
 				</main>
 			</div>
@@ -242,7 +116,7 @@
 	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
 
 	<!-- 커스텀 모듈 -->
-	<script src="../js/member/info-moreImgView.js"></script>
+	<script src="../js/member/scroll-review.js"></script>
 </body>
 
 </html>

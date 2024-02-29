@@ -1,4 +1,5 @@
-package com.itwill.matzip.dto;
+package com.itwill.matzip.dto.admin;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,10 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class CategoryOrderUpdateDto {
-    private Integer id;
-    private Integer order;
+public class HashtagUpdateDto {
+    private String tagName;
+    private Long categoryId;
 }

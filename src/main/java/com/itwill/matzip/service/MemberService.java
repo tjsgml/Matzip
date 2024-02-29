@@ -2,17 +2,22 @@ package com.itwill.matzip.service;
 
 import java.util.Optional;
 
+import com.itwill.matzip.repository.MyPickRepository;
+import com.itwill.matzip.repository.ReviewRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.enums.MemberRole;
+import com.itwill.matzip.dto.MemberMainHeaderRequestDto;
 import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MemberSignupRequestDto;
 import com.itwill.matzip.repository.member.MemberRepository;
+import com.itwill.matzip.util.S3Utility;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,99 +28,155 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class MemberService implements UserDetailsService {
 
-	private final MemberRepository memberDao;
-	private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final MemberRepository memberDao;
+    private final ReviewRepository reviewDao;
+    private final MyPickRepository pickDao;
+    private final S3Utility s3Util;
+    
+    //로그인
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("loadUserByUsername(username={})", username);
 
-		log.info("loadUserByUsername(username={})", username);
+        Optional<Member> opt = memberDao.findByUsername(username);
 
-		Optional<Member> opt = memberDao.findByUsername(username);
+        if (opt.isPresent()) {
+            log.info("나 실행 : {}", opt.toString());
+            return MemberSecurityDto.fromEntity(opt.get());
+        } else {
+            throw new UsernameNotFoundException(username + " 찾을 수 없음");
+        }
+    }
+    
+    
+    /**마이페이지 --------------------------------------------------------*/
+    // 프로필 사진, 닉네임, 북마크, 리뷰 수 정보 가져옴
+    public MemberMainHeaderRequestDto getProfileInfo(MemberSecurityDto msd) {
+        log.info("getProfileInfo : member - {}", msd);
 
-		if (opt.isPresent()) {
-			log.info("나 실행 : {}",opt.toString());
-			return MemberSecurityDto.fromEntity(opt.get());
-		} else {
-			throw new UsernameNotFoundException(username + " 찾을 수 없음");
-		}
-	}
 
-	// 유저 아이디 중복 검사
-	public String checkUsername(String username) {
-		log.info("checkUsername(username = {})", username);
+        Long reviewCnt = reviewDao.countAllByMemberId(msd.getUserid());
+        Long myPickCnt = pickDao.countAllByMemberId(msd.getUserid());
 
-		Optional<Member> opt = memberDao.findByUsername(username);
-		if (opt.isPresent()) {
-			log.info(opt.toString());
-			return "Y";
-		} else {
-			return "N";
-		}
-	}
+        return MemberMainHeaderRequestDto.builder().nickname(msd.getNickname()).img(msd.getImg())
+                .reviewCnt(reviewCnt).pickCnt(myPickCnt).build();
+    }
 
-	// 닉네임 중복 검사
-	public String checkNickname(String nickname) {
-		log.info("checkNickname(nickname = {})", nickname);
+    
+    
+    /**유효성 검사 -------------------------------------------------------*/
+    // 유저 아이디 중복 검사
+    public String checkUsername(String username) {
+        log.info("checkUsername(username = {})", username);
 
-		Member m = memberDao.findByNickname(nickname);
+        Optional<Member> opt = memberDao.findByUsername(username);
+        if (opt.isPresent()) {
+            log.info(opt.toString());
+            return "Y";
+        } else {
+            return "N";
+        }
+    }
 
-		if (m != null) {
-			return "Y";
-		} else {
-			return "N";
-		}
-	}
+    // 닉네임 중복 검사
+    public String checkNickname(String nickname) {
+        log.info("checkNickname(nickname = {})", nickname);
 
-	// 이메일 중복 검사
-	public Member checkEmail(String email) {
-		log.info("checkEmail(email = {})", email);
+        Member m = memberDao.findByNickname(nickname);
 
-		Member m = memberDao.findByEmail(email);
+        if (m != null) {
+            return "Y";
+        } else {
+            return "N";
+        }
+    }
 
-		return m;
-	}
+    // 이메일 중복 검사
+    public Member checkEmail(String email) {
+        log.info("checkEmail(email = {})", email);
 
-	// 이메일 인증키와 username이 맞는지 검사
-	public boolean authKey(String key, String username) {
-		boolean result = passwordEncoder.matches(username, key);
+        Member m = memberDao.findByEmail(email);
 
-		return result;
-	}
-	
-	//입력한 비밀번호가 현재 비밀번호와 같은지 확인
-	public String checkPassword(String oldPwd, String username) {
-		log.info("memberSvc : oldPwd - {}", oldPwd);
-		String strResult = "N";
-		
-		Member m = memberDao.findByUsername(username).orElse(null);
-		
-		boolean result = passwordEncoder.matches(oldPwd, m.getPassword());
-		if(result) {
-			//입력된 비밀번호가 현재 비밀번호와 같음
-			strResult = "Y";
-		}
-		
-		return strResult;
-	}
+        return m;
+    }
 
-	// 정보 삽입/수정 메서드 모음 -------------------------------------------------------
-	// 회원가입
-	public void createMember(MemberSignupRequestDto dto) {
-		log.info("createMember : {}", dto);
+    // 이메일 인증키와 username이 맞는지 검사
+    public boolean authKey(String key, String username) {
+        boolean result = passwordEncoder.matches(username, key);
 
-		Member entity = dto.toEntity(passwordEncoder);
-		entity.addRole(MemberRole.USER);
+        return result;
+    }
 
-		memberDao.save(entity);
-	}
+    //입력한 비밀번호가 현재 비밀번호와 같은지 확인
+    public String checkPassword(String oldPwd, Long id) {
+        log.info("memberSvc : oldPwd - {}", oldPwd);
+        String strResult = "N";
 
-	// 비밀번호 변경
-	@Transactional
-	public void updatePwd(String username, String pwd) {
-		log.info("updatePwd(username : {}, pwd : {}", username, pwd);
+        Member m = memberDao.findById(id).orElse(null);
 
-		Member entity = memberDao.findByUsername(username).orElse(null);
-		entity.pwdUpdate(passwordEncoder.encode(pwd));
-	}
+        boolean result = passwordEncoder.matches(oldPwd, m.getPassword());
+        if (result) {
+            //입력된 비밀번호가 현재 비밀번호와 같음
+            strResult = "Y";
+        }
+
+        return strResult;
+    }
+
+    /** 정보 삽입/수정 메서드 모음--------------------------------------*/
+    // 회원가입
+    public void createMember(MemberSignupRequestDto dto) {
+        log.info("createMember : {}", dto);
+
+        Member entity = dto.toEntity(passwordEncoder);
+        entity.addRole(MemberRole.USER);
+
+        memberDao.save(entity);
+    }
+
+    // 비밀번호 변경
+    @Transactional
+    public void updatePwd(String username, String pwd) {
+        log.info("updatePwd(username : {}, pwd : {}", username, pwd);
+
+        Member entity = memberDao.findByUsername(username).orElse(null);
+        entity.pwdUpdate(passwordEncoder.encode(pwd));
+    }
+    
+    
+    //프로필 이미지 기본 이미지로 변경
+    @Transactional
+    public String changeProfileDefaultImg(Long id) {
+        String imgUrl = null;
+        Member entity = memberDao.findById(id).orElse(null);
+
+        if (entity != null) {
+            entity.profileImgUpdate("https://domain-web-storage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20240219_111445259.jpg");
+            imgUrl = "https://domain-web-storage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20240219_111445259.jpg";
+        }
+
+        return imgUrl;
+    }
+    
+    //프로필 이미지 커스텀 변경
+    @Transactional
+    public String changeProfileCtmImg(Long id, MultipartFile imgFile) {
+        String imgUrl = null;
+        Member entity = memberDao.findById(id).orElse(null);
+
+        if (!imgFile.isEmpty()) {
+            try {
+                imgUrl = s3Util.uploadImageToS3(imgFile, s3Util.generateFileName());
+
+                if (entity != null) {
+                    entity.profileImgUpdate(imgUrl);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return imgUrl;
+    }
 }

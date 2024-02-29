@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
@@ -18,7 +20,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Entity
 @Table(name = "BUSINESS_HOUR")
-public class BusinessHour {
+public class BusinessHour implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

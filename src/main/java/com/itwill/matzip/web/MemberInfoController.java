@@ -3,14 +3,19 @@ package com.itwill.matzip.web;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.itwill.matzip.domain.Member;
+import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.dto.*;
+import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.service.*;
 
 import lombok.RequiredArgsConstructor;
@@ -22,50 +27,44 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class MemberInfoController {
 
-	private final MemberInfoService miSvc;
 	private final RestaurantService resSvc;
-
+	private final ReviewService reviewSvc;
+	private final MemberService memSvc;
+	private final MemberRepository mdao;
+	
+	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/mymain")
-	public void myMain(Principal principal, Model model) {
+	public void myMainForm(@AuthenticationPrincipal MemberSecurityDto msd, Principal principal,Model model) {
 		log.info("마이 페이지 [마이픽]");
-		String username = principal.getName().toString();
-		Member member = miSvc.getMember(username);
 
 		// 헤더에 있는 프로필 정보 가져옴
-		MemberMainHeaderRequestDto dto = miSvc.getProfileInfo(member);
-
-		// 북마크한 레스토랑 리스트 가져오기
-		List<MyPickRequestDto> pickList = miSvc.getMyPickRestaurant(member);
-
+		MemberMainHeaderRequestDto dto = memSvc.getProfileInfo(msd);
 		model.addAttribute("info", dto);
-		model.addAttribute("mypicks", pickList);
 	}
 
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/myreview")
-	public void myReview(Principal principal, Model model) {
-		log.info("마이 페이지 [리뷰]");
-		String username = principal.getName().toString();
-		Member member = miSvc.getMember(username);
+	public void myReviewForm(@AuthenticationPrincipal MemberSecurityDto msd, Model model) {
 
 		// 헤더에 있는 프로필 정보 가져옴
-		MemberMainHeaderRequestDto dto = miSvc.getProfileInfo(member);
-
-		// 내가 쓴 리뷰 리스트 가져오기
-		List<MyReviewRequestDto> reviewlist = miSvc.getReviews(member);
-
+		MemberMainHeaderRequestDto dto = memSvc.getProfileInfo(msd);
 		model.addAttribute("info", dto);
-		model.addAttribute("reviews", reviewlist);
+		
+		
+		//내 리뷰 총 평점 구하기 TODO :
+		List<Review> reviewlist = reviewSvc.getAllReviews(msd.getUserid());
+		Double totalReviewRating = reviewSvc.getTotalRating(reviewlist);
+		model.addAttribute("totalRating", totalReviewRating);
 	}
-
+	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/profilemodify")
 	public void profileModify(Principal principal, Model model) {
 		log.info("마이 페이지 [프로필 수정]");
 
 		String username = principal.getName().toString();
-		Member member = miSvc.getMember(username);
-		
-		
-		log.info("?멤버비밀번호 : {},  동일한지 : {}" ,member.getPassword(), member.getPassword().matches("username"));
+		Member member = mdao.findByUsername(username).orElse(null);
 
 		model.addAttribute("memberinfo", member);
 	}
@@ -84,27 +83,51 @@ public class MemberInfoController {
 		return "redirect:/memberinfo/mymain";
 	}
 
-	//기본 이미지로 프로필 변경
+	//레스트 컨트롤러 ---------------------------------------------------
+	// 북마크한 레스토랑 리스트 가져오기
+	// 마이픽 페이지 처리함 - 무한 스크롤 이용시 값만 전달
+	@GetMapping("/api/mypick")
+	public ResponseEntity<Page<MyPickRequestDto>> myMain(@AuthenticationPrincipal MemberSecurityDto msd, Model model, @RequestParam(name="p") int p) {
+		log.info("마이 페이지 [북마크] : p - {}", p);
+
+		Page<MyPickRequestDto> pickList = resSvc.getMyPickRestaurant(msd.getUserid(), p);
+		
+		return ResponseEntity.ok(pickList);
+	}
+	
+	
+	//내가 쓴 리뷰 리스트 가져옴
+	//리뷰 페이지 처리함
+	@ResponseBody
+	@GetMapping("/api/myreview")
+	public ResponseEntity<Page<MyReviewRequestDto>> myReviewApi(@AuthenticationPrincipal MemberSecurityDto msd, Model model, @RequestParam(name = "p") int p) {
+		log.info("마이 페이지 [리뷰] : p - {}", p);
+
+		Page<MyReviewRequestDto> reviewlist = reviewSvc.getReviews(msd.getUserid(), p);
+
+		return ResponseEntity.ok(reviewlist);
+	}
+	
+	
+	// 기본 이미지로 프로필 변경
 	@ResponseBody
 	@GetMapping("changeDefaultImg")
-	public ResponseEntity<String> changeDefaultImg(Principal principal) {
+	public ResponseEntity<String> changeDefaultImg(@AuthenticationPrincipal MemberSecurityDto msd) {
 		log.info("기본 프로필 이미지 변경");
-		
-		String result = miSvc.changeProfileDefaultImg(principal.getName());
+
+		String result = memSvc.changeProfileDefaultImg(msd.getUserid());
 
 		return ResponseEntity.ok(result);
 	}
-	
-	//커스텀 프로필 변경
+
+	// 커스텀 프로필 변경
 	@ResponseBody
 	@PostMapping("/changeCtmImg")
-	public ResponseEntity<String> changeCtmImg(
-			@RequestParam("file") MultipartFile imgFile,
-			Principal principal){
+	public ResponseEntity<String> changeCtmImg(@RequestParam("file") MultipartFile imgFile, @AuthenticationPrincipal MemberSecurityDto msd) {
 		log.info("커스텀 프로필 이미지 변경 : file - {}", imgFile);
-		
-		String result = miSvc.changeProfileCtmImg(principal.getName(), imgFile);
-		
+
+		String result = memSvc.changeProfileCtmImg(msd.getUserid(), imgFile);
+
 		return ResponseEntity.ok(result);
 	}
 }

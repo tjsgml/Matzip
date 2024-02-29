@@ -1,17 +1,16 @@
 package com.itwill.matzip.domain;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +19,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @Entity
-public class HashtagCategory {
+public class HashtagCategory implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +29,7 @@ public class HashtagCategory {
 	@Basic(optional = false)
 	private String name;
 
+	@Builder.Default
+	@OneToMany(fetch = FetchType.LAZY)
+	private List<ReviewHashtag> reviewHashtags = new ArrayList<>();
 }
