@@ -32,5 +32,6 @@ public class HashtagCategory implements Serializable {
 
 	@Builder.Default
 	@OneToMany(fetch = FetchType.LAZY)
+//	@JoinColumn(name="HASHTAG_CATEGORY_FK")
 	private List<ReviewHashtag> reviewHashtags = new ArrayList<>();
 }
