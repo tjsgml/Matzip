@@ -63,5 +63,12 @@ public class MemberSecurityDto extends User implements OAuth2User {
 	public String getImg() {
 		return this.img;
 	}
-
+	
+	public void updateNickname(String nickname) {
+		this.nickname = nickname;
+	}	
+	
+	public void updateImg(String img) {
+		this.img = img;
+	}
 }

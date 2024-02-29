@@ -75,11 +75,13 @@ public class SocialMemberService extends DefaultOAuth2UserService {
 
 	// 카카오 로그인 추가 정보 업데이트 및 권한 수정
 	@Transactional
-	public void updateMember(MemberUpdateDto dto, String username) {
+	public void updateMember(MemberUpdateDto dto, MemberSecurityDto msd) {
 		log.info("Svc - updateMember(dto = {})", dto);
 		
-		Member entity = memberDao.findByUsername(username).orElseThrow();
+		Member entity = memberDao.findById(msd.getUserid()).orElseThrow();
 		entity.memUpdate(dto.toEntity());
+		
+		msd.updateNickname(dto.getNickname());
 
 		//권한이 GUEST(소셜 로그인으로 처음 가입한 사람)이면 권한 변경 작업
 		List<String> roleNames = new ArrayList<String>();
