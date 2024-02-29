@@ -28,6 +28,4 @@ public class HashtagCategory implements Serializable {
 	
 	@Basic(optional = false)
 	private String name;
-
-	
 }

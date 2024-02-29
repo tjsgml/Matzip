@@ -57,7 +57,8 @@ public class ReviewHashtag implements Serializable {
     private Set<Review> reviews = new HashSet<>();
     
 	@Enumerated(EnumType.STRING)
-	private Expose expose;
+    @Builder.Default
+	private Expose expose = Expose.N;
 
     public void updateKeyword(String keyword) {
         this.keyword = keyword;
@@ -65,5 +66,9 @@ public class ReviewHashtag implements Serializable {
 
     public void changeCategory(HashtagCategory htCategory) {
         this.htCategory = htCategory;
+    }
+
+    public void changeExpose (Expose expose) {
+        this.expose =expose;
     }
 }
