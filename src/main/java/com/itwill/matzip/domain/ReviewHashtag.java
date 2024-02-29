@@ -7,6 +7,7 @@ import java.util.Set;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.Basic;
@@ -47,12 +48,12 @@ public class ReviewHashtag implements Serializable {
 	@ToString.Exclude
 	@JsonInclude
 	@Fetch(FetchMode.JOIN)
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "HASHTAG_CATEGORY_FK")
 	private HashtagCategory htCategory;
 	
 	@Builder.Default
-	@ManyToMany(mappedBy = "hashtags", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "hashtags", fetch = FetchType.EAGER)
     private Set<Review> reviews = new HashSet<>();
 	
 

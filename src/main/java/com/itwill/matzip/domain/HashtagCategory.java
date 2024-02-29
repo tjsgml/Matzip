@@ -10,6 +10,7 @@ import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,9 +32,4 @@ public class HashtagCategory implements Serializable {
 	
 	@Basic(optional = false)
 	private String name;
-
-	@Builder.Default
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY)
-	private List<ReviewHashtag> reviewHashtags = new ArrayList<>();
 }
