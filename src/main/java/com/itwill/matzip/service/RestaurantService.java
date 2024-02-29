@@ -20,6 +20,7 @@ import com.itwill.matzip.domain.BusinessHour;
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.MyPick;
+import com.itwill.matzip.domain.QReviewHashtag;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.domain.ReviewHashtag;
@@ -160,7 +161,9 @@ public class RestaurantService {
 	          .build())
 	  .collect(Collectors.toList());
 	}
+	
 
+	
 	
 //	@Autowired
 //	private final ReviewHashtagRepository reviewHTDao;

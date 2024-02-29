@@ -1,10 +1,10 @@
-package com.itwill.matzip.dto;
+package com.itwill.matzip.dto.admin;
 
+import com.itwill.matzip.dto.admin.MenuToCreateDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Arrays;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.itwill.matzip.jsonTest;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itwill.matzip.dto.BusinessHourUpdateDto;
+import com.itwill.matzip.dto.admin.BusinessHourUpdateDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

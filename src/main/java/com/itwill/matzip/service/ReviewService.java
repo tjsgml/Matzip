@@ -19,7 +19,7 @@ import com.itwill.matzip.dto.ReviewCreateDto;
 import com.itwill.matzip.dto.ReviewUpdateDto;
 import com.itwill.matzip.repository.HashtagCategoryRepository;
 import com.itwill.matzip.repository.member.MemberRepository;
-import com.itwill.matzip.repository.ReviewHashtagRepository;
+import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.repository.ReviewImageRepository;
 import com.itwill.matzip.repository.ReviewRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;

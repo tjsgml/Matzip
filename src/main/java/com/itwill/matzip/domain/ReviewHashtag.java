@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -40,6 +45,8 @@ public class ReviewHashtag implements Serializable {
 	private String keyword;
 	
 	@ToString.Exclude
+	@JsonInclude
+	@Fetch(FetchMode.JOIN)
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "HASHTAG_CATEGORY_FK")
 	private HashtagCategory htCategory;
@@ -48,4 +55,14 @@ public class ReviewHashtag implements Serializable {
 	@ManyToMany(mappedBy = "hashtags", fetch = FetchType.LAZY)
     private Set<Review> reviews = new HashSet<>();
 	
+
+    public void updateKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public void changeCategory(HashtagCategory htCategory) {
+        this.htCategory = htCategory;
+    }
+    
+    
 }

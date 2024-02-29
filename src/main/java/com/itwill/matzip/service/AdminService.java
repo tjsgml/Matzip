@@ -3,21 +3,19 @@ package com.itwill.matzip.service;
 import com.itwill.matzip.domain.*;
 import com.itwill.matzip.domain.enums.BusinessDay;
 import com.itwill.matzip.dto.*;
+import com.itwill.matzip.dto.admin.*;
 import com.itwill.matzip.repository.BusinessHourRepository;
 import com.itwill.matzip.repository.CategoryRepository;
+import com.itwill.matzip.repository.HashtagCategoryRepository;
 import com.itwill.matzip.repository.MenuRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
+import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.beans.Transient;
 import java.util.*;
 
 @Service
@@ -29,6 +27,9 @@ public class AdminService {
     private final CategoryRepository categoryDao;
     private final MenuRepository menuDao;
     private final BusinessHourRepository businessHourDao;
+    private final HashtagCategoryRepository hashtagCategoryDao;
+    private final ReviewHashtagRepository reviewHashtagDao;
+
 
     public List<Category> getCategories() {
         return categoryDao.findAll();
@@ -283,4 +284,31 @@ public class AdminService {
         category.changeName(categoryName);
     }
 
+    public List<HashtagCategory> getHashtagCategories() {
+        return hashtagCategoryDao.findAll();
+    }
+
+    public List<ReviewHashtag> getReviewHashtags(HashtagSearchDto searchDto) {
+        return reviewHashtagDao.searchReviewHashtagByKeyword(searchDto);
+    }
+
+    public ReviewHashtag getReviewHashtagById(Long hashtagId) {
+        return reviewHashtagDao.findById(hashtagId).orElseThrow();
+    }
+
+    @Transactional
+    public void updateHashtag(Long tagId, HashtagUpdateDto updateDto) {
+        ReviewHashtag reviewHashtag = reviewHashtagDao.findById(tagId).orElseThrow();
+
+        reviewHashtag.updateKeyword(updateDto.getTagName());
+
+        log.info("tgId={}", tagId);
+        log.info("updateDto={}", updateDto);
+        HashtagCategory htCategory = hashtagCategoryDao.findById(updateDto.getCategoryId()).orElseThrow();
+        reviewHashtag.changeCategory(htCategory);
+    }
+
+    public void deleteReviewHashtagById(Long... tagId) {
+        reviewHashtagDao.deleteAllById(List.of(tagId));
+    }
 }

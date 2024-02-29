@@ -1,4 +1,4 @@
-package com.itwill.matzip.dto;
+package com.itwill.matzip.dto.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NickRespDto {
-    private String words;
-    private String seed;
+public class CategoryOrderUpdateDto {
+    private Integer id;
+    private Integer order;
 }
