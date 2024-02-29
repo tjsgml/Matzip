@@ -7,9 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-
-import com.itwill.matzip.domain.enums.Expose;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,7 +32,4 @@ public class HashtagCategory implements Serializable {
 	@Builder.Default
 	@OneToMany(fetch = FetchType.LAZY)
 	private List<ReviewHashtag> reviewHashtags = new ArrayList<>();
-	
-	@Enumerated(EnumType.STRING)
-	private Expose expose;
 }
