@@ -306,6 +306,8 @@ public class AdminService {
         log.info("updateDto={}", updateDto);
         HashtagCategory htCategory = hashtagCategoryDao.findById(updateDto.getCategoryId()).orElseThrow();
         reviewHashtag.changeCategory(htCategory);
+
+        reviewHashtag.changeExpose(updateDto.getExpose());
     }
 
     public void deleteReviewHashtagById(Long... tagId) {

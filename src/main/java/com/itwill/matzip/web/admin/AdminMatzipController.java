@@ -244,9 +244,10 @@ public class AdminMatzipController {
 
     @ResponseBody
     @PatchMapping("/hashtag/{tagId}")
-    public ResponseEntity<Void> updateHashtagCategoryById(@PathVariable Long tagId, @RequestBody HashtagUpdateDto updateDto) {
+    public ResponseEntity<String> updateHashtagCategoryById(@PathVariable Long tagId, @RequestBody HashtagUpdateDto updateDto) {
+        log.info("updateDto={}", updateDto);
         adminService.updateHashtag(tagId, updateDto);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok("updated");
     }
 
     @ResponseBody
