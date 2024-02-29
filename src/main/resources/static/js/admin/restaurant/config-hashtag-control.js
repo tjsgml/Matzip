@@ -19,9 +19,9 @@ document.querySelector("input#tag-keyword").addEventListener("keyup", (e) => {
     resetTableBody();
     const tagFiltered = tagDataList.filter(el => el.keyword.includes(e.target.value.trim()));
 
-    if (! tagFiltered.length) {
+    if (!tagFiltered.length) {
         document.querySelector("div#none-data-div").classList.remove("d-none");
-    }else {
+    } else {
         document.querySelector("div#none-data-div").classList.add("d-none");
     }
 
@@ -51,9 +51,9 @@ async function getDataByCategory(e) {
     const {data} = await axios.get(`../hashtag?categoryId=${e?.target?.value ?? ""}`);
 
     tagDataList = data;
-    if (! data?.length) {
+    if (!data?.length) {
         document.querySelector("div#none-data-div").classList.remove("d-none");
-    }else {
+    } else {
         document.querySelector("div#none-data-div").classList.add("d-none");
     }
 
@@ -84,10 +84,9 @@ document.querySelector("button#btn-clear-all").addEventListener("click", () => {
         changeAllChecked(document.querySelectorAll("input[type='checkbox']"))
     }
 )
-const checkBoxOfTags = document.querySelectorAll("input.select-tag");
 
 document.querySelector("input#check-all-tags").addEventListener("change", () => {
-        changeAllChecked(checkBoxOfTags, document.querySelector("input#check-all-tags").checked)
+        changeAllChecked(document.querySelectorAll("input.select-tag"), document.querySelector("input#check-all-tags").checked);
     }
 )
 
@@ -136,9 +135,9 @@ async function deleteTag(ev) {
 
     tagDataList = tagDataList.filter(e => parseInt(dataId) === e.id);
 
-    if (! tagDataList.length) {
+    if (!tagDataList.length) {
         document.querySelector("div#none-data-div").classList.remove("d-none");
-    }else {
+    } else {
         document.querySelector("div#none-data-div").classList.add("d-none");
     }
 }
@@ -151,7 +150,7 @@ async function updateTagInfo(ev) {
         tagName: document.querySelector("input#tag-name-to-update").value.trim(),
         categoryId: document.querySelector("select#tag-category-to-update").value.trim(),
     }
-    console.log(request.tagId)
+
     const {status} = await axios.patch(`./${tagId}`, request);
     location.reload();
 }
@@ -172,9 +171,6 @@ document.querySelector("button#btn-remove-selected").addEventListener("click", a
     }
 
     const tagsChecked = getAllCheckedHashtags();
-
-    console.log("tagsChecked")
-    console.log(tagsChecked)
 
     const query = tagsChecked.map(el => `tagId=${el}`).join("&");
     const {status} = await axios.delete(`../hashtag?${query}`);
