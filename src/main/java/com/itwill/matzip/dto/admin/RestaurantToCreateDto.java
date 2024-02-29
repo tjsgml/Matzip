@@ -1,7 +1,8 @@
-package com.itwill.matzip.dto;
+package com.itwill.matzip.dto.admin;
 
 import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.Restaurant;
+import com.itwill.matzip.dto.admin.BusinessTimeDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

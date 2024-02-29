@@ -7,7 +7,6 @@ async function setClosureStatusRestaurantById(id) {
     const continueSet = confirm("폐업 상태로 전환하시겠습니까?");
     if (continueSet) {
         const resp = await axios.put(`./${id}/closure`);
-        console.log(resp)
         location.reload();
     }
 }

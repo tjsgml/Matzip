@@ -1,4 +1,4 @@
-package com.itwill.matzip.dto;
+package com.itwill.matzip.dto.admin;
 
 import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.Restaurant;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
