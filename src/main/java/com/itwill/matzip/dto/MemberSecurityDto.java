@@ -13,12 +13,20 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.enums.MemberRole;
 
+
 public class MemberSecurityDto extends User implements OAuth2User {
 
 	private static final long serialVersionUID = 1L;
+	
+	private Long userId;
+	private String nickname;
+	private String img;
 
-	public MemberSecurityDto(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+	public MemberSecurityDto(Long userId,String nickname, String img, String username, String password, Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, authorities);
+		this.userId = userId;
+		this.nickname = nickname;
+		this.img = img;
 	}
 	
 	public static MemberSecurityDto fromEntity(Member entity) {
@@ -30,7 +38,7 @@ public class MemberSecurityDto extends User implements OAuth2User {
 			authorities.add(auth);
 		}
 		
-		return new MemberSecurityDto(entity.getUsername(), entity.getPassword(), authorities);
+		return new MemberSecurityDto(entity.getId(), entity.getNickname(), entity.getImg(), entity.getUsername(), entity.getPassword(), authorities);
 	}
 
 	@Override
@@ -42,6 +50,18 @@ public class MemberSecurityDto extends User implements OAuth2User {
 	public String getName() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public Long getUserid() {
+		return this.userId;
+	}
+	
+	public String getNickname() {
+		return this.nickname;
+	}
+	
+	public String getImg() {
+		return this.img;
 	}
 
 }
