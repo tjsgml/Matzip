@@ -95,7 +95,12 @@ async function renderMemberList() {
         memberListTable.append(tableRow);
 
         tableRow.querySelector("button.btn-del").addEventListener("click", async () => {
-            const {status} = axios.delete(location.href + "/" + listItem.id);
+            const {status} = await axios.delete(location.href + "/" + listItem.id);
+
+            if (status === 204) {
+                alert("사용자가 삭제되었습니다.");
+                location.reload();
+            }
         })
     });
 

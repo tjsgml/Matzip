@@ -29,7 +29,4 @@ public class HashtagCategory implements Serializable {
 	@Basic(optional = false)
 	private String name;
 
-	@Builder.Default
-	@OneToMany(fetch = FetchType.LAZY)
-	private List<ReviewHashtag> reviewHashtags = new ArrayList<>();
 }
