@@ -1,11 +1,13 @@
 package com.itwill.matzip.web.admin;
 
 import com.itwill.matzip.domain.*;
+import com.itwill.matzip.domain.enums.ApprovalStatus;
 import com.itwill.matzip.dto.*;
 import com.itwill.matzip.dto.admin.*;
 import com.itwill.matzip.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -43,7 +45,7 @@ public class AdminMatzipController {
 
     //    레스토랑 관리 리스트
     @GetMapping("/restaurant/all")
-    public String showRestaurantListPage(@ModelAttribute RestaurantSearchCond cond, Model model) {
+    public String showRestaurantListPage(RestaurantSearchCond cond, Model model) {
         log.info("showRestaurantListPage(RestaurantSearchCond cond={})", cond.getKeywordCriteria());
 
         Map<String, Object> result = adminService.getRestaurantByOptions(cond);
@@ -229,7 +231,7 @@ public class AdminMatzipController {
 
     @ResponseBody
     @GetMapping("/hashtag")
-    public ResponseEntity<List<ReviewHashtag>> getHashtagCategory(@ModelAttribute HashtagSearchDto searchDto) {
+    public ResponseEntity<List<ReviewHashtag>> getHashtagCategory(HashtagSearchDto searchDto) {
         log.info("HashtagSearchDto={}", searchDto);
         List<ReviewHashtag> reviewHashtags = adminService.getReviewHashtags(searchDto);
         return ResponseEntity.ok(reviewHashtags);
@@ -256,4 +258,34 @@ public class AdminMatzipController {
         adminService.deleteReviewHashtagById(tagId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/request")
+    public String getUpdateRequest(Model model) {
+        ApprovalStatus[] approvalStatuses = ApprovalStatus.values();
+        model.addAttribute("approvalStatuses", approvalStatuses);
+        return "admin/request-list.html";
+    }
+
+    @ResponseBody
+    @GetMapping("/requests")
+    public ResponseEntity<Page<UpdateRequest>> getRequestList(SearchRequestDto searchRequestDto) {
+        log.info("searchRequestDto={}", searchRequestDto);
+        Page<UpdateRequest> list = adminService.getRequests(searchRequestDto);
+        return ResponseEntity.ok(list);
+    }
+
+    @ResponseBody
+    @PatchMapping("/requests")
+    public ResponseEntity<Object> updateRequest(@RequestParam(name = "reqId") Long... reqId) {
+        adminService.updateRequest(reqId);
+        return ResponseEntity.ok(null);
+    }
+
+    @ResponseBody
+    @GetMapping("/requests/{reqId}")
+    public ResponseEntity<UpdateRequest> getRequestList(@PathVariable(name = "reqId") Long reqId) {
+        UpdateRequest updateRequest = adminService.getRequestById(reqId);
+        return ResponseEntity.ok(updateRequest);
+    }
+
 }

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head th:replace="~{/layout/fragment-common::my-header('MAT.ZIP ADMIN | 요청 리스트')}"></head>
+<link href="/css/admin/admin-common.css" rel="stylesheet">
+<style>
+    #member-list {
+        width: 90%;
+        margin: 5px 40px 40px;
+    }
+
+    .hover-secondary:hover {
+        color: gray;
+    }
+</style>
+<body>
+<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+<div class="mz-admin-container">
+    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <main>
+        <div class="mz-inner-container">
+            <h3 class="page-main-desc">QnA 게시판</h3>
+        </div>
+
+        <div id="member-list" class="m-5">
+            <div class="d-flex justify-content-between mb-3">
+                <select id="search-option" class="input-group-text">
+                    <option value="">전체</option>
+                    <option th:each="status : ${approvalStatuses}" th:text="${status.desc}"
+                            th:value="${status.name()}">아이디
+                    </option>
+                </select>
+
+                <div class="input-group" style="width: 500px;">
+                    <input type="text" id="search-keyword" class="form-control form-control-sm"/>
+                    <button id="submit-btn" class="btn btn-outline-success btn-sm">검색</button>
+                </div>
+
+                <button id="complete-multiple-req-btn" class="btn btn-outline-success">완료 처리</button>
+            </div>
+
+            <table class="table table-stripe" style="table-layout: fixed">
+                <thead>
+                <tr class="text-center">
+                    <th scope="col" style="width:7%"><input id="check-all-req" type="checkbox"/></th>
+                    <th scope="col" style="width:10%">레스토랑</th>
+                    <th scope="col" style="width:25%">내용</th>
+                    <th scope="col" class="p-2" style="width:10%">처리여부</th>
+                    <th scope="col" class="p-2" style="width:10%">완료처리</th>
+                </tr>
+                </thead>
+                <tbody id="request-list-table">
+                </tbody>
+            </table>
+            <div id="nothing-div" class="d-none">
+                <div class="card-body pt-5">
+                    <div class="row fw-semibold text-center"
+                         style="font-size: 20px;">
+                        <div class="col my-5">
+                            <p style="font-size: 50px">😂👀😳😦</p>
+                            <div>
+                                해당 검색 결과에 알맞은 요청이 없습니다.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; justify-content:center">
+                <nav id="pagination" aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </main>
+
+    <!--    모달 -->
+
+    <div class="modal fade m-3" id="requestToUpdateModal" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="d-flex justify-content-between">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                            <span id="restaurant-name-in-modal">미자네 닭갈비</span><span id="status-badge"
+                                                                                    class="ms-2 badge rounded-pill text-bg-danger">대기</span>
+                        </h1>
+                    </div>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between">
+                        <span id="req-content"> 여기 폐업했어욥</span>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" id="btn-update-in-modal" class="btn btn-primary" data-bs-dismiss="modal">
+                        완료하기
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
+<script src="/js/admin/util.js"></script>
+<script src="/js/admin/restaurant/config-request-list.js"></script>
+</body>
+</html>
