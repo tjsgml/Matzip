@@ -77,6 +77,7 @@ public class Review extends BaseTimeEntity implements Serializable {
     @JsonInclude
     @OneToMany(mappedBy = "review")
     @Cascade(CascadeType.REMOVE)
+    @Builder.Default
     private List<ReviewImage> reviewImages = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -86,6 +87,7 @@ public class Review extends BaseTimeEntity implements Serializable {
             joinColumns = @JoinColumn(name = "REVIEW_PK"), // 현재 엔티티 참조 컬럼이름
             inverseJoinColumns = @JoinColumn(name = "REVIEW_HASHTAG_PK") // 반대 엔티티 참조 컬럼이름
     )
+    @Builder.Default
     private Set<ReviewHashtag> hashtags = new HashSet<>();
 
 

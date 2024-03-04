@@ -54,11 +54,12 @@ public class ReviewHashtag implements Serializable {
     private HashtagCategory htCategory;
 
     @ManyToMany(mappedBy = "hashtags", fetch = FetchType.LAZY)
-    private Set<Review> reviews = new HashSet<>();
-    
-	@Enumerated(EnumType.STRING)
     @Builder.Default
-	private Expose expose = Expose.N;
+    private Set<Review> reviews = new HashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private Expose expose = Expose.N;
 
     public void updateKeyword(String keyword) {
         this.keyword = keyword;
@@ -68,7 +69,7 @@ public class ReviewHashtag implements Serializable {
         this.htCategory = htCategory;
     }
 
-    public void changeExpose (Expose expose) {
-        this.expose =expose;
+    public void changeExpose(Expose expose) {
+        this.expose = expose;
     }
 }
