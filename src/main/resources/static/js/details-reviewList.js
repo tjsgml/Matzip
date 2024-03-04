@@ -4,6 +4,9 @@
  */
 
 document.addEventListener('DOMContentLoaded', async()=>{
+    
+    // 현재 로그인한 사용자의 닉네임
+    const loggedInUserNickname = document.getElementById('loggedInUserNickname').textContent;
     //회원의 아이디
     let memberId ='';
     const restId = document.querySelector('input#restId').value;//음식점 아이디
@@ -26,9 +29,11 @@ document.addEventListener('DOMContentLoaded', async()=>{
             const reviewListContainer = document.getElementById('reviewListContainer');
             reviewListContainer.innerHTML = ''; // 초기화
 
-            reviews.hashtag
+            reviews.hashtag 
             
             reviews.forEach((review, reviewIndex) => {
+                console.log(`Review ${reviewIndex}:`, review.memberNickname, loggedInUserNickname, review.memberNickname === loggedInUserNickname);
+                
                 const reviewElement = document.createElement('div');
                 reviewElement.className = 'review_post';
 
@@ -69,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async()=>{
                         </div>
                     </div>
                 </div>
-                <p class="review_contents btxt" style="font-size: 18px; margin-top:10px;">${review.content}</p>`;
+                <p class="review_contents btxt">${review.content}</p>`;
 
                 // 리뷰 이미지 캐러셀
                 if (review.reviewImages.length > 0) {
@@ -94,23 +99,30 @@ document.addEventListener('DOMContentLoaded', async()=>{
                 <div class="review_ht_list">
                     ${review.hashtags.map(hashtag => `<span class="ht_POV badge rounded-pill">${hashtag}</span>`).join(' ')}
                 </div>
-                <button class="btn btn-outline-danger">공감</button>`;
+                <div class="review-btn-container">
+                    <button class="btn btn-outline-danger">공감</button>
+                </div>`;
                 
-                // 로그인한 회원이 리뷰 작성자인 경우 수정 버튼 추가
-    if (memberId === review.memberId) { // memberId는 로그인한 회원의 ID, review.memberId는 리뷰 작성자의 ID
-        const editButton = document.createElement('button');
-        editButton.textContent = '리뷰 수정';
-        editButton.className = 'btn btn-primary edit-review-btn';
-        editButton.addEventListener('click', function() {
-            // 리뷰 수정 페이지로 이동, URL에 리뷰 ID를 포함
-            window.location.href = `/review/update/${review.id}`;
-        });
+                
 
-        // 리뷰 요소에 수정 버튼 추가
-        reviewElement.appendChild(editButton);
-    }
 
                 reviewElement.innerHTML = innerHTML;
+                
+                // 로그인한 회원이 리뷰 작성자인 경우 수정 버튼 추가
+                if (review.memberNickname === loggedInUserNickname) {
+                    // 수정 버튼 생성
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'ㅤ수정ㅤ';
+                    editButton.className = 'btn edit-review-btn';
+                    editButton.addEventListener('click', function() {
+                        window.location.href = `/review/update/${review.id}`; /// review/update?review=${review.id} 
+                    });
+    
+                    // review-btn-container 찾기
+                    const btnContainer = reviewElement.querySelector('.review-btn-container');
+                    btnContainer.appendChild(editButton);
+                }
+                
                 reviewListContainer.appendChild(reviewElement);
             });
 
@@ -153,11 +165,11 @@ document.addEventListener('DOMContentLoaded', async()=>{
     }// -- reviewListLoad END --
 
     // 카테고리와 카테고리 이름을 매핑하는 객체
-const categoryNames = {
-  'visitPurpose': '방문 목적',
-  'mood': '분위기',
-  'convenience': '편의시설'
-};
+    const categoryNames = {
+      'visitPurpose': '방문 목적',
+      'mood': '분위기',
+      'convenience': '편의시설'
+    };
 
     // 순서대로 정렬하기 위한 배열
     const orderedCategories = ['visitPurpose', 'mood', 'convenience'];
@@ -242,31 +254,31 @@ const categoryNames = {
     }
 
     // 별점 표시 함수
-function displayAverageRatingStars(roundedAverageScore) {
-    // 첫 번째 별점 컨테이너 선택
-    const ratingStarContainer = document.querySelector('.rating_star');
-    ratingStarContainer.innerHTML = ''; // 이전 별점 초기화
-
-    // 두 번째 별점 컨테이너 선택
-    const ratingStarContainer2 = document.querySelector('.rating_star2');
-    ratingStarContainer2.innerHTML = ''; // 이전 별점 초기화
-
-    let starsHTML = '';
-
-    for (let index = 1; index <= 5; index++) {
-        if (index <= Math.floor(roundedAverageScore)) {
-            starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_on.png">`;
-        } else if (index === Math.ceil(roundedAverageScore) && roundedAverageScore % 1 >= 0.5) {
-            starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_half.png">`;
-        } else {
-            starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_off.png">`;
+    function displayAverageRatingStars(roundedAverageScore) {
+        // 첫 번째 별점 컨테이너 선택
+        const ratingStarContainer = document.querySelector('.rating_star');
+        ratingStarContainer.innerHTML = ''; // 이전 별점 초기화
+    
+        // 두 번째 별점 컨테이너 선택
+        const ratingStarContainer2 = document.querySelector('.rating_star2');
+        ratingStarContainer2.innerHTML = ''; // 이전 별점 초기화
+    
+        let starsHTML = '';
+    
+        for (let index = 1; index <= 5; index++) {
+            if (index <= Math.floor(roundedAverageScore)) {
+                starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_on.png">`;
+            } else if (index === Math.ceil(roundedAverageScore) && roundedAverageScore % 1 >= 0.5) {
+                starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_half.png">`;
+            } else {
+                starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_off.png">`;
+            }
         }
+    
+        // 두 컨테이너에 동일한 별점 HTML 삽입
+        ratingStarContainer.innerHTML = starsHTML;
+        ratingStarContainer2.innerHTML = starsHTML;
     }
-
-    // 두 컨테이너에 동일한 별점 HTML 삽입
-    ratingStarContainer.innerHTML = starsHTML;
-    ratingStarContainer2.innerHTML = starsHTML;
-}
 
     
 });//end document

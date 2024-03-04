@@ -448,6 +448,32 @@
     /* 확장됐을 때 스타일 */
 }
 
+.review-btn-container{
+    margin-top: 20px;
+}
+
+.edit-review-btn{
+    text-decoration: none;
+    border:solid 2px #595C5F;
+    border-radius: 10cap;
+    color: #666670;
+    padding:6px;
+    font-size: 15px;
+}
+
+.edit-review-btn:hover{
+    border:solid 2px #FF7F70;
+    border-radius: 10cap;
+    color: #000;
+    text-decoration: none;
+}
+
+.review_contents{
+    padding: 10px;
+    font-size: 18px; 
+    margin-top:10px;
+    margin-left:10px;
+}
 
 
 

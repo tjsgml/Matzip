@@ -59,8 +59,8 @@ public class ReviewController {
 
 
     // 리뷰 수정
-    @GetMapping("/update/{reviewId}")
-    public String reviewUpdate(@PathVariable Long reviewId, Model model) {
+    @GetMapping("/update/{reviewId}") //http://localhost:8081/review/update?review=3
+    public String reviewUpdate(@PathVariable("reviewId") Long reviewId, Model model) {
         // 리뷰 정보 조회 
         Review review = reviewSvc.findReviewById(reviewId);
         List<String> reviewImages = reviewSvc.getReviewImg(reviewId); // 리뷰 이미지
