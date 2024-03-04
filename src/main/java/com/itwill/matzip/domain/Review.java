@@ -77,9 +77,10 @@ public class Review extends BaseTimeEntity{
     @JsonInclude
     @OneToMany(mappedBy = "review")
     @Cascade(CascadeType.REMOVE)
+    @Builder.Default
     private List<ReviewImage> reviewImages = new ArrayList<>();
     
-    @Builder.Default
+    
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonInclude
     @JoinTable(
@@ -87,6 +88,7 @@ public class Review extends BaseTimeEntity{
             joinColumns = @JoinColumn(name = "REVIEW_PK"), // 현재 엔티티 참조 컬럼이름
             inverseJoinColumns = @JoinColumn(name = "REVIEW_HASHTAG_PK") // 반대 엔티티 참조 컬럼이름
     )
+    @Builder.Default
     private Set<ReviewHashtag> hashtags = new HashSet<>();
 
 

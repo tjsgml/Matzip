@@ -61,23 +61,22 @@ public class ReviewController {
     // 리뷰 수정
     @GetMapping("/update/{reviewId}")
     public String reviewUpdate(@PathVariable Long reviewId, Model model) {
-        log.info("GET - reviewEditForm - reviewId: {}", reviewId);
-
         // 리뷰 정보 조회 
         Review review = reviewSvc.findReviewById(reviewId);
+        List<String> reviewImages = reviewSvc.getReviewImg(reviewId); // 리뷰 이미지
         if (review == null) {
             // 리뷰 정보가 없으면
             return "redirect:/error";
         }
 
-//        // 리뷰와 연관된 레스토랑 정보 가져옴
-//        Restaurant restaurant = restaurantSvc.findOneRest(review.getRestaurant().getId());
-//        
-//        // 리뷰 정보, 레스토랑 정보 추가
-//        model.addAttribute("reviewForm", review); // ReviewCreateDto 대신 사용된 리뷰 객체, 적절한 DTO로 변환 필요
-//        model.addAttribute("restaurantName", restaurant.getName());
-//        model.addAttribute("restaurantId", restaurant.getId());
+        // 리뷰와 연관된 레스토랑 정보 가져옴
+        Restaurant restaurant = restaurantSvc.findOneRest(review.getRestaurant().getId());
+        
+        // 리뷰 정보, 레스토랑 정보 추가
+        model.addAttribute("restaurantName", restaurant.getName());
+        model.addAttribute("restaurantId", restaurant.getId());
         model.addAttribute("review", review);
+        model.addAttribute("reviewImages", reviewImages);
         return "review/update"; // 리뷰 수정 페이지
     }
     

@@ -22,7 +22,7 @@
         </div>
 
         <div id="member-list" class="m-5">
-            <div class="d-flex justify-content-between mb-3">
+             <div class="d-flex justify-content-between mb-3">
                 <div class="d-flex justify-content-between mb-3">
                     <div>
                         <label for="authorize-option">권한</label>
@@ -78,16 +78,6 @@
                 <div style="display: flex; justify-content:center">
                     <nav id="pagination" aria-label="Page navigation example">
                         <ul class="pagination justify-content-center">
-                            <li class="page-item disabled">
-                                <button class="page-link" href="#" tabindex="-1" aria-disabled="true" cur-page=0
-                                        disabled>
-                                    ≪
-                                </button>
-                            </li>
-                            <li class="page-item disabled">
-                                <button class="page-link" href="#" aria-disabled="true">≫
-                                </button>
-                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -100,7 +90,7 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
 <script src="/js/admin/member/config-member-list.js"></script>
-<script src="/js/admin/pagination-util.js"></script>
+<script src="/js/admin/util.js"></script>
 
 </body>
 </html>

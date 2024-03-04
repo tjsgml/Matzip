@@ -8,6 +8,18 @@ document.addEventListener("DOMContentLoaded", function() {
     const priceRating = parseInt(document.querySelector('#price').getAttribute('data-rating'));
     const serviceRating = parseInt(document.querySelector('#service').getAttribute('data-rating'));
     console.log(tasteRating, priceRating, serviceRating);
+    
+    // data-rating 값 읽고 별표 활성화 *****
+    document.querySelectorAll('.rating-container').forEach(container => {
+        const rating = parseInt(container.getAttribute('data-rating'));
+        const stars = container.querySelectorAll('.star');
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.add('active');
+            }
+        });
+    });
+
 
 
     ratingContainers.forEach(container => {
@@ -73,7 +85,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const imageInput = document.getElementById('image-input');
     const imagePreviewContainer = document.querySelector('.image-preview-container');
     const imagePreviewText = document.querySelector('.image-preview-text');
-    
 
     imageInput.addEventListener('change', function() {
 
@@ -110,6 +121,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
     
+    
+
     
 /* 키워드(해시태그) */
     // 태그 ID(삭제 시 필요)

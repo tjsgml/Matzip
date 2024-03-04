@@ -115,7 +115,7 @@ public class MemberInfoController {
 	public ResponseEntity<String> changeDefaultImg(@AuthenticationPrincipal MemberSecurityDto msd) {
 		log.info("기본 프로필 이미지 변경");
 
-		String result = memSvc.changeProfileDefaultImg(msd.getUserid());
+		String result = memSvc.changeProfileDefaultImg(msd);
 
 		return ResponseEntity.ok(result);
 	}
@@ -126,7 +126,7 @@ public class MemberInfoController {
 	public ResponseEntity<String> changeCtmImg(@RequestParam("file") MultipartFile imgFile, @AuthenticationPrincipal MemberSecurityDto msd) {
 		log.info("커스텀 프로필 이미지 변경 : file - {}", imgFile);
 
-		String result = memSvc.changeProfileCtmImg(msd.getUserid(), imgFile);
+		String result = memSvc.changeProfileCtmImg(imgFile,msd);
 
 		return ResponseEntity.ok(result);
 	}

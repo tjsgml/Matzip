@@ -1,3 +1,5 @@
+const type = "CREATE";
+
 let curPage = 1;
 let totalPage = 0;
 let reqSize = 10;
@@ -31,8 +33,8 @@ const REST_API_KEY = "c89a020dd130ee8b16d5aba0dc567c8e";
 const SEARCH_BY_KEYWORD_URL = "https://dapi.kakao.com/v2/local/search/keyword.JSON?";
 const SEARCH_BY_ADDRESS_URL = "https://dapi.kakao.com/v2/local/search/address.JSON?";
 
-let origin_lat  = latInput.value ?? 37.514322572335935;
-let origin_lng = lngInput.value ?? 127.06283102249932;
+let origin_lat = 37.49807646847611;
+let origin_lng = 127.02781933297571;
 
 function resetAddress() {
     nameInput.value = "";
@@ -48,22 +50,16 @@ function setAddressInfo(locId, infoWindow) {
     const placeName = document.getElementById(`placename-Input-${locId}`).value;
     const address = document.getElementById(`address-Input-${locId}`).value;
     const phone = document.getElementById(`phone-Input-${locId}`).value;
-    const lng = document.getElementById(`lng-Input-${locId}`).value;
     const lat = document.getElementById(`lat-Input-${locId}`).value;
+    const lng = document.getElementById(`lng-Input-${locId}`).value;
 
     nameInput.value = placeName;
     addrInput.value = address;
     contactInput.value = phone;
-
-    console.log(lng + " lnglng")
-    console.log(lat + " lat")
 
     lngInput.value = lng;
     latInput.value = lat;
     document.getElementById("placesList").innerHTML = "";
     removeAllMarkers();
     infoWindow.close();
-
-    console.log("lng : " +lng );
-    console.log("lat : " +lat );
 }

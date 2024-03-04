@@ -41,30 +41,29 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Entity
 public class ReviewHashtag implements Serializable {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "REVIEW_HASHTAG_PK")
-	private Long id;
-	
-	@Basic(optional = false)
-	private String keyword;
-	
-	@ToString.Exclude
-	@JsonInclude
-	@Fetch(FetchMode.JOIN)
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "HASHTAG_CATEGORY_FK")
-	private HashtagCategory htCategory;
-	
-	@Builder.Default
-	@JsonIgnore
-	@ManyToMany(mappedBy = "hashtags", fetch = FetchType.EAGER)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "REVIEW_HASHTAG_PK")
+    private Long id;
+
+    @Basic(optional = false)
+    private String keyword;
+
+    @ToString.Exclude
+    @JsonInclude
+    @Fetch(FetchMode.JOIN)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HASHTAG_CATEGORY_FK")
+    private HashtagCategory htCategory;
+
+    @ManyToMany(mappedBy = "hashtags", fetch = FetchType.LAZY)
+    @Builder.Default
     private Set<Review> reviews = new HashSet<>();
 
-	@Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Builder.Default
-	private Expose expose = Expose.N;
+    private Expose expose = Expose.N;
 
     public void updateKeyword(String keyword) {
         this.keyword = keyword;
@@ -74,7 +73,7 @@ public class ReviewHashtag implements Serializable {
         this.htCategory = htCategory;
     }
 
-    public void changeExpose (Expose expose) {
-        this.expose =expose;
+    public void changeExpose(Expose expose) {
+        this.expose = expose;
     }
 }

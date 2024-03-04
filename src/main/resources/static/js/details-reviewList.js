@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async()=>{
 
                 // 리뷰 기본 정보
                 let innerHTML = `
-                <div class="ht_container">
+                <div class="ht_container" style="display: flex; ">
                     <div class="profile_img" style="background-image: url('${review.memberImg}');"></div>
                     <div class="item2">
                         <p style="font-size: 23px; margin-left: 20px; font-weight: bold; margin-top: 15px; margin-bottom: 0;">${review.memberNickname}</p>
@@ -95,6 +95,20 @@ document.addEventListener('DOMContentLoaded', async()=>{
                     ${review.hashtags.map(hashtag => `<span class="ht_POV badge rounded-pill">${hashtag}</span>`).join(' ')}
                 </div>
                 <button class="btn btn-outline-danger">공감</button>`;
+                
+                // 로그인한 회원이 리뷰 작성자인 경우 수정 버튼 추가
+    if (memberId === review.memberId) { // memberId는 로그인한 회원의 ID, review.memberId는 리뷰 작성자의 ID
+        const editButton = document.createElement('button');
+        editButton.textContent = '리뷰 수정';
+        editButton.className = 'btn btn-primary edit-review-btn';
+        editButton.addEventListener('click', function() {
+            // 리뷰 수정 페이지로 이동, URL에 리뷰 ID를 포함
+            window.location.href = `/review/update/${review.id}`;
+        });
+
+        // 리뷰 요소에 수정 버튼 추가
+        reviewElement.appendChild(editButton);
+    }
 
                 reviewElement.innerHTML = innerHTML;
                 reviewListContainer.appendChild(reviewElement);

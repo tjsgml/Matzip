@@ -193,7 +193,6 @@ public class ReviewService {
                         .categoryName(review.getRestaurant().getCategory().getName())
                         .location(review.getRestaurant().getAddress())
                         .reviewId(review.getId())
-//						.createTime(review.getCreatedTime())
                         .formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime()))
                         .flavorScore((double) review.getFlavorScore())
                         .serviceScore((double) review.getServiceScore())
