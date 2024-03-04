@@ -4,6 +4,7 @@ import com.itwill.matzip.domain.*;
 import com.itwill.matzip.domain.enums.ApprovalStatus;
 import com.itwill.matzip.dto.*;
 import com.itwill.matzip.dto.admin.*;
+import com.itwill.matzip.service.AdminMatzipService;
 import com.itwill.matzip.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ import java.util.Map;
 @RequestMapping("/admin/matzip")
 public class AdminMatzipController {
 
-    private final AdminService adminService;
+    private final AdminMatzipService adminService;
 
     //    레스토랑 추가 페이지로 이동
     @GetMapping("/restaurant")
@@ -47,7 +48,7 @@ public class AdminMatzipController {
 
     //    레스토랑 관리 리스트
     @GetMapping("/restaurant/all")
-    public String showRestaurantListPage(@RequestBody RestaurantSearchCond cond, Model model) {
+    public String showRestaurantListPage(RestaurantSearchCond cond, Model model) {
         log.info("showRestaurantListPage(RestaurantSearchCond cond={})", cond.getKeywordCriteria());
 
         Map<String, Object> result = adminService.getRestaurantByOptions(cond);

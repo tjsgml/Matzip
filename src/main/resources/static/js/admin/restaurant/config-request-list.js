@@ -29,7 +29,7 @@ async function renderRequestList() {
     checkboxAll.checked = false;
     resetRequestList();
 
-    let {data, status} = await axios.get("./requests?" + mkRequestQuery(query));
+    let {data, status} = await axios.get("./requests?" + mkQueryString(query));
 
     console.log(data)
     if (!data || !data.length) {
