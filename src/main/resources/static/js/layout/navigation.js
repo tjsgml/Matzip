@@ -34,6 +34,7 @@
 	}
 	
 	const searchInput = document.getElementById('navSearchInput');
+	const navSearchInputImg = document.getElementById('navSearchInputImg');
 	
 	searchInput.addEventListener('keydown',(e) => {
 		if(e.key ==='Enter'){
@@ -48,6 +49,18 @@
 			}
 		}
 	});
+	
+	navSearchInputImg.addEventListener('click', () => {
+		const keyword = searchInput.value;
+		console.log('데이터 = ',keyword);
+		if(keyword == ''){
+			alert('검색어를 입력해주세요!!');
+		}else{
+			//검색 페이지로 키워드와 함께 보내기.
+			window.location.href = `/search/all?keyword=${keyword}`;
+		}
+	});
+	
 	
 	
  });

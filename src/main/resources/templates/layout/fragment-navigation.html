@@ -7,9 +7,20 @@
 			</div>
 			
 			<div th:fragment="searchBar" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+				<span>
+					<select id="restaurantTypeSelect" >
+					  <option selected>전체</option>
+					  <option value="1">가게명</option>
+					  <option value="2">방문목적</option>
+					  <option value="3">분위기</option>
+					  <option value="4">편의시설</option>
+					</select>
+				</span>
 				<span  style=" margin-left: 20px; position: relative; width: 100%;">
 					<input id="navSearchInput" placeholder="맛집을 검색해보세요! (예)청담이상 강남점">
-					<img type="button" src="/img/search.png" id="navSearchInputImg">
+					<a>
+						<img type="button" src="/img/search.png" id="navSearchInputImg">
+					</a>
 				</span>
 			</div>
 			
@@ -35,12 +46,11 @@
 					</th:block>
 					<th:block sec:authorize="isAuthenticated()">
 							<span class="nav-item dropdown" style="margin-left: 10px;">
-								<a  class="nav-link " href="#" role="button" data-bs-toggle="dropdown"  >
+								<a  class="nav-link " role="button" data-bs-toggle="dropdown"  >
 									<img th:src="${#authentication.principal.img}" style="width: 45px; height: 45px; border-radius: 50px;">
 									<!-- src="/img/user.png" -->
 								</a>
 								<ul class="dropdown-menu">
-									
 						            <li><a type="button" class="dropdown-item" th:href="@{/memberinfo/mymain}">마이페이지</a></li>
 						            <li><a type="button" class="dropdown-item" id="logoutButton">로그아웃</a></li>
 					            </ul>
