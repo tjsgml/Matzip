@@ -4,7 +4,8 @@
  */
 
  document.addEventListener('DOMContentLoaded', async()=>{
-	 
+	 //현재 페이지 저장
+	 const redirectUrl = encodeURIComponent(window.location.href);
 	 
 	const mapModal = document.getElementById('mapModal');
 	const btnShowModal = document.getElementById('showMap');
@@ -45,7 +46,9 @@
         } else {
             // 로그인이 필요한 경우
             if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
-                window.location.href = '/member/login';
+				
+				// 현재 페이지의 URL을 가져와서 로그인 페이지로 이동하면서 전달
+                window.location.href = `/member/detailLogin?redirect=${redirectUrl}`;
             } else {
                 alert('로그인이 취소되었습니다.');
             }
@@ -83,7 +86,8 @@
 		}else{
 			 if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
 			        // 로그인 페이지로 이동
-			        window.location.href = '/member/login';
+			         window.location.href = `/member/detailLogin?redirect=${redirectUrl}`;
+			       /* window.location.href = '/member/login';*/
 			    } else {
 			        // 사용자가 취소한 경우
 			        alert('로그인이 취소되었습니다.');
@@ -437,8 +441,11 @@
 			$.ajax({
 				url:'/rest/details/myPick/'+ myPickId,
 				type:'DELETE',
-				
+				beforeSend: function(xmlHttpRequest){
+					xmlHttpRequest.setRequestHeader("AJAX","true");
+				},
 				success: function(response){
+					console.log('좋아요 :',response);
 					console.log('취소완료');
 					btnMyPick.classList.remove('liked');
 					isLiked = false;
@@ -448,11 +455,13 @@
 		            // 오류 처리 로직을 추가하세요
 		        }
 			});
+			
 		}else{//좋아요 되어있지 않는 상태 -> 좋아요 누름 -> 행 삽입.
 			const data ={memberId, restId};
 			
 			 axios.post('/rest/details/registerMyPick',data)
 				  .then(response => {
+					  console.log('좋아요 :',response);
 					  console.log('좋아요 클릭시 아이디:',response.data);
 					  console.log('좋아요 누름!');
 					  btnMyPick.classList.add('liked');

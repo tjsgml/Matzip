@@ -1,5 +1,3 @@
-
-
 /**
  * details.html에 포함
  * details 페이지의 리뷰 리스트
