@@ -17,4 +17,9 @@ public class HomeController {
 		
 		return "home";
 	}
+	
+	@GetMapping("/layout/navigation")
+	public String testNav() {
+		return "test/navigationTest";
+	}
 }

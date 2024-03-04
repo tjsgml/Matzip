@@ -56,7 +56,7 @@ function mkTableRow(el) {
         <td>
             <input class="check-req" data-id="${el.id}" type="checkbox" ${el.status === "APPROVED" ? "disabled" : ""}/>
         </td>
-        <td><span>${el.restaurant.name}</span></td>
+        <td><a class="nav-link" href="./restaurant/${el.restaurant.id}">${el.restaurant.name}</a></td>
         <td>
             <button type="button" class="container bg-white border border-0 hover-secondary" 
             style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden" data-bs-toggle="modal" data-id="${el.id}" 
