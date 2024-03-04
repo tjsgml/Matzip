@@ -33,7 +33,7 @@ public class SecurityConfig {
 																	.successHandler(new CustomLoginSuccessHandler()));
 		
 		//로그아웃
-		http.logout((logout) -> logout.logoutSuccessUrl("/"));
+		http.logout((logout) -> logout.logoutSuccessHandler(new CustomLogoutSuccessHandler()));
 		
 		return http.build();
 	}
