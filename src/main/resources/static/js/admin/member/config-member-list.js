@@ -62,7 +62,7 @@ function resetMemberList() {
 
 async function renderMemberList() {
     resetMemberList();
-    let {data} = await axios.get(location.href + "/list?" + mkRequestQuery());
+    let {data} = await axios.get(location.href + "/list?" + mkRequestQuery(query));
     const {totalPages, number, content: listItems} = data;
 
     renderPagination(paginationList, totalPages, number, renderMemberList);
@@ -104,18 +104,6 @@ async function renderMemberList() {
         })
     });
 
-}
-
-function mkRequestQuery() {
-
-    const part = [];
-    const key = Object.keys(query);
-
-    key.forEach(k => {
-        part.push(`${k}=${query[k]}`);
-    })
-
-    return part.join("&");
 }
 
 searchKeywordBtn.addEventListener("click", () => {

@@ -15,7 +15,8 @@ import com.itwill.matzip.domain.enums.MemberRole;
 
 
 public class MemberSecurityDto extends User implements OAuth2User {
-
+	
+	
 	private static final long serialVersionUID = 1L;
 	
 	private Long userId;
@@ -48,10 +49,10 @@ public class MemberSecurityDto extends User implements OAuth2User {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
+
 	public Long getUserid() {
 		return this.userId;
 	}
@@ -60,6 +61,7 @@ public class MemberSecurityDto extends User implements OAuth2User {
 		return this.nickname;
 	}
 	
+
 	public String getImg() {
 		return this.img;
 	}

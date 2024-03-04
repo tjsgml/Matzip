@@ -1,5 +1,6 @@
 package com.itwill.matzip.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.itwill.matzip.domain.enums.ApprovalStatus;
 
 import jakarta.persistence.*;
@@ -12,6 +13,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.io.Serializable;
 
@@ -29,16 +32,24 @@ public class UpdateRequest implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "UPDATE_REQUEST_PK")
 	private Long id;
-	
-	@Basic(optional = false)
-	private Long restId;
+
+	@JsonInclude
+	@Fetch(FetchMode.JOIN)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "RESTAURANT_FK")
+	private Restaurant restaurant;
 	
 	@Basic(optional = false)
 	private String content;
-	
+
+	@JsonInclude
+	@Fetch(FetchMode.JOIN)
 	@Enumerated(EnumType.STRING)
 	@Builder.Default
 	private ApprovalStatus status = ApprovalStatus.WAITING;//기본으로 승인 대기,,
-	
+
+	public void completeRequest () {
+		this.status = ApprovalStatus.APPROVED;
+	}
 	
 }
