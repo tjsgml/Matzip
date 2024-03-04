@@ -13,7 +13,7 @@ const query = {
     page: searchParams.get("page") ?? null
 };
 
-const status = {
+const STATUS_ENUM = {
     WAITING: "대기",
     APPROVED: "완료"
 }
@@ -121,7 +121,7 @@ if (requestToUpdateModal) {
         const reqContent = requestToUpdateModal.querySelector('span#req-content');
 
         restaurantName.innerHTML = data.restaurant.name;
-        statusBadge.innerHTML = status[data.status];
+        statusBadge.innerHTML = STATUS_ENUM[data.status];
         updateBtnInModal.setAttribute("data-id", reqId);
 
         if (data.status === "WAITING") {
