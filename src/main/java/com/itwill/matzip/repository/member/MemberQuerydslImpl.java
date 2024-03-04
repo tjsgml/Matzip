@@ -21,31 +21,15 @@ public class MemberQuerydslImpl extends QuerydslRepositorySupport implements Mem
     }
 
     @Override
-    public Page<Member> findMemberList(MemberFilterDto filterDto) {
-        QMember member = QMember.member;
-        JPQLQuery<Member> query = from(member);
+    public List<Member> findMemberList(MemberFilterDto filterDto) {
+        JPQLQuery<Member> query = search(filterDto);
+        return query.fetch();
+    }
 
-        BooleanBuilder bool = new BooleanBuilder();
-
-        switch (filterDto.getRole()) { // 권한
-            case "ROLE_USER" -> bool.and(member.roles.contains(MemberRole.USER));
-            case "ROLE_ADMIN" -> bool.and(member.roles.contains(MemberRole.ADMIN));
-            case "ROLE_GUEST" -> bool.and(member.roles.contains(MemberRole.GUEST));
-        }
-
-        switch (filterDto.getSearchCondition()) {
-            case "USERNAME" -> bool.and(member.username.containsIgnoreCase(filterDto.getSearchKeyword()));
-            case "NICKNAME" -> bool.and(member.nickname.containsIgnoreCase(filterDto.getSearchKeyword()));
-            case "EMAIL" -> bool.and(member.email.containsIgnoreCase(filterDto.getSearchKeyword()));
-            default ->
-                    bool.and(member.email.containsIgnoreCase(filterDto.getSearchKeyword())
-                            .or(member.nickname.containsIgnoreCase(filterDto.getSearchKeyword()))
-                            .or(member.username.containsIgnoreCase(filterDto.getSearchKeyword()))
-                    );
-        }
-
+    @Override
+    public Page<Member> findMemberListByPagination(MemberFilterDto filterDto) {
+        JPQLQuery<Member> query = search(filterDto);
         Pageable pageable = PageRequest.of(filterDto.getPage(), filterDto.getViewCnt());
-        query.where(bool);
 
         Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query);
 
@@ -54,5 +38,36 @@ public class MemberQuerydslImpl extends QuerydslRepositorySupport implements Mem
         List<Member> content = query.fetch();
 
         return new PageImpl<>(content, pageable, total);
+    }
+
+
+    private JPQLQuery<Member> search(MemberFilterDto filterDto) {
+        QMember member = QMember.member;
+        JPQLQuery<Member> query = from(member);
+
+        BooleanBuilder bool = new BooleanBuilder();
+
+        if (filterDto.getRole() != null) {
+            switch (filterDto.getRole()) { // 권한
+                case "ROLE_USER" -> bool.and(member.roles.contains(MemberRole.USER));
+                case "ROLE_ADMIN" -> bool.and(member.roles.contains(MemberRole.ADMIN));
+                case "ROLE_GUEST" -> bool.and(member.roles.contains(MemberRole.GUEST));
+            }
+        }
+
+        if (filterDto.getSearchCondition() != null) {
+            switch (filterDto.getSearchCondition()) {
+                case "USERNAME" -> bool.and(member.username.containsIgnoreCase(filterDto.getSearchKeyword()));
+                case "NICKNAME" -> bool.and(member.nickname.containsIgnoreCase(filterDto.getSearchKeyword()));
+                case "EMAIL" -> bool.and(member.email.containsIgnoreCase(filterDto.getSearchKeyword()));
+                default -> bool.and(member.email.containsIgnoreCase(filterDto.getSearchKeyword())
+                        .or(member.nickname.containsIgnoreCase(filterDto.getSearchKeyword()))
+                        .or(member.username.containsIgnoreCase(filterDto.getSearchKeyword()))
+                );
+            }
+        }
+
+        query.where(bool);
+        return query;
     }
 }

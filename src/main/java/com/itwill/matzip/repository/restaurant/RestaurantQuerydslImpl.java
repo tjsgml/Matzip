@@ -1,6 +1,6 @@
 package com.itwill.matzip.repository.restaurant;
 
-import java.util.List;  
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.domain.Page;
@@ -26,9 +26,42 @@ public class RestaurantQuerydslImpl extends QuerydslRepositorySupport implements
     }
 
     @Override
-    public Page<Restaurant> search(RestaurantSearchCond cond) {
+    public List<Restaurant> search(RestaurantSearchCond cond) {
+        JPQLQuery<Restaurant> query = searchByCondition(cond);
+        return query.fetch();
+    }
+
+    @Override
+    public Page<Restaurant> searchByPagination(RestaurantSearchCond cond) {
 
         log.info("search(RestaurantSearchCond={})", cond);
+        JPQLQuery<Restaurant> query = searchByCondition(cond);
+
+        Pageable pageable = null;
+
+        if (cond.getOrder().equals("createdTimeASC")) {
+            pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.ASC, "createdTime");
+        } else if (cond.getOrder().equals("nameASC")) {
+            pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.ASC, "name");
+        } else {
+            pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.DESC, "createdTime");
+        }
+
+        Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query);
+
+        // 한 페이지에 표시될 데이터(컨텐트)
+        List<Restaurant> content = query.fetch();
+        // 전체 원소 개수
+        long total = query.fetchCount();
+
+        // Page<T> 타입 객체를 생성
+        Page<Restaurant> page = new PageImpl<>(content, pageable, total);
+        log.info("pageable = {}", page.getNumber());
+
+        return page;
+    }
+
+    private JPQLQuery<Restaurant> searchByCondition(RestaurantSearchCond cond) {
         QRestaurant restaurant = QRestaurant.restaurant;
         JPQLQuery<Restaurant> query = from(restaurant);
 
@@ -70,61 +103,41 @@ public class RestaurantQuerydslImpl extends QuerydslRepositorySupport implements
             }
         }
         query.where(builder);
-
-        Pageable pageable = null;
-
-        if (cond.getOrder().equals("createdTimeASC")) {
-            pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.ASC, "createdTime");
-        } else if (cond.getOrder().equals("nameASC")) {
-            pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.ASC, "name");
-        } else {
-            pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.DESC, "createdTime");
-        }
-
-        Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query);
-
-        // 한 페이지에 표시될 데이터(컨텐트)
-        List<Restaurant> content = query.fetch();
-        // 전체 원소 개수
-        long total = query.fetchCount();
-
-        // Page<T> 타입 객체를 생성
-        Page<Restaurant> page = new PageImpl<>(content, pageable, total);
-        log.info("pageable = {}", page.getNumber());
-
-        return page;
+        return query;
     }
 
     @Override
     public void updateCategoryToDefaultCategory(Integer categoryId, Integer categoryIdToChange) {
         QRestaurant restaurant = QRestaurant.restaurant;
-                update(restaurant)
+        update(restaurant)
                 .set(restaurant.category.id, categoryIdToChange)
                 .where(restaurant.category.id.eq(categoryId))
-                        .execute();
+                .execute();
     }
+
     //전체 리스트에서 키워드 검색
     @Override
     public List<Restaurant> searchAllByKeyword(String keyword) {
-    	QRestaurant restaurant = QRestaurant.restaurant;
-    	
-    	JPQLQuery<Restaurant> query = from(restaurant)
-    								  .where(restaurant.name.containsIgnoreCase(keyword)
-    								  .and(restaurant.status.eq(RestaurantStatus.OPEN)));
-    	return query.fetch();
-    	
+        QRestaurant restaurant = QRestaurant.restaurant;
+
+        JPQLQuery<Restaurant> query = from(restaurant)
+                .where(restaurant.name.containsIgnoreCase(keyword)
+                        .and(restaurant.status.eq(RestaurantStatus.OPEN)));
+        return query.fetch();
+
     }
+
     //카테고리별 키워드 검색
     @Override
     public List<Restaurant> searchByCategoryAndKeyword(Integer categoryId, String keyword) {
         QRestaurant restaurant = QRestaurant.restaurant;
         JPQLQuery<Restaurant> query = from(restaurant)
-        						     .where(restaurant.name.containsIgnoreCase(keyword)
-        						     .and(restaurant.category.id.eq(categoryId))
-                					 .and(restaurant.status.eq(RestaurantStatus.OPEN)));
-					     	
-        
+                .where(restaurant.name.containsIgnoreCase(keyword)
+                        .and(restaurant.category.id.eq(categoryId))
+                        .and(restaurant.status.eq(RestaurantStatus.OPEN)));
+
+
         return query.fetch();
     }
-    
+
 }

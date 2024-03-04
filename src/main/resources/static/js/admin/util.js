@@ -35,7 +35,7 @@ function mkPaginationListItem(paginationList, num, curPage, txt, func, varPrim) 
     });
 }
 
-function mkRequestQuery(query) {
+function mkQueryString(query) {
 
     const part = [];
     const key = Object.keys(query);

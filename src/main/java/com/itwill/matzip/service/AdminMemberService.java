@@ -28,7 +28,7 @@ public class AdminMemberService {
     private final static Integer REVIEW_LIST_SIZE = 5;
 
     public Page<Member> getMemberList(MemberFilterDto filterDto) {
-        Page<Member> members = memberDao.findMemberList(filterDto);
+        Page<Member> members = memberDao.findMemberListByPagination(filterDto);
         log.info("members={}", members);
         return members;
     }
