@@ -62,7 +62,7 @@ function resetMemberList() {
 
 async function renderMemberList() {
     resetMemberList();
-    let {data} = await axios.get(location.href + "/list?" + mkRequestQuery());
+    let {data} = await axios.get(location.href + "/list?" + mkRequestQuery(query));
     const {totalPages, number, content: listItems} = data;
 
     renderPagination(paginationList, totalPages, number, renderMemberList);
@@ -95,22 +95,15 @@ async function renderMemberList() {
         memberListTable.append(tableRow);
 
         tableRow.querySelector("button.btn-del").addEventListener("click", async () => {
-            const {status} = axios.delete(location.href + "/" + listItem.id);
+            const {status} = await axios.delete(location.href + "/" + listItem.id);
+
+            if (status === 204) {
+                alert("사용자가 삭제되었습니다.");
+                location.reload();
+            }
         })
     });
 
-}
-
-function mkRequestQuery() {
-
-    const part = [];
-    const key = Object.keys(query);
-
-    key.forEach(k => {
-        part.push(`${k}=${query[k]}`);
-    })
-
-    return part.join("&");
 }
 
 searchKeywordBtn.addEventListener("click", () => {

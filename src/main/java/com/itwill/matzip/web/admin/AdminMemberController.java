@@ -5,10 +5,11 @@ import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.domain.enums.MemberRole;
 import com.itwill.matzip.dto.admin.MemberFilterDto;
 import com.itwill.matzip.service.AdminMemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Controller
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/admin/member")
 public class AdminMemberController {
 
-    @Autowired
-    AdminMemberService memberService;
+    private final AdminMemberService memberService;
 
     @GetMapping("")
     public String getMemberListPage(Model model) {
@@ -69,7 +71,7 @@ public class AdminMemberController {
 
     @ResponseBody
     @DeleteMapping("/review/img/{reviewImgId}")
-    public ResponseEntity<List<String>> getReviewImgId(@PathVariable("reviewImgId") Long reviewImgId) {
+    public ResponseEntity<Object> deleteReviewImgId(@PathVariable("reviewImgId") Long reviewImgId) {
         memberService.deleteReviewImg(reviewImgId);
         return ResponseEntity.noContent().build();
     }

@@ -33,7 +33,7 @@
                             <th><input id="check-all-tags" type="checkbox"/></th>
                             <th>카테고리</th>
                             <th>해시태그</th>
-                            <th>레스토랑 개수</th>
+                            <th>메인 노출 여부</th>
                             <th>수정</th>
                             <th>삭제</th>
                         </tr>
@@ -49,7 +49,7 @@
                                 <div class="col my-5">
                                     <p style="font-size: 50px">😂👀😳😦</p>
                                     <div>
-                                        해당 검색 결과에 알맞은 유저가 없습니다.
+                                        해당 검색 결과에 알맞은 해시태그가 없습니다.
                                     </div>
                                 </div>
                             </div>
@@ -59,11 +59,22 @@
                 <div class="col-2">
                     <div id="update-div-form" class="d-none my-3">
                         <input id="tag-id-to-update" class="form-control" type="hidden"/>
-                        <label for="tag-name-to-update">이름</label><input id="tag-name-to-update" class="form-control"
-                                                                         type="text"/>
-                        <label for="tag-category-to-update">카테고리</label><select id="tag-category-to-update"
-                                                                                class="form-control">
-                    </select>
+                        <label for="tag-name-to-update">이름</label>
+                        <input id="tag-name-to-update" class="form-control"
+                               type="text"/>
+                        <label for="tag-category-to-update">카테고리</label>
+                        <select id="tag-category-to-update" class="form-control"></select>
+                        <div>메인 노출 여부</div>
+                        <div class="d-flex justify-content-center">
+                            <div>
+                                <label for="tag-expose-to-update-Y">Y</label>
+                                <input type="radio" value="Y" id="tag-expose-to-update-Y" name="expose"/>
+                            </div>
+                            <div class="ms-3">
+                                <label for="tag-expose-to-update-N">N</label>
+                                <input type="radio" value="N" id="tag-expose-to-update-N" name="expose" checked/>
+                            </div>
+                        </div>
                         <button id="btn-update-submit" class="mt-2 btn btn-sm btn-primary form-control">수정하기</button>
                     </div>
                 </div>

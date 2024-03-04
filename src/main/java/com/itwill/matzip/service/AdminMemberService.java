@@ -46,6 +46,7 @@ public class AdminMemberService {
     }
 
     public void deleteMember(Long memberId) {
+        reviewDao.deleteAllByMemberId(memberId);
         memberDao.deleteById(memberId);
     }
 

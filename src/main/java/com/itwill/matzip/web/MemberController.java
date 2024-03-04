@@ -25,8 +25,13 @@ import com.itwill.matzip.service.MailService;
 import com.itwill.matzip.service.MemberService;
 import com.itwill.matzip.service.SocialMemberService;
 
+<<<<<<< HEAD
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+=======
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
+>>>>>>> main
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,12 +92,21 @@ public class MemberController {
 	}
 
 	// 소셜 첫가입 회원 추가 정보 추가/기존 회원의 정보 수정
-	@PostMapping({ "/addinfo", "/modifyInfo" })
-	public String updateMemberInfo(MemberUpdateDto dto, Principal principal) {
-		log.info("updateMemberInfo(dto : {})", dto);
-
-		socialSvc.updateMember(dto, principal.getName());
-
+	@PostMapping({"/addinfo", "/modifyInfo"})
+	public String updateMemberInfo(MemberUpdateDto dto, 
+																		@AuthenticationPrincipal MemberSecurityDto msd,
+																		ServletRequest request) {
+		log.info("updateMemberInfo(dto : {})", msd.getUserid());
+		
+		HttpServletRequest req = (HttpServletRequest)request;
+		String target = req.getRequestURI();
+				
+		socialSvc.updateMember(dto, msd);
+		
+		if (target.equals("/member/modifyInfo")) {
+			return "redirect:/memberinfo/mymain";
+		}
+		
 		return "redirect:/";
 	}
 
