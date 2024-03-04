@@ -59,7 +59,7 @@ public class ReviewController {
 
 
     // 리뷰 수정
-    @GetMapping("/update/{reviewId}") //http://localhost:8081/review/update?review=3
+    @GetMapping("/update/{reviewId}") 
     public String reviewUpdate(@PathVariable("reviewId") Long reviewId, Model model) {
         // 리뷰 정보 조회 
         Review review = reviewSvc.findReviewById(reviewId);
@@ -77,6 +77,9 @@ public class ReviewController {
         model.addAttribute("restaurantId", restaurant.getId());
         model.addAttribute("review", review);
         model.addAttribute("reviewImages", reviewImages);
+        log.info("맛평점 ={}", review.getFlavorScore());
+        log.info("가격평점 ={}", review.getPriceScore());
+        log.info("서비스평점 ={}", review.getServiceScore());
         return "review/update"; // 리뷰 수정 페이지
     }
     
