@@ -25,4 +25,9 @@ public class RestaurantSearchCond {
     private Integer totalCount = 10;
     @Builder.Default
     private String order = "createdTimeASC";
+    private String type = "DEFAULT";
+
+    public void checkExcelDownloadFlow () {
+        this.type = "EXCEL";
+    }
 }

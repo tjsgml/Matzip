@@ -1,3 +1,5 @@
+const resource = "member";
+
 const memberListTable = document.querySelector("tbody#member-list-table");
 const searchOptionSelect = document.querySelector("select#search-option");
 const searchKeyword = document.querySelector("input#search-keyword");
@@ -62,7 +64,7 @@ function resetMemberList() {
 
 async function renderMemberList() {
     resetMemberList();
-    let {data} = await axios.get(location.href + "/list?" + mkRequestQuery(query));
+    let {data} = await axios.get(location.href + "/list?" + mkQueryString(query));
     const {totalPages, number, content: listItems} = data;
 
     renderPagination(paginationList, totalPages, number, renderMemberList);
