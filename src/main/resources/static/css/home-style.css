@@ -25,7 +25,6 @@ ul {
 	display: flex;
 	gap: 15px;
 	list-style-type: none;
-	transition-duration: 0.3s;
 }
 
 .main-bg-color {

@@ -63,7 +63,7 @@
 						<div class="tag-restbox" th:data-id="*{tagId}">
 
 							<div class="rest-l-btn">
-								<button class="preBtn" th:data-id="*{tagId}">
+								<button class="preBtn" th:data-id="*{tagId}" th:if="*{restLength>3}">
 									<i class="fa-solid fa-angle-left fa-2x" th:data-id="*{tagId}"></i>
 								</button>
 							</div>
@@ -101,7 +101,7 @@
 
 							<!-- -------------------------------------------------------------------------------------------------------- -->
 							<div class="rest-r-btn">
-								<button class="nextBtn" th:data-id="*{tagId}">
+								<button class="nextBtn" th:data-id="*{tagId}"  th:if="*{restLength>3}">
 									<i class="fa-solid fa-angle-right  fa-2x" th:data-id="*{tagId}"></i>
 								</button>
 							</div>
