@@ -148,13 +148,15 @@ public class MemberService implements UserDetailsService {
     
     //프로필 이미지 기본 이미지로 변경
     @Transactional
-    public String changeProfileDefaultImg(Long id) {
+    public String changeProfileDefaultImg(MemberSecurityDto msd) {
         String imgUrl = null;
-        Member entity = memberDao.findById(id).orElse(null);
+        Member entity = memberDao.findById(msd.getUserid()).orElse(null);
 
         if (entity != null) {
             entity.profileImgUpdate("https://domain-web-storage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20240219_111445259.jpg");
             imgUrl = "https://domain-web-storage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20240219_111445259.jpg";
+            
+            msd.updateImg(imgUrl);
         }
 
         return imgUrl;
@@ -162,9 +164,9 @@ public class MemberService implements UserDetailsService {
     
     //프로필 이미지 커스텀 변경
     @Transactional
-    public String changeProfileCtmImg(Long id, MultipartFile imgFile) {
+    public String changeProfileCtmImg(MultipartFile imgFile, MemberSecurityDto msd) {
         String imgUrl = null;
-        Member entity = memberDao.findById(id).orElse(null);
+        Member entity = memberDao.findById(msd.getUserid()).orElse(null);
 
         if (!imgFile.isEmpty()) {
             try {
@@ -172,6 +174,7 @@ public class MemberService implements UserDetailsService {
 
                 if (entity != null) {
                     entity.profileImgUpdate(imgUrl);
+                    msd.updateImg(imgUrl);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -34,3 +34,15 @@ function mkPaginationListItem(paginationList, num, curPage, txt, func, varPrim) 
         func();
     });
 }
+
+function mkRequestQuery(query) {
+
+    const part = [];
+    const key = Object.keys(query);
+
+    key.forEach(k => {
+        if (query[k]) part.push(`${k}=${query[k]}`);
+    })
+
+    return part.join("&");
+}

@@ -1,3 +1,5 @@
+const type = "UPDATE";
+
 let curPage = 1;
 let totalPage = 0;
 let reqSize = 10;
@@ -43,8 +45,8 @@ const REST_API_KEY = "c89a020dd130ee8b16d5aba0dc567c8e";
 const SEARCH_BY_KEYWORD_URL = "https://dapi.kakao.com/v2/local/search/keyword.JSON?";
 const SEARCH_BY_ADDRESS_URL = "https://dapi.kakao.com/v2/local/search/address.JSON?";
 
-let origin_lat = latInput.value ?? 37.514322572335935;
-let origin_lng = lngInput.value ?? 127.06283102249932;
+let origin_lat = latInput.value;
+let origin_lng = lngInput.value;
 
 function resetAddress() {
     nameInput.value = originRestaurantInfo.name;
