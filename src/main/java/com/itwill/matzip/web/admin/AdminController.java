@@ -1,6 +1,7 @@
 package com.itwill.matzip.web.admin;
 
 import com.itwill.matzip.domain.Restaurant;
+import com.itwill.matzip.dto.admin.MemberFilterDto;
 import com.itwill.matzip.dto.admin.RestaurantSearchCond;
 import com.itwill.matzip.service.AdminService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,8 +36,14 @@ public class AdminController {
 
     @ResponseBody
     @GetMapping("/excel/restaurant")
-    public void downloadExcel(RestaurantSearchCond cond, HttpServletResponse response) {
-        adminService.getAllRestaurant(cond, response);
+    public void downloadRestaurantDataToExcel(RestaurantSearchCond cond, HttpServletResponse response) {
+        adminService.getAllRestaurantByExcel(cond, response);
+    }
+
+    @ResponseBody
+    @GetMapping("/excel/member")
+    public void downloadMemberDataToExcel(MemberFilterDto cond, HttpServletResponse response) {
+        adminService.getAllMemberByExcel(cond, response);
     }
 
 }

@@ -29,7 +29,7 @@ public class AdminMemberController {
     public String getMemberListPage(Model model) {
         List<MemberRole> memberRoles = memberService.getMemberRoles();
         model.addAttribute("memberRoles", memberRoles);
-        return "admin/member-list.html";
+        return "admin/member-list";
     }
 
     @ResponseBody
