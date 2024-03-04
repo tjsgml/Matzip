@@ -1,21 +1,136 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>MZ들의 트렌트 맛집 저장소</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>MZ의 트렌드 맛집 검색, Mat.Zip</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+	<link rel="stylesheet" href="../css/home-style.css" />
 </head>
+
 <body>
-	<h1>홈</h1>
-	
-	<!-- 02.14 수정 : <a th:href="@{/logout}">로그아웃</a> -->
-	<th:block sec:authorize="isAnonymous()">
-		<a th:href="@{/member/login}">로그인</a>
-	</th:block>
-	<th:block sec:authorize="isAuthenticated()">
-		<a th:href="@{/logout}">로그아웃</a>
-		<a th:href="@{/memberinfo/mymain}">마이페이지</a>
-	</th:block>
-	
-	<a th:href="@{/map/list}">지도</a>
+	<!-- 메뉴 바 추가 예정 -->
+	<div style="background-color: antiquewhite; height: 150px;">메뉴바</div>
+
+	<div class="container-fluid">
+		<div class="row">
+			<!-- 여백 -->
+			<div class="col-md-3"></div>
+
+			<!-- **메인** -->
+			<div class="col-md-6  main-bg-color">
+				
+				<!-- 광고 div -->
+				<div id="carouselExampleSlidesOnly" class="carousel slide matzip-ad" data-bs-ride="carousel">
+
+					<div class="carousel-indicators">
+						<button type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide-to="0" class="active"
+							aria-current="true" aria-label="Slide 1"></button>
+						<button type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide-to="1"
+							aria-label="Slide 2"></button>
+						<button type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide-to="2"
+							aria-label="Slide 3"></button>
+					</div>
+
+					<div class="carousel-inner">
+						<div class="carousel-item active" data-bs-interval="5000">
+							<img src="../img/banner.png" class="d-block w-100">
+						</div>
+						<div class="carousel-item" data-bs-interval="5000">
+							<img src="../img/banner2.png" class="d-block w-100">
+						</div>
+						<div class="carousel-item" data-bs-interval="5000">
+							<img src="../img/banner3.png" class="d-block w-100">
+						</div>
+					</div>
+				</div>
+
+				<!-- 태그 리스트들 -->
+				<section class="tag-list main-bg-color">
+
+					<!-- 1개 태그에 검색된 레스토랑들 -->
+					<div class="tag-list__one" th:each="tag:${tags}" th:object="${tag}">
+
+						<!-- 태그명 및 수 -->
+						<div class="tag-name">
+							<div th:text="|#*{tagKeyword}|"></div>
+							<div th:text="|(*{restLength})|"></div>
+						</div>
+
+						<!-- 레스토랑 리스트 -->
+						<div class="tag-restbox" th:data-id="*{tagId}">
+
+							<div class="rest-l-btn">
+								<button class="preBtn" th:data-id="*{tagId}">
+									<i class="fa-solid fa-angle-left fa-2x" th:data-id="*{tagId}"></i>
+								</button>
+							</div>
+							<!-- -------------------------------------------------------------------------------------------------------- -->
+							<!-- 슬라이드 컨테이너 넣을 공간 -->
+							<div class="rest-info">
+								<ul>
+
+									<li class="rest-one" th:each="res:*{rest}" th:object="${res}">
+										<a th:href="@{/rest/details(id=*{restaurantId})}">
+											<div class="rest-one__img">
+
+												<!-- 식당 이미지 -->
+												<img th:if="*{imgUrl != null}" th:src="*{imgUrl}" />
+												<div class="emptyMainImg" th:if="*{imgUrl == null}">
+													<img src="/img/reviewNullImg.png" />
+												</div>
+
+												<!-- 식당 평점 -->
+												<div>
+													<img src="/img/v26_89.png" />
+													<span th:text="*{totalSart}"></span>
+												</div>
+											</div>
+
+											<div class="rest-one__name">
+												<span th:text="*{restaurantName}"></span>
+												<span th:text="*{categoryName}"></span>
+											</div>
+										</a>
+									</li>
+
+								</ul>
+							</div>
+
+							<!-- -------------------------------------------------------------------------------------------------------- -->
+							<div class="rest-r-btn">
+								<button class="nextBtn" th:data-id="*{tagId}">
+									<i class="fa-solid fa-angle-right  fa-2x" th:data-id="*{tagId}"></i>
+								</button>
+							</div>
+
+						</div><!-- 끝 : 레스토랑 리스트 -->
+
+					</div>
+				</section>
+			</div>
+
+			<!-- 여백 -->
+			<div class="col-md-3"></div>
+		</div>
+	</div>
+
+	<!-- java script -->
+	<!-- Bootstrap 자바스크립트 모듈 -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+		crossorigin="anonymous"></script>
+
+	<!-- Axios 자바스크립트 모듈 -->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+	<!-- 아이콘 모듈 -->
+	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
+
+	<!-- 커스텀 모듈 -->
+	<script src="../js/home/slide.js"></script>
 </body>
+
 </html>

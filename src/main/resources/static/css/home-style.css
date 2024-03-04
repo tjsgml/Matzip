@@ -1,0 +1,176 @@
+@charset "UTF-8";
+
+:root {
+	--br-gray: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.row>* {
+	padding: 0px 0px;
+}
+
+body {
+	font-family: Pretendard, ui-sans-serif, system-ui;
+	background-color: #f0f0f3;
+	height: 100vh;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+ul {
+	padding-left: 0;
+	position: absolute;
+	display: flex;
+	gap: 15px;
+	list-style-type: none;
+	transition-duration: 0.3s;
+}
+
+.main-bg-color {
+	background-color: white;
+}
+
+.matzip-ad {
+	margin-top: 15px;
+	margin-bottom: 35px;
+}
+
+.matzip-ad>img {
+	border-radius: 10px;
+	height: 270px;
+	background-size: cover;
+	object-fit: cover;
+	box-sizing: border-box;
+}
+
+
+.tag-name {
+	padding: 0 70px;
+	padding-top: 17px ;
+	padding-bottom: 8px;
+	display: flex;
+	font-size: 20px;
+	color: #888888;
+	gap: 3px;
+}
+
+.tag-name>div:first-child {
+	font-weight: bold;
+	color: black;
+	font-size: 24px;
+}
+
+.tag-name>div:last-child {
+	align-self: center;
+	padding-bottom: 2px;
+}
+
+.tag-restbox {
+	margin-bottom: 20px;
+	padding-bottom: 30px;
+	position: relative;
+	display: grid;
+	grid-template-columns: 70px auto 70px;
+
+	border-bottom: var(--br-gray);
+}
+
+.rest-r-btn,
+.rest-l-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding-bottom: 45px;
+}
+
+.rest-r-btn>button,
+.rest-l-btn>button {
+	border: none;
+	background-color: transparent;
+	outline: none;
+	color: #888888;
+}
+
+.rest-r-btn>button:hover,
+.rest-l-btn>button:hover {
+	color: #FF230A;
+}
+
+.rest-info {
+	overflow: hidden;
+	position: relative;
+	height: 249px;
+}
+
+.emptyMainImg {
+	background-color: #FAF3E7;
+	/*border: solid 1.5px #FF230A;*/
+	width: 200px;
+	height: 200px;
+	border-radius: 15px;
+	display: flex;
+	/* 부모 요소를 플렉스 박스로 설정하여 가운데 정렬을 수행 */
+	justify-content: center;
+	/* 가로 방향으로 가운데 정렬 */
+	align-items: center;
+	/* 세로 방향으로 가운데 정렬 */
+	background-size: cover;
+}
+
+.emptyMainImg>img {
+	width: 45px;
+}
+
+.rest-one {
+	width: 200px;
+}
+
+.rest-one__img {
+	position: relative;
+	width: 200px;
+	margin-bottom: 6px;
+}
+
+.rest-one__img>img {
+	width: 200px;
+	height: 200px;
+	background-size: cover;
+	object-fit: cover;
+	box-sizing: border-box;
+	border-radius: 15px;
+
+}
+
+.rest-one__img>div:last-child {
+	position: absolute;
+	padding: 3px 9px;
+
+	color: white;
+	font-weight: 600;
+	font-size: 12px;
+
+	bottom: 10px;
+	right: 10px;
+
+	border-radius: 13px;
+	background-color: rgba(0, 0, 0, .5);
+}
+
+.rest-one__img>div:last-child>img {
+	width: 12px;
+	height: 12px;
+	margin-right: 4px;
+}
+
+.rest-one__name>span:first-child {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.rest-one__name>span:last-child {
+	font-size: 12px;
+	color: #666666;
+	margin-left: 6px;
+}
