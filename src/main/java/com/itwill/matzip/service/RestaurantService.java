@@ -128,10 +128,13 @@ public class RestaurantService {
 	
 	// 수정 요청 사항 삽입
 	public void updateRequest(UpdateRequestItemDto dto) {
+		Restaurant rest = restDao.findById(dto.getRestId()).orElse(null);
 		UpdateRequest ur = UpdateRequest.builder()
-										.restId(dto.getRestId())
+										.restaurant(rest)
 										.content(dto.getContent())
 										.build();
+		
+		log.info(ur.toString());
 		URdao.save(ur);
 	}
 	

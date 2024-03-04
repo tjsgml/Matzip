@@ -30,8 +30,9 @@ public class UpdateRequest implements Serializable {
 	@Column(name = "UPDATE_REQUEST_PK")
 	private Long id;
 	
-	@Basic(optional = false)
-	private Long restId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "RESTAURANT_FK")
+	private Restaurant restaurant;
 	
 	@Basic(optional = false)
 	private String content;

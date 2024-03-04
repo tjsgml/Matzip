@@ -49,7 +49,6 @@ public class MemberSecurityDto extends User implements OAuth2User {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

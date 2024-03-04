@@ -36,7 +36,8 @@
 					<th:block sec:authorize="isAuthenticated()">
 							<span class="nav-item dropdown" style="margin-left: 10px;">
 								<a  class="nav-link " href="#" role="button" data-bs-toggle="dropdown"  >
-									<img  src="/img/user.png" style="width: 45px; height: 45px;">
+									<img th:src="${#authentication.principal.img}" style="width: 45px; height: 45px; border-radius: 50px;">
+									<!-- src="/img/user.png" -->
 								</a>
 								<ul class="dropdown-menu">
 									

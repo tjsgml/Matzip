@@ -84,11 +84,29 @@ public class RestaurantController {
 	//좋아요 버튼 클릭시 로그인 상태인지 확인. 로그인 상태면 memberId 반환, 로그아웃 상태면 null을 반환 
 	@GetMapping("/details/checkMember")
 	@ResponseBody
-	public ResponseEntity<Long> checkLogin(){
-		//현재 인증된 사용자의 정보를 가져온다.
+	public ResponseEntity<Long> checkLogin(){ 
+		
+		
 	     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	     
-	     
+	  // Principal로부터 MemberSecurityDto를 가져올 수 있음
+        if (auth != null && auth.getPrincipal() instanceof MemberSecurityDto) {
+            MemberSecurityDto memberDto = (MemberSecurityDto) auth.getPrincipal();
+            
+            // MemberSecurityDto에서 사용자 정보 가져오기
+            Long userId = memberDto.getUserid();
+            String nickname = memberDto.getNickname();
+            String img = memberDto.getImg();
+            
+            // 사용자 정보 활용하기
+           log.info("@@@@@ userId={}",userId);
+           log.info("nickName={}",nickname);
+           log.info("@@@ img={}",img);
+           
+        } else {
+            // MemberSecurityDto가 아닌 다른 타입의 Principal인 경우 처리
+            System.out.println("Principal is not an instance of MemberSecurityDto");
+        }
 
 	        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
 	            // 사용자가 로그아웃되어 있음을 반환
