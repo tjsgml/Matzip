@@ -155,6 +155,7 @@ public class AdminMatzipController {
         return "admin/update-restaurant";
     }
 
+    @ResponseBody
     @PatchMapping("/restaurant/{restaurantId}")
     public ResponseEntity<Restaurant> updateRestaurantInfo(@RequestBody RestaurantUpdateDto restaurantUpdateDto) {
         Restaurant updatedRestaurant = adminService.updateRestaurant(restaurantUpdateDto);
