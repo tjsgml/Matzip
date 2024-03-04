@@ -7,7 +7,8 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface RestaurantQuerydsl {
-    Page<Restaurant> search (RestaurantSearchCond cond); // 검색 조건 담을 Dto 생성 필요
+	List<Restaurant> search(RestaurantSearchCond cond);
+	Page<Restaurant> searchByPagination(RestaurantSearchCond cond); // 검색 조건 담을 Dto 생성 필요
     void updateCategoryToDefaultCategory(Integer categoryId, Integer categoryIdToChange);
     
 	List<Restaurant> searchAllByKeyword(String keyword);

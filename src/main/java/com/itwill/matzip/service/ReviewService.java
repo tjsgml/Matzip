@@ -219,8 +219,12 @@ public class ReviewService {
         for (Review review : list) {
             temp += (review.getFlavorScore() + review.getPriceScore() + review.getServiceScore()) / 3.0;
         }
-
-        return (double) temp / list.size();
+        
+        if(list.size() == 0) {
+        	return 0.0;
+        }else {
+        	return (double) temp / list.size();        	
+        }
     }
 	
 	

@@ -171,6 +171,12 @@
                         </ul>
                     </nav>
                 </div>
+                <div class="mt-4">
+                    <button id="excel-down-btn" class="btn btn-success form-control">
+                        <div>EXCEL로 다운로드</div>
+                        <kbd>검색 후 다운로드 시 검색된 데이터만 다운됩니다.</kbd>
+                    </button>
+                </div>
             </div>
             <div class="container card mt-4 border-0"
                  style="border-radius: 24px; box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);"
@@ -187,6 +193,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </main>
 
@@ -196,6 +203,7 @@
 <script src="/js/admin/restaurant/matzip-status-change.js"></script>
 <script src="/js/admin/restaurant/matzip-list.js"></script>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
+<script src="/js/admin/download-excel.js"></script>
 
 </body>
 </html>
