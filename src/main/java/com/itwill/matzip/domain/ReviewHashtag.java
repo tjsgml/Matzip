@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.itwill.matzip.domain.enums.Expose;
 
@@ -55,6 +56,7 @@ public class ReviewHashtag implements Serializable {
 
     @ManyToMany(mappedBy = "hashtags", fetch = FetchType.LAZY)
     @Builder.Default
+    @JsonIgnore
     private Set<Review> reviews = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
