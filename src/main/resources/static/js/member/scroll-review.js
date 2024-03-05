@@ -18,14 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	const io = new IntersectionObserver(
 		(entry, observer) => {
-			const ioTarget = entry[0].target;
-
 			if (entry[0].isIntersecting) {
 				const count = post_list.children.length;	//현재 부모 태그가 가지고 있는 자식 수
 
-				if (reviewCnt.innerHTML >= count) {
-					console.log("현재 보이는 타겟", ioTarget);
-
+				if (reviewCnt.innerHTML > count) {
 					io.unobserve(post_one);		//현재 태그의 옵저버를 끊음
 
 					//리뷰 1개 가져오기
@@ -217,6 +213,12 @@ document.addEventListener('DOMContentLoaded', function() {
 								<pre class="review-content">${data.content}</pre>
 							</div>
 
+					<div class="my-review-meta">
+							<div class="review-like">
+									<div>공감</div>
+									<div>${data.reviewLikeCnt} likes</div>
+							</div>
+							
 							<div class="review-post_column dropdown text-end">
 								<div class="d-block link-body-emphasis text-decoration-none" data-bs-toggle="dropdown"
 									aria-expanded="false">
@@ -231,6 +233,8 @@ document.addEventListener('DOMContentLoaded', function() {
 									</li>
 								</ul>
 							</div>
+							
+					</div>
 						</div>`
 
 		post_list.innerHTML += strHtml;
