@@ -13,87 +13,94 @@
     <div class="row">
         <div class="col-3"></div>
         <div class="col-6 mt-5">
+            <!-- 폼 시작 -->
+            <form th:action="@{/review/update}" th:object="${reviewForm}" method="post" enctype="multipart/form-data" id="reviewForm">
                 <!-- 평점에 대한 hidden Input -->
                 <input type="hidden" id="tasteRating" name="tasteRating" th:value="${review.flavorScore}">
                 <input type="hidden" id="priceRating" name="priceRating" th:value="${review.priceScore}">
                 <input type="hidden" id="serviceRating" name="serviceRating" th:value="${review.serviceScore}">
-            <h2 class="text-center-title">[[${restaurantName}]] 평가하기</h2>
-            <hr/>
-            <div>
-                <h4 class="text-center-title">평점</h4>
                 
-                <div class="rating-container" id="taste" th:data-rating="${review.flavorScore}">
-                    <p class="rating-flavor">맛</p>
-                    <span class="stars taste-stars">
-                        <span class="star" data-value="1"><i class="fas fa-star"></i></span>
-                        <span class="star" data-value="2"><i class="fas fa-star"></i></span>
-                        <span class="star" data-value="3"><i class="fas fa-star"></i></span>
-                        <span class="star" data-value="4"><i class="fas fa-star"></i></span>
-                        <span class="star" data-value="5"><i class="fas fa-star"></i></span>
-                    </span>
+                <h2 class="text-center-title">[[${restaurantName}]] 평가하기</h2>
+                <hr/>
+                
+                <div>
+                    <h4 class="text-center-title">평점</h4>
+                    
+                    <div class="rating-container" id="taste" th:data-rating="${review.flavorScore}">
+                        <p class="rating-flavor">맛</p>
+                        <span class="stars taste-stars">
+                            <span class="star" data-value="1"><i class="fas fa-star"></i></span>
+                            <span class="star" data-value="2"><i class="fas fa-star"></i></span>
+                            <span class="star" data-value="3"><i class="fas fa-star"></i></span>
+                            <span class="star" data-value="4"><i class="fas fa-star"></i></span>
+                            <span class="star" data-value="5"><i class="fas fa-star"></i></span>
+                        </span>
+                    </div>
+    
+                    <div class="rating-container" id="price" th:data-rating="${review.priceScore}">
+                        <p class="rating-price">가격</p>
+                        <span class="stars price-stars">
+                            <span class="star" data-value="1"><i class="fas fa-star"></i></span>
+                            <span class="star" data-value="2"><i class="fas fa-star"></i></span>
+                            <span class="star" data-value="3"><i class="fas fa-star"></i></span>
+                            <span class="star" data-value="4"><i class="fas fa-star"></i></span>
+                            <span class="star" data-value="5"><i class="fas fa-star"></i></span>
+                        </span>
+                    </div>
+                    <div class="rating-container" id="service" th:data-rating="${review.serviceScore}">
+                        <p class="rating-service">서비스</p>
+                        <span class="stars service-stars">
+                            <span class="star" data-value="1"><i class="fas fa-star"></i></span>
+                            <span class="star" data-value="2"><i class="fas fa-star"></i></span>
+                            <span class="star" data-value="3"><i class="fas fa-star"></i></span>
+                            <span class="star" data-value="4"><i class="fas fa-star"></i></span>
+                            <span class="star" data-value="5"><i class="fas fa-star"></i></span>
+                        </span>
+                    </div>
                 </div>
-
-                <div class="rating-container" id="price" th:data-rating="${review.priceScore}">
-                    <p class="rating-price">가격</p>
-                    <span class="stars price-stars">
-                        <span class="star" data-value="1"><i class="fas fa-star"></i></span>
-                        <span class="star" data-value="2"><i class="fas fa-star"></i></span>
-                        <span class="star" data-value="3"><i class="fas fa-star"></i></span>
-                        <span class="star" data-value="4"><i class="fas fa-star"></i></span>
-                        <span class="star" data-value="5"><i class="fas fa-star"></i></span>
-                    </span>
-                </div>
-                <div class="rating-container" id="service" th:data-rating="${review.serviceScore}">
-                    <p class="rating-service">서비스</p>
-                    <span class="stars service-stars">
-                        <span class="star" data-value="1"><i class="fas fa-star"></i></span>
-                        <span class="star" data-value="2"><i class="fas fa-star"></i></span>
-                        <span class="star" data-value="3"><i class="fas fa-star"></i></span>
-                        <span class="star" data-value="4"><i class="fas fa-star"></i></span>
-                        <span class="star" data-value="5"><i class="fas fa-star"></i></span>
-                    </span>
-                </div>
-            </div>
-            <hr/>
-            <div>
-                <h4 class="text-center-title">방문후기</h4>
-                <!-- 이미지섹션 -->
-                <div class="image-section">
-                    <div class="image-upload">
-                        <div class="file">
-                            <span class="image-inner">
-                                <input type="file" multiple accept="image/*" id="image-input" name="images" />
-                            </span>
+                <hr/>
+                
+                <div>
+                    <h4 class="text-center-title">방문후기</h4>
+                    <!-- 이미지섹션 -->
+                    <div class="image-section">
+                        <div class="image-upload">
+                            <div class="file">
+                                <span class="image-inner">
+                                    <input type="file" multiple accept="image/*" id="image-input" name="images" />
+                                </span>
+                            </div>
+                        </div>
+                        <!-- 이미지 미리보기 -->
+                        <div class="image-preview-container">
+                            <div class="image-preview-text ">이미지 업로드</div>
                         </div>
                     </div>
-                    <!-- 이미지 미리보기 -->
-                    <div class="image-preview-container">
-                        <div class="image-preview-text ">이미지 업로드</div>
+                    <textarea th:text="${review.content}" class="form-control" id="review" rows="5" name="reviewContent" placeholder="방문한 식당의 솔직한 후기를 입력해 주세요!"></textarea>
+                </div>
+                <hr/>
+                <h4 class="text-center-title">음식점 키워드</h4>
+                <div>
+                    <!-- TODO: 해시태그 키워드들 각각의 input 및 ul 요소에 표시해야 함 -->
+                    <div class="keyword- form-group">
+                        <div>방문목적</div>
+                        <input type="text" class="tag-input" name="purpose" data-category="visit-purpose" placeholder="엔터를 눌러 해시태그 등록" />
+                        <ul id="visitPurpose-tags" class="tag-list"></ul>
+                    </div>
+                    <div class="keyword-mood form-group">
+                        <div>분위기</div>
+                        <input type="text" class="tag-input" name="mood" data-category="mood" placeholder="엔터를 눌러 해시태그 등록" />
+                        <ul id="mood-tags" class="tag-list"></ul>
+                    </div>
+                    <div class="keyword-convenience form-group">
+                        <div>편의시설</div>
+                        <input type="text" class="tag-input" name="convenience" data-category="convenience" placeholder="엔터를 눌러 해시태그 등록" />
+                        <ul id="convenience-tags" class="tag-list"></ul>
                     </div>
                 </div>
-                <textarea th:text="${review.content}" class="form-control" id="review" rows="5" name="reviewContent" placeholder="방문한 식당의 솔직한 후기를 입력해 주세요!"></textarea>
-            </div>
-            <hr/>
-            <h4 class="text-center-title">음식점 키워드</h4>
-            <div>
-                <!-- TODO: 해시태그 키워드들 각각의 input 및 ul 요소에 표시해야 함 -->
-                <div class="keyword-purpose form-group">
-                    <div>방문목적</div>
-                    <input type="text" class="tag-input" name="purpose" data-category="visit-purpose" placeholder="엔터를 눌러 해시태그 등록" />
-                    <ul id="visit-purpose-tags" class="tag-list"></ul>
-                </div>
-                <div class="keyword-mood form-group">
-                    <div>분위기</div>
-                    <input type="text" class="tag-input" name="mood" data-category="mood" placeholder="엔터를 눌러 해시태그 등록" />
-                    <ul id="mood-tags" class="tag-list"></ul>
-                </div>
-                <div class="keyword-convenience form-group">
-                    <div>편의시설</div>
-                    <input type="text" class="tag-input" name="convenience" data-category="convenience" placeholder="엔터를 눌러 해시태그 등록" />
-                    <ul id="convenience-tags" class="tag-list"></ul>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-submit">리뷰 저장</button>
+                <button type="submit" class="btn btn-submit">리뷰 저장</button>
+            </form>
+            <!-- 폼 끝 -->
         </div>
         <div class="col-3"></div>
     </div>
@@ -102,7 +109,14 @@
 <script th:inline="javascript">
         // 서버에서 전달받은 reviewImages 배열을 전역 변수로 선언
         window.reviewImages = /*[[${reviewImages}]]*/ [];
+        let hashtags = /*[[${hashtags}]]*/ [];
 </script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    
+    /*]]>*/
+</script>
+
 <script src="/js/review/review-update.js"></script>
 </body>
 </html>

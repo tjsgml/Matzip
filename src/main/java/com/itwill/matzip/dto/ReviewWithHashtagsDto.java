@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class ReviewWithHashtagsDto {
 	private Long id;
     private String content;
-    private List<HashtagCategoryDto> categorizedHashtags;
+    private List<HashtagDto> categorizedHashtags;
 
 }

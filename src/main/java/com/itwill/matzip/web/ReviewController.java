@@ -1,6 +1,7 @@
 package com.itwill.matzip.web;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
+import com.itwill.matzip.dto.HashtagDto;
 import com.itwill.matzip.dto.ReviewCreateDto;
 import com.itwill.matzip.service.RestaurantService;
 import com.itwill.matzip.service.ReviewService;
@@ -68,6 +70,10 @@ public class ReviewController {
             // 리뷰 정보가 없으면
             return "redirect:/error";
         }
+        
+        List<HashtagDto> hashtags = review.getHashtags().stream()
+        		.map(h-> new HashtagDto(h.getId(), h.getKeyword(), h.getHtCategory().getName()))
+        		.collect(Collectors.toList());
 
         // 리뷰와 연관된 레스토랑 정보 가져옴
         Restaurant restaurant = restaurantSvc.findOneRest(review.getRestaurant().getId());
@@ -77,6 +83,7 @@ public class ReviewController {
         model.addAttribute("restaurantId", restaurant.getId());
         model.addAttribute("review", review);
         model.addAttribute("reviewImages", reviewImages);
+        model.addAttribute("hashtags", hashtags);
         return "review/update"; // 리뷰 수정 페이지
     }
     

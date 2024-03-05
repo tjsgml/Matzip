@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     initializeStarRatings();
+    console.log(hashtags);
     
     
     
@@ -12,7 +13,8 @@ document.addEventListener("DOMContentLoaded", function() {
         e.returnValue = '수정을 취소하시겠습니까? 수정한 내용은 저장되지 않습니다.'; // 대부분의 브라우저는 기본메시지 사용. e.returnValue에 값 설정해도 사용자 정의 메시지는 표시되지 않을 수 있음.
         return e.returnValue;
     });
-
+    
+    
 
 
 
@@ -157,6 +159,112 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 
+    /* 키워드(해시태그) */
+    
+    
+    
+    // 태그 ID(삭제 시 필요)
+    let tagIdCounter = 0;
+
+    document.querySelectorAll('.tag-input').forEach(input => {
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const tagValue = this.value.trim();
+                if (tagValue) {
+                    const category = this.getAttribute('data-category');
+                    const tagId = `tag-${tagIdCounter++}`; // 태그 고유 ID 생성
+
+                    // 숨겨진 입력 필드 생성
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    // name 속성 DTO 변수명과 일치하게 수정
+                    let inputName = '';
+                    if (category === 'visit-purpose') {
+                        inputName = 'visitPurposeTags[]';
+                    } else if (category === 'mood') {
+                        inputName = 'moodTags[]';
+                    } else if (category === 'convenience') {
+                        inputName = 'convenienceTags[]';
+                    }
+                    hiddenInput.name = inputName;
+                    hiddenInput.value = tagValue;
+                    hiddenInput.id = tagId;
+
+                    document.getElementById('reviewForm').appendChild(hiddenInput);
+
+                    // 태그 UI 생성
+                    const tagList = document.getElementById(input.getAttribute('data-category') + '-tags');
+                    const tagItem = document.createElement('li');
+                    tagItem.textContent = tagValue;
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'X';
+                    deleteBtn.addEventListener('click', function() {
+                        tagItem.remove(); // 태그 UI 삭제
+                        document.getElementById(tagId).remove(); // 숨겨진 입력 필드 삭제
+                    });
+
+                    tagItem.appendChild(deleteBtn);
+                    tagList.appendChild(tagItem);
+
+                    this.value = ''; // 입력 필드 초기화
+                }
+            }
+        });
+    });
+
+
+
+
+    document.querySelectorAll('.tag-input').forEach(function(input) {
+        const maxLength = 8; // 글자 수 제한
+        input.addEventListener('input', function() {
+            if (this.value.length > maxLength) {
+                // 글자수 제한 초과시 초과 부분 자름
+                this.value = this.value.substring(0, maxLength);
+                // 경고 표시
+                displayWarning(this.name, '태그는 8글자를 초과할 수 없습니다.');
+            } else {
+                // 경고 숨김
+                clearWarning(this.name);
+            }
+        });
+    });
+    
+    
+    hashtags.forEach(hashtag => {
+        // 'hashtagCategory' 필드를 사용하여 태그 리스트 선택
+        const tagList = document.getElementById(hashtag.hashtagCategory + '-tags');
+        if (!tagList) {
+            console.error('Tag list not found for category:', hashtag.hashtagCategory);
+            return; // 해당 카테고리의 태그 리스트가 없으면 다음 해시태그로 넘어감
+        }
+    
+        const tagItem = document.createElement('li');
+        tagItem.textContent = hashtag.keyword;
+    
+        // 숨겨진 입력 필드 생성 (해시태그 ID 저장 용도)
+        const hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'hashtags[]');
+        hiddenInput.value = hashtag.hashtagId;
+        tagItem.appendChild(hiddenInput);
+    
+        // 삭제 버튼 추가
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'X';
+        deleteButton.addEventListener('click', function() {
+            tagItem.remove(); // 태그 아이템 삭제
+            // 서버에 삭제 요청 로직 구현 필요
+        });
+    
+        tagItem.appendChild(deleteButton);
+        tagList.appendChild(tagItem);
+    });
+
+
+
+
 
 /*
  * 함수들 
@@ -201,6 +309,30 @@ document.addEventListener("DOMContentLoaded", function() {
         const ratingInput = document.getElementById(`${containerId}Rating`);
         if (ratingInput) {
             ratingInput.value = rating;
+        }
+    }
+    
+    //해시태그 글자수제한
+    function displayWarning(inputName, message) {
+        const warningElement = document.getElementById(inputName + '-warning');
+        if (warningElement) {
+            warningElement.textContent = message;
+            warningElement.classList.remove('d-none');
+        } else {
+            // 경고요소 없으면
+            const inputElement = document.querySelector(`input[name=${inputName}]`);
+            const newWarning = document.createElement('small');
+            newWarning.id = inputName + '-warning';
+            newWarning.textContent = message;
+            newWarning.classList.add('form-text', 'text-muted');
+            inputElement.parentNode.insertBefore(newWarning, inputElement.nextSibling);
+        }
+    }
+    
+    function clearWarning(inputName) {
+        const warningElement = document.getElementById(inputName + '-warning');
+        if (warningElement) {
+            warningElement.classList.add('d-none');
         }
     }
 

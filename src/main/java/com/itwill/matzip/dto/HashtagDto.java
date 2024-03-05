@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class HashtagCategoryDto {
+public class HashtagDto {
+	private Long hashtagId;
 	private String keyword;
-	private String category;
+	private String hashtagCategory;
 	
 }
