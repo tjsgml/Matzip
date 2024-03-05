@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const imageInput = document.getElementById('image-input');
     const imagePreviewContainer = document.querySelector('.image-preview-container');
     let selectedFiles = [];
-    let deleteImageRequests = [];
+    let deleteImageRequests = []; // 삭제할 이미지 배열
     
     // HTML에서 th:inline="javascript"를 통해 전달받은 reviewImages 사용
     if (window.reviewImages && window.reviewImages.length > 0) {
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const confirmed = confirm("해당 이미지를 삭제하시겠습니까?\n" + imageUrl);
                 if (confirmed) {
                     // 서버에서 이미지 삭제 요청 로직을 여기에 추가
-                    deleteImageRequests.push(imageUrl);
+                    deleteImageRequests.push(imageUrl); 
                     imagePreviewWrap.remove(); // 미리보기에서 이미지 삭제
                     // 모든 이미지가 삭제되었는지 확인하고 "이미지 업로드" 텍스트 다시 표시
                     if (imagePreviewContainer.querySelectorAll('.image-preview-wrap').length === 0) {
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     hiddenInput.type = 'hidden';
                     // name 속성 DTO 변수명과 일치하게 수정
                     let inputName = '';
-                    if (category === 'visit-purpose') {
+                    if (category === 'visitPurpose') {
                         inputName = 'visitPurposeTags[]';
                     } else if (category === 'mood') {
                         inputName = 'moodTags[]';
