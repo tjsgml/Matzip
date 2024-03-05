@@ -5,7 +5,7 @@
 
  document.addEventListener('DOMContentLoaded', async()=>{
      //현재 페이지 저장
-     const redirectUrl = encodeURIComponent(window.location.href);
+    const redirectUrl = encodeURIComponent(window.location.href);
      
     const mapModal = document.getElementById('mapModal');
     const btnShowModal = document.getElementById('showMap');

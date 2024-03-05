@@ -6,9 +6,8 @@
 document.addEventListener('DOMContentLoaded', async()=>{
     
     // 현재 로그인한 사용자의 닉네임
-    const loggedInUserNickname = document.getElementById('loggedInUserNickname').textContent;
-    //회원의 아이디
-    let memberId ='';
+    const loggedInUserNickname = document.getElementById('loggedInUserNickname').textContent.trim();
+    
     const restId = document.querySelector('input#restId').value;//음식점 아이디
 
     reviewListLoad(restId);
@@ -109,7 +108,7 @@ document.addEventListener('DOMContentLoaded', async()=>{
                 reviewElement.innerHTML = innerHTML;
                 
                 // 로그인한 회원이 리뷰 작성자인 경우 수정 버튼 추가
-                if (review.memberNickname === loggedInUserNickname) {
+                if (loggedInUserNickname && review.memberNickname === loggedInUserNickname) {
                     // 수정 버튼 생성
                     const editButton = document.createElement('button');
                     editButton.textContent = 'ㅤ수정ㅤ';
