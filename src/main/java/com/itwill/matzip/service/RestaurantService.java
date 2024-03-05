@@ -1,13 +1,16 @@
 package com.itwill.matzip.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.itwill.matzip.repository.*;
 import com.itwill.matzip.repository.UpdateRequest.UpdateRequestRepository;
 import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
+import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.util.DateTimeUtil;
 
 import org.springframework.data.domain.Page;
@@ -25,8 +28,10 @@ import com.itwill.matzip.domain.ReviewHashtag;
 import com.itwill.matzip.domain.ReviewImage;
 import com.itwill.matzip.domain.RestaurantStatus;
 import com.itwill.matzip.domain.UpdateRequest;
+import com.itwill.matzip.domain.enums.Expose;
 import com.itwill.matzip.dto.MyPickRequestDto;
 import com.itwill.matzip.dto.ReviewListDto;
+import com.itwill.matzip.dto.TagRestaurantRequestDto;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
 
 import lombok.RequiredArgsConstructor;
@@ -51,6 +56,8 @@ public class RestaurantService {
     private final UpdateRequestRepository URdao;
     //리뷰 서비스 - 리뷰에 있는 총점 메서드 사용하기 위함
     private final ReviewService reviewSvc;
+    
+	private final ReviewHashtagRepository reviewTagDao;
 
 
     //음식점 전체 목록 가져오기
@@ -207,4 +214,47 @@ public class RestaurantService {
 
         return list;
     }
+
+	public List<TagRestaurantRequestDto> getRestaurantByHashTag() {
+		log.info("getRestaurantByHashTag");
+		Double restTotalRating = 0.0;
+		List<TagRestaurantRequestDto> dto = new ArrayList<>();
+
+		//노출 표시한 태그들 찾기
+		List<ReviewHashtag> list = reviewTagDao.findByExposeOrderById(Expose.Y);
+
+		for (ReviewHashtag exposeY : list) {
+			//태그에 해당된 리뷰 가져오기
+			Set<Review> reviewList = exposeY.getReviews();
+			Set<Restaurant> restList = new HashSet<>();
+			List<MyPickRequestDto> pickList = new ArrayList<>();
+			
+			//리뷰에 해당하는 레스토랑 가져오기
+			for (Review r : reviewList) {
+				restList.add(r.getRestaurant());				
+			}
+			
+			//가져온 레스토랑들의 리뷰들을 가져와 총점 계산
+			for (Restaurant re : restList) {
+				List<Review> l = reviewDao.findByRestaurantId(re.getId());
+				restTotalRating = reviewSvc.getTotalRating(l);
+				
+				pickList.add(MyPickRequestDto.builder()
+						.imgUrl(reviewSvc.getImgUrl(re.getId()))
+						.restaurantId(re.getId())
+						.restaurantName(re.getName())
+						.categoryName(re.getCategory().getName())
+						.totalSart(restTotalRating)
+						.build());
+				
+				restTotalRating=0.0;
+			}
+
+			//dto에 저장하기
+			dto.add(TagRestaurantRequestDto.builder().tagId(exposeY.getId()).tagKeyword(exposeY.getKeyword())
+					.rest(pickList).restLength(restList.size()).build());
+			restTotalRating = 0.0;
+		}
+		return dto;
+	}
 }

@@ -1,5 +1,6 @@
 package com.itwill.matzip.web;
 
+import java.io.IOException;
 import java.security.Principal;
 
 import org.springframework.http.ResponseEntity;
@@ -7,7 +8,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwill.matzip.domain.Member;
@@ -18,6 +25,8 @@ import com.itwill.matzip.service.MailService;
 import com.itwill.matzip.service.MemberService;
 import com.itwill.matzip.service.SocialMemberService;
 
+
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -36,10 +45,31 @@ public class MemberController {
 
 	// 로그인 폼으로 이동
 	@GetMapping("/login")
-	public void login() {
+	public String login(Principal principal) {
 		log.info("Get - login()");
+		if(principal == null) {
+			return "/member/login";
+		}else {
+			return "redirect:/";
+		}
 	}
-
+	
+	// 로그인을 한 후에 이전 페이지로 리다이렉트
+	@PreAuthorize("hasRole('USER')")
+	@GetMapping("/detailLogin")
+	public void detailLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.info("Get - login()");
+		 // 이전 페이지의 URL을 가져옴
+        String redirectUrl = request.getParameter("redirect");
+        if (redirectUrl != null) {
+            // 리다이렉트할 URL이 있으면 해당 페이지로 리다이렉트
+            response.sendRedirect(redirectUrl);
+        } else {
+            // 리다이렉트할 URL이 없으면 기본적으로 설정된 페이지로 리다이렉트
+            response.sendRedirect("/");
+        }
+	}
+	
 	// 회원가입 폼으로 이동
 	@GetMapping("/signup")
 	public void signup() {
@@ -128,7 +158,6 @@ public class MemberController {
 				valid = "Y";
 			}
 		}
-
 		model.addAttribute("valid", valid);
 
 		return "/member/password";

@@ -122,15 +122,22 @@ document.addEventListener('DOMContentLoaded',() =>{
 		            //마커를 배열에 저장.
 		            markers.push({id: restaurant.id, overlay: customOverlay});
 		            
+		           
 		            const aa = document.getElementById(`customoverlay-${restaurant.id}`);
-		            //console.log(aa)
+		           
 		            aa.addEventListener('mouseover', () => {
-						customOverlay.setZIndex(10);
-						//console.log("들어옴")
+						const dataId = aa.getAttribute('data-id');
+						const targetMarker = markers.find(marker => marker.id.toString() === dataId);
+						console.log('targetMarker:',targetMarker);
+						targetMarker.overlay.setZIndex(10);
+						console.log("들어옴");
 					});
 					document.getElementById(`customoverlay-${restaurant.id}`).addEventListener('mouseout', () => {
-						customOverlay.setZIndex(0);
-						//console.log("나감")
+						const dataId = aa.getAttribute('data-id');
+						console.log(dataId);
+						const targetMarker = markers.find(marker => marker.id.toString() === dataId);
+						targetMarker.overlay.setZIndex(0);	
+						console.log("나감");
 					});
 			});
 

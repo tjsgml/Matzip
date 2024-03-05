@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,11 +22,13 @@ import com.itwill.matzip.domain.BusinessHour;
 import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
+import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MyPickRegisterDto;
 import com.itwill.matzip.dto.ReviewListDto;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
 import com.itwill.matzip.service.RestaurantService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -81,12 +84,29 @@ public class RestaurantController {
 	//좋아요 버튼 클릭시 로그인 상태인지 확인. 로그인 상태면 memberId 반환, 로그아웃 상태면 null을 반환 
 	@GetMapping("/details/checkMember")
 	@ResponseBody
-	public ResponseEntity<Long> checkLogin(){
-		//현재 인증된 사용자의 정보를 가져온다.
+	public ResponseEntity<Long> checkLogin(){ 
+		
+		
 	     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	     
-	     log.info("@@@@ 로그인 정보 ={}",auth.toString());
-	     
+	  // Principal로부터 MemberSecurityDto를 가져올 수 있음
+        if (auth != null && auth.getPrincipal() instanceof MemberSecurityDto) {
+            MemberSecurityDto memberDto = (MemberSecurityDto) auth.getPrincipal();
+            
+            // MemberSecurityDto에서 사용자 정보 가져오기
+            Long userId = memberDto.getUserid();
+            String nickname = memberDto.getNickname();
+            String img = memberDto.getImg();
+            
+            // 사용자 정보 활용하기
+           log.info("@@@@@ userId={}",userId);
+           log.info("nickName={}",nickname);
+           log.info("@@@ img={}",img);
+           
+        } else {
+            // MemberSecurityDto가 아닌 다른 타입의 Principal인 경우 처리
+            System.out.println("Principal is not an instance of MemberSecurityDto");
+        }
 
 	        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
 	            // 사용자가 로그아웃되어 있음을 반환
@@ -95,6 +115,10 @@ public class RestaurantController {
 	        } else {
 	            // 사용자가 로그인되어 있으면 사용자의 이름을 반환
 	            String username = auth.getName();
+	            
+	            MemberSecurityDto memberDto = (MemberSecurityDto) auth.getPrincipal();
+	           
+	            log.info("@@@@ 로그인 정보 ={}",memberDto.getNickname());
 	            
 	            Long memberId = restSvc.findMemberId(username);
 	            
