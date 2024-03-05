@@ -59,7 +59,6 @@ public class ReviewHashtag implements Serializable {
 
     @ManyToMany(mappedBy = "hashtags", fetch = FetchType.LAZY)
     @Builder.Default
-    @JsonIgnore
     private Set<Review> reviews = new HashSet<>();
 
     @Enumerated(EnumType.STRING)

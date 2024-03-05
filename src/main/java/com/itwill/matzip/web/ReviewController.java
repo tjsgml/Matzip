@@ -77,9 +77,6 @@ public class ReviewController {
         model.addAttribute("restaurantId", restaurant.getId());
         model.addAttribute("review", review);
         model.addAttribute("reviewImages", reviewImages);
-        log.info("맛평점 ={}", review.getFlavorScore());
-        log.info("가격평점 ={}", review.getPriceScore());
-        log.info("서비스평점 ={}", review.getServiceScore());
         return "review/update"; // 리뷰 수정 페이지
     }
     
