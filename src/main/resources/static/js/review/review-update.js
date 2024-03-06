@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // 수정 중 페이지 벗어날때 경고창
     window.addEventListener('beforeunload', function(e) {
-        // 변경사항이 있을 때 경고를 표시.(여기에 변경사항이 있는지 검사하는 로직 추가하기.'폼 데이터가 처음 로드될 때 상태랑 다른지 비교 검사'
+        // 변경사항이 있을 때 경고를 표시
         // 일단 평점 변경시에는 창 뜸
         e.returnValue = '수정을 취소하시겠습니까? 수정한 내용은 저장되지 않습니다.'; // 대부분의 브라우저는 기본메시지 사용. e.returnValue에 값 설정해도 사용자 정의 메시지는 표시되지 않을 수 있음.
         return e.returnValue;
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function updateImagePreviewsWithExistingImages(imageUrls) {
         const uploadText = document.querySelector('.image-preview-text');
         if (uploadText) {
-            uploadText.style.display = 'none'; // 이미지가 있으므로 텍스트를 숨깁니다.
+            uploadText.style.display = 'none'; // 이미지미리보기 있으면 텍스트 숨김
         }
     
         imageUrls.forEach((imageUrl, index) => {
@@ -51,7 +51,6 @@ document.addEventListener("DOMContentLoaded", function() {
             deleteButton.onclick = function() {
                 const confirmed = confirm("해당 이미지를 삭제하시겠습니까?\n" + imageUrl);
                 if (confirmed) {
-                    // 서버에서 이미지 삭제 요청 로직을 여기에 추가
                     deleteImageRequests.push(imageUrl); 
                     imagePreviewWrap.remove(); // 미리보기에서 이미지 삭제
                     // 모든 이미지가 삭제되었는지 확인하고 "이미지 업로드" 텍스트 다시 표시
@@ -162,6 +161,7 @@ document.addEventListener("DOMContentLoaded", function() {
     /* 키워드(해시태그) */
     
     
+    let deleteHashtagRequests = []; // 삭제할 해시태그 배열
     
     // 태그 ID(삭제 시 필요)
     let tagIdCounter = 0;
@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         tagItem.remove(); // 태그 UI 삭제
                         document.getElementById(tagId).remove(); // 숨겨진 입력 필드 삭제
                     });
-
+                    
                     tagItem.appendChild(deleteBtn);
                     tagList.appendChild(tagItem);
 
@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // 'hashtagCategory' 필드를 사용하여 태그 리스트 선택
         const tagList = document.getElementById(hashtag.hashtagCategory + '-tags');
         if (!tagList) {
-            console.error('Tag list not found for category:', hashtag.hashtagCategory);
+            console.error('카테고리 태그목록 없음:', hashtag.hashtagCategory);
             return; // 해당 카테고리의 태그 리스트가 없으면 다음 해시태그로 넘어감
         }
     
@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // 숨겨진 입력 필드 생성 (해시태그 ID 저장 용도)
         const hiddenInput = document.createElement('input');
         hiddenInput.setAttribute('type', 'hidden');
-        hiddenInput.setAttribute('name', 'hashtags[]');
+        hiddenInput.setAttribute('name', 'hashtags[]'); // hiddenInput의 hashtags[]는 기존에 저장된 해시태그들
         hiddenInput.value = hashtag.hashtagId;
         tagItem.appendChild(hiddenInput);
     
@@ -255,13 +255,13 @@ document.addEventListener("DOMContentLoaded", function() {
         deleteButton.textContent = 'X';
         deleteButton.addEventListener('click', function() {
             tagItem.remove(); // 태그 아이템 삭제
-            // 서버에 삭제 요청 로직 구현 필요
+            deleteHashtagRequests.push(hiddenInput.value);
+                console.log(deleteHashtagRequests);
         });
     
         tagItem.appendChild(deleteButton);
         tagList.appendChild(tagItem);
     });
-
 
 
 

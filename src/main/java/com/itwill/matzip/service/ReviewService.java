@@ -69,20 +69,63 @@ public class ReviewService {
     }
     
     // 리뷰 업데이트
+    @Transactional
     public void updateReview(Long reviewId, ReviewUpdateDto dto) {
-    	Review review = findReviewById(reviewId);
-    	
-    	review.updateReview(
-    		dto.getTasteRating(),
-    		dto.getPriceRating(),
-    		dto.getServiceRating(),
-    		dto.getReviewContent()
-    	);
-    	
+        Review review = findReviewById(reviewId);
+
+        // 평점 내용 업데이트
+        review.updateReview(dto.getTasteRating(), dto.getPriceRating(), dto.getServiceRating(), dto.getReviewContent());
+
+        // 이미지 처리
+        updateDeleteImages(review, dto.getImages(), dto.getDeleteImageUrls());
+
+        // 해시태그 처리
+        updateDeleteHashtags(review, dto.getVisitPurposeTags(), dto.getMoodTags(), dto.getConvenienceTags(), dto.getDeleteHashtagIds());
     }
     
     
-    @Transactional
+    private void updateDeleteImages(Review review, MultipartFile[] images, List<String> deleteImageUrls) {
+        // 삭제 이미지 처리
+        for (String imageUrl : deleteImageUrls) {
+            ReviewImage reviewImage = reviewImageDao.findByImgUrl(imageUrl);
+            if (reviewImage != null) {
+                reviewImageDao.delete(reviewImage); // DB 이미지 삭제
+                String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+                s3Util.deleteImageFromS3(fileName); // S3 이미지 삭제
+            }
+        }
+
+        // 새로운 이미지 처리
+        if (images != null) {
+            for (MultipartFile image : images) {
+                if (!image.isEmpty()) {
+                    String imageUrl = s3Util.uploadImageToS3(image, s3Util.generateFileName());
+                    ReviewImage newReviewImage = new ReviewImage(null, review, imageUrl);
+                    reviewImageDao.save(newReviewImage);
+                }
+            }
+        }
+    }
+
+    private void updateDeleteHashtags(Review review, List<String> visitPurposeTags, List<String> moodTags, List<String> convenienceTags, List<Long> deleteHashtagIds) {
+        // 삭제 요청된 해시태그 처리
+        for (Long hashtagId : deleteHashtagIds) {
+            ReviewHashtag hashtag = reviewHTDao.findById(hashtagId).orElse(null);
+            if (hashtag != null) {
+                review.getHashtags().remove(hashtag);
+                reviewHTDao.delete(hashtag);
+            }
+        }
+
+        // 새로운 해시태그 처리
+        saveHashtags(visitPurposeTags, HashtagCategoryName.VISIT_PURPOSE, review);
+        saveHashtags(moodTags, HashtagCategoryName.MOOD, review);
+        saveHashtags(convenienceTags, HashtagCategoryName.CONVENIENCE, review);
+    }
+
+
+
+	@Transactional
     public void saveReview(ReviewCreateDto dto) {
     	
     	log.info("방문목적 태그: {}", dto.getVisitPurposeTags());
@@ -139,7 +182,7 @@ public class ReviewService {
         saveHashtags(dto.getConvenienceTags(), HashtagCategoryName.CONVENIENCE, savedReview);
     }
 
-
+    // 해시태그 저장
     private void saveHashtags(List<String> tags, HashtagCategoryName categoryEnum, Review savedReview) {
         if (tags == null || tags.isEmpty()) return; // 태그없으면
 
