@@ -176,6 +176,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const isDuplicate = hashtags.some(hashtag => hashtag.keyword.toLowerCase() === tagValue.toLowerCase());
                 if(isDuplicate){
                     alert('동일한 키워드가 이미 존재합니다.');
+                    
                     this.value = '';
                     return; 
                 }
