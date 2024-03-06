@@ -1,5 +1,6 @@
 package com.itwill.matzip.web;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.dto.HashtagDto;
 import com.itwill.matzip.dto.ReviewCreateDto;
+import com.itwill.matzip.dto.ReviewUpdateDto;
 import com.itwill.matzip.service.RestaurantService;
 import com.itwill.matzip.service.ReviewService;
 
@@ -81,11 +83,42 @@ public class ReviewController {
         // 리뷰 정보, 레스토랑 정보 추가
         model.addAttribute("restaurantName", restaurant.getName());
         model.addAttribute("restaurantId", restaurant.getId());
+        log.info("restaurantId={}", restaurant.getId());
         model.addAttribute("review", review);
         model.addAttribute("reviewImages", reviewImages);
         model.addAttribute("hashtags", hashtags);
         return "review/update"; // 리뷰 수정 페이지
     }
+    
+    @PostMapping("/update/{reviewId}")
+    public String updateReview(@PathVariable("reviewId") Long reviewId, @ModelAttribute ReviewUpdateDto reviewDto, RedirectAttributes redirectAttributes) {
+        try {
+            if (reviewDto.getDeleteImageUrls() == null) {
+                reviewDto.setDeleteImageUrls(new ArrayList<>());
+            }
+
+            if (reviewDto.getDeleteHashtagIds() == null) {
+                reviewDto.setDeleteHashtagIds(new ArrayList<>());
+            }
+
+            reviewSvc.updateReview(reviewId, reviewDto);
+            log.info("reviewId={}", reviewId);
+            log.info("restaurantId={}", reviewDto.getRestaurantId());
+
+            return "redirect:/rest/details?id=" + reviewDto.getRestaurantId();
+        } catch (Exception e) {
+            log.info("reviewId={}", reviewId);
+            e.printStackTrace();
+
+            return "redirect:/review/update/" + reviewId;
+        }
+    }
+
+
+
+    
+    
+    
     
     //레스트 컨트롤러-------------------------------
     //내가 쓴 리뷰의 이미지 가져오기

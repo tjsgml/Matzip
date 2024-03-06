@@ -7,12 +7,15 @@ document.addEventListener("DOMContentLoaded", function() {
     
     
     // 수정 중 페이지 벗어날때 경고창
-    window.addEventListener('beforeunload', function(e) {
-        // 변경사항이 있을 때 경고를 표시
-        // 일단 평점 변경시에는 창 뜸
-        e.returnValue = '수정을 취소하시겠습니까? 수정한 내용은 저장되지 않습니다.'; // 대부분의 브라우저는 기본메시지 사용. e.returnValue에 값 설정해도 사용자 정의 메시지는 표시되지 않을 수 있음.
-        return e.returnValue;
-    });
+    //window.addEventListener('beforeunload', function(e) {
+    //    // 변경사항이 있을 때 경고를 표시
+    //    // 일단 평점 변경시에는 창 뜸
+    //    e.returnValue = '수정을 취소하시겠습니까? 수정한 내용은 저장되지 않습니다.'; // 대부분의 브라우저는 기본메시지 사용. e.returnValue에 값 설정해도 사용자 정의 메시지는 표시되지 않을 수 있음.
+     //   return e.returnValue;
+    //});
+    
+    
+    
     
     
 
@@ -53,6 +56,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (confirmed) {
                     deleteImageRequests.push(imageUrl); 
                     imagePreviewWrap.remove(); // 미리보기에서 이미지 삭제
+                    console.log(deleteImageRequests);
+                    addDeletedImagesToForm();
                     // 모든 이미지가 삭제되었는지 확인하고 "이미지 업로드" 텍스트 다시 표시
                     if (imagePreviewContainer.querySelectorAll('.image-preview-wrap').length === 0) {
                         if (uploadText) {
@@ -267,6 +272,7 @@ document.addEventListener("DOMContentLoaded", function() {
         deleteButton.addEventListener('click', function() {
             tagItem.remove(); // 태그 아이템 삭제
             deleteHashtagRequests.push(hiddenInput.value);
+            addDeletedHashtagsToForm();
                 console.log(deleteHashtagRequests);
         });
     
@@ -280,6 +286,35 @@ document.addEventListener("DOMContentLoaded", function() {
 /*
  * 함수들 
  */ 
+
+    function addDeletedHashtagsToForm() {
+    const form = document.getElementById('reviewForm');
+    deleteHashtagRequests.forEach(hashtagId => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'deleteHashtags[]'; // 여기서 input.name을 'deleteHashtags'에서 'deleteHashtags[]'로 변경, 서버 측에서 배열로 받기 위함
+        input.value = hashtagId;
+        form.appendChild(input);
+    });
+
+    // 해시태그 ID를 폼에 추가한 후에 deleteHashtagRequests 배열 비우기
+    deleteHashtagRequests = []; // 배열을 비워서 이전에 추가된 요소가 다시 추가되지 않도록 함
+}
+
+    
+
+    function addDeletedImagesToForm() {
+        const form = document.getElementById('reviewForm');
+        deleteImageRequests.forEach(imageUrl => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'deleteImageUrls';
+            input.value = imageUrl;
+            form.appendChild(input);
+        });
+    }
+
+   
     function initializeStarRatings() {
         document.querySelectorAll(".rating-container").forEach(container => {
             let currentRating = parseInt(container.getAttribute('data-rating'));

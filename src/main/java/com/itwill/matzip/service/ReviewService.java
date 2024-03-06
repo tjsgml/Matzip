@@ -78,15 +78,16 @@ public class ReviewService {
 
         // 평점 내용 업데이트
         review.updateReview(dto.getTasteRating(), dto.getPriceRating(), dto.getServiceRating(), dto.getReviewContent());
+        
 
         // 이미지 처리
         updateDeleteImages(review, dto.getImages(), dto.getDeleteImageUrls());
-
+        
         // 해시태그 처리
         updateDeleteHashtags(review, dto.getVisitPurposeTags(), dto.getMoodTags(), dto.getConvenienceTags(), dto.getDeleteHashtagIds());
     }
     
-    
+    @Transactional
     private void updateDeleteImages(Review review, MultipartFile[] images, List<String> deleteImageUrls) {
         // 삭제 이미지 처리
         for (String imageUrl : deleteImageUrls) {
@@ -109,10 +110,12 @@ public class ReviewService {
             }
         }
     }
-
+    
+    @Transactional
     private void updateDeleteHashtags(Review review, List<String> visitPurposeTags, List<String> moodTags, List<String> convenienceTags, List<Long> deleteHashtagIds) {
         // 삭제 요청된 해시태그 처리
         for (Long hashtagId : deleteHashtagIds) {
+        	log.info("deleteHTs={}", deleteHashtagIds);
             ReviewHashtag hashtag = reviewHTDao.findById(hashtagId).orElse(null);
             if (hashtag != null) {
                 review.getHashtags().remove(hashtag);

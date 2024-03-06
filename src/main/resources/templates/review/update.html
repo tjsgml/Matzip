@@ -14,7 +14,7 @@
         <div class="col-3"></div>
         <div class="col-6 mt-5">
             <!-- 폼 시작 -->
-            <form th:action="@{/review/update}" th:object="${reviewForm}" method="post" enctype="multipart/form-data" id="reviewForm">
+            <form th:action="@{/review/update/{reviewId}(reviewId=${review.id})}" method="post" enctype="multipart/form-data" id="reviewForm">
                 <!-- 평점에 대한 hidden Input -->
                 <input type="hidden" id="tasteRating" name="tasteRating" th:value="${review.flavorScore}">
                 <input type="hidden" id="priceRating" name="priceRating" th:value="${review.priceScore}">
