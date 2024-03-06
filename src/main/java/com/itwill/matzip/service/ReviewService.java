@@ -33,6 +33,7 @@ import com.itwill.matzip.util.DateTimeUtil;
 import com.itwill.matzip.util.S3Utility;
 import com.itwill.matzip.util.SecurityUtility;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -111,23 +112,72 @@ public class ReviewService {
         }
     }
     
+//    @Transactional
+//    private void updateDeleteHashtags(Review review, List<String> visitPurposeTags, List<String> moodTags, List<String> convenienceTags, List<Long> deleteHashtagIds) {
+//        // 삭제 요청된 해시태그 처리
+//        for (Long hashtagId : deleteHashtagIds) {
+//        	log.info("deleteHTs={}", deleteHashtagIds);
+//            ReviewHashtag hashtag = reviewHTDao.findById(hashtagId).orElse(null);
+//            if (hashtag != null) {
+//                review.getHashtags().remove(hashtag);
+//                reviewHTDao.delete(hashtag);
+//            }
+//        }
+//
+//        // 새로운 해시태그 처리
+//        saveHashtags(visitPurposeTags, HashtagCategoryName.VISIT_PURPOSE, review);
+//        saveHashtags(moodTags, HashtagCategoryName.MOOD, review);
+//        saveHashtags(convenienceTags, HashtagCategoryName.CONVENIENCE, review);
+//    }
     @Transactional
     private void updateDeleteHashtags(Review review, List<String> visitPurposeTags, List<String> moodTags, List<String> convenienceTags, List<Long> deleteHashtagIds) {
         // 삭제 요청된 해시태그 처리
-        for (Long hashtagId : deleteHashtagIds) {
-        	log.info("deleteHTs={}", deleteHashtagIds);
-            ReviewHashtag hashtag = reviewHTDao.findById(hashtagId).orElse(null);
-            if (hashtag != null) {
-                review.getHashtags().remove(hashtag);
-                reviewHTDao.delete(hashtag);
+    	
+//        if (deleteHashtagIds != null && !deleteHashtagIds.isEmpty()) {
+//            for (Long hashtagId : deleteHashtagIds) {
+//                ReviewHashtag hashtag = reviewHTDao.findById(hashtagId).orElse(null);
+//                if (hashtag != null) {
+//                    // 리뷰와 해시태그 간의 관계 제거
+//                    review.getHashtags().remove(hashtag);
+//                    hashtag.getReviews().remove(review);
+//                    
+//                    // 해시태그가 더 이상 어떤 리뷰와도 연관되어 있지 않다면 해시태그 엔티티 삭제
+//                    if (hashtag.getReviews().isEmpty()) {
+//                        reviewHTDao.delete(hashtag);
+//                    }
+//                }
+//            }
+//        }
+    	if (deleteHashtagIds != null && !deleteHashtagIds.isEmpty()) {
+            for (Long hashtagId : deleteHashtagIds) {
+                deleteHashtagFromReview(review.getId(), hashtagId);
             }
         }
-
         // 새로운 해시태그 처리
         saveHashtags(visitPurposeTags, HashtagCategoryName.VISIT_PURPOSE, review);
         saveHashtags(moodTags, HashtagCategoryName.MOOD, review);
         saveHashtags(convenienceTags, HashtagCategoryName.CONVENIENCE, review);
     }
+
+    @Transactional
+    public void deleteHashtagFromReview(Long reviewId, Long hashtagId) {
+        // ReviewHashtag 엔티티의 객체를 찾습니다.
+        ReviewHashtag hashtag = reviewHTDao.findById(hashtagId)
+                                            .orElseThrow(() -> new EntityNotFoundException("해시태그를 찾을 수 없습니다"));
+
+        // Review 엔티티의 객체를 찾습니다.
+        Review review = reviewDao.findById(reviewId)
+                                        .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다"));
+
+        // REVIEW_HASHTAG_REL 테이블에서 해당 리뷰와 해시태그의 관계를 찾아 삭제합니다.
+        review.getHashtags().remove(hashtag);
+        hashtag.getReviews().remove(review);
+
+        // 필요하다면 중간 테이블 엔티티를 삭제할 수도 있습니다.
+        // reviewHashtagRelRepository.deleteByReviewAndHashtag(review, hashtag);
+    }
+
+    
 
 
 

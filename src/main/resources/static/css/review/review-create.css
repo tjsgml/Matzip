@@ -1,5 +1,12 @@
 
+.layout_1{
+    margin:10px;
+    background-color: white;
+    justify-content: center;
+    padding: 10px;
+}
 .text-center-title {
+    margin-top:5px;
     text-align: center;
 }
 
@@ -26,6 +33,7 @@
 
 .rating-container{
     margin: 20px;
+    /*display: inline-block; */ /*별 평점 가로로 나란히*/ 
 }
 
 p {
@@ -169,8 +177,9 @@ p {
 
 /* 기본 설정 */
 * {
-  font-family: Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  /*font-family: Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    */
 }
 
 html {
