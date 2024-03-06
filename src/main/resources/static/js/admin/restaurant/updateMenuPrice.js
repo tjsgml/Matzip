@@ -18,6 +18,12 @@ async function updatePrice(e) {
     const menuId = updateMenuPriceComp.getAttribute("data-id");
     const priceToUpdate = updateMenuPriceComp.querySelector("input#priceToUpdate");
 
+    if (! /^\d+$/.test(String(priceToUpdate.value))) {
+        alert("가격은 정수로만 입력해주세요.");
+        priceToUpdate.value = null;
+        return;
+    }
+
     const checkBeforeUpdate = confirm("정말 변경하시겠습니까?");
     if (!checkBeforeUpdate) {
         priceToUpdate.value = null;
@@ -58,13 +64,16 @@ btnUpdateMenuNames.forEach(el => {
 async function updateName(e) {
     const updateMenuNameComp = e.target.parentElement.parentElement.querySelector("#update-menu-name-comp");
 
-    const checkBeforeUpdate = confirm("정말 변경하시겠습니까?");
     const menuId = updateMenuNameComp.getAttribute("data-id");
     const nameToUpdate = updateMenuNameComp.querySelector("input#nameToUpdate");
 
-    if (!checkBeforeUpdate) {
+    if (!confirm("정말 변경하시겠습니까?")) {
         nameToUpdate.value = null;
         return;
+    }
+
+    if (nameToUpdate.value.trim().length <= 0) {
+        alert("수정할 메뉴 이름을 입력해주세요.");
     }
 
     const {data, status} = await axios.patch(`./menu/${menuId}/name?name=${nameToUpdate.value}`);
