@@ -4,7 +4,7 @@ const hashtagCategory = {
     mood: "분위기",
     convenience: "편의시설"
 }
-const categoryUpdateSelect = document.querySelector("select#tag-category-to-update")
+const categoryUpdateSelect = document.querySelector("select#tag-category-to-update");
 let tagDataList = null;
 
 const tbody = document.querySelector("tbody");
@@ -59,7 +59,6 @@ async function getDataByCategory(e) {
 
     data.forEach(mkTableRow);
 
-    addClickEventWhenRenderedList();
 }
 
 function mkTableRow(data) {
@@ -74,6 +73,11 @@ function mkTableRow(data) {
     `;
 
     tbody.appendChild(tr);
+
+    const updateBtn = tr.querySelector("button.btn-update");
+    updateBtn.addEventListener("click", getTagInfoToUpdate);
+    const deleteBtn = tr.querySelector("button.btn-delete");
+    deleteBtn.addEventListener("click", deleteTag);
 }
 
 function resetTableBody() {
@@ -94,13 +98,6 @@ function changeAllChecked(checkBoxes, bool) {
     Array.from(checkBoxes).forEach(el => {
         el.checked = bool ?? false;
     })
-}
-
-function addClickEventWhenRenderedList() {
-    const updateBtns = document.querySelectorAll("button.btn-update");
-    updateBtns.forEach(el => el.addEventListener("click", getTagInfoToUpdate));
-    const deleteBtns = document.querySelectorAll("button.btn-delete");
-    deleteBtns.forEach(el => el.addEventListener("click", deleteTag))
 }
 
 async function getTagInfoToUpdate(ev) {
@@ -153,7 +150,7 @@ async function updateTagInfo(ev) {
     const request = {
         tagName: document.querySelector("input#tag-name-to-update").value.trim(),
         categoryId: document.querySelector("select#tag-category-to-update").value.trim(),
-       expose:  Array.from(document.querySelectorAll("input[name='expose']")).filter(e => e.checked)[0].value
+        expose: Array.from(document.querySelectorAll("input[name='expose']")).filter(e => e.checked)[0].value
     }
 
     const {status} = await axios.patch(`./${tagId}`, request);
