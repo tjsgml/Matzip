@@ -14,5 +14,6 @@ import lombok.NoArgsConstructor;
 public class HashtagUpdateDto {
     private String tagName;
     private Long categoryId;
+    @Builder.Default
     private Expose expose = Expose.N;
 }

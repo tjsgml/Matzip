@@ -49,7 +49,7 @@ public class AdminMatzipController {
     // 레스토랑 관리 리스트
     @GetMapping("/restaurant/all")
     public String showRestaurantListPage(RestaurantSearchCond cond, Model model) {
-        log.info("showRestaurantListPage(RestaurantSearchCond cond={})", cond.getKeywordCriteria());
+        log.info("showRestaurantListPage(RestaurantSearchCond cond={})", cond);
 
         Map<String, Object> result = adminService.getRestaurantByOptions(cond);
         model.addAllAttributes(result);

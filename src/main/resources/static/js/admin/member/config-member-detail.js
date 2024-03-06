@@ -69,7 +69,7 @@ async function configReviewList() {
 
         const imgs = el.reviewImages?.map(image => `
                 <div class="d-inline-block position-relative">
-                    <button class="btn-delete-image position-absolute top-0 end-0" data-id="${image.id}">X</button>
+                    <button class="btn btn-sm btn-warning btn-delete-image position-absolute top-0 end-0" data-id="${image.id}">X</button>
                     <img src="${image.imgUrl}" alt="이미지"/>
                 </div>`).join("");
 
@@ -162,6 +162,7 @@ modifyRoleBtn.addEventListener("click", async () => {
     })
 
     if (rolesToModify.length <= 0) {
+        console.log("최소 1개의 역할을 부여해주세요");
         return;
     }
 

@@ -32,6 +32,13 @@
         display: table-cell;
         vertical-align: middle;
     }
+    .scroll-box {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+    .scroll-box::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera*/
+    }
 </style>
 <body>
 <nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
@@ -114,7 +121,7 @@
                             <button class="btn btn-sm" id="prevBtn">되돌리기</button>
                         </div>
                     </div>
-                    <div th:if="${#lists.isEmpty(restaurant.menus)}" class="row fw-semibold text-center"
+                    <div th:if="${#lists.isEmpty(restaurant.menus)}" class="row fw-semibold text-center scroll-box"
                          style="font-size: 20px; overflow: scroll;" id="menu-list-container">
                         <div id="empty-menu-list" class="col my-5">
                             <p style="font-size: 50px">📋️</p>
@@ -124,7 +131,7 @@
                              style="display: grid; grid-template-columns: repeat(2, 1fr);">
                         </div>
                     </div>
-                    <div th:if="${!#lists.isEmpty(restaurant.menus)}" class="row fw-semibold text-center"
+                    <div th:if="${!#lists.isEmpty(restaurant.menus)}" class="row fw-semibold text-center scroll-box"
                          style="font-size: 20px; overflow: scroll;" id="menu-list-container">
                         <div class="col my-2">
                             <div id="empty-menu-list" class="col my-5 d-none">
@@ -157,8 +164,7 @@
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
 <script>
-    console.log(document.getElementById("lat").value)
-    const center = new kakao.maps.LatLng(document.getElementById("lon").value, document.getElementById("lat").value);
+    const center = new kakao.maps.LatLng(document.getElementById("lat").value, document.getElementById("lon").value);
     const marker = new kakao.maps.Marker();
     const mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
