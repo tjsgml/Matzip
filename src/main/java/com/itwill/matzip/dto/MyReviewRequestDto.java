@@ -26,4 +26,6 @@ public class MyReviewRequestDto {
 	private Double priceScore;
 	private String content;
 	private List<String> reviewImg;	//내가 등록한 리뷰의 사진들
+	
+	private int reviewLikeCnt;
 }
