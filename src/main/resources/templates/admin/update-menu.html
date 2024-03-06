@@ -157,8 +157,7 @@
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
 <script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
 <script>
-    console.log(document.getElementById("lat").value)
-    const center = new kakao.maps.LatLng(document.getElementById("lon").value, document.getElementById("lat").value);
+    const center = new kakao.maps.LatLng(document.getElementById("lat").value, document.getElementById("lon").value);
     const marker = new kakao.maps.Marker();
     const mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {

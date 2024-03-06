@@ -9,13 +9,15 @@ const mapOption = {
 
 const map = new kakao.maps.Map(mapContainer, mapOption, {useMapBounds: true}); // 지도를 생성합니다
 
-const draggableMarker = new kakao.maps.Marker({
+const centerMarker = new kakao.maps.Marker({
         position: map.getCenter(),
         map,
-        draggable: true
+        draggable: false
 });
-console.log(draggableMarker.position)
-changeDraggableMarkerPosition(draggableMarker.getPosition());
+
+console.log(centerMarker.getPosition())
+
+changeDraggableMarkerPosition(centerMarker.getPosition());
 
 // 센터 정하는 메서드
 function setCenter(lat, lng) {
@@ -24,17 +26,13 @@ function setCenter(lat, lng) {
 }
 
 kakao.maps.event.addListener(map, 'center_changed', function () {
-    draggableMarker.setPosition(map.getCenter());
+    centerMarker.setPosition(map.getCenter());
     changeDraggableMarkerPosition(map.getCenter());
 });
 
-kakao.maps.event.addListener(draggableMarker, 'dragend', function () {
-    getCurrentCord();
-    setCenter(draggableMarker.getPosition());
-    changeDraggableMarkerPosition(draggableMarker.getPosition());
-});
-
 async function changeDraggableMarkerPosition(latLng) {
+    console.log("latLng latLng" )
+    console.log(latLng )
     const query = `y=${latLng.getLat()}&x=${latLng.getLng()}&page=${curPage}&size=${reqSize}`;
     const resp = await axios.get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?${query}`, {
         headers: {
@@ -73,22 +71,22 @@ async function changeDraggableMarkerPosition(latLng) {
 
 // 인포윈도우를 생성합니다
     const infowindow = new kakao.maps.InfoWindow({
-        position: draggableMarker.getPosition(),
+        position: centerMarker.getPosition(),
         content: infowindowContent,
     });
 
 // 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
-    kakao.maps.event.addListener(draggableMarker, "mouseover", (event) => {
-        draggableMarker.setZIndex(10);
-        infowindow.open(map, draggableMarker);
+    kakao.maps.event.addListener(centerMarker, "mouseover", (event) => {
+        centerMarker.setZIndex(10);
+        infowindow.open(map, centerMarker);
     })
 
-    kakao.maps.event.addListener(draggableMarker, "mouseout", (event) => {
-        draggableMarker.setZIndex(0);
+    kakao.maps.event.addListener(centerMarker, "mouseout", (event) => {
+        centerMarker.setZIndex(0);
         infowindow.close();
     })
 
-    kakao.maps.event.addListener(draggableMarker, "click", () => setAddressInfo("center", infowindow));
+    kakao.maps.event.addListener(centerMarker, "click", () => setAddressInfo("center", infowindow));
 }
 
 // 지도, 스카이뷰 선택
@@ -96,7 +94,7 @@ const mapTypeControl = new kakao.maps.MapTypeControl();
 map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 
 // 지도 드래그 가능 여부 설정
-const draggableBtn = document.getElementById("draggable-btn")
+const draggableBtn = document.getElementById("draggable-btn");
 draggableBtn.addEventListener("click", () => {
     map.setDraggable(true);
     draggableBtn.classList.add("active");
