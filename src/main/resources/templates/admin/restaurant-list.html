@@ -25,7 +25,7 @@
                         <select id="category-option">
                             <option value="" selected>전체</option>
                             <th:block th:each="cate : ${categories}">
-                                <option th:if="${cate.id eq category}" th:value="${cate.id}" th:text="${cate.name}"
+                                <option th:if="${cate.id == category}" th:value="${cate.id}" th:text="${cate.name}"
                                         th:attr="selected=true">
                                 <option th:if="${cate.id != category}" th:value="${cate.id}"
                                         th:text="${cate.name}"></option>
