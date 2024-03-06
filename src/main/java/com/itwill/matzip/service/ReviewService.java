@@ -26,6 +26,7 @@ import com.itwill.matzip.repository.HashtagCategoryRepository;
 import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.repository.ReviewImageRepository;
+import com.itwill.matzip.repository.ReviewLikeRepository;
 import com.itwill.matzip.repository.ReviewRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import com.itwill.matzip.util.DateTimeUtil;
@@ -46,12 +47,14 @@ public class ReviewService {
     private final MemberRepository memberDao; 
     private final S3Utility s3Util;
     
+    private final ReviewLikeRepository reviewLikeDao;
+    
     
     @Autowired
     public ReviewService(ReviewRepository reviewDao, ReviewImageRepository reviewImageDao, 
                         ReviewHashtagRepository reviewHTDao, HashtagCategoryRepository hashCategoryDao,
                         RestaurantRepository  restaurantDao, MemberRepository memberDao,
-                        S3Utility s3Util) {
+                        S3Utility s3Util, ReviewLikeRepository reviewLikeDao) {
         this.reviewDao = reviewDao;
         this.reviewImageDao = reviewImageDao;
         this.reviewHTDao = reviewHTDao;
@@ -59,7 +62,7 @@ public class ReviewService {
 		this.restaurantDao = restaurantDao;
 		this.memberDao = memberDao;
         this.s3Util = s3Util;
-        
+        this.reviewLikeDao=reviewLikeDao;
     }
     
     // ReviewId 조회
@@ -230,6 +233,9 @@ public class ReviewService {
             Double a = getTotalRating(reviews);
 
             for (Review review : reviews) {
+            	
+            	int reviewLikeCnt = reviewLikeDao.countAllByReviewId(review.getId());
+            	
                 dto.add(MyReviewRequestDto.builder()
                         .restaurantId(review.getRestaurant().getId())
                         .restaurantName(review.getRestaurant().getName())
@@ -244,6 +250,7 @@ public class ReviewService {
                         .mainImg(getImgUrl(review.getRestaurant().getId()))
                         .reviewImg(getReviewImg(review.getId()))
                         .totalAllReviewRating(a)
+                        .reviewLikeCnt(reviewLikeCnt)
                         .build());
             }
         }
@@ -269,7 +276,7 @@ public class ReviewService {
         if(list.size() == 0) {
         	return 0.0;
         }else {
-        	return (double) temp / list.size();        	
+        	return Math.floor((temp / list.size())*10.0)/10.0;        	
         }
     }
 	

@@ -6,6 +6,7 @@
 
 .row>* {
 	padding: 0px 0px;
+	height: 100vh;
 }
 
 body {
@@ -19,12 +20,9 @@ a {
 	color: black;
 }
 
-ul {
-	padding-left: 0;
+.my-wrapper {
 	position: absolute;
 	display: flex;
-	gap: 15px;
-	list-style-type: none;
 }
 
 .main-bg-color {
@@ -43,10 +41,9 @@ ul {
 	box-sizing: border-box;
 }
 
-
 .tag-name {
 	padding: 0 70px;
-	padding-top: 17px ;
+	padding-top: 17px;
 	padding-bottom: 8px;
 	display: flex;
 	font-size: 20px;
@@ -123,6 +120,7 @@ ul {
 
 .rest-one {
 	width: 200px;
+	margin-right: 20px;
 }
 
 .rest-one__img {
@@ -145,6 +143,8 @@ ul {
 	position: absolute;
 	padding: 3px 9px;
 
+	display: flex;
+
 	color: white;
 	font-weight: 600;
 	font-size: 12px;
@@ -157,6 +157,7 @@ ul {
 }
 
 .rest-one__img>div:last-child>img {
+	align-self: center;
 	width: 12px;
 	height: 12px;
 	margin-right: 4px;

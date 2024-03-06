@@ -171,6 +171,16 @@ document.addEventListener("DOMContentLoaded", function() {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 const tagValue = this.value.trim();
+                
+                // 태그 중복 체크
+                const isDuplicate = hashtags.some(hashtag => hashtag.keyword.toLowerCase() === tagValue.toLowerCase());
+                if(isDuplicate){
+                    alert('동일한 키워드가 이미 존재합니다.');
+                    this.value = '';
+                    return; 
+                }
+                
+                
                 if (tagValue) {
                     const category = this.getAttribute('data-category');
                     const tagId = `tag-${tagIdCounter++}`; // 태그 고유 ID 생성

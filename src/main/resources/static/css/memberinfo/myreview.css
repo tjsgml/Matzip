@@ -39,7 +39,7 @@
 
 .review-post {
 	margin-bottom: 20px;
-	padding-bottom: 10px;
+	padding-bottom: 25px;
 	border-bottom: var(--br-gray);
 }
 
@@ -225,4 +225,30 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 10px;
+}
+
+.my-review-meta {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.review-like {
+	display: flex;
+	gap: 7px;
+	font-size: 14px;
+	align-items: center;
+	font-weight: 600;
+}
+
+.review-like>div:first-child {
+	background-color: #f07973;
+	color: white;
+	padding: 2px 8px;
+	border-radius: 6px;
+	font-size: 12px;
+}
+
+.review-like>div:last-child {
+	color: #888888;
 }
