@@ -1,8 +1,10 @@
 package com.itwill.matzip.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -146,29 +148,46 @@ public class RestaurantService {
         URdao.save(ur);
     }
 
-    /* 은겸 추가 */
-    private final ReviewRepository reviewDao;
-
-    public List<ReviewListDto> getReviewsForRestaurant(Long restaurantId) {
-        List<Review> reviews = reviewDao.findByRestaurantId(restaurantId);
-        return reviews.stream().map(review -> ReviewListDto.builder()
-                        .id(review.getId())
-                        .content(review.getContent())
-                        .flavorScore(review.getFlavorScore())
-                        .serviceScore(review.getServiceScore())
-                        .priceScore(review.getPriceScore())
-                        .formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime())) // 포맷팅된 날짜
-                        .memberNickname(review.getMember().getNickname())
-                        .memberImg(review.getMember().getImg())
-                        .reviewImages(review.getReviewImages().stream()
-                                .map(ReviewImage::getImgUrl)
-                                .collect(Collectors.toList()))
-                        .hashtags(review.getHashtags().stream()
-                                .map(ReviewHashtag::getKeyword)
-                                .collect(Collectors.toSet()))
-                        .build())
-                .collect(Collectors.toList());
-    }
+/* 은겸 추가 ---------------------------------------------------------------------------- */
+	private final ReviewRepository reviewDao;
+	
+	private final ReviewHashtagRepository reviewHashtagDao;
+	
+	public List<ReviewListDto> getReviewsForRestaurant(Long restaurantId) {
+	  List<Review> reviews = reviewDao.findByRestaurantIdWithHashtags(restaurantId);
+	
+	  return reviews.stream().map(review -> ReviewListDto.builder()
+	          .id(review.getId())
+	          .content(review.getContent())
+	          .flavorScore(review.getFlavorScore())
+	          .serviceScore(review.getServiceScore())
+	          .priceScore(review.getPriceScore())
+	          .formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime()))
+	          .memberNickname(review.getMember().getNickname())
+	          .memberImg(review.getMember().getImg())
+	          .reviewImages(review.getReviewImages().stream()
+	                  .map(ReviewImage::getImgUrl)
+	                  .collect(Collectors.toList()))
+	          .hashtags(review.getHashtags().stream()
+	                  .map(ReviewHashtag::getKeyword)
+	                  .collect(Collectors.toSet()))
+	          .build())
+	  .collect(Collectors.toList());
+	}
+	
+	public Map<String, Set<String>> getReviewHashtagsByCategory(Long restaurantId) {
+	    List<ReviewHashtag> hashtags = reviewHashtagDao.findAllByRestaurantId(restaurantId);
+	    
+	    Map<String, Set<String>> hashtagsByCategory = new HashMap<>();
+	    for (ReviewHashtag hashtag : hashtags) {
+	        String categoryName = hashtag.getHtCategory().getName();
+	        hashtagsByCategory.computeIfAbsent(categoryName, k -> new HashSet<>()).add(hashtag.getKeyword());
+	    }
+	    
+	    return hashtagsByCategory;
+	}
+	
+	/*------------------------------------------------------------------------------------------- */
 
 
     // 내가 저장한 레스토랑 정보 가져오기
@@ -214,6 +233,7 @@ public class RestaurantService {
 
         return list;
     }
+
 
 	public List<TagRestaurantRequestDto> getRestaurantByHashTag() {
 		log.info("getRestaurantByHashTag");

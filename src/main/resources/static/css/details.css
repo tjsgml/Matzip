@@ -195,6 +195,11 @@
 	margin-bottom: 8px;
 }
 
+.bigStar {
+    width: 30px;
+    height: 30px;
+}
+
 
 .review_name{
 	font-size: 17px;
@@ -217,13 +222,17 @@
 	border-radius: 10px;
 }
 .ht_container{
-	display: grid;
 	grid-template-columns: repeat(10, 1fr);
 }
 .item2 {
 	grid-column: 2 / 11;
 	margin-top:10px;
 }
+
+.ht_POV {
+    margin-top:5px;
+}
+
 .btnMoreHt{
 	border-radius: 20px;
 	border-color: #666670;
@@ -244,7 +253,10 @@
     height: 15px; /* 원하는 높이로 조정 */
     margin-bottom: 3px; /* 필요에 따라 조정 */
 }
-.detail_rating{
+.detail_rating,
+.flavor_rating_avg,
+.price_rating_avg, 
+.service_rating_avg{
 	margin-left: 10px;
 	font-size: 15px;
 	color:rgb(94, 94, 94);
@@ -417,4 +429,52 @@
     align-items: center;
     gap: 10px;
 }
+
+.evalAvg1,
+.evalAvg2 {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.more-button-container {
+    margin-top: 10px; /* 버튼과 태그들 사이의 간격 */
+}
+
+.btnMoreHt.expanded {
+    /* 확장됐을 때 스타일 */
+}
+
+.review-btn-container{
+    margin-top: 20px;
+}
+
+.edit-review-btn{
+    text-decoration: none;
+    border:solid 2px #595C5F;
+    border-radius: 10cap;
+    color: #666670;
+    padding:6px;
+    font-size: 15px;
+}
+
+.edit-review-btn:hover{
+    border:solid 2px #FF7F70;
+    border-radius: 10cap;
+    color: #000;
+    text-decoration: none;
+}
+
+.review_contents{
+    padding: 10px;
+    font-size: 18px; 
+    margin-top:10px;
+    margin-left:10px;
+}
+
+
+
 

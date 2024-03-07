@@ -1,7 +1,8 @@
 package com.itwill.matzip.web;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,8 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.itwill.matzip.domain.BusinessHour;
 import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.Restaurant;
+
 import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.domain.ReviewHashtag;
+
 import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MyPickRegisterDto;
 import com.itwill.matzip.dto.ReviewListDto;
@@ -31,7 +34,6 @@ import com.itwill.matzip.repository.ReviewRepository;
 import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.service.RestaurantService;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -168,13 +170,21 @@ public class RestaurantController {
 		return ResponseEntity.ok(1);
 	}
 	
-//	/* 은겸 추가 */
+	/* 은겸 추가 */
+	
+	// 리뷰 리스트 
 	@GetMapping("/details/reviews/{restaurantId}")
     public ResponseEntity<List<ReviewListDto>> findReviews(@PathVariable("restaurantId") Long restaurantId) {
         List<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId);
         return ResponseEntity.ok(reviews);
     }
-
+	
+	// 카테고리별 해시태그 
+    @GetMapping("/details/hashtags/{restaurantId}")
+    public ResponseEntity<Map<String, Set<String>>> findHashTagsAndCategory(@PathVariable("restaurantId") Long restaurantId){
+    	Map<String, Set<String>> hashtagsByCategory = restSvc.getReviewHashtagsByCategory(restaurantId);
+    	return ResponseEntity.ok(hashtagsByCategory);
+    }
 	
 	
 	

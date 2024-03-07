@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="kr">
-<head th:replace="~{/layout/fragment-common.html::my-header('MAT.ZIP ADMIN')}"></head>
+<head th:replace="~{layout/fragment-common.html::my-header('MAT.ZIP ADMIN')}"></head>
 <link href="/css/admin/admin-common.css" rel="stylesheet">
 <body>
-<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+<nav th:replace="~{layout/fragment-admin::mz-top-nav}"></nav>
 <div class="mz-admin-container">
-    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <nav th:replace="~{layout/fragment-admin::mz-nav}"></nav>
     <main class="m-2">
         <h5 class="my-3" style="padding-left: 10px">
             💪🏼<span th:text="${#authentication.name}"></span>님 오늘도 득근💪🏼<br/>

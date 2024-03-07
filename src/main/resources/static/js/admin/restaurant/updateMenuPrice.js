@@ -63,7 +63,7 @@ btnUpdateMenuNames.forEach(el => {
 
 async function updateName(e) {
     const updateMenuNameComp = e.target.parentElement.parentElement.querySelector("#update-menu-name-comp");
-
+    console.log(updateMenuNameComp.getAttribute("data-id"))
     const menuId = updateMenuNameComp.getAttribute("data-id");
     const nameToUpdate = updateMenuNameComp.querySelector("input#nameToUpdate");
 
@@ -163,7 +163,7 @@ createMenuBtn.addEventListener("click", async () => {
 
     listItemToAdd.innerHTML = `
         <div>
-                <span id="name-${data.id}">${menuNameInput.value}</span>
+                <span id="name-${data}">${menuNameInput.value}</span>
                 <button class="btn btn-sm btn-update-menu-name">이름 변경</button>
                 <div class="input-group d-none" id="update-menu-name-comp" data-id=${data}>
                     <input id="nameToUpdate" class="form-control form-control-sm" type="text"

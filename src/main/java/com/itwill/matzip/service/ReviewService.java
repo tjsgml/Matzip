@@ -2,6 +2,7 @@ package com.itwill.matzip.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,7 @@ import com.itwill.matzip.util.DateTimeUtil;
 import com.itwill.matzip.util.S3Utility;
 import com.itwill.matzip.util.SecurityUtility;
 
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -47,6 +49,10 @@ public class ReviewService {
     private final S3Utility s3Util;
     
     private final ReviewLikeRepository reviewLikeDao;
+    
+    
+    @Autowired
+    private EntityManager entityManager; 
     
     
     @Autowired
@@ -70,21 +76,75 @@ public class ReviewService {
     			.orElseThrow(() -> new IllegalArgumentException("존재하지않는 리뷰 ID" + reviewId));
     }
     
+        
+    
     // 리뷰 업데이트
+    @Transactional
     public void updateReview(Long reviewId, ReviewUpdateDto dto) {
-    	Review review = findReviewById(reviewId);
-    	
-    	review.updateReview(
-    		dto.getTasteRating(),
-    		dto.getPriceRating(),
-    		dto.getServiceRating(),
-    		dto.getReviewContent()
-    	);
-    	
+
+        Review review = findReviewById(reviewId);
+
+        // 평점 내용 업데이트
+        review.updateReview(dto.getTasteRating(), dto.getPriceRating(), dto.getServiceRating(), dto.getReviewContent());
+
+        // 이미지 처리
+        updateDeleteImages(review, dto.getImages(), dto.getDeleteImageUrls());
+        
+        // 해시태그 처리
+        updateDeleteHashtags(review, dto.getVisitPurposeTags(), dto.getMoodTags(), dto.getConvenienceTags(), dto.getDeleteHashtagIds());
     }
     
+    @Transactional
+    private void updateDeleteHashtags(Review review, List<String> visitPurposeTags, List<String> moodTags, List<String> convenienceTags, List<Long> deleteHashtagIds) {
+    	if (deleteHashtagIds != null && !deleteHashtagIds.isEmpty()) {
+    	    for (Long hashtagId : deleteHashtagIds) {
+    	        Optional<ReviewHashtag> optionalHashtag = reviewHTDao.findById(hashtagId);
+    	        if (optionalHashtag.isPresent()) {
+    	            ReviewHashtag hashtag = optionalHashtag.get();
+    	            review.getHashtags().remove(hashtag); // 리뷰에서 해시태그 제거
+    	            hashtag.getReviews().remove(review); // 해시태그에서 리뷰 제거
+    	            // 해시태그가 다른 리뷰에도 연결된게 없으면 삭제
+    	            if (hashtag.getReviews().isEmpty()) {
+    	                reviewHTDao.delete(hashtag);
+    	            }
+    	        }
+    	    }
+    	}
+
+        // 새로운 해시태그 처리
+        saveHashtags(visitPurposeTags, HashtagCategoryName.VISIT_PURPOSE, review);
+        saveHashtags(moodTags, HashtagCategoryName.MOOD, review);
+        saveHashtags(convenienceTags, HashtagCategoryName.CONVENIENCE, review);
+    }
+
     
     @Transactional
+    private void updateDeleteImages(Review review, MultipartFile[] images, List<String> deleteImageUrls) {
+        // 삭제 이미지 처리
+        for (String imageUrl : deleteImageUrls) {
+            ReviewImage reviewImage = reviewImageDao.findByImgUrl(imageUrl);
+            if (reviewImage != null) {
+                reviewImageDao.delete(reviewImage); // DB 이미지 삭제
+                String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+                s3Util.deleteImageFromS3(fileName); // S3 이미지 삭제
+            }
+        }
+
+        // 새로운 이미지 처리
+        if (images != null) {
+            for (MultipartFile image : images) {
+                if (!image.isEmpty()) {
+                    String imageUrl = s3Util.uploadImageToS3(image, s3Util.generateFileName());
+                    ReviewImage newReviewImage = new ReviewImage(null, review, imageUrl);
+                    reviewImageDao.save(newReviewImage);
+                }
+            }
+        }
+    }
+    
+
+    // 리뷰 저장
+	@Transactional
     public void saveReview(ReviewCreateDto dto) {
     	
     	log.info("방문목적 태그: {}", dto.getVisitPurposeTags());
@@ -141,30 +201,34 @@ public class ReviewService {
         saveHashtags(dto.getConvenienceTags(), HashtagCategoryName.CONVENIENCE, savedReview);
     }
 
-    
+	
+    // 해시태그 저장
     private void saveHashtags(List<String> tags, HashtagCategoryName categoryEnum, Review savedReview) {
         if (tags == null || tags.isEmpty()) return; // 태그없으면
-        
+
         // 카테고리 조회
         HashtagCategory category = hashCategoryDao.findByName(categoryEnum.getCategoryName()).orElse(null);
-        
+
         for (String tag : tags) {
-        	log.info("saveHashtags() - 해시태그:{}, 태그카테고리: {}", tag, categoryEnum.getCategoryName());
-        	
-        	// 카테고리에 같은 키워드가 있는지 확인
-        	ReviewHashtag existingTag = reviewHTDao.findByKeywordAndHtCategory(tag, category).orElse(null);
-        	
-        	if(existingTag == null) { // 같은 키워드가 없으면 저장
-	            ReviewHashtag reviewHashtag = ReviewHashtag.builder()
-	                                                        .keyword(tag)
-	                                                        .htCategory(category) 
-	                                                        .build();
-	            reviewHTDao.save(reviewHashtag);
-        	}
+            log.info("saveHashtags() - 해시태그:{}, 태그카테고리: {}", tag, categoryEnum.getCategoryName());
+
+            // 카테고리에 같은 키워드가 있는지 확인
+            ReviewHashtag existingTag = reviewHTDao.findByKeywordAndHtCategory(tag, category)
+                                                    .orElseGet(() -> {
+                                                        // 같은 키워드가 없으면 새로 저장
+                                                        ReviewHashtag newTag = ReviewHashtag.builder()
+                                                                                             .keyword(tag)
+                                                                                             .htCategory(category)
+                                                                                             .build();
+                                                        reviewHTDao.save(newTag);
+                                                        return newTag;
+                                                    });
+
+            savedReview.getHashtags().add(existingTag); // Review에 해시태그 추가
+            existingTag.getReviews().add(savedReview); // 해시태그에 Review 추가
         }
-        
-  
     }
+
 
     /** 회원과 연관된 리뷰 메서드 모음 ---------------------------------------*/
     //오직 리뷰 정보(리뷰 엔터티 - 맛, 서비스, 분위기 평점 이용)만 가져오기
@@ -195,7 +259,6 @@ public class ReviewService {
                         .categoryName(review.getRestaurant().getCategory().getName())
                         .location(review.getRestaurant().getAddress())
                         .reviewId(review.getId())
-//						.createTime(review.getCreatedTime())
                         .formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime()))
                         .flavorScore((double) review.getFlavorScore())
                         .serviceScore((double) review.getServiceScore())

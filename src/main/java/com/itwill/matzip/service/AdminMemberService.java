@@ -2,11 +2,13 @@ package com.itwill.matzip.service;
 
 import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.Review;
+import com.itwill.matzip.domain.ReviewImage;
 import com.itwill.matzip.domain.enums.MemberRole;
 import com.itwill.matzip.dto.admin.MemberFilterDto;
 import com.itwill.matzip.repository.ReviewImageRepository;
 import com.itwill.matzip.repository.ReviewRepository;
 import com.itwill.matzip.repository.member.MemberRepository;
+import com.itwill.matzip.util.S3Utility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ public class AdminMemberService {
     private final MemberRepository memberDao;
     private final ReviewRepository reviewDao;
     private final ReviewImageRepository rlmgDao;
+    private final S3Utility s3Util;
 
     private final static Integer REVIEW_LIST_SIZE = 5;
 
@@ -34,6 +37,8 @@ public class AdminMemberService {
     }
 
     public void deleteReviewImg(Long reviewImg) {
+        ReviewImage reviewImage = rlmgDao.findById(reviewImg).orElseThrow();
+        s3Util.deleteImageFromS3(reviewImage.getImgUrl());
         rlmgDao.deleteById(reviewImg);
     }
 

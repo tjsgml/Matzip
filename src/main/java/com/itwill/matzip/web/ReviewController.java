@@ -1,6 +1,8 @@
 package com.itwill.matzip.web;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +13,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
+import com.itwill.matzip.dto.HashtagDto;
 import com.itwill.matzip.dto.ReviewCreateDto;
+import com.itwill.matzip.dto.ReviewUpdateDto;
 import com.itwill.matzip.service.RestaurantService;
 import com.itwill.matzip.service.ReviewService;
 
@@ -47,8 +51,8 @@ public class ReviewController {
             reviewSvc.saveReview(reviewDto);
             redirectAttributes.addFlashAttribute("message", "리뷰 등록 성공!");
         } catch (Exception e) {
-            log.info("review register 실패", reviewDto);
-            e.printStackTrace();
+        	log.info("review register 실패", reviewDto);
+        	e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage", "리뷰 등록 실패: " + e.getMessage());
             return "redirect:/review/create?restaurantId=" + reviewDto.getRestaurantId(); // 리다이렉트시 레스토랑ID 쿼리파라미터로 추가
 
@@ -59,27 +63,64 @@ public class ReviewController {
 
 
     // 리뷰 수정
-    @GetMapping("/update/{reviewId}")
-    public String reviewUpdate(@PathVariable Long reviewId, Model model) {
-        log.info("GET - reviewEditForm - reviewId: {}", reviewId);
-
+    @GetMapping("/update/{reviewId}") 
+    public String reviewUpdate(@PathVariable("reviewId") Long reviewId, Model model) {
         // 리뷰 정보 조회 
         Review review = reviewSvc.findReviewById(reviewId);
+        List<String> reviewImages = reviewSvc.getReviewImg(reviewId); // 리뷰 이미지
         if (review == null) {
             // 리뷰 정보가 없으면
             return "redirect:/error";
         }
+        
+        List<HashtagDto> hashtags = review.getHashtags().stream()
+        		.map(h-> new HashtagDto(h.getId(), h.getKeyword(), h.getHtCategory().getName()))
+        		.collect(Collectors.toList());
 
-//        // 리뷰와 연관된 레스토랑 정보 가져옴
-//        Restaurant restaurant = restaurantSvc.findOneRest(review.getRestaurant().getId());
-//        
-//        // 리뷰 정보, 레스토랑 정보 추가
-//        model.addAttribute("reviewForm", review); // ReviewCreateDto 대신 사용된 리뷰 객체, 적절한 DTO로 변환 필요
-//        model.addAttribute("restaurantName", restaurant.getName());
-//        model.addAttribute("restaurantId", restaurant.getId());
+        // 리뷰와 연관된 레스토랑 정보 가져옴
+        Restaurant restaurant = restaurantSvc.findOneRest(review.getRestaurant().getId());
+        
+        // 리뷰 정보, 레스토랑 정보 추가
+        model.addAttribute("restaurantName", restaurant.getName());
+        model.addAttribute("restaurantId", restaurant.getId());
+        log.info("restaurantId={}", restaurant.getId());
         model.addAttribute("review", review);
+        model.addAttribute("reviewImages", reviewImages);
+        model.addAttribute("hashtags", hashtags);
         return "review/update"; // 리뷰 수정 페이지
     }
+    
+    @PostMapping("/update/{reviewId}")
+    public String updateReview(@PathVariable("reviewId") Long reviewId, @ModelAttribute ReviewUpdateDto reviewDto, RedirectAttributes redirectAttributes) {
+        try {
+            if (reviewDto.getDeleteImageUrls() == null) {
+                reviewDto.setDeleteImageUrls(new ArrayList<>());
+            }
+
+            if (reviewDto.getDeleteHashtagIds() == null) {
+            	log.info("reviewDto.getDeleteHashtagIds() 널이다 이자식아=", reviewDto.getDeleteHashtagIds());
+                reviewDto.setDeleteHashtagIds(new ArrayList<>());
+            }
+
+            reviewSvc.updateReview(reviewId, reviewDto);
+            log.info("reviewId={}", reviewId);
+            log.info("restaurantId={}", reviewDto.getRestaurantId());
+
+            return "redirect:/rest/details?id=" + reviewDto.getRestaurantId();
+//            return "redirect:/review/update/" + reviewId;
+        } catch (Exception e) {
+            log.info("reviewId={}", reviewId);
+            e.printStackTrace();
+
+            return "redirect:/review/update/" + reviewId;
+        }
+    }
+
+
+
+    
+    
+    
     
     //레스트 컨트롤러-------------------------------
     //내가 쓴 리뷰의 이미지 가져오기
@@ -90,4 +131,7 @@ public class ReviewController {
 
     	return ResponseEntity.ok(list);
     }
+    
+    
+    
 }
