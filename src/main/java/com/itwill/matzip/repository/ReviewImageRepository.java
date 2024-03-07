@@ -11,4 +11,7 @@ public interface ReviewImageRepository extends JpaRepository<ReviewImage, Long> 
 	//이미지 배열 가져오기
 	List<ReviewImage> findByReviewId(Long reviewId);
 
+	ReviewImage findByImgUrl(String imageUrl);
+
+
 }

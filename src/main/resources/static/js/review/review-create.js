@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-/* 별 평점 */
+    /* 별 평점 */
     // 평가 카테고리 별 별점 값
     const ratingContainers = document.querySelectorAll(".rating-container");
 
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 // 이 카테고리에 대한 별점 값 업데이트
                 container.setAttribute("data-rating", value.toString());
-                
+
                 // 바로 업데이트된 data-rating 값을 사용하여 처리
                 processRating(container.id, value);
             });
@@ -56,8 +56,8 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
     });
-    
-     // 카테고리 + 평점
+
+    // 카테고리 + 평점
     function processRating(categoryId, ratingValue) {
         console.log(`${categoryId} 평점: ${ratingValue}`);
         // hidden input 값 업데이트
@@ -72,16 +72,29 @@ document.addEventListener("DOMContentLoaded", function() {
     /* 이미지 */
     const imageInput = document.getElementById('image-input');
     const imagePreviewContainer = document.querySelector('.image-preview-container');
-    const imagePreviewText = document.querySelector('.image-preview-text');
-    
+    let selectedFiles = [];
 
-    imageInput.addEventListener('change', function() {
+    // 이미 선택된 파일들을 DataTransfer 객체를 사용하여 input의 files 속성에 설정하는 함수
+    function updateInputFiles(files) {
+        const dataTransfer = new DataTransfer();
+        files.forEach(file => {
+            dataTransfer.items.add(file);
+        });
+        imageInput.files = dataTransfer.files;
+    }
 
-        if (this.files && this.files.length > 0) {
-            imagePreviewText.remove();
-        }
+    // 이미지 미리보기에서 파일을 삭제하는 함수
+    function removeFileFromInput(indexToRemove) {
+        selectedFiles = selectedFiles.filter((_, index) => index !== indexToRemove);
+        updateInputFiles(selectedFiles); // input의 files 속성 업데이트
+        updateImagePreviews(selectedFiles); // 미리보기 업데이트
+    }
 
-        for (const file of this.files) {
+    // 미리보기를 업데이트하는 함수
+    function updateImagePreviews(files) {
+        imagePreviewContainer.innerHTML = ''; // 기존 미리보기 클리어
+
+        files.forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const imagePreviewWrap = document.createElement('div');
@@ -90,28 +103,40 @@ document.addEventListener("DOMContentLoaded", function() {
                 const imagePreview = document.createElement('img');
                 imagePreview.src = e.target.result;
 
-                const deleteButton = document.createElement('a');
-                deleteButton.innerHTML = '<i class="fas fa-times"></i>'; 
+                // 삭제 버튼 추가
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'X';
                 deleteButton.classList.add('delete-image');
-                deleteButton.href = 'javascript:void(0);';
+                deleteButton.setAttribute('type', 'button'); // 폼 제출 방지
+                deleteButton.onclick = function() {
+                    removeFileFromInput(index); // 미리보기와 선택된 파일 목록에서 이미지 삭제
+                };
 
-                deleteButton.addEventListener('click', function() {
-                    imagePreviewWrap.remove(); 
-                });
-
-                // 이미지 & 삭제 버튼 wrap에 추가
                 imagePreviewWrap.appendChild(imagePreview);
-                imagePreviewWrap.appendChild(deleteButton);
+                imagePreviewWrap.appendChild(deleteButton); // 삭제 버튼을 미리보기에 추가
 
-                // wrap을 imagePreviewContainer에 추가
                 imagePreviewContainer.appendChild(imagePreviewWrap);
             };
             reader.readAsDataURL(file);
-        }
+        });
+    }
+
+    imageInput.addEventListener('change', function(event) {
+        const newFiles = Array.from(event.target.files); // 사용자가 새롭게 선택한 파일들
+
+        newFiles.forEach(file => {
+            if (!selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                selectedFiles.push(file);
+            }
+        });
+
+        updateInputFiles(selectedFiles); // input의 files 속성 업데이트
+        updateImagePreviews(selectedFiles); // 미리보기 업데이트
     });
-    
-    
-/* 키워드(해시태그) */
+
+
+
+    /* 키워드(해시태그) */
     // 태그 ID(삭제 시 필요)
     let tagIdCounter = 0;
 
@@ -123,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (tagValue) {
                     const category = this.getAttribute('data-category');
                     const tagId = `tag-${tagIdCounter++}`; // 태그 고유 ID 생성
-    
+
                     // 숨겨진 입력 필드 생성
                     const hiddenInput = document.createElement('input');
                     hiddenInput.type = 'hidden';
@@ -139,9 +164,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     hiddenInput.name = inputName;
                     hiddenInput.value = tagValue;
                     hiddenInput.id = tagId;
-    
+
                     document.getElementById('reviewForm').appendChild(hiddenInput);
-    
+
                     // 태그 UI 생성
                     const tagList = document.getElementById(input.getAttribute('data-category') + '-tags');
                     const tagItem = document.createElement('li');
@@ -152,10 +177,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         tagItem.remove(); // 태그 UI 삭제
                         document.getElementById(tagId).remove(); // 숨겨진 입력 필드 삭제
                     });
-    
+
                     tagItem.appendChild(deleteBtn);
                     tagList.appendChild(tagItem);
-    
+
                     this.value = ''; // 입력 필드 초기화
                 }
             }
@@ -163,8 +188,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 
-    
-    
+
+
     document.querySelectorAll('.tag-input').forEach(function(input) {
         const maxLength = 8; // 글자 수 제한
         input.addEventListener('input', function() {
@@ -197,6 +222,7 @@ document.addEventListener("DOMContentLoaded", function() {
             inputElement.parentNode.insertBefore(newWarning, inputElement.nextSibling);
         }
     }
+
     function clearWarning(inputName) {
         const warningElement = document.getElementById(inputName + '-warning');
         if (warningElement) {
@@ -204,58 +230,51 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-/* 폼 제출  */
-    
-        const reviewForm = document.getElementById("reviewForm");
-        reviewForm.addEventListener("submit", function(e) {
-            // 평점 입력 확인
-            const tasteRating = document.getElementById('tasteRating').value;
-            const priceRating = document.getElementById('priceRating').value;
-            const serviceRating = document.getElementById('serviceRating').value;
-            console.log(tasteRating, priceRating, serviceRating);
-            
-            if (tasteRating === "0" || priceRating === "0" || serviceRating === "0") {
-                e.preventDefault();
-                alert("모든 평점을 선택해주세요.");
-                return;
-            }
-    
-            const reviewContent = document.getElementById('review').value; 
-            if (!reviewContent.trim()) {
-                e.preventDefault();
-                alert("리뷰 내용을 입력해주세요.");
-                return;
-            }
-    
-        });
-    
-    
+    /* 폼 제출  */
+
+    const reviewForm = document.getElementById("reviewForm");
+    reviewForm.addEventListener("submit", function(e) {
+        // 평점 입력 확인
+        const tasteRating = document.getElementById('tasteRating').value;
+        const priceRating = document.getElementById('priceRating').value;
+        const serviceRating = document.getElementById('serviceRating').value;
+        console.log(tasteRating, priceRating, serviceRating);
+
+        if (tasteRating === "0" || priceRating === "0" || serviceRating === "0") {
+            e.preventDefault();
+            alert("모든 평점을 선택해주세요.");
+            return;
+        }
+
+        const reviewContent = document.getElementById('review').value;
+        if (!reviewContent.trim()) {
+            e.preventDefault();
+            alert("리뷰 내용을 입력해주세요.");
+            return;
+        }
+
+    });
+
+
     // 레스토랑 ID
-    
+
     // URL에서 식당 ID 읽어오기
     const params = getQueryStringParams(window.location.search);
     const restaurantId = params.get('id'); // 'id'-쿼리 스트링 파라미터
-    
+
     // 식당 ID hidden input 추가
-    if(restaurantId) {
+    if (restaurantId) {
         const hiddenRestaurantIdInput = document.createElement('input');
         hiddenRestaurantIdInput.setAttribute('type', 'hidden');
         hiddenRestaurantIdInput.setAttribute('name', 'restaurantId');
         hiddenRestaurantIdInput.setAttribute('value', restaurantId);
         document.querySelector('form').appendChild(hiddenRestaurantIdInput);
     }
-    
+
     function getQueryStringParams(query) {
         return new URLSearchParams(query);
     }
 
 
 
-
-
-
-
-
-
-
-}); // end
+}); // end DOM
