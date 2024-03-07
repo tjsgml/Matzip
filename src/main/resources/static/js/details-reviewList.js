@@ -128,10 +128,10 @@ document.addEventListener('DOMContentLoaded', async()=>{
     
                     btnContainer.appendChild(editButton);
                     btnContainer.appendChild(deleteButton);
-                } else {  //  TODO: 로그인한 회원이 리뷰 작성자가 아닌 경우 공감 버튼 추가
+                } else {  // 로그인한 회원이 리뷰 작성자가 아닌 경우 공감 버튼 추가
                     const likeButton = document.createElement('button');
-                    likeButton.textContent = '공감';
                     likeButton.className = 'btn like-review-btn';
+                    likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_Off.png" class="like-button-img"">';
                     likeButton.addEventListener('click', function() {
                         
                         
