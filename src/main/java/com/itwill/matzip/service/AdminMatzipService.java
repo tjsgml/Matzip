@@ -248,8 +248,8 @@ public class AdminMatzipService {
     @Transactional
     public void deleteCategory(Integer categoryId) {
         log.info("deleteCategory(Integer categoryId = {} )", categoryId);
-        categoryDao.deleteById(categoryId);
         restaurantDao.updateCategoryToDefaultCategory(categoryId, DEFAULT_CATEGORY);
+        categoryDao.deleteById(categoryId);
     }
 
     public Category createCategory(String categoryName) {
