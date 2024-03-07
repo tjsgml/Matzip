@@ -7,10 +7,11 @@
 		rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 		<link href="/css/layout/navigation.css" rel="stylesheet">
 		<link href="/css/font.css" rel="stylesheet" /> 
+		<link href="/css/search-list.css" rel="stylesheet">
 	</head>
-		<body>
+		<body style="background-color: #F0F0F3;">
 		<!--검색 결과 리스트 보여주는 html(전체순, 공감수,리뷰수,좋아요수 대로 정렬하기!!) -->
-			<div class="container-fluid"  style="background-color: #F0F0F3;">
+			<div class="container-fluid"  style="background-color: #F0F0F3; height: auto;">
 				<div class="row" style=" background-color: white; "><!-- 네비게이션 바-->
 					<div class="navContainer">
 								<div class="nav1"><!--로고-->
@@ -27,25 +28,170 @@
 								</div>
 						</div>	
 					</div>
-				<div class="row" style="height: 100vh;">
+				<div class="row">
 					<div class="col-md-3"></div>
-					<div class="col-md-6" >
-						<div id="searchList" style=" background-color: white; margin-top: 20px;">
-							<div id="searchKeywordBar">
+					<div class="col-md-6">
+						<div id="searchList" style=" background-color: white; margin-top: 10px; ">
+							<div id="searchKeywordBar" style="display: flex;">
 								<span>
-									<img src="/img/search-results.png" style="height: 25px; height: 25px; margin-bottom: 8px;">
+									<img src="/img/search-results.png" style="height: 25px; height: 25px; margin-top:3px;">
 								</span>
-								<span style="font-size: 20px; font-weight: bold; color: #FF230A;">"</span>
-								<span id="keyword" style="font-size: 20px; font-weight: bold;" th:text="${keyword}"></span>
-								<span style="font-size: 20px; font-weight: bold; color: #FF230A;">"</span>
-								<span style="font-size: 20px; "> 의 검색결과</span>
-								<span style="font-size: 20px; ">(</span>
-								<span id="resultNum" style="font-size: 20px; letter-spacing: 0; color: #FF230A; font-weight: bold;" ></span>
-								<span style="font-size: 20px; letter-spacing: 0;">)곳 </span>
+								<span style="margin-left:5px;" >
+									<p class="badge" id="searchCategory" th:text="${searchCategory}"></p>
+								</span>
+								<span id="search-phrases">
+									<span style="font-size: 20px; font-weight: bold; color: #FF230A;">"</span>
+									<span id="keyword" style="font-size: 20px; font-weight: bold;" th:text="${keyword}"></span>
+									<span style="font-size: 20px; font-weight: bold; color: #FF230A;">"</span>
+									<span style="font-size: 20px; "> 의 검색결과</span>
+									<span style="font-size: 20px; ">(</span>
+									<span id="resultNum" style="font-size: 20px; letter-spacing: 0; color: #FF230A; font-weight: bold;" th:text="${list.size()}" ></span>
+									<span style="font-size: 20px; letter-spacing: 0;">)곳 </span>
+								</span>
 							</div>
-							<div>
-								
+							<hr style="margin:0; border-color: rgb(214, 214, 222); border-width: 3px;">
+							<!-- 검색 결과가 없을 때-->
+							<div th:if="${list.isEmpty()}" style="padding-bottom: 150px;">
+								<div  style="display: flex; justify-content: center; align-items: center; margin-top:200px; margin-bottom: 350px; background-color: white;">
+								    <div>
+										<span style="display: flex; justify-content: center;">
+											<img src="/img/icon_nullWarning.png" style="width: 45px; height: 45px;">
+										</span>
+										<br>
+										<span style="font-size: 20px; font-weight: bold;">검색 결과가 없습니다.</span>
+									</div>
+								</div>
 							</div>
+							<!-- 검색 결과가 있을 때 리스트-->
+							<th:block th:each="rest : ${list}">	
+							  <th:block th:if="${rest.rvTotal != 0}"><!--리뷰가 null이 아닐 때 -->
+								<div id="post">
+									<a id="restPost" class="restPost" th:href="@{/rest/details(id=${rest.restId})}" data-id="${rest.restId}">
+										<div data-id="${rest.restId}">
+											<div class="container" id="container" data-id="${rest.restId}">
+												<div  id="review-info-img-${rest.restId}" th:style="${rest.rvImg != null and rest.rvImg != '' ? 'background-image: url(' + rest.rvImg + ')' : ''}" th:class="${rest.rvImg == null or rest.rvImg == '' ? 'nullImg item1' : 'item1'}">
+													<img th:if="${rest.rvImg == null or rest.rvImg == ''}"  src="/img/reviewNullImg.png" class="reviewNullImg">
+												</div>
+												<div class="grid-item2">
+													<div class="item2" th:text="${rest.restName}"></div>
+													<div class="item3" th:text="${rest.restCategory}">${restaurant.category.name}</div>
+													<div class="item4">
+															<img style="margin-bottom: 7px; width: 20px;height: 20px;"src="/img/v26_89.png">
+															<th:block th:if="${rest.rvTotal == 0}">
+																<span id="review-info-grade-${rest.restId}" >0점(0명)</span>
+															</th:block>
+															<th:block th:unless="${rest.rvTotal == 0}">
+															    <span id="review-info-grade-${rest.restId}" th:text="${rest.rvTotalRating + '점(' + rest.rvTotal + '명)'}"></span>
+															</th:block>
+															<div class="v-line"></div>
+															<span class="button likeButton" id="likeButton" data-id="${rest.restId}">
+															    <img id="rest-myPick-${restaurant.id}" src="/img/v26_98.png" style="margin-bottom: 4px; width: 22px;height: 22px;">
+															</span>
+															<th:block th:if="${rest.myPickTotal == 0}">
+																<span id="rest-totalMyPick-${rest.restId}" >(0)</span>
+															</th:block>
+															<th:block th:unless="${rest.myPickTotal == 0}">
+															    <span id="rest-totalMyPick-${rest.restId}" th:text="${ '(' + rest.myPickTotal + ')'}"></span>
+															</th:block>
+															<span id="rest-totalMyPick-${restaurant.id}"><span>
+													</div>
+													<div class="item5">
+														<th:block th:each="tag : ${rest.rvHashtags}">
+													        <span id="tag" th:text="'#'+${tag}"></span>
+													    </th:block>
+													</div>
+												</div>
+											</div>
+											<th:block th:if="${rest.rvTotal != 0}">
+												<div class="reviewDiv" th:id="'review-info-'+ ${rest.restId}" >
+													<span class="reviewContent" th:text="'&quot;' + (${rest.rvContent.length() > 55 ? rest.rvContent.substring(0, 55) + '...' : rest.rvContent}) + '&quot;'"></span>
+												</div>
+												<div class="c1" id="review-c1-${rest.restId}">
+													<div class="i1">
+														<span class="reviewLike" id="review-reviewLike-${rest.restId}" th:text="${rest.rvLikeTotal != null ? rest.rvLikeTotal : '0'}"></span>
+														<span class="reviewLike2">명이 추천했습니다.</spanstyle>
+													</div>
+													<div class="i2">
+														<span class="reviewNick" id="review-reviewNick-${rest.restId}" th:text="'by.'+${rest.rvNickname}" >by.닉네임</span>
+													</div>
+												</div>
+											</th:block>
+										</div>
+									</a>
+								</div>
+								<hr style="margin:0; border-color: rgb(214, 214, 222); border-width: 3px;">
+							  </th:block>
+							 </th:block>
+							 <th:block th:each="rest : ${list}">
+							   <th:block th:unless="${rest.rvTotal != 0}"><!-- 리뷰가 null 일 때-->
+							   	<div id="post" class="reviewNullPost">
+									<a id="restPost" class="restPost" th:href="@{/rest/details(id=${rest.restId})}" data-id="${rest.restId}">
+										<div data-id="${rest.restId}">
+											<div class="container" id="container" data-id="${rest.restId}">
+												<div  id="review-info-img-${rest.restId}" th:style="${rest.rvImg != null and rest.rvImg != '' ? 'background-image: url(' + rest.rvImg + ')' : ''}" th:class="${rest.rvImg == null or rest.rvImg == '' ? 'nullImg item1' : 'item1'}">
+													<img th:if="${rest.rvImg == null or rest.rvImg == ''}"  src="/img/reviewNullImg.png" class="reviewNullImg">
+												</div>
+												<div class="grid-item2">
+													<div class="item2" th:text="${rest.restName}"></div>
+													<div class="item3" th:text="${rest.restCategory}">${restaurant.category.name}</div>
+													<div class="item4">
+															<img style="margin-bottom: 7px; width: 20px;height: 20px;"src="/img/v26_89.png">
+															<th:block th:if="${rest.rvTotal == 0}">
+																<span id="review-info-grade-${rest.restId}" >0점(0명)</span>
+															</th:block>
+															<th:block th:unless="${rest.rvTotal == 0}">
+															    <span id="review-info-grade-${rest.restId}" th:text="${rest.rvTotalRating + '점(' + rest.rvTotal + '명)'}"></span>
+															</th:block>
+															<div class="v-line"></div>
+															<span class="button likeButton" id="likeButton" data-id="${rest.restId}">
+															    <img id="rest-myPick-${restaurant.id}" src="/img/v26_98.png" style="margin-bottom: 4px; width: 22px;height: 22px;">
+															</span>
+															<th:block th:if="${rest.myPickTotal == 0}">
+																<span id="rest-totalMyPick-${rest.restId}" >(0)</span>
+															</th:block>
+															<th:block th:unless="${rest.myPickTotal == 0}">
+															    <span id="rest-totalMyPick-${rest.restId}" th:text="${ '(' + rest.myPickTotal + ')'}"></span>
+															</th:block>
+															<span id="rest-totalMyPick-${restaurant.id}"><span>
+													</div>
+													<div class="item5">
+														<th:block th:each="tag : ${rest.rvHashtags}">
+													        <span id="tag" th:text="'#'+${tag}"></span>
+													    </th:block>
+													</div>
+												</div>
+											</div>
+											<th:block th:if="${rest.rvTotal != 0}">
+												<div class="reviewDiv" th:id="'review-info-'+ ${rest.restId}" >
+													<span class="reviewContent" th:text="'&quot;' + (${rest.rvContent.length() > 55 ? rest.rvContent.substring(0, 55) + '...' : rest.rvContent}) + '&quot;'"></span>
+												</div>
+												<div class="c1" id="review-c1-${rest.restId}">
+													<div class="i1">
+														<span class="reviewLike" id="review-reviewLike-${rest.restId}" th:text="${rest.rvLikeTotal != null ? rest.rvLikeTotal : '0'}"></span>
+														<span class="reviewLike2">명이 추천했습니다.</spanstyle>
+													</div>
+													<div class="i2">
+														<span class="reviewNick" id="review-reviewNick-${rest.restId}" th:text="'by.'+${rest.rvNickname}" >by.닉네임</span>
+													</div>
+												</div>
+											</th:block>
+											<th:block th:unless="${rest.rvTotal != 0}">
+												<div class="c1" id="review-c1-${rest.restId}" style="margin: 8px;">
+													<div class="i1">
+														<span class="reviewLike" id="review-reviewLike-${rest.restId}" ></span>
+														<span class="reviewLike2"></spanstyle>
+													</div>
+													<div class="i2">
+														<span class="reviewNick" id="review-reviewNick-${rest.restId}"  ></span>
+													</div>
+												</div>
+											</th:block>
+										</div>
+									</a>
+								</div>
+								<hr style="margin:0; border-color: rgb(214, 214, 222); border-width: 3px;">
+							   </th:block>
+							</th:block>	   
 						</div>
 					</div>
 					<div class="col-md-3"></div>

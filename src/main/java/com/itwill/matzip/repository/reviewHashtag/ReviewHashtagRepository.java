@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.itwill.matzip.domain.HashtagCategory;
+import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.ReviewHashtag;
 import com.itwill.matzip.domain.enums.Expose;
 
@@ -16,4 +17,7 @@ public interface ReviewHashtagRepository extends JpaRepository<ReviewHashtag, Lo
 	
 	List<ReviewHashtag> findByExposeOrderById(Expose e);
 	
+	List<ReviewHashtag> searchByKeyword(String keyword);
+	
+	List<ReviewHashtag> searchByCategoryAndKeyword(Long categoryId, String keyword);
 }
