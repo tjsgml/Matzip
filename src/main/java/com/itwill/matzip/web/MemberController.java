@@ -50,9 +50,15 @@ public class MemberController {
 
 	// 로그인 폼으로 이동
 	@GetMapping("/login")
-	public void login() {
+	public String login(Principal principal) {
 		log.info("Get - login()");
+		if(principal == null) {
+			return "/member/login";
+		}else {
+			return "redirect:/";
+		}
 	}
+	
 	// 로그인을 한 후에 이전 페이지로 리다이렉트
 	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/detailLogin")
@@ -96,10 +102,7 @@ public class MemberController {
             // 잘못된 URI가 제공된 경우 처리
             log.error("Invalid URI: {}", redirectUri);
             response.sendRedirect("/");
-        }
-		
-		
-		
+        }		
 		 // 이전 페이지의 URL을 가져옴
 //        String redirectUrl = request.getParameter("redirect");
 //        log.info("@@@ redirectUrl ={}",redirectUrl);
@@ -111,6 +114,7 @@ public class MemberController {
 //            // 리다이렉트할 URL이 없으면 기본적으로 설정된 페이지로 리다이렉트
 //            response.sendRedirect("/");
 //        }
+
 	}
 	
 	// 회원가입 폼으로 이동
@@ -201,7 +205,6 @@ public class MemberController {
 				valid = "Y";
 			}
 		}
-
 		model.addAttribute("valid", valid);
 
 		return "/member/password";

@@ -29,7 +29,7 @@ public class AdminMatzipController {
 
     private final AdminMatzipService adminService;
 
-    //    레스토랑 추가 페이지로 이동
+    // 레스토랑 추가 페이지로 이동
     @GetMapping("/restaurant")
     public String showPageToAddMatzip(Model model) {
         List<Category> categories = adminService.getCategories();
@@ -37,7 +37,7 @@ public class AdminMatzipController {
         return "admin/create-restaurant";
     }
 
-    //    레스토랑 메뉴 추가 페이지로 이동
+    // 레스토랑 메뉴 추가 페이지로 이동
     @GetMapping("/restaurant/{restaurantId}/menu")
     public String showPageToAddMenu(@PathVariable(name = "restaurantId") Long restaurantId, Model model) {
         log.info("restaurantId = {}", restaurantId);
@@ -46,10 +46,10 @@ public class AdminMatzipController {
         return "admin/update-menu";
     }
 
-    //    레스토랑 관리 리스트
+    // 레스토랑 관리 리스트
     @GetMapping("/restaurant/all")
     public String showRestaurantListPage(RestaurantSearchCond cond, Model model) {
-        log.info("showRestaurantListPage(RestaurantSearchCond cond={})", cond.getKeywordCriteria());
+        log.info("showRestaurantListPage(RestaurantSearchCond cond={})", cond);
 
         Map<String, Object> result = adminService.getRestaurantByOptions(cond);
         model.addAllAttributes(result);
@@ -58,7 +58,7 @@ public class AdminMatzipController {
         return "admin/restaurant-list";
     }
 
-    //    레스토랑 추가
+    // 레스토랑 추가
     @ResponseBody
     @PostMapping("/restaurant")
     public ResponseEntity<Long> addMatzip(@RequestBody RestaurantToCreateDto restaurant) {
@@ -70,7 +70,7 @@ public class AdminMatzipController {
         return ResponseEntity.ok(restaurantCreated.getId());
     }
 
-    //    레스토랑 삭제 (폐업 처리된 레스토랑 삭제)
+    // 레스토랑 삭제 (폐업 처리된 레스토랑 삭제)
     @ResponseBody
     @DeleteMapping("/restaurant/{restaurantId}")
     public ResponseEntity<Void> deleteMatzipData(@PathVariable(name = "restaurantId") Long restaurantId) {
@@ -78,10 +78,11 @@ public class AdminMatzipController {
         return ResponseEntity.noContent().build();
     }
 
-    //    메뉴 등록하는 REST API
+    // 메뉴 등록하는 REST API
     @ResponseBody
     @PostMapping("/restaurant/{restaurantId}/menu")
-    public ResponseEntity<URI> addMenuToRestaurant(@RequestBody MenusToCreateDto menus, @PathVariable(name = "restaurantId") Long restaurantId) {
+    public ResponseEntity<URI> addMenuToRestaurant(@RequestBody MenusToCreateDto menus,
+                                                   @PathVariable(name = "restaurantId") Long restaurantId) {
         menus.setRestaurantId(restaurantId);
 
         adminService.addMenusToRestaurant(menus);
@@ -91,14 +92,15 @@ public class AdminMatzipController {
 
     @ResponseBody
     @PostMapping("/restaurant/{restaurantId}/menu/one")
-    public ResponseEntity<Long> addMenuToRestaurant(@RequestBody MenuToCreateDto menu, @PathVariable(name = "restaurantId") Long restaurantId) {
+    public ResponseEntity<Long> addMenuToRestaurant(@RequestBody MenuToCreateDto menu,
+                                                    @PathVariable(name = "restaurantId") Long restaurantId) {
         log.info("addMenuToRestaurant(MenuToCreateDto={})", menu);
         Menu menuCreated = adminService.addMenuToRestaurant(restaurantId, menu);
 
         return ResponseEntity.ok(menuCreated.getId());
     }
 
-    //    메뉴 삭제 REST API
+    // 메뉴 삭제 REST API
     @ResponseBody
     @DeleteMapping("/restaurant/menu")
     public ResponseEntity<Void> deleteMenuToRestaurant(@RequestParam List<Long> menuId) {
@@ -112,29 +114,29 @@ public class AdminMatzipController {
 
     @ResponseBody
     @PatchMapping("/restaurant/menu/{menuId}/price")
-    public ResponseEntity<Menu> updateMenuPriceToRestaurant(@PathVariable(name = "menuId") Long menuId, @RequestParam(name = "price") Long price) {
+    public ResponseEntity<Menu> updateMenuPriceToRestaurant(@PathVariable(name = "menuId") Long menuId,
+                                                            @RequestParam(name = "price") Long price) {
         Menu menu = adminService.updateMenuPrice(menuId, price);
         return ResponseEntity.ok(menu);
     }
 
     @ResponseBody
     @PatchMapping("/restaurant/menu/{menuId}/name")
-    public ResponseEntity<Menu> updateMenuNameToRestaurant(@PathVariable(name = "menuId") Long menuId, @RequestParam(name = "name") String name) {
+    public ResponseEntity<Menu> updateMenuNameToRestaurant(@PathVariable(name = "menuId") Long menuId,
+                                                           @RequestParam(name = "name") String name) {
         Menu menu = adminService.updateMenuName(menuId, name);
         return ResponseEntity.ok(menu);
     }
 
     @ResponseBody
     @PutMapping("/restaurant/{restaurantId}/{status}")
-    public ResponseEntity<Void> setRestaurantById(
-            @PathVariable(name = "restaurantId") Long restaurantId,
-            @PathVariable(name = "status") String status
-    ) {
+    public ResponseEntity<Void> setRestaurantById(@PathVariable(name = "restaurantId") Long restaurantId,
+                                                  @PathVariable(name = "status") String status) {
         adminService.setStatusRestaurantById(restaurantId, status);
         return ResponseEntity.noContent().build();
     }
 
-    //    레스토랑 디테일 페이지로 이동
+    // 레스토랑 디테일 페이지로 이동
     @GetMapping("/restaurant/{restaurantId}")
     public String getRestaurantDetail(@PathVariable(name = "restaurantId") Long restaurantId, Model model) {
         Map<String, Object> result = adminService.getRestaurantForDetail(restaurantId);
@@ -159,7 +161,8 @@ public class AdminMatzipController {
 
     @ResponseBody
     @PatchMapping("/restaurant/{restaurantId}/time")
-    public ResponseEntity<String> updateRestaurantBusinessTime(@RequestBody List<BusinessHourUpdateDto> businessHours, @PathVariable(name = "restaurantId") Long restaurantId) {
+    public ResponseEntity<String> updateRestaurantBusinessTime(@RequestBody List<BusinessHourUpdateDto> businessHours,
+                                                               @PathVariable(name = "restaurantId") Long restaurantId) {
         log.info("businessHours={}", businessHours);
         log.info("restaurantId={}", restaurantId);
 
@@ -193,7 +196,8 @@ public class AdminMatzipController {
 
     @ResponseBody
     @PatchMapping("/category/order")
-    public ResponseEntity<String> updateCategoryOrder(@RequestBody List<CategoryOrderUpdateDto> categoryOrderUpdateDto) {
+    public ResponseEntity<String> updateCategoryOrder(
+            @RequestBody List<CategoryOrderUpdateDto> categoryOrderUpdateDto) {
         adminService.updateCategoryOrder(categoryOrderUpdateDto);
         return ResponseEntity.ok("order_updated");
     }
@@ -207,7 +211,8 @@ public class AdminMatzipController {
 
     @ResponseBody
     @PatchMapping("/category/{categoryId}")
-    public ResponseEntity<String> updateCategoryName(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "categoryName") String categoryName) {
+    public ResponseEntity<String> updateCategoryName(@PathVariable(name = "categoryId") Integer categoryId,
+                                                     @RequestParam(name = "categoryName") String categoryName) {
         log.info("categoryId= {}, @RequestParam(name ={}", categoryId, categoryName);
         adminService.updateCategoryName(categoryId, categoryName);
         return ResponseEntity.ok("order_updated");
@@ -242,7 +247,7 @@ public class AdminMatzipController {
 
     @ResponseBody
     @PatchMapping("/hashtag/{tagId}")
-    public ResponseEntity<String> updateHashtagCategoryById(@PathVariable Long tagId, @RequestBody HashtagUpdateDto updateDto) {
+    public ResponseEntity<String> updateHashtagCategoryById(@PathVariable(name = "tagId") Long tagId, @RequestBody HashtagUpdateDto updateDto) {
         log.info("updateDto={}", updateDto);
         adminService.updateHashtag(tagId, updateDto);
         return ResponseEntity.ok("updated");

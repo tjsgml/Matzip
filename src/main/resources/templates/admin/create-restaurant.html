@@ -38,9 +38,9 @@
                     <div class="mb-3">
                         <label class="form-label mt-3" for="select-category">카테고리 선택</label>
                         <select id="select-category" class="form-select">
-                        <option th:each="category : ${categories}" th:value="${category.id}"
-                                th:text="${category.name}"></option>
-                    </select>
+                            <option th:each="category : ${categories}" th:value="${category.id}"
+                                    th:text="${category.name}"></option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="mb-1" for="nameInput">가게명</label>
@@ -84,14 +84,18 @@
             <div>
                 <div class="m-3" id="floating">
                     <div class="text-end my-3">
-                        <div class="d-inline-block">
-                            <label class="mx-3" for="selectDistance">거리</label>
-                            <select id="selectDistance">
-                                <option value="1000">1km 이내</option>
-                                <option value="2000">2km 이내</option>
-                                <option value="5000">5km 이내</option>
-                                <option value="10000">10km 이내</option>
-                            </select>
+                        <div class="d-flex justify-content-between">
+
+                            <div class="d-inline mt-4">
+                                <label for="selectDistance">거리</label>
+                                <select id="selectDistance">
+                                    <option value="1000">1km 이내</option>
+                                    <option value="2000">2km 이내</option>
+                                    <option value="5000">5km 이내</option>
+                                    <option value="10000">10km 이내</option>
+                                </select>
+                            </div>
+                            <button id="submit-btn" class="btn btn-outline-primary mt-3">제출</button>
                         </div>
                     </div>
                     <div id="map" class="mb-3"></div>
@@ -100,7 +104,7 @@
                         </button>
                         <button class="form-control btn btn-outline-warning" id="un-draggable-btn">지도 드래그 비활성화</button>
                     </div>
-                    <button id="submit-btn" class="btn btn-outline-primary mt-3 form-control">제출</button>
+
                 </div>
             </div>
         </div>

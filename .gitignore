@@ -1,13 +1,11 @@
 HELP.md
 .gradle
+!./.gradle/8.4/checksums/checksums.lock
+!./.gradle/8.4/fileChanges/last-build.bin
 build/
-!gradle/wrapper/gradle-wrapper.jar
+!.gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-gradle/
-gradlew
-gradlew.bat
-settings.gradle
 
 ### STS ###
 .apt_generated

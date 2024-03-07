@@ -40,11 +40,11 @@ public class RestaurantQuerydslImpl extends QuerydslRepositorySupport implements
         Pageable pageable = null;
 
         if (cond.getOrder().equals("createdTimeASC")) {
-            pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.ASC, "createdTime");
+            pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.ASC, "id");
         } else if (cond.getOrder().equals("nameASC")) {
             pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.ASC, "name");
         } else {
-            pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.DESC, "createdTime");
+            pageable = PageRequest.of(cond.getCurPage(), cond.getTotalCount(), Sort.Direction.DESC, "id");
         }
 
         Objects.requireNonNull(getQuerydsl()).applyPagination(pageable, query);
@@ -67,6 +67,7 @@ public class RestaurantQuerydslImpl extends QuerydslRepositorySupport implements
 
         BooleanBuilder builder = new BooleanBuilder();
 
+        log.info("searchByCondition={}", cond);
         if (cond.getCategoryCond() != null) {
 //            카테고리 조건 있는 경우
             builder.and(restaurant.category.id.eq(cond.getCategoryCond()));

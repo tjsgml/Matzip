@@ -25,7 +25,7 @@
                         <select id="category-option">
                             <option value="" selected>전체</option>
                             <th:block th:each="cate : ${categories}">
-                                <option th:if="${cate.id eq category}" th:value="${cate.id}" th:text="${cate.name}"
+                                <option th:if="${cate.id == category}" th:value="${cate.id}" th:text="${cate.name}"
                                         th:attr="selected=true">
                                 <option th:if="${cate.id != category}" th:value="${cate.id}"
                                         th:text="${cate.name}"></option>
@@ -99,7 +99,8 @@
                     <tr th:each="matzip : ${restaurants}" th:attr="data-id=${matzip.id}">
                         <td th:text="${matzip.category.name}"></td>
                         <td><a th:href="${'./' + matzip.id}" th:text="${matzip.name}"></a></td>
-                        <td th:text="${matzip.address + matzip.detailAddress}"></td>
+                        <td th:if="${! #strings.isEmpty(matzip.detailAddress)}" th:text="${matzip.address + matzip.detailAddress}"></td>
+                        <td th:if="${#strings.isEmpty(matzip.detailAddress)}" th:text="${matzip.address}"></td>
                         <!--                    <td th:text="${matzip.contact}">010-0000-0000</td>-->
                         <td>010-0000-0000</td>
                         <td th:text="${matzip.status.kor}">승인 대기</td>

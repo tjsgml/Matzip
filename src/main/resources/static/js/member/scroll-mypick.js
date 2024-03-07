@@ -16,14 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	const io = new IntersectionObserver(
 		(entry, observer) => {
-			const ioTarget = entry[0].target;
-
 			if (entry[0].isIntersecting) {
 				const count = post_list.children.length;	//현재 부모 태그가 가지고 있는 자식 수
 
-				if (pickCnt.innerHTML >= count) {
-					console.log("현재 보이는 타겟", ioTarget);
-
+				if (pickCnt.innerHTML > count) {
 					io.unobserve(post_one);		//현재 태그의 옵저버를 끊음
 
 					//리뷰 1개 가져오기
@@ -83,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
 									<h4>${data.restaurantName}</h4>
 									<div class="mypick-rating">
 										<img src="/img/v26_89.png" />
-										<div>${data.totalSart}</div>
+										<div>${data.totalSart.toFixed(1)}</div>
 										<div>(<span>${data.reviewAllCount}</span>)</div>
 									</div>
 									<div class="mypick-category">
