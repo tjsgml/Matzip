@@ -26,7 +26,7 @@
 	font-size: 18px;
 	
 }
-.btnMyPick:hover{
+/*.btnMyPick:hover{
 	border:solid 1px #FF230A;
 	border-radius: 10cap;
 	color: #000;
@@ -34,7 +34,7 @@
 }
 .btnMyPick:hover img{
 	content: url('/img/icon_heartOn.png');
-}
+}*/
 .btnMyPick.liked{
 	border:solid 1px #FF230A;
 	border-radius: 10cap;

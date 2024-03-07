@@ -1,0 +1,145 @@
+/*검색 결과 리스트 디자인*/
+#searchKeywordBar{
+	padding: 20px 30px;
+	padding-top: 30px; 
+}
+
+#searchCategory{
+	background-color: rgb(197, 197, 197);
+	border-radius: 20px;
+	font-size: 15px;
+	font-weight: normal;
+	margin-top:3px;
+}
+#search-phrases{
+	margin-left: 5px;
+}
+
+#restPost{
+	 text-decoration: none;
+	 color: inherit; /* 링크 색상을 부모 요소의 색상으로 상속 */
+}
+
+
+#post{
+	padding-top: 10px; 
+	padding-left: 25px;
+	padding-right: 25px;
+	padding-bottom: 10px;
+}
+#post.reviewNullPost{
+	padding-top: 20px; 
+	padding-left: 25px;
+	padding-right: 25px;
+	padding-bottom: 10px;
+}
+#post:hover{
+	background-color: rgb(250, 250, 250);
+}
+.container{
+	display: grid;
+	grid-template-columns: repeat(5,1fr);
+	column-gap: 20px;
+}
+.reviewDiv{
+		 margin-top:10px;
+}
+.reviewContent{
+	 margin-left:50px; 
+	 color:rgba(106,106,113,1); 
+	 font-size: 18px;
+}
+.reviewLike{
+	font-weight: bold; 
+	color: rgb(164, 164, 168); 
+	font-size: 16px;
+}
+.reviewLike2{
+	font-weight:normal; 
+	color: rgb(164, 164, 168); 
+	font-size: 16px;
+}
+.reviewNick{
+	font-size: 16px;
+}
+.c1{
+	margin-left:50px; 
+	margin-top:5px;
+	display: grid;
+	grid-template-columns: repeat(2,1fr);
+}
+.i1{
+	grid-column: 1/2;
+	margin-right: 27px;
+}
+.i2{
+	grid-column: 2/3;
+	text-align: end;
+	margin-right: 40px;
+	}
+.item1{
+	grid-column: 1/2;
+	margin-left: 30px;
+	background-color: rgb(255, 255, 255);
+	width: 150px;
+  	height: 150px;
+  	border-radius: 2cap;
+  	background-size: cover;
+ 
+	}
+.item1.nullImg{
+grid-column: 1/2;
+margin-left: 30px;
+background-color: #F9F3E8;
+width: 150px;
+height: 150px;
+border-radius: 2cap;
+background-size: cover;
+display: flex; /* 부모 요소를 플렉스 박스로 설정하여 가운데 정렬을 수행 */
+justify-content: center; /* 가로 방향으로 가운데 정렬 */
+align-items: center; /* 세로 방향으로 가운데 정렬 */
+}
+.reviewNullImg{
+	width: 49px;
+	height:32px;
+}
+.grid-item2{
+	grid-column: 2/6;
+}
+.item2{
+	font-weight: bold;
+	margin-top:20px;
+	font-size: 19px;
+	}
+.item3{
+	margin-top:7px;
+	margin-left: 3px;
+	font-size:16px;
+	color:rgba(158,158,158,1);
+	
+	}
+.item4{
+	margin-left: 3px;
+	margin-top:7px;
+	font-size:16px;
+	}
+
+.item5{
+	margin-top:5px;
+}
+#tag{
+	font-size: 16px;
+	color: rgb(209, 209, 209);
+    margin-top:0;
+	margin-left: 5px; 
+}
+.v-line {
+	display: inline-block;
+	vertical-align: middle; 
+	height: 12px; 
+	width: 1px;
+	margin-bottom:2px;
+	background-color: rgb(208, 208, 208);
+	margin-left: 5px; 
+	margin-right: 5px;
+  }

@@ -1,6 +1,9 @@
 package com.itwill.matzip.repository.reviewHashtag;
 
+import com.itwill.matzip.domain.QRestaurant;
 import com.itwill.matzip.domain.QReviewHashtag;
+import com.itwill.matzip.domain.Restaurant;
+import com.itwill.matzip.domain.RestaurantStatus;
 import com.itwill.matzip.domain.ReviewHashtag;
 import com.itwill.matzip.dto.admin.HashtagSearchDto;
 import com.querydsl.core.BooleanBuilder;
@@ -32,5 +35,25 @@ public class ReviewHashtagQuerydslImpl extends QuerydslRepositorySupport impleme
         return query.fetch();
     }
 
-    ;
+    //리뷰 해시태그에서 키워드 검색
+    public List<ReviewHashtag> searchByKeyword(String keyword) {
+        QReviewHashtag hashtag = QReviewHashtag.reviewHashtag;
+
+        JPQLQuery<ReviewHashtag> query = from(hashtag)
+                .where(hashtag.keyword.containsIgnoreCase(keyword));
+                
+        return query.fetch();
+
+    }
+
+    //카테고리별 키워드 검색
+    public List<ReviewHashtag> searchByCategoryAndKeyword(Long categoryId, String keyword) {
+    	QReviewHashtag hashtag = QReviewHashtag.reviewHashtag;
+        JPQLQuery<ReviewHashtag> query = from(hashtag)
+        		.where(hashtag.keyword.containsIgnoreCase(keyword)
+        				 .and(hashtag.htCategory.id.eq(categoryId)));
+
+        return query.fetch();
+    }
+
 }
