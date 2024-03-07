@@ -5,10 +5,7 @@ import com.itwill.matzip.domain.enums.BusinessDay;
 import com.itwill.matzip.domain.enums.Expose;
 import com.itwill.matzip.dto.RestaurantUpdateDto;
 import com.itwill.matzip.dto.admin.*;
-import com.itwill.matzip.repository.BusinessHourRepository;
-import com.itwill.matzip.repository.CategoryRepository;
-import com.itwill.matzip.repository.HashtagCategoryRepository;
-import com.itwill.matzip.repository.MenuRepository;
+import com.itwill.matzip.repository.*;
 import com.itwill.matzip.repository.UpdateRequest.UpdateRequestRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
@@ -27,6 +24,7 @@ public class AdminMatzipService {
 
     private final RestaurantRepository restaurantDao;
     private final CategoryRepository categoryDao;
+    private final ReviewRepository reviewDao;
     private final MenuRepository menuDao;
     private final BusinessHourRepository businessHourDao;
     private final HashtagCategoryRepository hashtagCategoryDao;
@@ -313,7 +311,16 @@ public class AdminMatzipService {
     }
 
     public void deleteReviewHashtagById(Long... tagId) {
-        reviewHashtagDao.deleteAllById(List.of(tagId));
+        List<Long> tagIds = List.of(tagId);
+
+        for (Long id : tagIds) {
+            ReviewHashtag reviewHashtag = reviewHashtagDao.findById(id).orElseThrow();
+
+            Review review = reviewDao.findReviewsByHashtagsId(id);
+            if (review != null) review.getHashtags().remove(reviewHashtag);
+            reviewHashtagDao.deleteById(id);
+        }
+
     }
 
     public Page<UpdateRequest> getRequests(SearchRequestDto searchRequestDto) {
