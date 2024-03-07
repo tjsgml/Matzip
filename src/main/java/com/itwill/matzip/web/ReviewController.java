@@ -2,10 +2,13 @@ package com.itwill.matzip.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
+import com.itwill.matzip.domain.ReviewLike;
 import com.itwill.matzip.dto.HashtagDto;
+import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.ReviewCreateDto;
 import com.itwill.matzip.dto.ReviewLikeRegisterDto;
 import com.itwill.matzip.dto.ReviewUpdateDto;
@@ -34,31 +39,27 @@ public class ReviewController {
     @Autowired
     private RestaurantService restaurantSvc;
     
-//    @PostMapping("/reviews/registerLike")
-//    public ResponseEntity<Long> registerReviewLike(@RequestBody ReviewLikeRegisterDto dto) {
-//        log.info("registerReviewLike 호출 (memberId={}, reviewId={})", dto.getMemberId(), dto.getReviewId());
-//        Long reviewLikeId = reviewSvc.registerReviewLike(dto.getMemberId(), dto.getReviewId());
-//        log.info("리뷰 좋아요 클릭 시 아이디={}", reviewLikeId);
-//        return ResponseEntity.ok(reviewLikeId);
-//    }
-//    
-//    @DeleteMapping("/reviews/like/{likeId}")
-//    public ResponseEntity<String> deleteReviewLike(@PathVariable("likeId") Long likeId) {
-//        reviewSvc.deleteReviewLike(likeId);
-//        return ResponseEntity.ok("OK");
-//    }
-//
-//
-//    
-//    @GetMapping("/reviews/checkLike")
-//    public ResponseEntity<Long> checkReviewLike(@RequestParam("reviewId") Long reviewId, @RequestParam("memberId") Long memberId) {
-//        log.info("멤버 아이디 ={}, 리뷰 아이디={}", memberId, reviewId);
-//        Long reviewLikeId = reviewSvc.checkReviewLike(memberId, reviewId);
-//        
-//        return ResponseEntity.ok(reviewLikeId);
-//    }
+    /** 리뷰 좋아요 --------------------------------------*/
+   
+    // 리뷰 좋아요 추가
+    @PostMapping("/likes")
+    @ResponseBody
+    public ResponseEntity<String> registerReviewLike(@RequestBody ReviewLikeRegisterDto dto, @AuthenticationPrincipal MemberSecurityDto memberSecurityDto) {
+    	log.info("registerReviewLike()");
+        Long memberId = memberSecurityDto.getUserid(); // 현재 로그인한 사용자의 ID를 얻습니다.
+        dto.setMemberId(memberId); // DTO에 memberId를 세팅합니다.
+        try {
+            Long likeId = reviewSvc.registerReviewLike(dto);
+            return ResponseEntity.ok().body("리뷰 좋아요 등록 성공, 좋아요 ID: " + likeId);
+        } catch (Exception e) {
+            log.error("리뷰 좋아요 등록 실패", e);
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("리뷰 좋아요 등록 실패");
+        }
+    }
 
 
+    /** 리뷰 등록 --------------------------------------*/
     // 리뷰 등록 폼
     @GetMapping("/create")
     public String reviewCreateForm(@RequestParam("restaurantId") Long restaurantId, Model model) {
@@ -87,7 +88,7 @@ public class ReviewController {
         return "redirect:/rest/details?id=" + reviewDto.getRestaurantId();
     }
 
-
+    /** 리뷰 수정 --------------------------------------*/
     // 리뷰 수정
     @GetMapping("/update/{reviewId}") 
     public String reviewUpdate(@PathVariable("reviewId") Long reviewId, Model model) {
@@ -133,7 +134,6 @@ public class ReviewController {
             log.info("restaurantId={}", reviewDto.getRestaurantId());
 
             return "redirect:/rest/details?id=" + reviewDto.getRestaurantId();
-//            return "redirect:/review/update/" + reviewId;
         } catch (Exception e) {
             log.info("reviewId={}", reviewId);
             e.printStackTrace();
@@ -143,7 +143,17 @@ public class ReviewController {
     }
 
 
-
+    @DeleteMapping("/delete/{reviewId}")
+    public ResponseEntity<?> deleteReview(@PathVariable("reviewId") Long reviewId) {
+    	log.info("deleteReview()");
+        try {
+            reviewSvc.deleteReview(reviewId);
+            return ResponseEntity.ok().build(); // 성공 응답
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 삭제 중 오류 발생!");
+        }
+    }
     
     
     
