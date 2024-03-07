@@ -3,7 +3,7 @@ package com.itwill.matzip.service;
 import java.util.Optional;
 
 import com.itwill.matzip.repository.MyPickRepository;
-import com.itwill.matzip.repository.ReviewRepository;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -31,7 +31,7 @@ import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.repository.ReviewImageRepository;
 import com.itwill.matzip.repository.ReviewLikeRepository;
-import com.itwill.matzip.repository.ReviewRepository;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import com.itwill.matzip.util.DateTimeUtil;
 import com.itwill.matzip.util.S3Utility;

@@ -169,7 +169,7 @@ modifyRoleBtn.addEventListener("click", async () => {
     })
 
     if (rolesToModify.length <= 0) {
-        console.log("최소 1개의 역할을 부여해주세요");
+        alert("최소 1개의 역할을 부여해주세요");
         return;
     }
 

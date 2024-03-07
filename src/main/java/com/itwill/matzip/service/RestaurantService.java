@@ -12,6 +12,7 @@ import com.itwill.matzip.repository.*;
 import com.itwill.matzip.repository.UpdateRequest.UpdateRequestRepository;
 import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.util.DateTimeUtil;
 

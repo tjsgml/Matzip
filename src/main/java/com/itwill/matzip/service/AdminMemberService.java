@@ -6,7 +6,7 @@ import com.itwill.matzip.domain.ReviewImage;
 import com.itwill.matzip.domain.enums.MemberRole;
 import com.itwill.matzip.dto.admin.MemberFilterDto;
 import com.itwill.matzip.repository.ReviewImageRepository;
-import com.itwill.matzip.repository.ReviewRepository;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.util.S3Utility;
 import lombok.RequiredArgsConstructor;

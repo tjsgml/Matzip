@@ -8,6 +8,7 @@ import com.itwill.matzip.dto.admin.*;
 import com.itwill.matzip.repository.*;
 import com.itwill.matzip.repository.UpdateRequest.UpdateRequestRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -205,7 +206,6 @@ public class AdminMatzipService {
         });
     }
 
-
     private void businessTime(BusinessHourUpdateDto el, Long restaurantId) {
         if (el == null) return;
 
@@ -231,6 +231,10 @@ public class AdminMatzipService {
         bhour.updateOpenTime(el.getStartTime());
         bhour.updateCloseTime(el.getEndTime());
 //        수정 flow
+    }
+
+    public Page<Review> getRestaurantReviewList(Long restaurantId, Integer curPage) {
+        return reviewDao.getReviewsByRestaurantIdPerPage(restaurantId, curPage);
     }
 
     @Transactional

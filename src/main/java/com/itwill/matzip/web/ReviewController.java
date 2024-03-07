@@ -38,21 +38,22 @@ public class ReviewController {
 
     @Autowired
     private RestaurantService restaurantSvc;
-    
-    /** 리뷰 좋아요 --------------------------------------*/
+
+    /**
+     * 리뷰 좋아요 --------------------------------------
+     */
     // 리뷰 좋아요 삭제
     @DeleteMapping("/unlike/{reviewId}")
-    public ResponseEntity<?> deleteReviewLike(@PathVariable(name="reviewId") Long reviewId, @AuthenticationPrincipal MemberSecurityDto memberSecurityDto) {
+    public ResponseEntity<?> deleteReviewLike(@PathVariable(name = "reviewId") Long reviewId, @AuthenticationPrincipal MemberSecurityDto memberSecurityDto) {
         Long userId = memberSecurityDto.getUserid();
         try {
             reviewSvc.deleteReviewLike(reviewId, userId);
-            return ResponseEntity.ok().build(); 
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             log.error("리뷰 좋아요 삭제 실패", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 좋아요 삭제 중 오류 발생");
         }
     }
-
 
 
     // 리뷰 좋아요 상태 확인
@@ -68,7 +69,7 @@ public class ReviewController {
     @PostMapping("/likes")
     @ResponseBody
     public ResponseEntity<String> registerReviewLike(@RequestBody ReviewLikeRegisterDto dto, @AuthenticationPrincipal MemberSecurityDto memberSecurityDto) {
-    	log.info("registerReviewLike()");
+        log.info("registerReviewLike()");
         Long memberId = memberSecurityDto.getUserid(); // 현재 로그인한 사용자의 ID를 얻습니다.
         dto.setMemberId(memberId); // DTO에 memberId를 세팅합니다.
         try {
@@ -82,7 +83,9 @@ public class ReviewController {
     }
 
 
-    /** 리뷰 등록 --------------------------------------*/
+    /**
+     * 리뷰 등록 --------------------------------------
+     */
     // 리뷰 등록 폼
     @GetMapping("/create")
     public String reviewCreateForm(@RequestParam("restaurantId") Long restaurantId, Model model) {
@@ -101,8 +104,8 @@ public class ReviewController {
             reviewSvc.saveReview(reviewDto);
             redirectAttributes.addFlashAttribute("message", "리뷰 등록 성공!");
         } catch (Exception e) {
-        	log.info("review register 실패", reviewDto);
-        	e.printStackTrace();
+            log.info("review register 실패", reviewDto);
+            e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage", "리뷰 등록 실패: " + e.getMessage());
             return "redirect:/review/create?restaurantId=" + reviewDto.getRestaurantId(); // 리다이렉트시 레스토랑ID 쿼리파라미터로 추가
 
@@ -111,9 +114,11 @@ public class ReviewController {
         return "redirect:/rest/details?id=" + reviewDto.getRestaurantId();
     }
 
-    /** 리뷰 수정 --------------------------------------*/
+    /**
+     * 리뷰 수정 --------------------------------------
+     */
     // 리뷰 수정
-    @GetMapping("/update/{reviewId}") 
+    @GetMapping("/update/{reviewId}")
     public String reviewUpdate(@PathVariable("reviewId") Long reviewId, Model model) {
         // 리뷰 정보 조회 
         Review review = reviewSvc.findReviewById(reviewId);
@@ -122,14 +127,14 @@ public class ReviewController {
             // 리뷰 정보가 없으면
             return "redirect:/error";
         }
-        
+
         List<HashtagDto> hashtags = review.getHashtags().stream()
-        		.map(h-> new HashtagDto(h.getId(), h.getKeyword(), h.getHtCategory().getName()))
-        		.collect(Collectors.toList());
+                .map(h -> new HashtagDto(h.getId(), h.getKeyword(), h.getHtCategory().getName()))
+                .collect(Collectors.toList());
 
         // 리뷰와 연관된 레스토랑 정보 가져옴
         Restaurant restaurant = restaurantSvc.findOneRest(review.getRestaurant().getId());
-        
+
         // 리뷰 정보, 레스토랑 정보 추가
         model.addAttribute("restaurantName", restaurant.getName());
         model.addAttribute("restaurantId", restaurant.getId());
@@ -139,7 +144,7 @@ public class ReviewController {
         model.addAttribute("hashtags", hashtags);
         return "review/update"; // 리뷰 수정 페이지
     }
-    
+
     @PostMapping("/update/{reviewId}")
     public String updateReview(@PathVariable("reviewId") Long reviewId, @ModelAttribute ReviewUpdateDto reviewDto, RedirectAttributes redirectAttributes) {
         try {
@@ -148,7 +153,7 @@ public class ReviewController {
             }
 
             if (reviewDto.getDeleteHashtagIds() == null) {
-            	log.info("reviewDto.getDeleteHashtagIds() 널이다 이자식아=", reviewDto.getDeleteHashtagIds());
+                log.info("reviewDto.getDeleteHashtagIds() 널이다 이자식아=", reviewDto.getDeleteHashtagIds());
                 reviewDto.setDeleteHashtagIds(new ArrayList<>());
             }
 
@@ -167,43 +172,24 @@ public class ReviewController {
 
     @DeleteMapping("/delete/{reviewId}")
     public ResponseEntity<?> deleteReview(@PathVariable("reviewId") Long reviewId) {
-    	log.info("deleteReview()");
+        log.info("deleteReview()");
         try {
             reviewSvc.deleteReview(reviewId);
             return ResponseEntity.ok().build(); // 성공 응답
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 삭제 중 오류 발생!");
         }
     }
 
-
-
-    @DeleteMapping("/delete/{reviewId}")
-    public ResponseEntity<?> deleteReview(@PathVariable("reviewId") Long reviewId) {
-    	log.info("deleteReview()");
-        try {
-            reviewSvc.deleteReview(reviewId);
-            return ResponseEntity.ok().build(); 
-        } catch (Exception e) {
-        	e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 삭제 중 오류 발생!");
-        }
-    }
-    
-    
-    
-    
     //레스트 컨트롤러-------------------------------
     //내가 쓴 리뷰의 이미지 가져오기
     @ResponseBody
     @GetMapping("/img/{reviewId}")
-    public ResponseEntity<List<String>> getReviewImg(@PathVariable("reviewId") Long reviewId){
-    	List<String> list = reviewSvc.getReviewImg(reviewId);
+    public ResponseEntity<List<String>> getReviewImg(@PathVariable("reviewId") Long reviewId) {
+        List<String> list = reviewSvc.getReviewImg(reviewId);
 
-    	return ResponseEntity.ok(list);
+        return ResponseEntity.ok(list);
     }
-    
-    
-    
+
 }
