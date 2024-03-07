@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -115,6 +116,19 @@ public class ReviewController {
             return "redirect:/review/update/" + reviewId;
         }
     }
+
+    @DeleteMapping("/delete/{reviewId}")
+    public ResponseEntity<?> deleteReview(@PathVariable("reviewId") Long reviewId) {
+    	log.info("deleteReview()");
+        try {
+            reviewSvc.deleteReview(reviewId);
+            return ResponseEntity.ok().build(); // 성공 응답
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 삭제 중 오류 발생!");
+        }
+    }
+
 
 
 
