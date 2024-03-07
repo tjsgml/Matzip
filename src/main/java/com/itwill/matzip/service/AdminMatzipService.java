@@ -117,28 +117,16 @@ public class AdminMatzipService {
         restaurantDao.deleteById(restaurantId);
     }
 
+    @Transactional
     public void setStatusRestaurantById(Long restaurantId, String status) {
         log.info("상태 변화");
-        Restaurant restaurant = restaurantDao.findById(restaurantId).orElse(null);
+        Restaurant restaurant = restaurantDao.findById(restaurantId).orElseThrow(null);
 
         if (restaurant == null) {
             return;
         }
 
-        Restaurant restaurantToUpdate = Restaurant.builder()
-                .id(restaurantId)
-                .name(restaurant.getName())
-                .address(restaurant.getAddress())
-                .detailAddress(restaurant.getDetailAddress())
-                .contact(restaurant.getContact())
-                .lon(restaurant.getLon())
-                .lat(restaurant.getLat())
-                .status(RestaurantStatus.valueOf(status.toUpperCase()))
-                .category(restaurant.getCategory())
-                .build();
-
-        log.info("restaurantToUpdate={}", restaurantToUpdate);
-        restaurantDao.save(restaurantToUpdate);
+        restaurant.updateStatus(RestaurantStatus.valueOf(status.toUpperCase()));
     }
 
     public Map<String, Object> getRestaurantByOptions(RestaurantSearchCond cond) {

@@ -3,14 +3,14 @@
 <script src="/js/admin/restaurant/searchLocation.js"></script>
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
-<head th:replace="~{/layout/fragment-common.html::my-header('MAT.ZIP ADMIN | 맛집 추가')}"></head>
+<head th:replace="~{layout/fragment-common.html::my-header('MAT.ZIP ADMIN | 맛집 추가')}"></head>
 <link href="/css/admin/admin-common.css" rel="stylesheet">
 <link href="/css/admin/admin-holiday.css" rel="stylesheet">
 <body>
-<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+<nav th:replace="~{layout/fragment-admin::mz-top-nav}"></nav>
 
 <div class="mz-admin-container">
-    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <nav th:replace="~{layout/fragment-admin::mz-nav}"></nav>
     <main>
         <div class="mz-inner-container">
             <div class="mz-main-comp">
@@ -72,13 +72,13 @@
                     <hr class="border border-secondary border-2 opacity-50">
                     <h5>영업 시간 등록하기</h5>
                     <div class="text-secondary">선택 사항</div>
-                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='월', dayValue= 'MON')}"></div>
-                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='화', dayValue='TUE')}"></div>
-                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='수', dayValue= 'WED')}"></div>
-                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='목', dayValue= 'THU')}"></div>
-                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='금', dayValue= 'FRI')}"></div>
-                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='토', dayValue= 'SAT')}"></div>
-                    <div th:replace="~{/layout/fragment-admin::businessTimeInput(day ='일', dayValue= 'SUN')}"></div>
+                    <div th:replace="~{layout/fragment-admin::businessTimeInput(day ='월', dayValue= 'MON')}"></div>
+                    <div th:replace="~{layout/fragment-admin::businessTimeInput(day ='화', dayValue='TUE')}"></div>
+                    <div th:replace="~{layout/fragment-admin::businessTimeInput(day ='수', dayValue= 'WED')}"></div>
+                    <div th:replace="~{layout/fragment-admin::businessTimeInput(day ='목', dayValue= 'THU')}"></div>
+                    <div th:replace="~{layout/fragment-admin::businessTimeInput(day ='금', dayValue= 'FRI')}"></div>
+                    <div th:replace="~{layout/fragment-admin::businessTimeInput(day ='토', dayValue= 'SAT')}"></div>
+                    <div th:replace="~{layout/fragment-admin::businessTimeInput(day ='일', dayValue= 'SUN')}"></div>
                 </div>
             </div>
             <div>
@@ -110,7 +110,7 @@
         </div>
     </main>
 </div>
-<script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
+<script th:replace="~{layout/fragment-common::bootstrap_js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/js/admin/restaurant/variablesToCreateLocation.js"></script>
 <script src="/js/admin/restaurant/configMap.js"></script>

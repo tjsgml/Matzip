@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="kr">
-<head th:replace="~{/layout/fragment-common::my-header('MAT.ZIP ADMIN | 메뉴 추가')}"></head>
+<head th:replace="~{layout/fragment-common::my-header('MAT.ZIP ADMIN | 메뉴 추가')}"></head>
 <link href="/css/admin/admin-common.css" rel="stylesheet">
 <style>
     .menu-badge {
@@ -41,10 +41,10 @@
     }
 </style>
 <body>
-<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+<nav th:replace="~{layout/fragment-admin::mz-top-nav}"></nav>
 
 <div class="mz-admin-container">
-    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <nav th:replace="~{layout/fragment-admin::mz-nav}"></nav>
     <main>
         <div class="mz-inner-container">
             <div class="mz-main-comp px-2">
@@ -162,7 +162,7 @@
 </div>
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
-<script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
+<script th:replace="~{layout/fragment-common::bootstrap_js}"></script>
 <script>
     const center = new kakao.maps.LatLng(document.getElementById("lat").value, document.getElementById("lon").value);
     const marker = new kakao.maps.Marker();
@@ -175,7 +175,7 @@
 
     const map = new kakao.maps.StaticMap(mapContainer, mapOption); // 지도를 생성합니다
 </script>
-<script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
+<script th:replace="~{layout/fragment-common::bootstrap_js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/js/admin/restaurant/updateMenu.js"></script>
 </body>
