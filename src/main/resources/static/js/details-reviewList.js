@@ -101,8 +101,6 @@ document.addEventListener('DOMContentLoaded', async()=>{
                 <div class="review-btn-container">
                     
                 </div>`;
-                
-                
 
                 reviewElement.innerHTML = innerHTML;
                 
@@ -339,7 +337,7 @@ document.addEventListener('DOMContentLoaded', async()=>{
                     'Content-Type': 'application/json'
                 },
             });
-    
+
             if (response.ok) { 
                 alert("리뷰가 삭제되었습니다!");
                 window.location.reload(); 

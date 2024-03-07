@@ -165,6 +165,19 @@ public class ReviewController {
         }
     }
 
+    @DeleteMapping("/delete/{reviewId}")
+    public ResponseEntity<?> deleteReview(@PathVariable("reviewId") Long reviewId) {
+    	log.info("deleteReview()");
+        try {
+            reviewSvc.deleteReview(reviewId);
+            return ResponseEntity.ok().build(); // 성공 응답
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 삭제 중 오류 발생!");
+        }
+    }
+
+
 
     @DeleteMapping("/delete/{reviewId}")
     public ResponseEntity<?> deleteReview(@PathVariable("reviewId") Long reviewId) {
