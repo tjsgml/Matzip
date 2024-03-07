@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="kr">
-<head th:replace="~{/layout/fragment-common::my-header('MAT.ZIP ADMIN | 레스토랑 리스트')}"></head>
+<head th:replace="~{layout/fragment-common::my-header('MAT.ZIP ADMIN | 레스토랑 리스트')}"></head>
 <link href="/css/admin/admin-common.css" rel="stylesheet">
 <style>
     #restaurant-list {
@@ -9,9 +9,9 @@
     }
 </style>
 <body>
-<nav th:replace="~{/layout/fragment-admin::mz-top-nav}"></nav>
+<nav th:replace="~{layout/fragment-admin::mz-top-nav}"></nav>
 <div class="mz-admin-container">
-    <nav th:replace="~{/layout/fragment-admin::mz-nav}"></nav>
+    <nav th:replace="~{layout/fragment-admin::mz-nav}"></nav>
     <main>
         <div class="mz-inner-container">
             <h3 class="page-main-desc">레스토랑 리스트</h3>
@@ -96,8 +96,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="matzip : ${restaurants}" th:attr="data-id=${matzip.id}">
-                        <td th:text="${matzip.category.name}"></td>
+                    <tr th:each="matzip : ${restaurants}" th:object="${matzip}" th:attr="data-id=${matzip.id}">
+                        <td th:text="*{category.name}"></td>
                         <td><a th:href="${'./' + matzip.id}" th:text="${matzip.name}"></a></td>
                         <td th:if="${! #strings.isEmpty(matzip.detailAddress)}" th:text="${matzip.address + matzip.detailAddress}"></td>
                         <td th:if="${#strings.isEmpty(matzip.detailAddress)}" th:text="${matzip.address}"></td>
@@ -203,7 +203,7 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/js/admin/restaurant/matzip-status-change.js"></script>
 <script src="/js/admin/restaurant/matzip-list.js"></script>
-<script th:replace="~{/layout/fragment-common::bootstrap_js}"></script>
+<script th:replace="~{layout/fragment-common::bootstrap_js}"></script>
 <script src="/js/admin/download-excel.js"></script>
 
 </body>

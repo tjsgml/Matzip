@@ -2,6 +2,7 @@ package com.itwill.matzip.web.admin;
 
 import com.itwill.matzip.domain.*;
 import com.itwill.matzip.domain.enums.ApprovalStatus;
+import com.itwill.matzip.domain.enums.Expose;
 import com.itwill.matzip.dto.*;
 import com.itwill.matzip.dto.admin.*;
 import com.itwill.matzip.service.AdminMatzipService;
@@ -132,6 +133,7 @@ public class AdminMatzipController {
     @PutMapping("/restaurant/{restaurantId}/{status}")
     public ResponseEntity<Void> setRestaurantById(@PathVariable(name = "restaurantId") Long restaurantId,
                                                   @PathVariable(name = "status") String status) {
+        log.info("setRestaurantById(restaurantId={}, status={})", restaurantId, status);
         adminService.setStatusRestaurantById(restaurantId, status);
         return ResponseEntity.noContent().build();
     }
@@ -236,6 +238,15 @@ public class AdminMatzipController {
         log.info("HashtagSearchDto={}", searchDto);
         List<ReviewHashtag> reviewHashtags = adminService.getReviewHashtags(searchDto);
         return ResponseEntity.ok(reviewHashtags);
+    }
+
+    @ResponseBody
+    @PatchMapping("/hashtag/expose/{expose}")
+    public ResponseEntity<String> updateHashtagCategoryExpose(@PathVariable(name = "expose") Expose expose, @RequestParam(name = "tagId") Long... tagId) {
+        log.info("abctagId={}", tagId);
+        log.info("abctagId={}", expose);
+        adminService.updateTagExpose(expose, tagId);
+        return ResponseEntity.ok("updated");
     }
 
     @ResponseBody

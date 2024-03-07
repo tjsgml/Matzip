@@ -2,7 +2,8 @@
 <html>
     <head>
         <meta charset=UTF-8> <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>[[${rest.name}]] - MATZIP</title>
+        <title>[[${rest.name}]] - MAT.ZIP</title>
+       	<link rel="shortcut icon" type="image/x-icon" href="../img/tab_icon.png">
         <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" 
         rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
@@ -24,16 +25,16 @@
                 <div class="row" style=" background-color: white; ">
 					<div class="navContainer">
 						<div class="nav1"><!--로고-->
-							 <div th:replace="~{/layout/fragment-navigation :: homeLogo}"></div>
+							 <div th:replace="~{layout/fragment-navigation :: homeLogo}"></div>
 						</div>
 						<div class="nav2"><!--검색 바-->
-							  <span th:replace="~{/layout/fragment-navigation :: searchBar}"></span>
+							  <span th:replace="~{layout/fragment-navigation :: searchBar}"></span>
 						</div>
 						<div class="nav3"><!-- 지도-->
-							 <div th:replace="~{/layout/fragment-navigation :: mapList}"> </div>
+							 <div th:replace="~{layout/fragment-navigation :: mapList}"> </div>
 						</div>
 						<div class="nav4"><!--로그인-->
-							 <div th:replace="~{/layout/fragment-navigation :: navLogin}"> </div>	
+							 <div th:replace="~{layout/fragment-navigation :: navLogin}"> </div>	
 						</div>
 					</div>	
 				        

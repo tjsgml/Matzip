@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -12,18 +13,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import com.itwill.matzip.domain.enums.Expose;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -55,7 +44,8 @@ public class ReviewHashtag implements Serializable {
     @JoinColumn(name = "HASHTAG_CATEGORY_FK")
     private HashtagCategory htCategory;
 
-    @ManyToMany(mappedBy = "hashtags", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "hashtags", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.MERGE,CascadeType.PERSIST})
     @Builder.Default
     @JsonIgnore
     private Set<Review> reviews = new HashSet<>();

@@ -23,7 +23,7 @@
         <a class="mz-nav-link" th:href="@{/admin/matzip/category}">카테고리 관리</a>
         <a class="mz-nav-link" th:href="@{/admin/matzip/hashtag/control}">해시태그 관리</a>
         <a class="mz-nav-link" th:href="@{/admin/matzip/request}">요청 관리 리스트</a>
-        <a class="mz-nav-link" th:href="@{/admin/matzip/member}">멤버 관리 리스트</a>
+        <a class="mz-nav-link" th:href="@{/admin/member}">멤버 관리 리스트</a>
     </div>
 </div>
 
@@ -31,13 +31,13 @@
     <div class="input-group">
         <h6 th:text="${day}"> : </h6>
         <input type="hidden" id="day-value" th:value="${dayValue}">
-        <input id="input-start-hour" type="number" class="time" min="0" max="23">
+        <input id="input-start-hour" type="number" class="time form-control" min="0" max="23" size="30"/>
         <label for="input-start-hour">시 </label>
-        <input id="input-start-minute" type="number" class="time" min="0" max="59">
+        <input id="input-start-minute" type="number" class="time form-control" min="0" max="59" size="30"/>
         <label for="input-start-minute">분 ~</label>
-        <input id="input-end-hour" type="number" class="time" min="0" max="23">
+        <input id="input-end-hour" type="number" class="time form-control" min="0" max="23" size="30"/>
         <label for="input-end-hour">시 </label>
-        <input id="input-end-minute" type="number" class="time" min="0" max="59">
+        <input id="input-end-minute" type="number" class="time form-control" min="0" max="59" size="30"/>
         <label for="input-end-minute">분</label>
     </div>
     <span class="fs-6 mx-4"><label for="is-holiday">휴일인가요?</label><input id="is-holiday" class="mx-2"
@@ -45,7 +45,7 @@
 </div>
 
 <div id="business-time-container" class="business-time my-4" th:fragment="businessTimeInputToUpdate(day)">
-    <div class="input-group" style="width: 130%">
+    <div class="input-group">
         <h6><span th:text="${day.kor}"></span></h6>
         <!--   Hidden Input 시작     -->
         <input class="form-control form-control-sm" id="bhour-id" type="hidden"
@@ -59,8 +59,7 @@
         <input class="form-control form-control-sm" id="open-time" type="hidden"
                th:if="${businessHours.get(day.name()) == null}"/>
         <input class="form-control form-control-sm" id="close-time" type="hidden"
-               th:if="${businessHours.get(day.name()) != null}"
-               th:value="${businessHours.get(day.name()).closeTime}"/>
+               th:if="${businessHours.get(day.name()) != null}" th:value="${businessHours.get(day.name()).closeTime}"/>
         <input id="close-time" type="hidden" class="form-control form-control-sm"
                th:if="${businessHours.get(day.name()) == null}"/>
         <input id="is-holiday" class="mx-2" th:if="${businessHours.get(day.name()) != null}" type="hidden"
@@ -68,20 +67,23 @@
         <input id="is-holiday" class="mx-2" th:if="${businessHours.get(day.name()) == null}" type="hidden"
                th:value="${false}"/>
         <!--   Hidden Input 끝     -->
-        <span class="mx-2">
-        <input id="input-start-hour" type="number" class="time form-control form-control-sm" min="0" max="23">
+        <span class="mx-2" >
+        <input id="input-start-hour" type="number" class="time" size="40" min="0"
+               max="23"/>
         <label for="input-start-hour">시 </label>
         </span>
         <span class="mx-2">
-        <input id="input-start-minute" type="number" class="time form-control form-control-sm" min="0" max="59">
+        <input id="input-start-minute" type="number" class="time" size="40" min="0"
+               max="59"/>
         <label for="input-start-minute">분 ~</label>
         </span>
         <span class="mx-2">
-        <input id="input-end-hour" type="number" class="time form-control form-control-sm" min="0" max="23">
+        <input id="input-end-hour" type="number" class="time" size="40" min="0" max="23"/>
         <label for="input-end-hour">시 </label>
         </span>
         <span class="mx-2">
-        <input id="input-end-minute" type="number" class="time form-control form-control-sm" min="0" max="59">
+        <input id="input-end-minute" type="number" class="time" size="40" min="0"
+               max="59"/>
         <label for="input-end-minute">분</label>
         </span>
         <span class="fs-6 mx-4"><label for="is-holiday-to-update">휴일인가요?</label>

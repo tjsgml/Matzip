@@ -2,6 +2,8 @@ package com.itwill.matzip.repository;
 
 import java.util.List;
 
+import com.itwill.matzip.domain.HashtagCategory;
+import com.itwill.matzip.domain.ReviewHashtag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,6 +24,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	List<Review> findByMemberIdOrderById(Long userId);
 
     Page<Review> findByMemberIdOrderByCreatedTime(Long userId, Pageable pageable);
+
+	Review findReviewsByHashtagsId(Long hashtags_id);
 
     @Query("SELECT r FROM Review r LEFT JOIN FETCH r.hashtags WHERE r.restaurant.id = :restaurantId")
     List<Review> findByRestaurantIdWithHashtags(@Param("restaurantId") Long restaurantId);
