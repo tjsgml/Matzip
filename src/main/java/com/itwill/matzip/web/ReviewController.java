@@ -40,7 +40,30 @@ public class ReviewController {
     private RestaurantService restaurantSvc;
     
     /** 리뷰 좋아요 --------------------------------------*/
-   
+    // 리뷰 좋아요 삭제
+    @DeleteMapping("/unlike/{reviewId}")
+    public ResponseEntity<?> deleteReviewLike(@PathVariable(name="reviewId") Long reviewId, @AuthenticationPrincipal MemberSecurityDto memberSecurityDto) {
+        Long userId = memberSecurityDto.getUserid();
+        try {
+            reviewSvc.deleteReviewLike(reviewId, userId);
+            return ResponseEntity.ok().build(); 
+        } catch (Exception e) {
+            log.error("리뷰 좋아요 삭제 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 좋아요 삭제 중 오류 발생");
+        }
+    }
+
+
+
+    // 리뷰 좋아요 상태 확인
+    @GetMapping("/likes/check")
+    @ResponseBody
+    public ResponseEntity<Boolean> checkReviewLike(@RequestParam("reviewId") Long reviewId, @AuthenticationPrincipal MemberSecurityDto memberSecurityDto) {
+        Long memberId = memberSecurityDto.getUserid(); // 현재 로그인한 사용자의 ID를 얻습니다.
+        Optional<ReviewLike> reviewLike = reviewSvc.checkReviewLike(memberId, reviewId);
+        return ResponseEntity.ok(reviewLike.isPresent());
+    }
+
     // 리뷰 좋아요 추가
     @PostMapping("/likes")
     @ResponseBody
@@ -148,7 +171,7 @@ public class ReviewController {
     	log.info("deleteReview()");
         try {
             reviewSvc.deleteReview(reviewId);
-            return ResponseEntity.ok().build(); // 성공 응답
+            return ResponseEntity.ok().build(); 
         } catch (Exception e) {
         	e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 삭제 중 오류 발생!");

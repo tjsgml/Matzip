@@ -35,12 +35,12 @@ public class ReviewLike  implements Serializable {
 	private Long id;
 	
 	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REVIEW_FK")
 	private Review review;
 	
 	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MEMBER_FK")
 	private Member member;
 

@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.itwill.matzip.domain.Member;
 import com.itwill.matzip.domain.ReviewLike;
 
 public interface ReviewLikeRepository extends JpaRepository<ReviewLike, Long> {
@@ -15,6 +14,12 @@ public interface ReviewLikeRepository extends JpaRepository<ReviewLike, Long> {
 	 int countAllByReviewId(Long reviewId);
 
 	 Optional<ReviewLike> findByMemberIdAndReviewId(Long memberId, Long reviewId);
+
+	 boolean existsByReviewIdAndMemberId(Long reviewId, Long memberId);
+	 
+
+
+
 
 
 }

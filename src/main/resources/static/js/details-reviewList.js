@@ -125,19 +125,23 @@ document.addEventListener('DOMContentLoaded', async()=>{
                     deleteButton.addEventListener('click', function() {
                         deleteReview(review.id); 
                     });
-    
+
                     btnContainer.appendChild(editButton);
                     btnContainer.appendChild(deleteButton);
                 } else {  // 로그인한 회원이 리뷰 작성자가 아닌 경우 공감 버튼 추가
                     const likeButton = document.createElement('button');
                     likeButton.className = 'btn like-review-btn';
-                    likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_Off.png" class="like-button-img"">';
+                    if (review.likedByUser) {
+                        likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_On.png" class="like-button-img">';
+                    } else {
+                        likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_Off.png" class="like-button-img">';
+                    }
                     likeButton.addEventListener('click', function() {
-                       handleReviewLikeClick(review.id, likeButton);
-                        
+                        handleReviewLikeClick(review.id, likeButton);
+
                     });
                     btnContainer.appendChild(likeButton);
-                    
+
                 }
                 
                
@@ -257,24 +261,27 @@ document.addEventListener('DOMContentLoaded', async()=>{
     }
     
     
-    // 리뷰 좋아요
+    // 리뷰 좋아요 버튼 클릭 이벤트 핸들러
     async function handleReviewLikeClick(reviewId, likeButton) {
-    try {
-        // 좋아요 상태 확인...TODO
-        const checkLikeResponse = await axios.get(`/review/likes/check?reviewId=${reviewId}`);
-        if (checkLikeResponse.data) {
-            // 이미 좋아요가 되어있다면 삭제
-            await axios.delete(`/review/likes/${reviewId}`);
-            likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_Off.png" class="like-button-img">';
-        } else {
-            // 좋아요가 되어있지 않다면 등록 
-            await axios.post(`/review/likes`, { reviewId: reviewId });
-            likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_On.png" class="like-button-img">';
+        // 좋아요 상태 확인
+        const isLiked = likeButton.querySelector('img').src.includes('imgicon_Thumbs_On.png');
+        
+        try {
+            if (isLiked) {
+                // 좋아요 삭제 요청
+                await axios.delete(`/review/unlike/${reviewId}`);
+                likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_Off.png" class="like-button-img">';
+            } else {
+                // 좋아요 추가 요청
+                await axios.post(`/review/likes`, { reviewId });
+                likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_On.png" class="like-button-img">';
+            }
+        } catch (error) {
+            console.error('리뷰 좋아요 처리 중 에러 발생:', error);
         }
-    } catch (error) {
-        console.error('리뷰 좋아요 처리 중 에러 발생:', error);
     }
-}
+
+    
 
 
     
