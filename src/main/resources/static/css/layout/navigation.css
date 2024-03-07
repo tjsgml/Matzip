@@ -54,6 +54,26 @@
   	font-size: 18px;
   	text-indent: 20px; 
 }
+#restaurantTypeSelect option:checked {
+    background-color: #EFEEEE; /* 선택된 옵션의 배경색을 투명하게 설정합니다. */
+}
+#restaurantTypeSelect option:focus {
+    outline: none;
+}
+#restaurantTypeSelect {
+	margin-left: 10px;
+  	border-radius: 40px;
+    width: 110px; height: 47px;
+    font-size: 18px;
+    border: 1px solid #EFEEEE;
+    text-align: center;
+    background-color: transparent;
+}
+
+#restaurantTypeSelect:focus {
+    outline: none;
+}
+
 #navSearchInput:focus{
 	outline: none;
 }
@@ -76,4 +96,11 @@
 #navLogin{
 	align-items: center;
 	margin-top:20px;
+}
+.adminBadge{
+	font-weight: normal;
+	background-color: #FF7F70;
+	color:white;
+	margin-left: 10px;
+	font-size: 10px;
 }

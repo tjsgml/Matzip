@@ -15,16 +15,19 @@ public class RestaurantSearchCond {
 
     @Builder.Default
     private Integer categoryCond = null;
-    private RestaurantStatus restaurantStatus;
+    @Builder.Default
+    private RestaurantStatus restaurantStatus = null;
     @Builder.Default
     private String keywordCriteria = "ALL";
-    private String keyword;
+    @Builder.Default
+    private String keyword = "";
     @Builder.Default
     private Integer curPage = 0;
     @Builder.Default
     private Integer totalCount = 10;
     @Builder.Default
     private String order = "createdTimeASC";
+    @Builder.Default
     private String type = "DEFAULT";
 
     public void checkExcelDownloadFlow () {

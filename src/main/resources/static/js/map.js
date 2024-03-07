@@ -29,13 +29,19 @@ document.addEventListener('DOMContentLoaded',() =>{
     //음식점 검색 input
     const searchInput = document.querySelector('.searchInput');
     
+    
     searchInput.addEventListener('keydown',(event) => {
         if (event.key === 'Enter') {
             
             if(searchInput.value ===''){
-                alert("검색어를 입력해주세요!");          
-            }else{
-                getRestByCategoryAndKeyword(selectBox.value,searchInput.value);
+                getAllRestaurant(); 
+                
+            }else if(searchInput.value.trim() ===''){
+                
+            alert("검색어를 입력해주세요!");  
+            }
+            else{
+                getRestByCategoryAndKeyword(selectBox.value,searchInput.value.trim());
             }
         }
     });

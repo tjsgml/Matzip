@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.itwill.matzip.domain.HashtagCategory;
+import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.ReviewHashtag;
 import com.itwill.matzip.domain.enums.Expose;
 
@@ -24,9 +25,12 @@ public interface ReviewHashtagRepository extends JpaRepository<ReviewHashtag, Lo
 	@Query("SELECT rh FROM ReviewHashtag rh JOIN rh.reviews r WHERE r.restaurant.id = :restaurantId")
 	List<ReviewHashtag> findAllByRestaurantId(@Param("restaurantId") Long restaurantId);
 	
-	@Modifying
-    @Transactional
-    @Query("DELETE FROM ReviewHashtag rh WHERE rh.id = :hashtagId")
-    void deleteById(@Param("hashtagId") Long hashtagId);
+//	@Modifying
+//    @Transactional
+//    @Query("DELETE FROM ReviewHashtag rh WHERE rh.id = :hashtagId")
+//    void deleteById(@Param("hashtagId") Long hashtagId);
 	
+	List<ReviewHashtag> searchByKeyword(String keyword);
+	
+	List<ReviewHashtag> searchByCategoryAndKeyword(Long categoryId, String keyword);
 }

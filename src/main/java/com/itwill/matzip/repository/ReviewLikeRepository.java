@@ -11,6 +11,8 @@ import com.itwill.matzip.domain.ReviewLike;
 
 public interface ReviewLikeRepository extends JpaRepository<ReviewLike, Long> {
 	
+	 List<ReviewLike> findByReviewId(Long reviewId);
+	 
 	 int countAllByReviewId(Long reviewId);
 
 }
