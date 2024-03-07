@@ -132,6 +132,7 @@ public class AdminMatzipController {
     @PutMapping("/restaurant/{restaurantId}/{status}")
     public ResponseEntity<Void> setRestaurantById(@PathVariable(name = "restaurantId") Long restaurantId,
                                                   @PathVariable(name = "status") String status) {
+        log.info("setRestaurantById(restaurantId={}, status={})", restaurantId, status);
         adminService.setStatusRestaurantById(restaurantId, status);
         return ResponseEntity.noContent().build();
     }

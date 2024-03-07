@@ -21,42 +21,41 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/search")
 public class SearchController {
-	
-	private final SearchService searchSvc;
-	
-	@GetMapping("/all")
-	public String showSearchList(@RequestParam("keyword") String keyword,@RequestParam("categoryId") int categoryId, Model model) {
-		
-		log.info("@@@@@키워드={}, 카테고리 아이디={}",keyword,categoryId);
-		
-		List<SearchListDto> list = new ArrayList<SearchListDto>();
-		
-		switch (categoryId) {
-		case 1://전체
-			list =	searchSvc.searchAll(keyword);
-			model.addAttribute("searchCategory","전체");
-			break;
-		case 2://가게명
-			list = searchSvc.searchByRestaurantName(keyword);
-			model.addAttribute("searchCategory","가게명");
-			break;
-		case 3://방문 목적
-			list = searchSvc.searchByCategoryAndKeyword(1L, keyword);
-			model.addAttribute("searchCategory","방문 목적");
-			break;
-		case 4://분위기
-			list = searchSvc.searchByCategoryAndKeyword(2L, keyword);
-			model.addAttribute("searchCategory","분위기");
-			break;
-		case 5://편의시설
-			list = searchSvc.searchByCategoryAndKeyword(3L, keyword);
-			model.addAttribute("searchCategory","편의시설");
-			break;
-		}
-		model.addAttribute("keyword",keyword);
-		model.addAttribute("list",list);
-		
-		return "/restaurant/searchList";
-		
-	}
+
+    private final SearchService searchSvc;
+
+    @GetMapping("/all")
+    public String showSearchList(@RequestParam("keyword") String keyword, @RequestParam("categoryId") int categoryId, Model model) {
+
+        log.info("@@@@@키워드={}, 카테고리 아이디={}", keyword, categoryId);
+
+        List<SearchListDto> list = new ArrayList<SearchListDto>();
+
+        switch (categoryId) {
+            case 1://전체
+                list = searchSvc.searchAll(keyword);
+                model.addAttribute("searchCategory", "전체");
+                break;
+            case 2://가게명
+                list = searchSvc.searchByRestaurantName(keyword);
+                model.addAttribute("searchCategory", "가게명");
+                break;
+            case 3://방문 목적
+                list = searchSvc.searchByCategoryAndKeyword(1L, keyword);
+                model.addAttribute("searchCategory", "방문 목적");
+                break;
+            case 4://분위기
+                list = searchSvc.searchByCategoryAndKeyword(2L, keyword);
+                model.addAttribute("searchCategory", "분위기");
+                break;
+            case 5://편의시설
+                list = searchSvc.searchByCategoryAndKeyword(3L, keyword);
+                model.addAttribute("searchCategory", "편의시설");
+                break;
+        }
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("list", list);
+
+        return "/restaurant/searchList";
+    }
 }

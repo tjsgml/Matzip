@@ -12,20 +12,29 @@
         <link href="/css/layout/navigation.css" rel="stylesheet">
     </head>
         <body>
+            <!-- 로그인한 사용자의 닉네임을 담고 있는 요소 -->
+            <div th:if="${#authorization.expression('isAuthenticated()')}">
+                <span id="loggedInUserNickname" sec:authentication="principal.nickname" style="display:none;"></span>
+            </div>
+            <div th:unless="${#authorization.expression('isAuthenticated()')}">
+                <span id="loggedInUserNickname" style="display:none;"></span>
+            </div>
+
+            
             <div class="container-fluid" style="background-color: #F0F0F3;">
                 <div class="row" style=" background-color: white; ">
 					<div class="navContainer">
 						<div class="nav1"><!--로고-->
-							 <div th:replace="~{/layout/fragment-navigation :: homeLogo}"></div>
+							 <div th:replace="~{layout/fragment-navigation :: homeLogo}"></div>
 						</div>
 						<div class="nav2"><!--검색 바-->
-							  <span th:replace="~{/layout/fragment-navigation :: searchBar}"></span>
+							  <span th:replace="~{layout/fragment-navigation :: searchBar}"></span>
 						</div>
 						<div class="nav3"><!-- 지도-->
-							 <div th:replace="~{/layout/fragment-navigation :: mapList}"> </div>
+							 <div th:replace="~{layout/fragment-navigation :: mapList}"> </div>
 						</div>
 						<div class="nav4"><!--로그인-->
-							 <div th:replace="~{/layout/fragment-navigation :: navLogin}"> </div>	
+							 <div th:replace="~{layout/fragment-navigation :: navLogin}"> </div>	
 						</div>
 					</div>	
 				        
@@ -45,14 +54,12 @@
                                 <div style="margin: 5px;" >
                                     <span class="locAndMenu" th:text="*{category.name}"></span>
                                 </div>
-                                <div style="margin:5px;">
-                                    <span class="evalCnt">2명의 평가</span>
-                                    <span class="evalAvg"> 5점</span>
-                                    <img style="margin-left: 5px;"class="star" data-index="1" src="/img/star_on.png">
-                                    <img class="star"data-index="2" src="/img/star_on.png">
-                                    <img class="star" data-index="3" src="/img/star_on.png">
-                                    <img class="star" data-index="4" src="/img/star_on.png">
-                                    <img class="star" data-index="5" src="/img/star_off.png">
+                                <div style="display: flex; align-items: center; margin: 5px;" class="rating-container">
+                                    <div class="rating_star">
+                                        <!-- big Star 1 -->
+                                    </div>
+                                    <span class="evalAvg1" style="padding-left: 10px; padding-bottom: 1px;"></span>
+                                    <span class="evalCnt" style="padding-left: 10px; margin-bottom: 1px;"></span>
                                 </div>
                             </div>
                             <div class="restInfo" >
@@ -174,140 +181,32 @@
                             <!-- 리뷰 리스트 -->
                             <div class="layout_1">
                                 <div class="restInfo">
-                                    <span class="title total-review"> 2건의 방문자 평가</span>
-                                    <hr class="div_day" style="margin:10px;">
-                                    <span class="evalAvg"> 4점</span><!-- 가게 총 평점 -->
-                                    <img style="margin-left: 5px;"class="star" data-index="1" src="/img/star_on.png">
-                                    <img class="star"data-index="2" src="/img/star_on.png">
-                                    <img class="star" data-index="3" src="/img/star_on.png">
-                                    <img class="star" data-index="4" src="/img/star_on.png">
-                                    <img class="star" data-index="5" src="/img/star_off.png">
-                                    <br>
-                                    <span class="review_name">맛</span>
-                                    <img  class="review_star" src="/img/star_on.png">
-                                    <span class="review_name">4.7</span>
-                                    <span class="review_name">가격</span>
-                                    <img class="review_star" src="/img/star_on.png">
-                                    <span class="review_name">4.7</span>
-                                    <span class="review_name">서비스</span>
-                                    <img class="review_star" src="/img/star_on.png">
-                                    <span class="review_name">4.7</span>
-                                    <div class="ht_container"style="padding-top:20px;">
-                                        <div style="margin-top: 10px;">
-                                            <span style="font-size: 20px;">방문 목적</span>
-                                        </div>
-                                        <div class="item2">
-                                            <span class=" ht_POV badge rounded-pill">술모임(2)</span>
-                                            
-                                            <button class="btnMoreHt btn" data-bs-toggle="collapse" data-bs-target="#collapseExample">
-                                                <img src="/img/icon_dots.png">
-                                                더보기
-                                            </button>
-                                            <div style="margin-top: 10px;" class="collapse" id="collapseExample">
-                                                <span class=" ht_POV badge rounded-pill">술모임(2)</span>
-                                                
+                                    <span class="title total-review" ></span>
+                                    <hr class="div_day" style="margin:7px;">
+                                    <div style="display: flex; align-items: center; justify-content:space-between;  margin-left:8px; margin-bottom:5px; ">
+                                                <div style="display: flex;">
+                                                <span class="evalAvg2" style="margin-right:5px;" ><!-- 가게 총 평점 --></span>
+                                                <div>
+                                                <!-- 리뷰 총 평점 별 (리뷰리스트 시작부분)-->
+                                                <div style="display: flex; align-items: center;" class="rating-container2">
+                                                    <div class="rating_star2">
+                                                        <!-- big Star 2 -->
+                                                    </div>
+                                                </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        
-                                        <div style="margin-top: 10px;">
-                                            <span style="font-size: 20px;">분위기</span>
-                                        </div>
-                                        <div class="item2">
-                                            <span class=" ht_POV badge rounded-pill">고급스러운(2)</span>
-                                            
-                                            <button class="btnMoreHt btn" data-bs-toggle="collapse" data-bs-target="#collapseExample2">
-                                                <img src="/img/icon_dots.png">
-                                                더보기
-                                            </button>
-                                            <div style="margin-top: 10px;" class="collapse" id="collapseExample2">
-                                              
+                                            <div class="rating_category_avg">
+                                                <!-- All Reviews Rating(카테고리 별)   -->
                                             </div>
-                                        </div>
-                                        <div style="margin-top: 10px;">
-                                            <span style="font-size: 20px;">편의시설</span>
-                                        </div>
-                                        <div class="item2">
-                                            <span class=" ht_POV badge rounded-pill">주차(2)</span>
-                                            
-                                            <button class="btnMoreHt btn" data-bs-toggle="collapse" data-bs-target="#collapseExample2">
-                                                <img src="/img/icon_dots.png">
-                                                더보기
-                                            </button>
-                                            <div style="margin-top: 10px;" class="collapse" id="collapseExample2">
-                                              
-                                            </div>
-                                        </div>
-                                        <div style="margin-left: 10px;">
-                                        </div>
                                     </div>
-                                
+                                    <!-- 모든 해시태그 모음 -->
+                                    <div class="ht_container"style="padding-top:20px;">
+                                    </div> <!-- HT CATEGORY "ht_container" END -->
+                                <hr style="">
                                 <!-- reviewPost -->    
                                 <div id="reviewListContainer">
                                     <!-- 리뷰 목록 생성 부분 -->
                                 </div>
-                            
-                            <h3>디자인확인용 리뷰 리스트</h3>
-                            <div>
-                                <div class="review_post">
-                                    <div class="ht_container">
-                                        <div class="profile_img"></div>
-                                        <div class="item2" >
-                                            <p style="font-size: 23px; margin-left: 20px; font-weight: bold; margin-top: 15px; margin-bottom: 0;">닉네임</p>
-                                            <img style="margin-left: 20px;"class="star" data-index="1" src="/img/star_on.png">
-                                            <img class="star"data-index="2" src="/img/star_on.png">
-                                            <img class="star" data-index="3" src="/img/star_on.png">
-                                            <img class="star" data-index="4" src="/img/star_on.png">
-                                            <img class="star" data-index="5" src="/img/star_off.png">
-                                            <span style="font-size: 20px; color:rgb(94, 94, 94); ">2023년 2월 21일</span>
-                                            <br>
-                                            <span class="detail_rating" style="margin-left: 20px;">	
-                                                맛
-                                                <img src="/img/miniStar.png"class="miniStar">
-                                                3
-                                            </span>
-                                            <span class="detail_rating">
-                                                가격
-                                                <img src="/img/miniStar.png" class="miniStar">
-                                                4
-                                            </span>
-                                            <span class="detail_rating">
-                                                서비스
-                                                <img src="/img/miniStar.png" class="miniStar">
-                                                3
-                                            </span>
-                                                
-                                        </div>
-                                    </div>
-                                    <!-- 리뷰 글 부분-->
-                                    <p class="review_contents btxt" style="font-size: 18px; margin-top:10px;">
-                                        토요일 점심으로 찾았다.
-                                        <br>
-                                        식당에 도착하기 40분전에 테이블링으로 원격줄서기를 했음에도 도착하고 나서도  20분을 더 기다렸다.<br>
-                                        외관에서도 살짝 느껴지지만 안에 들어서면 미국미국한 인테리어가 반긴다. <br>
-                                        요즘  핫한 미국보다는 그 어떤 스테레오타입의 미국풍이 물씬 나는 뉴트로 느낌이랄까. <br>
-                                        
-                                    </p>
-                                    <!--리뷰 이미지 리스트 부분 -->
-                                    <div class="reviewImgList">
-                                        <div class="img1"></div>
-                                        <div  class="img2"></div>
-                                        <div  class="img3"></div>
-                                        <div  class="img4"></div>
-                                    </div>
-                                    <!--리뷰 : 해시태그 리스트  -->
-                                    <div class="review_ht_list">
-                                        <span class=" ht_POV badge rounded-pill">술모임</span>
-                                        <span class=" ht_POV badge rounded-pill">점심식사</span>
-                                        <span class=" ht_POV badge rounded-pill">저녁식사</span>
-                                        <span class=" ht_POV badge rounded-pill">식사모임</span>
-                                        <span class=" ht_POV badge rounded-pill">접대</span>
-                                        <span class=" ht_POV badge rounded-pill">회식</span>
-                                        <span class=" ht_POV badge rounded-pill">가족외식</span>
-                                    </div>
-                                    <button class="btn btn-outline-danger">공감</button>
-                                </div>
-                            </div>
-
                             </div>
                         </div><!-- end 'col=md-6'-->
                     </div>

@@ -67,11 +67,16 @@ async function configReviewList() {
 
         const createdTime = new Date(el.createdTime);
 
+
         const imgs = el.reviewImages?.map(image => `
                 <div class="d-inline-block position-relative">
                     <button class="btn btn-sm btn-warning btn-delete-image position-absolute top-0 end-0" data-id="${image.id}">X</button>
                     <img src="${image.imgUrl}" alt="이미지"/>
                 </div>`).join("");
+
+        const imgBox = !el.reviewImages || el.reviewImages.length === 0 ? null :`<div class="review-img-box">
+                ${imgs}
+            </div>`;
 
         listItem.innerHTML = `<div class="ms-2 me-auto">
                                     <div>${createdTime.getFullYear()}년 ${String(createdTime.getMonth()).padStart(2, 0)}월 ${String(createdTime.getDay()).padStart(2, 0)}일</div>
@@ -86,9 +91,7 @@ async function configReviewList() {
                                             <img src=${el.flavorScore ? "/img/star_on.png" : "/img/star_off.png"} class="miniStar"/>${el.priceScore}
                                         </span>
                                     </div>
-                                    <div class="review-img-box">
-                                         ${imgs ?? ""}
-                                    </div>
+                                         ${imgBox ?? ""}
                                     <div class="mt-3">
                                         ${el.content}
                                     </div>
@@ -128,6 +131,10 @@ async function deleteImg(e) {
     const imgBox = e.target.parentNode;
 
     imgsContainer.removeChild(imgBox);
+
+    if (imgsContainer.children.length === 0 ) {
+        imgsContainer.classList.add("d-none");
+    }
 }
 
 async function deleteReview(e) {
