@@ -242,7 +242,7 @@ public class AdminMatzipService {
         }
     }
 
-    private final static Integer DEFAULT_CATEGORY = 1;
+    private final static Integer DEFAULT_CATEGORY = 4;
 
     //    TODO : 수정 필요 => restaurant 삭제되지 않고 기본 값으로 들어갈 수 있도록 해야 함.
     @Transactional
