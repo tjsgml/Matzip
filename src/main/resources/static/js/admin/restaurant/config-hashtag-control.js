@@ -67,7 +67,7 @@ function mkTableRow(data) {
         <td><input data-id="${data.id}" class="select-tag" type="checkbox"/></td>
         <td class="category">${hashtagCategory[data.htCategory.name]}</td>
         <td>${data.keyword}</td>
-        <td>${data.expose}</td>
+        <td id="${'expose-td-' + data.id}">${data.expose}</td>
         <td><button class="btn-update form-control" data-id="${data.id}">수정</button></td>
         <td><button class="btn-delete form-control" data-id="${data.id}">삭제</button></td>
     `;

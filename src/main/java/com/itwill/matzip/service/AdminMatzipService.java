@@ -2,6 +2,7 @@ package com.itwill.matzip.service;
 
 import com.itwill.matzip.domain.*;
 import com.itwill.matzip.domain.enums.BusinessDay;
+import com.itwill.matzip.domain.enums.Expose;
 import com.itwill.matzip.dto.RestaurantUpdateDto;
 import com.itwill.matzip.dto.admin.*;
 import com.itwill.matzip.repository.BusinessHourRepository;
@@ -279,6 +280,18 @@ public class AdminMatzipService {
 
     public List<ReviewHashtag> getReviewHashtags(HashtagSearchDto searchDto) {
         return reviewHashtagDao.searchReviewHashtagByKeyword(searchDto);
+    }
+
+    @Transactional
+    public void updateTagExpose(Expose expose, Long... tagIdList) {
+        log.info("tagIdList={}", tagIdList);
+        List<Long> tagIds = List.of(tagIdList);
+
+        for (Long tagId : tagIds) {
+            ReviewHashtag hashtag = reviewHashtagDao.findById(tagId).orElseThrow();
+            log.info("hash={}", hashtag);
+            hashtag.changeExpose(expose);
+        }
     }
 
     public ReviewHashtag getReviewHashtagById(Long hashtagId) {
