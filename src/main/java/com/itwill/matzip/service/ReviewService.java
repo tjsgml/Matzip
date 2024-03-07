@@ -1,8 +1,10 @@
 package com.itwill.matzip.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +36,7 @@ import com.itwill.matzip.util.S3Utility;
 import com.itwill.matzip.util.SecurityUtility;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -75,6 +78,42 @@ public class ReviewService {
     	return reviewDao.findById(reviewId)
     			.orElseThrow(() -> new IllegalArgumentException("존재하지않는 리뷰 ID" + reviewId));
     }
+    
+    // 리뷰 삭제
+    @Transactional
+    public void deleteReview(Long reviewId) {
+        Review review = reviewDao.findById(reviewId)
+            .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없음: " + reviewId));
+        
+        // 리뷰와 연관된 해시태그 관계 제거
+        Set<ReviewHashtag> hashtags = review.getHashtags();
+        if (hashtags != null && !hashtags.isEmpty()) {
+        	Iterator<ReviewHashtag> iterator = hashtags.iterator();
+        	while (iterator.hasNext()) {
+        	    ReviewHashtag hashtag = iterator.next();
+        	    iterator.remove(); // 반복자를 사용하여 현재 요소를 컬렉션에서 제거
+        	    hashtag.getReviews().remove(review);
+        	    if (hashtag.getReviews().isEmpty()) {
+        	        reviewHTDao.delete(hashtag);
+        	    }
+        	}
+
+        }
+
+        // 리뷰와 연관된 이미지 삭제 (S3 및 데이터베이스에서)
+        List<ReviewImage> reviewImages = review.getReviewImages();
+        for (ReviewImage image : reviewImages) {
+            String imageUrl = image.getImgUrl();
+            String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+            s3Util.deleteImageFromS3(fileName); // S3에서 이미지 삭제
+            reviewImageDao.delete(image); // 데이터베이스에서 이미지 정보 삭제
+        }
+
+        // 모든 관계를 해제한 후 리뷰 삭제
+        reviewDao.delete(review);
+    }
+
+
     
         
     

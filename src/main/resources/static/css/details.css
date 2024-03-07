@@ -450,9 +450,12 @@
 
 .review-btn-container{
     margin-top: 20px;
+     display: flex;
+    justify-content: flex-end; 
 }
 
 .edit-review-btn{
+    margin-right:5px;
     text-decoration: none;
     border:solid 2px #595C5F;
     border-radius: 10cap;
@@ -467,6 +470,40 @@
     color: #000;
     text-decoration: none;
 }
+
+.delete-review-btn{
+    text-decoration: none;
+    border:solid 2px #595C5F;
+    border-radius: 10cap;
+    color: #666670;
+    padding:6px;
+    font-size: 15px;
+}
+
+.delete-review-btn:hover{
+    border:solid 2px #FF7F70;
+    border-radius: 10cap;
+    color: #000;
+    text-decoration: none;
+}
+
+.like-review-btn{
+    margin-right:5px;
+    text-decoration: none;
+    border:solid 2px #595C5F;
+    border-radius: 10cap;
+    color: #666670;
+    padding:6px;
+    font-size: 15px;
+}
+
+.like-review-btn:hover{
+    border:solid 2px #FF7F70;
+    border-radius: 10cap;
+    color: #000;
+    text-decoration: none;
+}
+
 
 .review_contents{
     padding: 10px;
