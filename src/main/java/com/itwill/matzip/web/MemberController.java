@@ -62,36 +62,34 @@ public class MemberController {
 	// 로그인을 한 후에 이전 페이지로 리다이렉트
 	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/detailLogin")
-	public void detailLogin(@RequestParam("redirect") String redirectUri,HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void detailLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		log.info("Get - login()");
 		 // 이전 페이지의 URI을 가져옴
-//        String redirectUri = request.getParameter("redirect");
+		String redirectUri = request.getParameter("redirect");
         String queryString = request.getQueryString();
         
         // "redirect=" 부분을 제거하여 실제 값만 추출
-         redirectUri = queryString.replaceFirst("redirect=", "");
+        String queryRedirectUri = queryString.replaceFirst("redirect=", "");
         // "&continue" 이후의 문자열은 삭제
         int continueIndex = redirectUri.indexOf("&continue");
         if (continueIndex != -1) {
-            redirectUri = redirectUri.substring(0, continueIndex);
+        	queryRedirectUri = redirectUri.substring(0, continueIndex);
         }
         log.info("@@@ redirectUri ={}", redirectUri);
         
         log.info("@@@ queryString ={}", queryString);
-        log.info("@@@ redirectUri ={}", redirectUri);
         
         
         try {
             if (redirectUri != null) {
             	if(containsUnicode(redirectUri)) {
             		 // URL 인코딩을 사용하여 한글 문자를 ASCII로 변환하여 리다이렉트 URL 생성
-                    String encodedRedirectUri = URLEncoder.encode(redirectUri, "UTF-8");
                     String uri = new URI(redirectUri).toString();
                     log.info("@@@ uri={}",uri);
-                    response.sendRedirect(redirectUri);
+                    response.sendRedirect(queryRedirectUri);
             	}else {
             		// 리다이렉트할 URI이 있으면 해당 URI로 리다이렉트
-            		response.sendRedirect(new URI(redirectUri).toString());
+            		response.sendRedirect(redirectUri);
             		
             	}
             } else {

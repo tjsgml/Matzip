@@ -59,8 +59,9 @@
 		if(keyword == ''){
 			alert('검색어를 입력해주세요!!');
 		}else{
+			const categoryId = restaurantTypeSelect.value;
 			//검색 페이지로 키워드와 함께 보내기.
-			window.location.href = `/search/all?keyword=${keyword}`;
+			window.location.href = `/search/all?keyword=${keyword}&categoryId=${categoryId}`;
 		}
 	});
 	
