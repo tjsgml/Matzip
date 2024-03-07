@@ -99,29 +99,36 @@ document.addEventListener('DOMContentLoaded', async()=>{
                     ${review.hashtags.map(hashtag => `<span class="ht_POV badge rounded-pill">${hashtag}</span>`).join(' ')}
                 </div>
                 <div class="review-btn-container">
-                    <button class="btn btn-outline-danger">공감</button>
+                    
                 </div>`;
                 
                 
 
-
                 reviewElement.innerHTML = innerHTML;
                 
-                // 로그인한 회원이 리뷰 작성자인 경우 수정 버튼 추가
+                const btnContainer = reviewElement.querySelector('.review-btn-container');
+                
+                // 로그인한 회원이 리뷰 작성자인 경우 수정/삭제 버튼 추가
                 if (loggedInUserNickname && review.memberNickname === loggedInUserNickname) {
                     // 수정 버튼 생성
                     const editButton = document.createElement('button');
                     editButton.textContent = 'ㅤ수정ㅤ';
-                    editButton.className = 'btn edit-review-btn';
+                    editButton.className = 'btn edit-review-btn'; 
                     editButton.addEventListener('click', function() {
-                        window.location.href = `/review/update/${review.id}`; /// review/update?review=${review.id} 
+                        window.location.href = `/review/update/${review.id}`; /// review/update?review=${review.id}
+                    }); 
+                        
+                    // 삭제 버튼 생성
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'ㅤ삭제ㅤ'
+                    deleteButton.className = 'btn delete-review-btn';
+                    deleteButton.addEventListener('click', function() {
+                        deleteReview(review.id); 
                     });
     
-                    // review-btn-container 찾기
-                    const btnContainer = reviewElement.querySelector('.review-btn-container');
                     btnContainer.appendChild(editButton);
                     btnContainer.appendChild(deleteButton);
-                } else {  // 로그인한 회원이 리뷰 작성자가 아닌 경우 공감 버튼 추가 // TODO: 로그아웃상태도..
+                } else {  // 로그인한 회원이 리뷰 작성자가 아닌 경우 공감 버튼 추가
                     const likeButton = document.createElement('button');
                     likeButton.className = 'btn like-review-btn';
                     likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_Off.png" class="like-button-img"">';
@@ -133,6 +140,10 @@ document.addEventListener('DOMContentLoaded', async()=>{
                     
                 }
                 
+               
+                                  
+                
+                
                 reviewListContainer.appendChild(reviewElement);
             });
 
@@ -140,7 +151,7 @@ document.addEventListener('DOMContentLoaded', async()=>{
             const totalReviewCountElement1 = document.querySelector('.title.total-review');
             const totalReviewCountElement2 = document.querySelector('.evalCnt');
             totalReviewCountElement1.textContent = `${reviews.length}건의 방문자 평가`;
-            totalReviewCountElement2.textContent = `(${reviews.length}명의 평가)`;
+            totalReviewCountElement2.textContent = `(${reviews.length}건의 평가)`;
 
             // 평점 평균 계산 및 별점 표시
             const averageScore = reviews.length > 0 ? totalScoreSum / reviews.length : 0;
@@ -289,7 +300,31 @@ document.addEventListener('DOMContentLoaded', async()=>{
         ratingStarContainer.innerHTML = starsHTML;
         ratingStarContainer2.innerHTML = starsHTML;
     }
+        
+        // 리뷰 삭제
+        async function deleteReview(reviewId) {
+        if (!confirm("리뷰를 삭제하시겠습니까?")) return; // 사용자에게 삭제 확인 요청
+    
+        try {
+            const response = await fetch(`/review/delete/${reviewId}`, {
+                method: 'DELETE', 
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+    
+            if (response.ok) { 
+                alert("리뷰가 삭제되었습니다!");
+                window.location.reload(); 
+            } else {
+                throw new Error('리뷰삭제실패');
+            }
+        } catch (error) {
+            console.error('리뷰 삭제 중 에러 발생:', error);
+            alert("리뷰 삭제에 실패했습니다.");
+        }
+    }
+
 
     
 });//end document
-
