@@ -148,11 +148,12 @@ public class ReviewService {
 //                }
 //            }
 //        }
-    	if (deleteHashtagIds != null && !deleteHashtagIds.isEmpty()) {
-            for (Long hashtagId : deleteHashtagIds) {
-                deleteHashtagFromReview(review.getId(), hashtagId);
-            }
-        }
+    	    if (deleteHashtagIds != null && !deleteHashtagIds.isEmpty()) {
+    	        for (Long hashtagId : deleteHashtagIds) {
+    	            // REVIEW_HASHTAG_REL 테이블에서 관계 삭제
+    	            deleteHashtagFromReview(review.getId(), hashtagId);
+    	        }
+    	    }
         // 새로운 해시태그 처리
         saveHashtags(visitPurposeTags, HashtagCategoryName.VISIT_PURPOSE, review);
         saveHashtags(moodTags, HashtagCategoryName.MOOD, review);
@@ -161,21 +162,22 @@ public class ReviewService {
 
     @Transactional
     public void deleteHashtagFromReview(Long reviewId, Long hashtagId) {
-        // ReviewHashtag 엔티티의 객체를 찾습니다.
         ReviewHashtag hashtag = reviewHTDao.findById(hashtagId)
                                             .orElseThrow(() -> new EntityNotFoundException("해시태그를 찾을 수 없습니다"));
-
-        // Review 엔티티의 객체를 찾습니다.
         Review review = reviewDao.findById(reviewId)
-                                        .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다"));
+                                  .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다"));
 
-        // REVIEW_HASHTAG_REL 테이블에서 해당 리뷰와 해시태그의 관계를 찾아 삭제합니다.
         review.getHashtags().remove(hashtag);
         hashtag.getReviews().remove(review);
 
-        // 필요하다면 중간 테이블 엔티티를 삭제할 수도 있습니다.
-        // reviewHashtagRelRepository.deleteByReviewAndHashtag(review, hashtag);
+        reviewHTDao.save(hashtag);
+
+        // 해시태그가 어떤 리뷰에도 연결되지 않으면 삭제
+        if (hashtag.getReviews().isEmpty()) {
+            reviewHTDao.delete(hashtag);
+        }
     }
+
 
     
 
