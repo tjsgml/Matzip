@@ -292,7 +292,7 @@ document.addEventListener("DOMContentLoaded", function() {
     deleteHashtagRequests.forEach(hashtagId => {
         const input = document.createElement('input');
         input.type = 'hidden';
-        input.name = 'deleteHashtags[]'; // 여기서 input.name을 'deleteHashtags'에서 'deleteHashtags[]'로 변경, 서버 측에서 배열로 받기 위함
+        input.name = 'deleteHashtagIds[]'; // 여기서 input.name을 'deleteHashtags'에서 'deleteHashtags[]'로 변경, 서버 측에서 배열로 받기 위함
         input.value = hashtagId;
         form.appendChild(input);
     });

@@ -33,7 +33,7 @@ import com.itwill.matzip.util.DateTimeUtil;
 import com.itwill.matzip.util.S3Utility;
 import com.itwill.matzip.util.SecurityUtility;
 
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -49,6 +49,10 @@ public class ReviewService {
     private final S3Utility s3Util;
     
     private final ReviewLikeRepository reviewLikeDao;
+    
+    
+    @Autowired
+    private EntityManager entityManager; 
     
     
     @Autowired
@@ -72,14 +76,16 @@ public class ReviewService {
     			.orElseThrow(() -> new IllegalArgumentException("존재하지않는 리뷰 ID" + reviewId));
     }
     
+        
+    
     // 리뷰 업데이트
     @Transactional
     public void updateReview(Long reviewId, ReviewUpdateDto dto) {
+
         Review review = findReviewById(reviewId);
 
         // 평점 내용 업데이트
         review.updateReview(dto.getTasteRating(), dto.getPriceRating(), dto.getServiceRating(), dto.getReviewContent());
-        
 
         // 이미지 처리
         updateDeleteImages(review, dto.getImages(), dto.getDeleteImageUrls());
@@ -87,6 +93,30 @@ public class ReviewService {
         // 해시태그 처리
         updateDeleteHashtags(review, dto.getVisitPurposeTags(), dto.getMoodTags(), dto.getConvenienceTags(), dto.getDeleteHashtagIds());
     }
+    
+    @Transactional
+    private void updateDeleteHashtags(Review review, List<String> visitPurposeTags, List<String> moodTags, List<String> convenienceTags, List<Long> deleteHashtagIds) {
+    	if (deleteHashtagIds != null && !deleteHashtagIds.isEmpty()) {
+    	    for (Long hashtagId : deleteHashtagIds) {
+    	        Optional<ReviewHashtag> optionalHashtag = reviewHTDao.findById(hashtagId);
+    	        if (optionalHashtag.isPresent()) {
+    	            ReviewHashtag hashtag = optionalHashtag.get();
+    	            review.getHashtags().remove(hashtag); // 리뷰에서 해시태그 제거
+    	            hashtag.getReviews().remove(review); // 해시태그에서 리뷰 제거
+    	            // 해시태그가 다른 리뷰에도 연결된게 없으면 삭제
+    	            if (hashtag.getReviews().isEmpty()) {
+    	                reviewHTDao.delete(hashtag);
+    	            }
+    	        }
+    	    }
+    	}
+
+        // 새로운 해시태그 처리
+        saveHashtags(visitPurposeTags, HashtagCategoryName.VISIT_PURPOSE, review);
+        saveHashtags(moodTags, HashtagCategoryName.MOOD, review);
+        saveHashtags(convenienceTags, HashtagCategoryName.CONVENIENCE, review);
+    }
+
     
     @Transactional
     private void updateDeleteImages(Review review, MultipartFile[] images, List<String> deleteImageUrls) {
@@ -112,77 +142,8 @@ public class ReviewService {
         }
     }
     
-//    @Transactional
-//    private void updateDeleteHashtags(Review review, List<String> visitPurposeTags, List<String> moodTags, List<String> convenienceTags, List<Long> deleteHashtagIds) {
-//        // 삭제 요청된 해시태그 처리
-//        for (Long hashtagId : deleteHashtagIds) {
-//        	log.info("deleteHTs={}", deleteHashtagIds);
-//            ReviewHashtag hashtag = reviewHTDao.findById(hashtagId).orElse(null);
-//            if (hashtag != null) {
-//                review.getHashtags().remove(hashtag);
-//                reviewHTDao.delete(hashtag);
-//            }
-//        }
-//
-//        // 새로운 해시태그 처리
-//        saveHashtags(visitPurposeTags, HashtagCategoryName.VISIT_PURPOSE, review);
-//        saveHashtags(moodTags, HashtagCategoryName.MOOD, review);
-//        saveHashtags(convenienceTags, HashtagCategoryName.CONVENIENCE, review);
-//    }
-    @Transactional
-    private void updateDeleteHashtags(Review review, List<String> visitPurposeTags, List<String> moodTags, List<String> convenienceTags, List<Long> deleteHashtagIds) {
-        // 삭제 요청된 해시태그 처리
-    	
-//        if (deleteHashtagIds != null && !deleteHashtagIds.isEmpty()) {
-//            for (Long hashtagId : deleteHashtagIds) {
-//                ReviewHashtag hashtag = reviewHTDao.findById(hashtagId).orElse(null);
-//                if (hashtag != null) {
-//                    // 리뷰와 해시태그 간의 관계 제거
-//                    review.getHashtags().remove(hashtag);
-//                    hashtag.getReviews().remove(review);
-//                    
-//                    // 해시태그가 더 이상 어떤 리뷰와도 연관되어 있지 않다면 해시태그 엔티티 삭제
-//                    if (hashtag.getReviews().isEmpty()) {
-//                        reviewHTDao.delete(hashtag);
-//                    }
-//                }
-//            }
-//        }
-    	    if (deleteHashtagIds != null && !deleteHashtagIds.isEmpty()) {
-    	        for (Long hashtagId : deleteHashtagIds) {
-    	            // REVIEW_HASHTAG_REL 테이블에서 관계 삭제
-    	            deleteHashtagFromReview(review.getId(), hashtagId);
-    	        }
-    	    }
-        // 새로운 해시태그 처리
-        saveHashtags(visitPurposeTags, HashtagCategoryName.VISIT_PURPOSE, review);
-        saveHashtags(moodTags, HashtagCategoryName.MOOD, review);
-        saveHashtags(convenienceTags, HashtagCategoryName.CONVENIENCE, review);
-    }
 
-    @Transactional
-    public void deleteHashtagFromReview(Long reviewId, Long hashtagId) {
-        ReviewHashtag hashtag = reviewHTDao.findById(hashtagId)
-                                            .orElseThrow(() -> new EntityNotFoundException("해시태그를 찾을 수 없습니다"));
-        Review review = reviewDao.findById(reviewId)
-                                  .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다"));
-
-        review.getHashtags().remove(hashtag);
-        hashtag.getReviews().remove(review);
-
-        reviewHTDao.save(hashtag);
-
-        // 해시태그가 어떤 리뷰에도 연결되지 않으면 삭제
-        if (hashtag.getReviews().isEmpty()) {
-            reviewHTDao.delete(hashtag);
-        }
-    }
-
-
-    
-
-
-
+    // 리뷰 저장
 	@Transactional
     public void saveReview(ReviewCreateDto dto) {
     	
@@ -240,6 +201,7 @@ public class ReviewService {
         saveHashtags(dto.getConvenienceTags(), HashtagCategoryName.CONVENIENCE, savedReview);
     }
 
+	
     // 해시태그 저장
     private void saveHashtags(List<String> tags, HashtagCategoryName categoryEnum, Review savedReview) {
         if (tags == null || tags.isEmpty()) return; // 태그없으면

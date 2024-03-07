@@ -98,6 +98,7 @@ public class ReviewController {
             }
 
             if (reviewDto.getDeleteHashtagIds() == null) {
+            	log.info("reviewDto.getDeleteHashtagIds() 널이다 이자식아=", reviewDto.getDeleteHashtagIds());
                 reviewDto.setDeleteHashtagIds(new ArrayList<>());
             }
 
@@ -106,6 +107,7 @@ public class ReviewController {
             log.info("restaurantId={}", reviewDto.getRestaurantId());
 
             return "redirect:/rest/details?id=" + reviewDto.getRestaurantId();
+//            return "redirect:/review/update/" + reviewId;
         } catch (Exception e) {
             log.info("reviewId={}", reviewId);
             e.printStackTrace();

@@ -1,6 +1,5 @@
 package com.itwill.matzip.domain;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -22,6 +20,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -29,11 +28,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -57,7 +53,7 @@ public class Review extends BaseTimeEntity{
 
     @ToString.Exclude
     @JsonInclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "MEMBER_FK", nullable = false)
     private Member member;
@@ -75,22 +71,19 @@ public class Review extends BaseTimeEntity{
     private Integer priceScore;
 
     @JsonInclude
-    @OneToMany(mappedBy = "review")
-    @Cascade(CascadeType.REMOVE)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<ReviewImage> reviewImages = new ArrayList<>();
     
-    
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonInclude
     @JoinTable(
-            name = "REVIEW_HASHTAG_REL", // 중간 테이블 이름
-            joinColumns = @JoinColumn(name = "REVIEW_PK"), // 현재 엔티티 참조 컬럼이름
-            inverseJoinColumns = @JoinColumn(name = "REVIEW_HASHTAG_PK") // 반대 엔티티 참조 컬럼이름
+            name = "REVIEW_HASHTAG_REL",
+            joinColumns = @JoinColumn(name = "REVIEW_PK"),
+            inverseJoinColumns = @JoinColumn(name = "REVIEW_HASHTAG_PK")
     )
     @Builder.Default
     private Set<ReviewHashtag> hashtags = new HashSet<>();
-
 
     public void updateReview(Integer flavorScore, Integer priceScore, Integer serviceScore, String content) {
         if (flavorScore != null) this.flavorScore = flavorScore;
@@ -98,6 +91,4 @@ public class Review extends BaseTimeEntity{
         if (serviceScore != null) this.serviceScore = serviceScore;
         if (content != null && !content.isEmpty()) this.content = content;
     }
-
-
 }
