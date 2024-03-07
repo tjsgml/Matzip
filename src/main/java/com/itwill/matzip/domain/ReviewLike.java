@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -22,6 +23,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 @Getter
+@Setter
 @ToString
 @EqualsAndHashCode
 @Entity
@@ -33,13 +35,14 @@ public class ReviewLike  implements Serializable {
 	private Long id;
 	
 	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REVIEW_FK")
 	private Review review;
 	
 	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MEMBER_FK")
 	private Member member;
+
 
 }

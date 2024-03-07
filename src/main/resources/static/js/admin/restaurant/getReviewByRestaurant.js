@@ -4,7 +4,6 @@ const reviewList = document.querySelector("tbody#review-list");
 let page = 0;
 
 document.addEventListener("DOMContentLoaded", async () => {
-    resetReviewTable(reviewList);
     renderReviewList(reviewList);
 })
 
@@ -14,6 +13,7 @@ function resetReviewTable(reviewList) {
 }
 
 async function renderReviewList() {
+    resetReviewTable(reviewList);
     const {data} = await axios.get(`./${restaurantId}/reviews?page=${page}`);
     const {content, totalPages, number} = data;
 
@@ -51,9 +51,7 @@ function mkTableRow(el) {
                         </div>
                     </div>
                 </div>
-                <div>
-                    <button class="btn-delete-review btn btn-outline-primary btn-sm" data-id="${el.id}">삭제</button>
-                </div>
+                <button class="btn-delete-review btn btn-outline-primary btn-sm" data-id="${el.id}">삭제</button>
             </div>
             <div id="img-box" style="text-align: center">
                 ${el.reviewImages.map(img => '<img style="width: 150px;display: inline-block" src="' + img.imgUrl + '"/>')}
@@ -69,11 +67,11 @@ function mkTableRow(el) {
     return tableRow;
 }
 
-function addDeleteBtnEvent (reviewList) {
+function addDeleteBtnEvent(reviewList) {
     const delBtns = reviewList.querySelector("button.btn-delete-review");
 
     delBtns.forEach(el => {
-        el.addEventListener("click", (e) => {
+        el.addEventListener("click", async (e) => {
             const reviewId = e.target.getAttribute("data-id");
 
             if (!confirm("정말 삭제하시겠습니까?")) {
@@ -81,7 +79,14 @@ function addDeleteBtnEvent (reviewList) {
                 return;
             }
 
+            const status = await axios.delete(`/review/delete/${reviewId}`);
 
+            if (status === 200) {
+                alert("해당 리뷰가 삭제되었습니다.")
+                renderReviewList();
+            } else {
+                alert("삭제에 실패했습니다. 다시 시도하세요.")
+            }
         });
     })
 }
