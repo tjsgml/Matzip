@@ -70,6 +70,13 @@ public class ReviewService {
         this.reviewLikeDao=reviewLikeDao;
     }
     
+    
+    
+//    public Long checkReviewLike(Long memberId, Long reviewId) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+    
     // ReviewId 조회
     public Review findReviewById(Long reviewId) {
     	return reviewDao.findById(reviewId)

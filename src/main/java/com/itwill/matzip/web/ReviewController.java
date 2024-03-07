@@ -15,6 +15,7 @@ import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.dto.HashtagDto;
 import com.itwill.matzip.dto.ReviewCreateDto;
+import com.itwill.matzip.dto.ReviewLikeRegisterDto;
 import com.itwill.matzip.dto.ReviewUpdateDto;
 import com.itwill.matzip.service.RestaurantService;
 import com.itwill.matzip.service.ReviewService;
@@ -32,6 +33,31 @@ public class ReviewController {
 
     @Autowired
     private RestaurantService restaurantSvc;
+    
+//    @PostMapping("/reviews/registerLike")
+//    public ResponseEntity<Long> registerReviewLike(@RequestBody ReviewLikeRegisterDto dto) {
+//        log.info("registerReviewLike 호출 (memberId={}, reviewId={})", dto.getMemberId(), dto.getReviewId());
+//        Long reviewLikeId = reviewSvc.registerReviewLike(dto.getMemberId(), dto.getReviewId());
+//        log.info("리뷰 좋아요 클릭 시 아이디={}", reviewLikeId);
+//        return ResponseEntity.ok(reviewLikeId);
+//    }
+//    
+//    @DeleteMapping("/reviews/like/{likeId}")
+//    public ResponseEntity<String> deleteReviewLike(@PathVariable("likeId") Long likeId) {
+//        reviewSvc.deleteReviewLike(likeId);
+//        return ResponseEntity.ok("OK");
+//    }
+//
+//
+//    
+//    @GetMapping("/reviews/checkLike")
+//    public ResponseEntity<Long> checkReviewLike(@RequestParam("reviewId") Long reviewId, @RequestParam("memberId") Long memberId) {
+//        log.info("멤버 아이디 ={}, 리뷰 아이디={}", memberId, reviewId);
+//        Long reviewLikeId = reviewSvc.checkReviewLike(memberId, reviewId);
+//        
+//        return ResponseEntity.ok(reviewLikeId);
+//    }
+
 
     // 리뷰 등록 폼
     @GetMapping("/create")

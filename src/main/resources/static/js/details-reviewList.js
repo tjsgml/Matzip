@@ -120,6 +120,17 @@ document.addEventListener('DOMContentLoaded', async()=>{
                     // review-btn-container 찾기
                     const btnContainer = reviewElement.querySelector('.review-btn-container');
                     btnContainer.appendChild(editButton);
+                    btnContainer.appendChild(deleteButton);
+                } else {  // 로그인한 회원이 리뷰 작성자가 아닌 경우 공감 버튼 추가 // TODO: 로그아웃상태도..
+                    const likeButton = document.createElement('button');
+                    likeButton.className = 'btn like-review-btn';
+                    likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_Off.png" class="like-button-img"">';
+                    likeButton.addEventListener('click', function() {
+                        
+                        
+                    });
+                    btnContainer.appendChild(likeButton);
+                    
                 }
                 
                 reviewListContainer.appendChild(reviewElement);
