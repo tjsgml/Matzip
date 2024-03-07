@@ -27,6 +27,7 @@ async function renderReviewList() {
         reviewList.appendChild(tr);
     });
 
+    addDeleteBtnEvent();
     renderPagination(paginationList, totalPages, number, renderReviewList, page);
 }
 
@@ -51,7 +52,9 @@ function mkTableRow(el) {
                         </div>
                     </div>
                 </div>
-                <button class="btn-delete-review btn btn-outline-primary btn-sm" data-id="${el.id}">삭제</button>
+                <div>
+                    <button class="btn-delete-review btn btn-outline-primary btn-sm" data-id="${el.id}">삭제</button>
+                </div>
             </div>
             <div id="img-box" style="text-align: center">
                 ${el.reviewImages.map(img => '<img style="width: 150px;display: inline-block" src="' + img.imgUrl + '"/>')}
@@ -67,8 +70,8 @@ function mkTableRow(el) {
     return tableRow;
 }
 
-function addDeleteBtnEvent(reviewList) {
-    const delBtns = reviewList.querySelector("button.btn-delete-review");
+function addDeleteBtnEvent() {
+    const delBtns = reviewList.querySelectorAll("button.btn-delete-review");
 
     delBtns.forEach(el => {
         el.addEventListener("click", async (e) => {
@@ -79,7 +82,7 @@ function addDeleteBtnEvent(reviewList) {
                 return;
             }
 
-            const status = await axios.delete(`/review/delete/${reviewId}`);
+            const {status} = await axios.delete(`/review/delete/${reviewId}`);
 
             if (status === 200) {
                 alert("해당 리뷰가 삭제되었습니다.")

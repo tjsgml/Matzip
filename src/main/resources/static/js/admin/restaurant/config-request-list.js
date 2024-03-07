@@ -31,7 +31,6 @@ async function renderRequestList() {
 
     let {data, status} = await axios.get("./requests?" + mkQueryString(query));
 
-    console.log(data)
     if (!data || !data.length) {
         nothingDiv.classList.add("d-none");
     } else {

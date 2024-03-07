@@ -15,8 +15,6 @@ const centerMarker = new kakao.maps.Marker({
         draggable: false
 });
 
-console.log(centerMarker.getPosition())
-
 changeDraggableMarkerPosition(centerMarker.getPosition());
 
 // 센터 정하는 메서드
@@ -31,8 +29,6 @@ kakao.maps.event.addListener(map, 'center_changed', function () {
 });
 
 async function changeDraggableMarkerPosition(latLng) {
-    console.log("latLng latLng" )
-    console.log(latLng )
     const query = `y=${latLng.getLat()}&x=${latLng.getLng()}&page=${curPage}&size=${reqSize}`;
     const resp = await axios.get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?${query}`, {
         headers: {
@@ -41,7 +37,6 @@ async function changeDraggableMarkerPosition(latLng) {
         }
     });
 
-    // console.log(resp)
     const address = await resp.data.documents[0]?.address;
 
     const infowindowContent = document.createElement("div");
