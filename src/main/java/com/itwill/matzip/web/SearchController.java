@@ -19,6 +19,6 @@ public class SearchController {
 	public String showSearchList(@RequestParam("keyword") String keyword) {
 		
 		log.info("@@@@@키워드={}",keyword);
-		return "/restaurant/searchList";
+		return "restaurant/searchList";
 	}
 }

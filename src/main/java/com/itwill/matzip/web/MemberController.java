@@ -48,7 +48,7 @@ public class MemberController {
 	public String login(Principal principal) {
 		log.info("Get - login()");
 		if(principal == null) {
-			return "/member/login";
+			return "member/login";
 		}else {
 			return "redirect:/";
 		}
@@ -160,7 +160,7 @@ public class MemberController {
 		}
 		model.addAttribute("valid", valid);
 
-		return "/member/password";
+		return "member/password";
 	}
 
 	//비밀번호 찾기로 해서 비밀번호 변경하기
@@ -180,7 +180,7 @@ public class MemberController {
 		} else {
 			queryString = "error";
 		}
-		return "/member/successpwd" + queryString;
+		return "member/successpwd" + queryString;
 	}
 
 	// 비밀번호 변경 성공 페이지로 이동
