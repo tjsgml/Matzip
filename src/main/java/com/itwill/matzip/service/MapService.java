@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.itwill.matzip.domain.Category;
 import com.itwill.matzip.domain.MyPick;
-import com.itwill.matzip.domain.QReview;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.RestaurantStatus;
 import com.itwill.matzip.domain.Review;
@@ -19,11 +18,8 @@ import com.itwill.matzip.dto.MapReviewDto;
 import com.itwill.matzip.dto.MostLikedReviewDto;
 import com.itwill.matzip.repository.CategoryRepository;
 import com.itwill.matzip.repository.MyPickRepository;
-import com.itwill.matzip.repository.ReviewRepository;
-import com.itwill.matzip.repository.restaurant.RestaurantQuerydsl;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;

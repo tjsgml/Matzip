@@ -172,6 +172,13 @@ public class AdminMatzipController {
         return ResponseEntity.ok("updated");
     }
 
+    @ResponseBody
+    @GetMapping("/restaurant/{restaurantId}/reviews")
+    public ResponseEntity<Page<Review>> updateRestaurantBusinessTime(@PathVariable(name = "restaurantId") Long restaurantId, @RequestParam(name = "page", defaultValue = "0") Integer page) {
+        Page<Review> reviewList = adminService.getRestaurantReviewList(restaurantId, page);
+        return ResponseEntity.ok(reviewList);
+    }
+
     @GetMapping("/category")
     public String moveToControlCategory(Model model) {
         List<Category> categories = adminService.getCategories();
@@ -299,5 +306,6 @@ public class AdminMatzipController {
         UpdateRequest updateRequest = adminService.getRequestById(reqId);
         return ResponseEntity.ok(updateRequest);
     }
+
 
 }
