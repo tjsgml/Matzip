@@ -35,7 +35,6 @@ categorySelect.addEventListener("change", () => {
 
 statusSelect.addEventListener("change", () => {
     query.restaurantStatus = statusSelect.value;
-    console.log(query);
     //    검색 axios 요청
     changeLocation();
 })
@@ -43,14 +42,12 @@ statusSelect.addEventListener("change", () => {
 keywordSearchBtn.addEventListener("click", () => {
     query.keywordCriteria = searchSelect.value;
     query.keyword = searchKeyword.value;
-    console.log(query);
     //    검색 axios 요청
     changeLocation();
 })
 
 orderRadio.forEach(el => el.addEventListener("change", (e) => {
     query.order = e.target.value;
-    console.log(query);
     changeLocation();
 }));
 

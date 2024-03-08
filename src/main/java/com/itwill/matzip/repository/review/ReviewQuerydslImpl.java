@@ -2,6 +2,8 @@ package com.itwill.matzip.repository.review;
 
 import java.util.List;
 
+import com.querydsl.core.BooleanBuilder;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import com.itwill.matzip.domain.QMember;
@@ -16,11 +18,28 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ReviewQuerydslImpl extends QuerydslRepositorySupport
-	implements ReviewQuerydsl{
-	
-	public ReviewQuerydslImpl() {
-		super(Review.class);
-	}
-	
-	
+        implements ReviewQuerydsl {
+
+    public ReviewQuerydslImpl() {
+        super(Review.class);
+    }
+
+
+    @Override
+    public Page<Review> getReviewsByRestaurantIdPerPage(Long restaurantId, Integer page) {
+
+        QReview review = QReview.review;
+        JPQLQuery<Review> query = from(review);
+
+        BooleanBuilder builder = new BooleanBuilder();
+        Pageable pageable = PageRequest.of(page, 5, Sort.Direction.DESC, "id");
+
+        builder.and(review.restaurant.id.eq(restaurantId));
+        query.where(builder);
+
+        List<Review> reviewList = query.fetch();
+        long total = query.fetchCount();
+
+        return new PageImpl<>(reviewList, pageable, total);
+    }
 }

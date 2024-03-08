@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -174,10 +175,17 @@ public class RestaurantController {
 	
 	// 리뷰 리스트 
 	@GetMapping("/details/reviews/{restaurantId}")
-    public ResponseEntity<List<ReviewListDto>> findReviews(@PathVariable("restaurantId") Long restaurantId) {
-        List<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId);
-        return ResponseEntity.ok(reviews);
-    }
+	public ResponseEntity<List<ReviewListDto>> findReviews(@PathVariable("restaurantId") Long restaurantId, @AuthenticationPrincipal MemberSecurityDto currentUser) {
+	    Long currentUserId = currentUser != null ? currentUser.getUserid() : null;
+	    
+	    List<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId, currentUserId);
+	    return ResponseEntity.ok(reviews);
+	}
+//	@GetMapping("/details/reviews/{restaurantId}")
+//    public ResponseEntity<List<ReviewListDto>> findReviews(@PathVariable("restaurantId") Long restaurantId) {
+//        List<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId);
+//        return ResponseEntity.ok(reviews);
+//    }
 	
 	// 카테고리별 해시태그 
     @GetMapping("/details/hashtags/{restaurantId}")

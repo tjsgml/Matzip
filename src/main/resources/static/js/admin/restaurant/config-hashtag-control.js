@@ -67,7 +67,7 @@ function mkTableRow(data) {
         <td><input data-id="${data.id}" class="select-tag" type="checkbox"/></td>
         <td class="category">${hashtagCategory[data.htCategory.name]}</td>
         <td>${data.keyword}</td>
-        <td>${data.expose}</td>
+        <td id="${'expose-td-' + data.id}">${data.expose}</td>
         <td><button class="btn-update form-control" data-id="${data.id}">수정</button></td>
         <td><button class="btn-delete form-control" data-id="${data.id}">삭제</button></td>
     `;
@@ -106,7 +106,6 @@ async function getTagInfoToUpdate(ev) {
 
     document.querySelector("input#tag-id-to-update").value = data.id;
     document.querySelector("input#tag-name-to-update").value = data.keyword;
-    console.log(data.expose)
     document.querySelector(`input#tag-expose-to-update-${data.expose}`).checked = true;
 
     Array.from(categoryUpdateSelect.options).forEach(el => {

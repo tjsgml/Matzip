@@ -2,6 +2,7 @@ package com.itwill.matzip.web.admin;
 
 import com.itwill.matzip.domain.*;
 import com.itwill.matzip.domain.enums.ApprovalStatus;
+import com.itwill.matzip.domain.enums.Expose;
 import com.itwill.matzip.dto.*;
 import com.itwill.matzip.dto.admin.*;
 import com.itwill.matzip.service.AdminMatzipService;
@@ -171,6 +172,13 @@ public class AdminMatzipController {
         return ResponseEntity.ok("updated");
     }
 
+    @ResponseBody
+    @GetMapping("/restaurant/{restaurantId}/reviews")
+    public ResponseEntity<Page<Review>> updateRestaurantBusinessTime(@PathVariable(name = "restaurantId") Long restaurantId, @RequestParam(name = "page", defaultValue = "0") Integer page) {
+        Page<Review> reviewList = adminService.getRestaurantReviewList(restaurantId, page);
+        return ResponseEntity.ok(reviewList);
+    }
+
     @GetMapping("/category")
     public String moveToControlCategory(Model model) {
         List<Category> categories = adminService.getCategories();
@@ -240,6 +248,15 @@ public class AdminMatzipController {
     }
 
     @ResponseBody
+    @PatchMapping("/hashtag/expose/{expose}")
+    public ResponseEntity<String> updateHashtagCategoryExpose(@PathVariable(name = "expose") Expose expose, @RequestParam(name = "tagId") Long... tagId) {
+        log.info("abctagId={}", tagId);
+        log.info("abctagId={}", expose);
+        adminService.updateTagExpose(expose, tagId);
+        return ResponseEntity.ok("updated");
+    }
+
+    @ResponseBody
     @GetMapping("/hashtag/{tagId}")
     public ResponseEntity<ReviewHashtag> getHashtagCategoryById(@PathVariable(name = "tagId") Long tagId) {
         ReviewHashtag hashtag = adminService.getReviewHashtagById(tagId);
@@ -289,5 +306,6 @@ public class AdminMatzipController {
         UpdateRequest updateRequest = adminService.getRequestById(reqId);
         return ResponseEntity.ok(updateRequest);
     }
+
 
 }

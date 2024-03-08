@@ -2,14 +2,13 @@ package com.itwill.matzip.service;
 
 import com.itwill.matzip.domain.*;
 import com.itwill.matzip.domain.enums.BusinessDay;
+import com.itwill.matzip.domain.enums.Expose;
 import com.itwill.matzip.dto.RestaurantUpdateDto;
 import com.itwill.matzip.dto.admin.*;
-import com.itwill.matzip.repository.BusinessHourRepository;
-import com.itwill.matzip.repository.CategoryRepository;
-import com.itwill.matzip.repository.HashtagCategoryRepository;
-import com.itwill.matzip.repository.MenuRepository;
+import com.itwill.matzip.repository.*;
 import com.itwill.matzip.repository.UpdateRequest.UpdateRequestRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +25,7 @@ public class AdminMatzipService {
 
     private final RestaurantRepository restaurantDao;
     private final CategoryRepository categoryDao;
+    private final ReviewRepository reviewDao;
     private final MenuRepository menuDao;
     private final BusinessHourRepository businessHourDao;
     private final HashtagCategoryRepository hashtagCategoryDao;
@@ -206,7 +206,6 @@ public class AdminMatzipService {
         });
     }
 
-
     private void businessTime(BusinessHourUpdateDto el, Long restaurantId) {
         if (el == null) return;
 
@@ -234,6 +233,10 @@ public class AdminMatzipService {
 //        수정 flow
     }
 
+    public Page<Review> getRestaurantReviewList(Long restaurantId, Integer curPage) {
+        return reviewDao.getReviewsByRestaurantIdPerPage(restaurantId, curPage);
+    }
+
     @Transactional
     public void updateCategoryOrder(List<CategoryOrderUpdateDto> categoryOrderUpdateList) {
         log.info("CategoryOrderUpdateDtos = {}", categoryOrderUpdateList);
@@ -243,14 +246,14 @@ public class AdminMatzipService {
         }
     }
 
-    private final static Integer DEFAULT_CATEGORY = 1;
+    private final static Integer DEFAULT_CATEGORY = 4;
 
     //    TODO : 수정 필요 => restaurant 삭제되지 않고 기본 값으로 들어갈 수 있도록 해야 함.
     @Transactional
     public void deleteCategory(Integer categoryId) {
         log.info("deleteCategory(Integer categoryId = {} )", categoryId);
-        categoryDao.deleteById(categoryId);
         restaurantDao.updateCategoryToDefaultCategory(categoryId, DEFAULT_CATEGORY);
+        categoryDao.deleteById(categoryId);
     }
 
     public Category createCategory(String categoryName) {
@@ -281,6 +284,18 @@ public class AdminMatzipService {
         return reviewHashtagDao.searchReviewHashtagByKeyword(searchDto);
     }
 
+    @Transactional
+    public void updateTagExpose(Expose expose, Long... tagIdList) {
+        log.info("tagIdList={}", tagIdList);
+        List<Long> tagIds = List.of(tagIdList);
+
+        for (Long tagId : tagIds) {
+            ReviewHashtag hashtag = reviewHashtagDao.findById(tagId).orElseThrow();
+            log.info("hash={}", hashtag);
+            hashtag.changeExpose(expose);
+        }
+    }
+
     public ReviewHashtag getReviewHashtagById(Long hashtagId) {
         return reviewHashtagDao.findById(hashtagId).orElseThrow();
     }
@@ -300,7 +315,16 @@ public class AdminMatzipService {
     }
 
     public void deleteReviewHashtagById(Long... tagId) {
-        reviewHashtagDao.deleteAllById(List.of(tagId));
+        List<Long> tagIds = List.of(tagId);
+
+        for (Long id : tagIds) {
+            ReviewHashtag reviewHashtag = reviewHashtagDao.findById(id).orElseThrow();
+
+            Review review = reviewDao.findReviewsByHashtagsId(id);
+            if (review != null) review.getHashtags().remove(reviewHashtag);
+            reviewHashtagDao.deleteById(id);
+        }
+
     }
 
     public Page<UpdateRequest> getRequests(SearchRequestDto searchRequestDto) {

@@ -42,7 +42,7 @@ public class MailService {
 		Context context = new Context();
 		context.setVariable("username", username);
 		context.setVariable("key", passwordEncoder.encode(username));;
-		return templateEngine.process("/member/mail2", context);
+		return templateEngine.process("member/mail2", context);
 	}
 
 }

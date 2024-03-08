@@ -4,7 +4,8 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>mat.zip</title>
+	 <link rel="shortcut icon" type="image/x-icon" href="../img/tab_icon.png">
+	<title>MZ의 트렌드 맛집 검색, MAT.ZIP</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
 	<link rel="stylesheet" href="/css/memberinfo-style.css" />
@@ -18,8 +19,10 @@
 
 			<div class="col-md-6 main-bg-color">
 				<header class="mypage-header margin-side-lr">
-					<span><a th:href="@{/}"><i class="fa-solid fa-angle-left"></i></a></span>
+					<a th:href="@{/}">
+					<span><i class="fa-solid fa-angle-left"></i></span>
 					<span>마이페이지</span>
+					</a>
 				</header>
 
 				<main>
@@ -61,12 +64,8 @@
 						<dl>
 							<dt>평균 별점</dt>
 							<dd>
-								<strong th:text="${totalRating}"></strong>
-								<div class="stars"><img src="/img/star_on.png" />
-								<img src="/img/star_on.png" />
-								<img src="/img/star_on.png" />
-								<img src="/img/star_off.png" />
-								<img src="/img/star_off.png" />
+								<strong class="totalRating" th:text="${totalRating}"></strong>
+								<div class="stars">
 								</div>
 							</dd>
 						</dl>
@@ -117,6 +116,7 @@
 
 	<!-- 커스텀 모듈 -->
 	<script src="../js/member/scroll-review.js"></script>
+	<script src="../js/member/draw-star.js"></script>
 </body>
 
 </html>

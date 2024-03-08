@@ -12,6 +12,7 @@ import com.itwill.matzip.repository.*;
 import com.itwill.matzip.repository.UpdateRequest.UpdateRequestRepository;
 import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.util.DateTimeUtil;
 
@@ -153,27 +154,36 @@ public class RestaurantService {
 	
 	private final ReviewHashtagRepository reviewHashtagDao;
 	
-	public List<ReviewListDto> getReviewsForRestaurant(Long restaurantId) {
-	  List<Review> reviews = reviewDao.findByRestaurantIdWithHashtags(restaurantId);
+	private final ReviewLikeRepository reviewLikeDao;
 	
-	  return reviews.stream().map(review -> ReviewListDto.builder()
-	          .id(review.getId())
-	          .content(review.getContent())
-	          .flavorScore(review.getFlavorScore())
-	          .serviceScore(review.getServiceScore())
-	          .priceScore(review.getPriceScore())
-	          .formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime()))
-	          .memberNickname(review.getMember().getNickname())
-	          .memberImg(review.getMember().getImg())
-	          .reviewImages(review.getReviewImages().stream()
-	                  .map(ReviewImage::getImgUrl)
-	                  .collect(Collectors.toList()))
-	          .hashtags(review.getHashtags().stream()
-	                  .map(ReviewHashtag::getKeyword)
-	                  .collect(Collectors.toSet()))
-	          .build())
-	  .collect(Collectors.toList());
+	public List<ReviewListDto> getReviewsForRestaurant(Long restaurantId, Long userId) {
+	    List<Review> reviews = reviewDao.findByRestaurantIdWithHashtags(restaurantId);
+	    
+	    return reviews.stream().map(review -> {
+	        boolean likedByUser = false;
+	        if (userId != null) {
+	            // 현재 사용자가 해당 리뷰에 좋아요를 눌렀는지 확인
+	            likedByUser = reviewLikeDao.existsByReviewIdAndMemberId(review.getId(), userId);
+	        }
+	        
+	        // 리뷰 정보와 사용자가 리뷰에 좋아요를 눌렀는지 여부를 포함한 DTO 생성
+	        return ReviewListDto.builder()
+	                .id(review.getId())
+	                .content(review.getContent())
+	                .flavorScore(review.getFlavorScore())
+	                .serviceScore(review.getServiceScore())
+	                .priceScore(review.getPriceScore())
+	                .formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime()))
+	                .memberNickname(review.getMember().getNickname())
+	                .memberImg(review.getMember().getImg())
+	                .reviewImages(review.getReviewImages().stream().map(ReviewImage::getImgUrl).collect(Collectors.toList()))
+	                .hashtags(review.getHashtags().stream().map(ReviewHashtag::getKeyword).collect(Collectors.toSet()))
+	                .likedByUser(likedByUser) // 사용자가 좋아요를 눌렀는지 여부 포함
+	                .build();
+	    }).collect(Collectors.toList());
 	}
+
+
 	
 	public Map<String, Set<String>> getReviewHashtagsByCategory(Long restaurantId) {
 	    List<ReviewHashtag> hashtags = reviewHashtagDao.findAllByRestaurantId(restaurantId);
