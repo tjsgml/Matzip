@@ -30,7 +30,7 @@ div.select {
 	height: 30px;
 	width: 100%;
 	border: 1.2px solid rgba(0, 0, 0, 0.2);
-	background-color: #fff;
+	background-color: #f9f9f9;
 	transition: border-color 0.2s ease-in-out;
 	line-height: 30px;
 	text-align: center;
@@ -39,15 +39,16 @@ div.select {
 	color: darkgray;
 }
 
-#gender_m +label{
-	    border-radius: 7px 0px 0px 7px;
+#gender_m+label {
+	border-radius: 7px 0px 0px 7px;
 }
-#gender_f +label{
-	    border-radius: 0px 7px 7px 0px;
+
+#gender_f+label {
+	border-radius: 0px 7px 7px 0px;
 }
 
 .select input[type=radio]:checked+label {
-	border-color:  #EA4037;
+	background-color: white;
+	border-color: #EA4037;
 	color: #EA4037;
 }
-

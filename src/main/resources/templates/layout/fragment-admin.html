@@ -2,7 +2,7 @@
      style="justify-content:space-between;background-color: #292F3D" th:fragment="mz-top-nav">
     <div class="container">
         <a class="navbar-brand" href="/admin">
-            <img src="/image/admin/navy-bg-admin-logo.png" class="object-fit-cover" style="height: 50px"
+            <img src="/img/admin/navy-bg-admin-logo.png" class="object-fit-cover" style="height: 50px"
                  alt="logo"/>
         </a>
     </div>
@@ -10,6 +10,9 @@
         <ul class="navbar-nav">
             <li class="nav-item pe-2">
                 <span class="bi bi-person fs-4 text-light" th:text="${#authentication.name}"></span>
+            </li>
+            <li class="ps-1 pe-2 pt-1">
+                <a href="/"><img src="/img/enter.png"  alt="나가기 이미지"/></a>
             </li>
         </ul>
     </div>

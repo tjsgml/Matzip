@@ -106,7 +106,6 @@ async function getTagInfoToUpdate(ev) {
 
     document.querySelector("input#tag-id-to-update").value = data.id;
     document.querySelector("input#tag-name-to-update").value = data.keyword;
-    console.log(data.expose)
     document.querySelector(`input#tag-expose-to-update-${data.expose}`).checked = true;
 
     Array.from(categoryUpdateSelect.options).forEach(el => {

@@ -31,11 +31,13 @@ import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.repository.ReviewImageRepository;
 import com.itwill.matzip.repository.ReviewLikeRepository;
-import com.itwill.matzip.repository.ReviewRepository;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import com.itwill.matzip.util.DateTimeUtil;
 import com.itwill.matzip.util.S3Utility;
 import com.itwill.matzip.util.SecurityUtility;
+
+import jakarta.persistence.EntityManager;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +80,6 @@ public class ReviewService {
     }
 
 
-    
     // 리뷰 좋아요 상태 확인
     public Optional<ReviewLike> checkReviewLike(Long memberId, Long reviewId) {
         // 멤버 ID와 리뷰 ID에 해당하는 좋아요가 있는지 확인
@@ -144,6 +145,9 @@ public class ReviewService {
         // 모든 관계를 해제한 후 리뷰 삭제
         reviewDao.delete(review);
     }    
+
+
+    
         
     
     // 리뷰 업데이트

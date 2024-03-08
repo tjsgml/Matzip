@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +27,7 @@ import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MyPickRegisterDto;
 import com.itwill.matzip.dto.ReviewListDto;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
+import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.service.RestaurantService;
 
 import lombok.RequiredArgsConstructor;
@@ -39,6 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/rest")
 public class RestaurantController {
 	private final RestaurantService restSvc;
+
 	
 	
 	//details.html 보여주기(기본적인 음식점 정보 넣기)
@@ -48,6 +49,8 @@ public class RestaurantController {
 		Restaurant rest = restSvc.findOneRest(restId);
 		
 		model.addAttribute("rest",rest);
+		
+
 		
 		log.info(rest.toString());
 		

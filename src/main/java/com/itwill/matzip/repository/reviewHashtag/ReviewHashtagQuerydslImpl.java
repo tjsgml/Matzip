@@ -4,18 +4,26 @@ import com.itwill.matzip.domain.QRestaurant;
 import com.itwill.matzip.domain.QReviewHashtag;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.RestaurantStatus;
+import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.domain.ReviewHashtag;
 import com.itwill.matzip.dto.admin.HashtagSearchDto;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
+
+import jakarta.persistence.EntityManager;
+
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public class ReviewHashtagQuerydslImpl extends QuerydslRepositorySupport implements ReviewHashtagQuerydsl {
-    public ReviewHashtagQuerydslImpl() {
+    public ReviewHashtagQuerydslImpl(EntityManager entityManager) {
         super(ReviewHashtag.class);
+        this.entityManager = entityManager;
     }
+
+    private final EntityManager entityManager;
 
     public List<ReviewHashtag> searchReviewHashtagByKeyword(HashtagSearchDto searchDto) {
         QReviewHashtag hashtag = QReviewHashtag.reviewHashtag;
@@ -43,7 +51,6 @@ public class ReviewHashtagQuerydslImpl extends QuerydslRepositorySupport impleme
                 .where(hashtag.keyword.containsIgnoreCase(keyword));
                 
         return query.fetch();
-
     }
 
     //카테고리별 키워드 검색
