@@ -3,6 +3,11 @@ const categoryComp = document.querySelector("div#category-comp");
 
 showAddCategoryBtn.addEventListener("click", canShowCategoryComp);
 document.querySelector("button#create-category-btn").addEventListener("click", submitCategoryToAdd);
+document.querySelector("input#categoryInput").addEventListener("keyup", (e) => {
+    if (e.keyCode === 13) {
+        submitCategoryToAdd();
+    }
+})
 
 function canShowCategoryComp() {
     if (categoryComp.classList.contains("d-none")) {
