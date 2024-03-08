@@ -8,6 +8,7 @@
 		<link href="/css/layout/navigation.css" rel="stylesheet">
 		<link href="/css/font.css" rel="stylesheet" /> 
 		<link href="/css/search-list.css" rel="stylesheet">
+		<link href="/css/layout/footer.css" rel="stylesheet"/>
 	</head>
 		<body style="background-color: #F0F0F3;">
 		<!--검색 결과 리스트 보여주는 html(전체순, 공감수,리뷰수,좋아요수 대로 정렬하기!!) -->
@@ -55,10 +56,9 @@
 								<div  style="display: flex; justify-content: center; align-items: center; margin-top:200px; margin-bottom: 350px; background-color: white;">
 								    <div>
 										<span style="display: flex; justify-content: center;">
-											<img src="/img/icon_nullWarning.png" style="width: 45px; height: 45px;">
+											<img src="/img/dish.png" style="width: 90px; height: 90px;">
 										</span>
-										<br>
-										<span style="font-size: 20px; font-weight: bold;">검색 결과가 없습니다.</span>
+										<p style="margin-left: 10px; margin-top:10px; font-size: 24px; font-weight: bold;">검색 결과가 없습니다.</p>
 									</div>
 								</div>
 							</div>
@@ -196,8 +196,32 @@
 					</div>
 					<div class="col-md-3"></div>
 				</div>
+				<div class="row">
+					<div th:replace="~{layout/fragment-footer :: footer}"></div>
+				</div>
 			</div>
 			 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 			 <script src="../js/layout/navigation.js"></script>
+			 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5"></script>
+			 <script>
+					// 이미지 지도에서 마커가 표시될 위치입니다 
+					const markerPosition  = new kakao.maps.LatLng(37.4987845817522,127.031704161063); 
+					
+					// 이미지 지도에 표시할 마커입니다
+					// 이미지 지도에 표시할 마커는 Object 형태입니다
+					const marker = {
+					    position: markerPosition
+					};
+					
+					const staticMapContainer  = document.getElementById('footer-map'), // 이미지 지도를 표시할 div  
+					    staticMapOption = { 
+					        center: new kakao.maps.LatLng(37.4987845817522, 127.031704161063), // 이미지 지도의 중심좌표
+					        level: 3, // 이미지 지도의 확대 레벨
+					        marker: marker // 이미지 지도에 표시할 마커 
+					    };    
+					
+					// 이미지 지도를 생성합니다
+					const staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
+				</script>
 		</body>
 </html>

@@ -9,6 +9,7 @@
         <link href="/css/font.css" rel="stylesheet" />  
         <link href="/css/details.css" rel="stylesheet" />
         <link href="/css/layout/navigation.css" rel="stylesheet">
+        <link href="/css/layout/footer.css" rel="stylesheet"/>
     </head>
         <body>
             <!-- 로그인한 사용자의 닉네임을 담고 있는 요소 -->
@@ -212,6 +213,10 @@
                     <div class="col-md-3"></div>
                 </div>
             </div>
+            <div class="row">
+		<div th:replace="~{layout/fragment-footer :: footer}"></div>
+	</div>
+           </div>
                     <!-- 이미지 크게 볼 수 있는 모달 띄우기 -->
                     <div id="gallryModal" class="modal fade" tabindex="-1">
                         <div class=" modal-dialog  modal-lg">
@@ -234,5 +239,25 @@
              <script src="../js/details.js"></script>
              <script src="../js/details-reviewList.js"></script>
              <script src="../js/layout/navigation.js"></script>
+             	<script>
+					// 이미지 지도에서 마커가 표시될 위치입니다 
+					const markerPosition  = new kakao.maps.LatLng(37.4987845817522,127.031704161063); 
+					
+					// 이미지 지도에 표시할 마커입니다
+					// 이미지 지도에 표시할 마커는 Object 형태입니다
+					const marker = {
+					    position: markerPosition
+					};
+					
+					const staticMapContainer  = document.getElementById('footer-map'), // 이미지 지도를 표시할 div  
+					    staticMapOption = { 
+					        center: new kakao.maps.LatLng(37.4987845817522, 127.031704161063), // 이미지 지도의 중심좌표
+					        level: 3, // 이미지 지도의 확대 레벨
+					        marker: marker // 이미지 지도에 표시할 마커 
+					    };    
+					
+					// 이미지 지도를 생성합니다
+					const staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
+				</script>
         </body>
 </html>
