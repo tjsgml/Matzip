@@ -8,12 +8,13 @@ async function configUpdatePage() {
 
     data.forEach(e => {
         const listItem = document.createElement("li");
-        listItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-start");
+        listItem.classList.add("list-group-item");
         listItem.draggable = true;
 
         const hrefToRestaurantList = `./restaurant/all?categoryCond=${e.id}`;
 
         listItem.innerHTML = `
+                    <div class="d-flex justify-content-between">
                         <input type="hidden" id="categoryId" value="${e.id}" />
                         <input type="hidden" id="categoryOrder" value="${e.order}" />
                         <div class="ms-2 me-auto">
@@ -24,6 +25,7 @@ async function configUpdatePage() {
                             <button type="button" id="del-category-btn" class="btn  btn-outline-info">삭제</button>
                             <button type="button" id="update-category-btn" class="btn  btn-outline-info">수정</button>
                         </div>
+                    </div>
                     `;
         categoryList.append(listItem);
 
@@ -45,45 +47,50 @@ async function deleteCategoryHandler(listItem, name) {
 
 async function updateCategoryHandler(listItem) {
 
-    const updateCategoryContainer = categoryList.querySelector("div#update-category-container");
-
-    console.log(updateCategoryContainer)
+    const updateCategoryContainer = listItem.querySelector("div#update-category-container");
 
     if (updateCategoryContainer) {
-        categoryList.removeChild(updateCategoryContainer.parentElement);
+        listItem.removeChild(updateCategoryContainer.parentElement);
         return;
     }
 
-    const li = document.createElement("li");
-    li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-start");
+    const updateComp = document.createElement("div");
+    updateComp.classList.add("card", "card-body", "d-flex", "justify-content-between", "align-items-start", "px-3", "pt-3");
 
-    li.innerHTML = `
+    updateComp.innerHTML = `
                  <div id="update-category-container" class="input-group input-group-lg mb-3">
-                          <input id="category-name" type="text" class="form-control is-valid" placeholder="변경할 이름" aria-label="category-name" aria-describedby="button-update-category-name" />
+                          <input id="category-name" type="text" class="form-control form-control-sm is-valid" placeholder="변경할 이름" aria-label="category-name" aria-describedby="button-update-category-name" />
                           <button class="btn btn-outline-secondary" type="button" id="button-update-category-name">수정하기</button>
                  </div>
     `;
 
-    listItem.after(li);
+    listItem.appendChild(updateComp);
     const categoryId = listItem.querySelector("input#categoryId").value;
-    const btnUpdateCategoryName = li.querySelector("button#button-update-category-name");
-    const categoryNameToChange = li.querySelector("input#category-name");
-    console.log(categoryNameToChange)
-    btnUpdateCategoryName.addEventListener("click", async () => {
-        if (categoryNameToChange.value && categoryNameToChange.value.trim().length < 2) {
-            alert("유효한 이름을 입력해주세요.");
-            return;
-        }
+    const btnUpdateCategoryName = updateComp.querySelector("button#button-update-category-name");
+    const categoryNameToChange = updateComp.querySelector("input#category-name");
 
-        const {
-            data,
-            status
-        } = await axios.patch(location.href + `/${categoryId}?categoryName=` + categoryNameToChange.value.trim());
-        if (200 <= status && status < 300) {
-            listItem.querySelector("#category-name-div").innerHTML = categoryNameToChange.value.trim();
-            categoryList.removeChild(li);
+    btnUpdateCategoryName.addEventListener("click", () => updateCategoryName(categoryId, categoryNameToChange, listItem, updateComp));
+    categoryNameToChange.addEventListener("keypress", (e) => {
+        if (e.keyCode === 13) {
+            updateCategoryName(categoryId, categoryNameToChange, listItem, updateComp);
         }
-    })
+    });
+}
+
+async function updateCategoryName(categoryId, categoryNameToChange, listItem, updateComp) {
+    if (categoryNameToChange.value && categoryNameToChange.value.trim().length < 2) {
+        alert("유효한 이름을 입력해주세요.");
+        return;
+    }
+
+    const {
+        data,
+        status
+    } = await axios.patch(location.href + `/${categoryId}?categoryName=` + categoryNameToChange.value.trim());
+    if (200 <= status && status < 300) {
+        listItem.querySelector("#category-name-div").innerHTML = categoryNameToChange.value.trim();
+        listItem.removeChild(updateComp);
+    }
 }
 
 // 드래그 드랍 가능 불가능
