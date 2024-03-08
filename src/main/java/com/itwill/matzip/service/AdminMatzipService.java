@@ -13,6 +13,7 @@ import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,7 @@ public class AdminMatzipService {
     private final UpdateRequestRepository updateRequestDao;
 
     public List<Category> getCategories() {
-        return categoryDao.findAll();
+        return categoryDao.findByOrderByListOrderAsc();
     }
 
     public List<CategoryListDto> getCategoryListItems() {
