@@ -27,6 +27,7 @@ import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MyPickRegisterDto;
 import com.itwill.matzip.dto.ReviewListDto;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
+import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.service.RestaurantService;
 
 import lombok.RequiredArgsConstructor;
