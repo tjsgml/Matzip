@@ -164,7 +164,6 @@ document.querySelector("button#add-category-btn").addEventListener("click", asyn
         return;
     }
 
-    console.log(categoryName)
     const {data} = await axios.post(location.href + "?categoryName=" + categoryName);
     console.log(data);
 
