@@ -448,11 +448,29 @@
     /* 확장됐을 때 스타일 */
 }
 
+
 .review-btn-container{
+    margin-top: 20px;
+     display: flex;
+    justify-content: flex-end; /* 양쪽으로 버튼을 분리 */
+}
+
+.review-btn-container {
+    display: flex;
     margin-top: 20px;
 }
 
+.like-btn-container {
+    justify-content: flex-start;
+}
+
+.edit-delete-btn-container {
+    
+}
+
+
 .edit-review-btn{
+    margin-right:5px;
     text-decoration: none;
     border:solid 2px #595C5F;
     border-radius: 10cap;
@@ -468,13 +486,52 @@
     text-decoration: none;
 }
 
-.review_contents{
-    padding: 10px;
-    font-size: 18px; 
-    margin-top:10px;
-    margin-left:10px;
+.delete-review-btn{
+    text-decoration: none;
+    border:solid 2px #595C5F;
+    border-radius: 10cap;
+    color: #666670;
+    padding:6px;
+    font-size: 15px;
 }
 
+.delete-review-btn:hover{
+    border:solid 2px #FF7F70;
+    border-radius: 10cap;
+    color: #000;
+    text-decoration: none;
+}
+
+.like-review-btn{
+    padding: 10px 30px;
+    margin-right:5px;
+    text-decoration: none;
+    border:solid 2px #666670;
+    border-radius: 10cap;
+    color: #666670;
+    padding:6px;
+    justify-content: flex-start; 
+}
+
+.like-review-btn:hover{
+    border:solid 2px #FF7F70;
+    border-radius: 10cap;
+    color: #000;
+    text-decoration: none;
+}
+.like-button-img{
+    width: 25px;
+    height: auto;
+}
+
+
+.review_contents{
+    padding-right: 10px;
+    font-size: 18px; 
+    margin-top:20px;
+    margin-right:10px;
+    margin-bottom:15px;
+}
 
 
 
