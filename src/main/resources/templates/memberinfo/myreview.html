@@ -19,8 +19,10 @@
 
 			<div class="col-md-6 main-bg-color">
 				<header class="mypage-header margin-side-lr">
-					<span><a th:href="@{/}"><i class="fa-solid fa-angle-left"></i></a></span>
+					<a th:href="@{/}">
+					<span><i class="fa-solid fa-angle-left"></i></span>
 					<span>마이페이지</span>
+					</a>
 				</header>
 
 				<main>
@@ -62,12 +64,8 @@
 						<dl>
 							<dt>평균 별점</dt>
 							<dd>
-								<strong th:text="${totalRating}"></strong>
-								<div class="stars"><img src="/img/star_on.png" />
-								<img src="/img/star_on.png" />
-								<img src="/img/star_on.png" />
-								<img src="/img/star_off.png" />
-								<img src="/img/star_off.png" />
+								<strong class="totalRating" th:text="${totalRating}"></strong>
+								<div class="stars">
 								</div>
 							</dd>
 						</dl>
@@ -118,6 +116,7 @@
 
 	<!-- 커스텀 모듈 -->
 	<script src="../js/member/scroll-review.js"></script>
+	<script src="../js/member/draw-star.js"></script>
 </body>
 
 </html>
