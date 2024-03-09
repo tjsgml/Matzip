@@ -101,8 +101,8 @@
                         <td><a th:href="${'./' + matzip.id}" th:text="${matzip.name}"></a></td>
                         <td th:if="${! #strings.isEmpty(matzip.detailAddress)}" th:text="${matzip.address + matzip.detailAddress}"></td>
                         <td th:if="${#strings.isEmpty(matzip.detailAddress)}" th:text="${matzip.address}"></td>
-                        <!--                    <td th:text="${matzip.contact}">010-0000-0000</td>-->
-                        <td>010-0000-0000</td>
+                        <td th:if="${#strings.isEmpty(matzip.contact)}" th:text="${matzip.contact}"></td>
+                        <td th:if="${! #strings.isEmpty(matzip.contact)}"></td>
                         <td th:text="${matzip.status.kor}">승인 대기</td>
                         <td th:if="${matzip.status ne WAIT}">
                             <button class="btn btn-outline-secondary btn-sm confirm-restaurant disabled" disabled>승인
