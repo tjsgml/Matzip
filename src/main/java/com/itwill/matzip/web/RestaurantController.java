@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,9 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.itwill.matzip.domain.BusinessHour;
 import com.itwill.matzip.domain.Menu;
 import com.itwill.matzip.domain.Restaurant;
-
-import com.itwill.matzip.domain.Review;
-import com.itwill.matzip.domain.ReviewHashtag;
 
 import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MyPickRegisterDto;
