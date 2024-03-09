@@ -7,27 +7,53 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 현재 로그인한 사용자의 닉네임
     const loggedInUserNickname = document.getElementById('loggedInUserNickname').textContent.trim();
-
+    
+    let currentPage = 0;
+    let isFetching = false; // 현재 데이터를 불러오는 중인지 확인하는 플래그
+    
     const restId = document.querySelector('input#restId').value;//음식점 아이디
 
     reviewListLoad(restId);
     loadHashtagsByCategory(restId);
+    
+     // 스크롤
+    function onScroll() {
+        console.log("스크롤@@@@@@@");
+         console.log(`innerHeight + scrollY: ${window.innerHeight + window.scrollY}, body.offsetHeight: ${document.body.offsetHeight}`);
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10 && !isFetching) { // 끝에 거의 도달했을 때 로딩
+            console.log("스크롤@@@@@@@ 되냐");
+            loadMoreData();
+        }
+    }
+    
+    async function loadMoreData() {
+        isFetching = true;
+        currentPage++;
+        await reviewListLoad(restId, currentPage);
+        isFetching = false;
+    }
+
+
+    
 
     // 리뷰 목록 ----------------------------------------------------------------------
-    async function reviewListLoad(restaurantId) {
+    async function reviewListLoad(restaurantId, currentPage) {
         try {
-            const response = await axios.get(`/rest/details/reviews/${restaurantId}`);
+            const response = await axios.get(`/rest/details/reviews/${restaurantId}?page=${currentPage}&size=10`);
+            //const { content, last } = response.data; // last: 마지막 페이지 여부
             const reviews = response.data;
-
+            
             let totalScoreSum = 0;
             let flavorScoreSum = 0;
             let priceScoreSum = 0;
             let serviceScoreSum = 0;
 
             const reviewListContainer = document.getElementById('reviewListContainer');
-            reviewListContainer.innerHTML = ''; // 초기화
+            //reviewListContainer.innerHTML = ''; // 초기화
+            
+            console.log(response.data);
 
-            if (reviews.length === 0) {
+            if (reviews.length === 0 && currentPage === 0) {
                 // 리뷰가 없을 때 
                 const noDataHTML = `
                     <div class="card">
@@ -211,10 +237,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // 리뷰 이미지 클릭 
             addReviewImageClickListener();
+            
+            if (reviews.length < 10) { // 요청한 페이지 크기보다 적은 리뷰가 반환된 경우, 마지막 페이지로 간주
+                window.removeEventListener('scroll', onScroll); // 더 이상 스크롤 이벤트 리스너 필요 없음
+            }
+            
         } catch (error) {
             console.error('리뷰 목록을 불러오는 데 실패했습니다:', error);
         }
     }// -- reviewListLoad END --
+    
+    window.addEventListener('scroll', onScroll);
+    
 
     // 카테고리와 카테고리 이름을 매핑하는 객체
     const categoryNames = {

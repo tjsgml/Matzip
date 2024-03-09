@@ -19,6 +19,7 @@ import com.itwill.matzip.util.DateTimeUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.itwill.matzip.domain.BusinessHour;
@@ -156,18 +157,16 @@ public class RestaurantService {
 	
 	private final ReviewLikeRepository reviewLikeDao;
 	
-	public List<ReviewListDto> getReviewsForRestaurant(Long restaurantId, Long userId) {
-	    List<Review> reviews = reviewDao.findByRestaurantIdWithHashtags(restaurantId);
-	    
-	    return reviews.stream().map(review -> {
-	        boolean likedByUser = false;
-	        if (userId != null) {
-	            // 현재 사용자가 해당 리뷰에 좋아요를 눌렀는지 확인
-	            likedByUser = reviewLikeDao.existsByReviewIdAndMemberId(review.getId(), userId);
-	        }
-	        
-	        // 리뷰 정보와 사용자가 리뷰에 좋아요를 눌렀는지 여부를 포함한 DTO 생성
-	        return ReviewListDto.builder()
+	// 기존의 메서드를 수정하여 페이징 처리 추가 및 최신순으로 정렬
+    public Page<ReviewListDto> getReviewsForRestaurant(Long restaurantId, Pageable pageable, Long userId) {
+        Page<Review> reviewPage = reviewDao.findByRestaurantIdOrderByCreatedTimeDesc(restaurantId, pageable);
+        
+        List<ReviewListDto> reviewListDtos = reviewPage.getContent().stream().map(review -> {
+            boolean likedByUser = false;
+            if (userId != null) {
+                likedByUser = reviewLikeDao.existsByReviewIdAndMemberId(review.getId(), userId);
+            }
+            return ReviewListDto.builder()
 	                .id(review.getId())
 	                .content(review.getContent())
 	                .flavorScore(review.getFlavorScore())
@@ -181,7 +180,36 @@ public class RestaurantService {
 	                .likedByUser(likedByUser) // 사용자가 좋아요를 눌렀는지 여부 포함
 	                .build();
 	    }).collect(Collectors.toList());
-	}
+        log.info(reviewListDtos.toString());
+        return new PageImpl<>(reviewListDtos, pageable, reviewPage.getTotalElements());
+    }
+	
+//	public List<ReviewListDto> getReviewsForRestaurant(Long restaurantId, Long userId) {
+//	    List<Review> reviews = reviewDao.findByRestaurantIdWithHashtags(restaurantId);
+//	    
+//	    return reviews.stream().map(review -> {
+//	        boolean likedByUser = false;
+//	        if (userId != null) {
+//	            // 현재 사용자가 해당 리뷰에 좋아요를 눌렀는지 확인
+//	            likedByUser = reviewLikeDao.existsByReviewIdAndMemberId(review.getId(), userId);
+//	        }
+//	        
+//	        // 리뷰 정보와 사용자가 리뷰에 좋아요를 눌렀는지 여부를 포함한 DTO 생성
+//	        return ReviewListDto.builder()
+//	                .id(review.getId())
+//	                .content(review.getContent())
+//	                .flavorScore(review.getFlavorScore())
+//	                .serviceScore(review.getServiceScore())
+//	                .priceScore(review.getPriceScore())
+//	                .formattedRegisterDate(DateTimeUtil.formatLocalDateTime(review.getCreatedTime()))
+//	                .memberNickname(review.getMember().getNickname())
+//	                .memberImg(review.getMember().getImg())
+//	                .reviewImages(review.getReviewImages().stream().map(ReviewImage::getImgUrl).collect(Collectors.toList()))
+//	                .hashtags(review.getHashtags().stream().map(ReviewHashtag::getKeyword).collect(Collectors.toSet()))
+//	                .likedByUser(likedByUser) // 사용자가 좋아요를 눌렀는지 여부 포함
+//	                .build();
+//	    }).collect(Collectors.toList());
+//	}
 
 
 	
