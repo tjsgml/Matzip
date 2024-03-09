@@ -2,6 +2,7 @@ package com.itwill.matzip.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -45,10 +46,12 @@ public class ReviewController {
     // 리뷰 좋아요 삭제
     @DeleteMapping("/unlike/{reviewId}")
     public ResponseEntity<?> deleteReviewLike(@PathVariable(name = "reviewId") Long reviewId, @AuthenticationPrincipal MemberSecurityDto memberSecurityDto) {
-        Long userId = memberSecurityDto.getUserid();
         try {
+            Long userId = memberSecurityDto.getUserid();
             reviewSvc.deleteReviewLike(reviewId, userId);
-            return ResponseEntity.ok().build();
+            // 좋아요 개수 업데이트
+            Long likesCount = reviewSvc.countLikesByReviewId(reviewId);
+            return ResponseEntity.ok().body(Map.of("likesCount", likesCount));
         } catch (Exception e) {
             log.error("리뷰 좋아요 삭제 실패", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 좋아요 삭제 중 오류 발생");
@@ -56,11 +59,12 @@ public class ReviewController {
     }
 
 
+
     // 리뷰 좋아요 상태 확인
     @GetMapping("/likes/check")
     @ResponseBody
     public ResponseEntity<Boolean> checkReviewLike(@RequestParam("reviewId") Long reviewId, @AuthenticationPrincipal MemberSecurityDto memberSecurityDto) {
-        Long memberId = memberSecurityDto.getUserid(); // 현재 로그인한 사용자의 ID를 얻습니다.
+        Long memberId = memberSecurityDto.getUserid(); 
         Optional<ReviewLike> reviewLike = reviewSvc.checkReviewLike(memberId, reviewId);
         return ResponseEntity.ok(reviewLike.isPresent());
     }
@@ -68,19 +72,19 @@ public class ReviewController {
     // 리뷰 좋아요 추가
     @PostMapping("/likes")
     @ResponseBody
-    public ResponseEntity<String> registerReviewLike(@RequestBody ReviewLikeRegisterDto dto, @AuthenticationPrincipal MemberSecurityDto memberSecurityDto) {
-        log.info("registerReviewLike()");
-        Long memberId = memberSecurityDto.getUserid(); // 현재 로그인한 사용자의 ID를 얻습니다.
-        dto.setMemberId(memberId); // DTO에 memberId를 세팅합니다.
+    public ResponseEntity<?> registerReviewLike(@RequestBody ReviewLikeRegisterDto dto, @AuthenticationPrincipal MemberSecurityDto memberSecurityDto) {
         try {
-            Long likeId = reviewSvc.registerReviewLike(dto);
-            return ResponseEntity.ok().body("리뷰 좋아요 등록 성공, 좋아요 ID: " + likeId);
+            Long memberId = memberSecurityDto.getUserid(); // 현재 로그인한 사용자 ID
+            dto.setMemberId(memberId);
+            reviewSvc.registerReviewLike(dto);
+            Long likesCount = reviewSvc.countLikesByReviewId(dto.getReviewId());
+            return ResponseEntity.ok().body(Map.of("likesCount", likesCount)); // 업데이트된 좋아요 개수 포함 응답
         } catch (Exception e) {
             log.error("리뷰 좋아요 등록 실패", e);
-            e.printStackTrace();
             return ResponseEntity.badRequest().body("리뷰 좋아요 등록 실패");
         }
     }
+
 
 
     /**
