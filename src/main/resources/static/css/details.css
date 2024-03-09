@@ -528,5 +528,14 @@
     margin-bottom:15px;
 }
 
+.likes-count {
+    display: inline-block;
+    min-width: 30px; /* 최소 너비 설정 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    height: 20px; /* 높이 설정 */
+    line-height: 20px; /* 라인 높이를 높이와 동일하게 설정하여 텍스트를 수직 중앙에 위치시킴 */
+}
+
+
 
 
