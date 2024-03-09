@@ -1,8 +1,6 @@
 package com.itwill.matzip.service;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,10 +17,8 @@ import com.itwill.matzip.domain.ReviewLike;
 import com.itwill.matzip.dto.SearchListDto;
 import com.itwill.matzip.repository.MyPickRepository;
 import com.itwill.matzip.repository.ReviewLikeRepository;
-import com.itwill.matzip.repository.ReviewRepository;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
-import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagQuerydsl;
-import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagQuerydslImpl;
 import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 
 import lombok.RequiredArgsConstructor;

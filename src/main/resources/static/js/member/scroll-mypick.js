@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		strHtml += `<!-- 포스트 1개-->
 						<div class="mypick-post_one margin-side-lr">
 							<!-- 음식점 사진 -->
-							<a href="{/rest/details?id=${data.restaurantId}}">`;
+							<a href="/rest/details?id=${data.restaurantId}">`;
 
 		if (data.imgUrl != null) {
 			strHtml += `<div>

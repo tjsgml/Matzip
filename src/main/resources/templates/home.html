@@ -9,11 +9,11 @@
 	
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
-
 	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
-
 	<link href="/css/layout/navigation.css" rel="stylesheet">
 	<link rel="stylesheet" href="../css/home-style.css" />
+	<link href="/css/layout/footer.css" rel="stylesheet"/>
+	<link href="/css/font.css" rel="stylesheet">
 </head>
 
 <body>
@@ -134,7 +134,10 @@
 			<div class="col-md-3"></div>
 		</div>
 	</div>
-
+	<div>
+		<div th:replace="~{layout/fragment-footer :: footer}"></div>
+	</div>
+	
 	<!-- java script -->
 	<!-- Bootstrap 자바스크립트 모듈 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
@@ -147,7 +150,7 @@
 	<!-- 아이콘 모듈 -->
 	<script src="https://kit.fontawesome.com/0a9be7c545.js" crossorigin="anonymous"></script>
 
-	<!-- 커스텀 모듈 -->.
+	<!-- 커스텀 모듈 -->
 	<script src="../js/layout/navigation.js"></script>
 
 	<!-- 슬라이드 라이브러리 사용 -->
@@ -166,6 +169,28 @@
 				nextArrow: $(this).parent().parent().find('.nextBtn')
 			});
 		});
+	</script>
+	
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5"></script>
+	<script>
+		// 이미지 지도에서 마커가 표시될 위치입니다 
+		const markerPosition  = new kakao.maps.LatLng(37.4987845817522,127.031704161063); 
+		
+		// 이미지 지도에 표시할 마커입니다
+		// 이미지 지도에 표시할 마커는 Object 형태입니다
+		const marker = {
+		    position: markerPosition
+		};
+		
+		const staticMapContainer  = document.getElementById('footer-map'), // 이미지 지도를 표시할 div  
+		    staticMapOption = { 
+		        center: new kakao.maps.LatLng(37.4987845817522, 127.031704161063), // 이미지 지도의 중심좌표
+		        level: 3, // 이미지 지도의 확대 레벨
+		        marker: marker // 이미지 지도에 표시할 마커 
+		    };    
+		
+		// 이미지 지도를 생성합니다
+		const staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
 	</script>
 
 </body>

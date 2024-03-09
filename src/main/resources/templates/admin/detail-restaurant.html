@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="kr">
-<head th:replace="~{layout/fragment-common::my-header('MAT.ZIP ADMIN | 레스토랑 리스트')}"></head>
+<head th:replace="~{layout/fragment-common::my-header('MAT.ZIP ADMIN | 레스토랑 상세 페이지')}"></head>
 <link href="/css/admin/admin-common.css" rel="stylesheet">
 <link href="/css/admin/admin-holiday.css" rel="stylesheet">
 <body>
@@ -185,7 +185,20 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
+            </div>
+        </div>
+        <div class="m-4">
+            <table class="table">
+                <tbody id="review-list">
+                </tbody>
+            </table>
+            <div style="display: flex; justify-content:center">
+                <nav id="pagination" aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                    </ul>
+                </nav>
             </div>
         </div>
     </main>
@@ -215,12 +228,14 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="/js/admin/restaurant/searchLocation.js"></script>
-<script src="/js/admin/restaurant/updateMenuPrice.js"></script>
-<script src="/js/admin/restaurant/updateBHour.js"></script>
+<script src="/js/admin/restaurant/update-menu-price.js"></script>
+<script src="/js/admin/restaurant/update-bussiness-hour.js"></script>
 <script th:replace="~{layout/fragment-common::bootstrap_js}"></script>
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=47ecd0d60ae3d050d86b7465e19f19b5&libraries=services"></script>
+<script type="text/javascript" src="/js/admin/util.js"></script>
+<script type="text/javascript" src="/js/admin/restaurant/get-review-by-restaurant.js"></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         console.log(document.getElementById("lat").value)
@@ -237,6 +252,7 @@
 
     })
 </script>
+
 
 </body>
 </html>

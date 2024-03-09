@@ -8,10 +8,12 @@ import com.itwill.matzip.dto.admin.*;
 import com.itwill.matzip.repository.*;
 import com.itwill.matzip.repository.UpdateRequest.UpdateRequestRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +34,7 @@ public class AdminMatzipService {
     private final UpdateRequestRepository updateRequestDao;
 
     public List<Category> getCategories() {
-        return categoryDao.findAll();
+        return categoryDao.findByOrderByListOrderAsc();
     }
 
     public List<CategoryListDto> getCategoryListItems() {
@@ -205,7 +207,6 @@ public class AdminMatzipService {
         });
     }
 
-
     private void businessTime(BusinessHourUpdateDto el, Long restaurantId) {
         if (el == null) return;
 
@@ -231,6 +232,10 @@ public class AdminMatzipService {
         bhour.updateOpenTime(el.getStartTime());
         bhour.updateCloseTime(el.getEndTime());
 //        수정 flow
+    }
+
+    public Page<Review> getRestaurantReviewList(Long restaurantId, Integer curPage) {
+        return reviewDao.getReviewsByRestaurantIdPerPage(restaurantId, curPage);
     }
 
     @Transactional

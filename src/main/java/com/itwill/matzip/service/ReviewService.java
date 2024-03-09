@@ -20,22 +20,25 @@ import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.domain.Review;
 import com.itwill.matzip.domain.ReviewHashtag;
 import com.itwill.matzip.domain.ReviewImage;
+import com.itwill.matzip.domain.ReviewLike;
 import com.itwill.matzip.domain.enums.HashtagCategoryName;
 import com.itwill.matzip.dto.MyReviewRequestDto;
 import com.itwill.matzip.dto.ReviewCreateDto;
+import com.itwill.matzip.dto.ReviewLikeRegisterDto;
 import com.itwill.matzip.dto.ReviewUpdateDto;
 import com.itwill.matzip.repository.HashtagCategoryRepository;
 import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.repository.ReviewImageRepository;
 import com.itwill.matzip.repository.ReviewLikeRepository;
-import com.itwill.matzip.repository.ReviewRepository;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
 import com.itwill.matzip.util.DateTimeUtil;
 import com.itwill.matzip.util.S3Utility;
 import com.itwill.matzip.util.SecurityUtility;
 
 import jakarta.persistence.EntityManager;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,10 +58,6 @@ public class ReviewService {
     
     
     @Autowired
-    private EntityManager entityManager; 
-    
-    
-    @Autowired
     public ReviewService(ReviewRepository reviewDao, ReviewImageRepository reviewImageDao, 
                         ReviewHashtagRepository reviewHTDao, HashtagCategoryRepository hashCategoryDao,
                         RestaurantRepository  restaurantDao, MemberRepository memberDao,
@@ -73,6 +72,43 @@ public class ReviewService {
         this.reviewLikeDao=reviewLikeDao;
     }
     
+    // 리뷰 좋아요 개수
+    public Long countLikesByReviewId(Long reviewId) {
+        return reviewLikeDao.countByReviewId(reviewId);
+    }
+    
+    // 리뷰 좋아요 삭제
+    @Transactional
+    public void deleteReviewLike(Long reviewId, Long memberId) {
+        Optional<ReviewLike> reviewLikeOpt = reviewLikeDao.findByMemberIdAndReviewId(memberId, reviewId);
+        reviewLikeOpt.ifPresent(reviewLike -> reviewLikeDao.delete(reviewLike));
+    }
+
+
+    // 리뷰 좋아요 상태 확인
+    public Optional<ReviewLike> checkReviewLike(Long memberId, Long reviewId) {
+        return reviewLikeDao.findByMemberIdAndReviewId(memberId, reviewId);
+    }
+
+    // 리뷰 좋아요 추가
+    @Transactional
+    public Long registerReviewLike(ReviewLikeRegisterDto dto) {
+        Long memberId = dto.getMemberId();
+        Long reviewId = dto.getReviewId();
+        
+        Review review = findReviewById(reviewId);
+        Member member = memberDao.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("멤버를 찾을 수 없습니다: " + memberId));
+        
+        ReviewLike reviewLike = new ReviewLike();
+        reviewLike.setReview(review);
+        reviewLike.setMember(member);
+        ReviewLike savedReviewLike = reviewLikeDao.save(reviewLike);
+        
+        return savedReviewLike.getId();
+    }
+
+
     // ReviewId 조회
     public Review findReviewById(Long reviewId) {
     	return reviewDao.findById(reviewId)
@@ -111,7 +147,7 @@ public class ReviewService {
 
         // 모든 관계를 해제한 후 리뷰 삭제
         reviewDao.delete(review);
-    }
+    }    
 
 
     
