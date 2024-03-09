@@ -27,7 +27,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             const reviewListContainer = document.getElementById('reviewListContainer');
             reviewListContainer.innerHTML = ''; // 초기화
 
-            reviews.hashtag
+            if (reviews.length === 0) {
+                // 리뷰가 없을 때 
+                const noDataHTML = `
+                    <div class="card">
+                        <div id="none-data-div" class="card-body pt-5">
+                            <div class="row fw-semibold text-center" style="font-size: 20px;">
+                                <div class="col my-5">
+                                    <p style="font-size: 50px">🥄🥺🥢</p>
+                                    <div>아직 등록된 리뷰가 없어요..</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                reviewListContainer.innerHTML = noDataHTML;
+                return; 
+            }           
+            
 
             reviews.forEach((review, reviewIndex) => {
                 console.log(`Review ${reviewIndex}:`, review.memberNickname, loggedInUserNickname, review.memberNickname === loggedInUserNickname);
@@ -177,16 +193,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             displayAverageRatingStars(roundedAverageScore); // 별점 표시 함수
 
             // 카테고리별 평점 평균
-            const flavorScoreAvg = flavorScoreSum / reviews.length;
-            const priceScoreAvg = priceScoreSum / reviews.length;
-            const serviceScoreAvg = serviceScoreSum / reviews.length;
+            const flavorScoreAvgText = reviews.length > 0 ? (flavorScoreSum / reviews.length).toFixed(1) : "0";
+            const priceScoreAvgText = reviews.length > 0 ? (priceScoreSum / reviews.length).toFixed(1) : "0";
+            const serviceScoreAvgText = reviews.length > 0 ? (serviceScoreSum / reviews.length).toFixed(1) : "0";
+            
+            // 0일 경우 소수점 제거
+            const formatScore = (score) => score.endsWith(".0") ? score.substring(0, score.length - 2) : score;
 
             const ratingCategoryAvgContainer = document.querySelector('.rating_category_avg');
             ratingCategoryAvgContainer.innerHTML = `
-            <div class="review_scores_all" >
-                <span class="flavor_rating_avg">맛 <img src="/img/miniStar.png" class="miniStar">${flavorScoreAvg.toFixed(1)}</span> 
-                <span class="price_rating_avg">가격 <img src="/img/miniStar.png" class="miniStar">${priceScoreAvg.toFixed(1)}</span>
-                <span class="service_rating_avg">서비스 <img src="/img/miniStar.png" class="miniStar">${serviceScoreAvg.toFixed(1)}</span>
+            <div class="review_scores_all">
+                <span class="flavor_rating_avg">맛 <img src="/img/miniStar.png" class="miniStar">${formatScore(flavorScoreAvgText)}</span> 
+                <span class="price_rating_avg">가격 <img src="/img/miniStar.png" class="miniStar">${formatScore(priceScoreAvgText)}</span>
+                <span class="service_rating_avg">서비스 <img src="/img/miniStar.png" class="miniStar">${formatScore(serviceScoreAvgText)}</span>
             </div>`;
 
 
