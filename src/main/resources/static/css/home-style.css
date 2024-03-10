@@ -162,13 +162,21 @@ a {
 	margin-right: 4px;
 }
 
+.rest-one__name {
+	display: flex;
+	gap:7px;
+}
+
 .rest-one__name>span:first-child {
 	font-size: 18px;
 	font-weight: bold;
+	display: block;
+	max-width: 140px;
+	
 }
 
 .rest-one__name>span:last-child {
+	align-self: self-end;
 	font-size: 12px;
 	color: #666666;
-	margin-left: 6px;
 }
