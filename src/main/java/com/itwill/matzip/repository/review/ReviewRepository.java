@@ -33,4 +33,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewQue
     List<Review> findByRestaurantIdWithHashtags(@Param("restaurantId") Long restaurantId);
 
     void deleteAllByMemberId(Long userId);
+
+    Page<Review> findByRestaurantIdOrderByCreatedTimeDesc(Long restaurantId, Pageable pageable);
 }

@@ -5,81 +5,81 @@
     font-style: normal;
 }
 .layout_1{
-	margin:10px;
-	background-color: white;
-	justify-content: center;
-	padding: 10px;
+    margin:10px;
+    background-color: white;
+    justify-content: center;
+    padding: 10px;
 }
 
 .restInfo{
-	margin-top : 20px;
-	margin-left: 50px;
-	margin-right: 50px;
+    margin-top : 20px;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 /*좋아요 버튼*/
 .btnMyPick{
-	text-decoration: none;
-	border:solid 1px #595C5F;
-	border-radius: 10cap;
-	color: #666670;
-	padding:10px;
-	font-size: 18px;
-	
+    text-decoration: none;
+    border:solid 1px #595C5F;
+    border-radius: 10cap;
+    color: #666670;
+    padding:10px;
+    font-size: 18px;
+    
 }
 /*.btnMyPick:hover{
-	border:solid 1px #FF230A;
-	border-radius: 10cap;
-	color: #000;
-	text-decoration: none;
+    border:solid 1px #FF230A;
+    border-radius: 10cap;
+    color: #000;
+    text-decoration: none;
 }
 .btnMyPick:hover img{
-	content: url('/img/icon_heartOn.png');
+    content: url('/img/icon_heartOn.png');
 }*/
 .btnMyPick.liked{
-	border:solid 1px #FF230A;
-	border-radius: 10cap;
-	color: #000;
-	text-decoration: none;
+    border:solid 1px #FF230A;
+    border-radius: 10cap;
+    color: #000;
+    text-decoration: none;
 }
 .btnMyPick.liked img{
-	content: url('/img/icon_heartOn.png');
+    content: url('/img/icon_heartOn.png');
 }
 /*평가하기 버튼*/
 .btnEval{
-	text-decoration: none;
-	border:solid 1px #595C5F;
-	border-radius: 10cap;
-	color: #666670;
-	padding:10px;
-	font-size: 18px;
-	float: inline-end;
+    text-decoration: none;
+    border:solid 1px #595C5F;
+    border-radius: 10cap;
+    color: #666670;
+    padding:10px;
+    font-size: 18px;
+    float: inline-end;
 }
 
 .btnEval:hover {
-	border:solid 1px #4281F7;
-	border-radius: 10cap;
-	color: #000;
-	text-decoration: none;
+    border:solid 1px #4281F7;
+    border-radius: 10cap;
+    color: #000;
+    text-decoration: none;
 }
 .btnEval:hover img{
-	content:url('/img/icon_editOn.png');
+    content:url('/img/icon_editOn.png');
 }
 .modal-title{
-	font-weight: bold; 
-	margin:auto; 
-	font-size: 23px;
+    font-weight: bold; 
+    margin:auto; 
+    font-size: 23px;
 }
 #reportInfo{
-	height: 200px;  
-	font-size: 21px; 
-	padding: 20px; 
+    height: 200px;  
+    font-size: 21px; 
+    padding: 20px; 
 }
 .modal-footer{
-	padding:20px;
+    padding:20px;
 }
 #btnReportInfo{
-	margin:auto; 
-	font-size: 20px; 
+    margin:auto; 
+    font-size: 20px; 
 }
 #reportInfo.form-control:focus {
     border-color: #ced4da; /* 테두리 색상 변경 */
@@ -97,87 +97,87 @@
 }
 
 .NullBsHour{
-	text-align: center; 
-	padding: 10px; 
-	border-radius: 20px;
-	background-color: rgb(214, 214, 216);
+    text-align: center; 
+    padding: 10px; 
+    border-radius: 20px;
+    background-color: rgb(214, 214, 216);
 }
 .bsHourNullString{
-	font-family: 'GangwonEduPowerExtraBoldA';
-	vertical-align: bottom; 
-	margin-bottom: 35px; 
-	margin-left:10px;
-	display: inline-block; 
-	font-size: 30px; 
-	color: #666670; 
+    font-family: 'GangwonEduPowerExtraBoldA';
+    vertical-align: bottom; 
+    margin-bottom: 35px; 
+    margin-left:10px;
+    display: inline-block; 
+    font-size: 30px; 
+    color: #666670; 
 }
 .restInfo_2{
-	font-size: 20px;
-	font-weight: normal;
-	padding:5px;
+    font-size: 20px;
+    font-weight: normal;
+    padding:5px;
 }
 .restInfo .name{
-	font-size: 35px;
-	font-weight: bold;
-	
+    font-size: 35px;
+    font-weight: bold;
+    
 }
 .restInfo .locAndMenu{
-	font-size: 20px;
-	font-weight: normal;
-	color: #66666E;
+    font-size: 20px;
+    font-weight: normal;
+    color: #66666E;
 }
 .restInfo .evalCnt{
-	font-size: 18px;
-	color: #666670;
+    font-size: 18px;
+    color: #666670;
 }
 .restInfo .evalAvg{
-	font-size: 19px;
-	margin-left: 3px;
-	font-weight: bold;
+    font-size: 19px;
+    margin-left: 3px;
+    font-weight: bold;
 }
 .showMap{
-	background-color: #FF230A;
-	color: white;
-	float: inline-end;
-	
+    background-color: #FF230A;
+    color: white;
+    float: inline-end;
+    
 }
 .title{
-	font-size: 30px;
-	font-weight: bold;
-	padding-top: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    padding-top: 10px;
 }
 .day{
-	font-size: 20px;
-	font-weight: bold;
-	margin-left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 10px;
 }
 .div_day{
-	color:rgb(128, 128, 128);
+    color:rgb(128, 128, 128);
 }
 .bs_hours{
-	font-size: 20px;
-	float: inline-end;
+    font-size: 20px;
+    float: inline-end;
 }
 .showMoreMenu{
-	float: inline-end; 
-	border: none; 
-	font-size: 20px; 
-	background-color: transparent; 
-	padding: 0; 
-	cursor: pointer;
+    float: inline-end; 
+    border: none; 
+    font-size: 20px; 
+    background-color: transparent; 
+    padding: 0; 
+    cursor: pointer;
 }
 .menu-item{
-	display: flex;
-	margin-bottom: 10px;
-	margin-left: 10px;
+    display: flex;
+    margin-bottom: 10px;
+    margin-left: 10px;
 }
 
 .menu-name{
-	font-size: 20px;
+    font-size: 20px;
 }
 .menu-price{
-	font-size: 20px;
-	float: inline-end;
+    font-size: 20px;
+    float: inline-end;
 }
 .hr-1 {
   flex-grow: 2;
@@ -190,9 +190,9 @@
 .star[data-index="3"],
 .star[data-index="4"],
 .star[data-index="5"]{
-	width: 30px;
-	height: 30px;
-	margin-bottom: 8px;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 8px;
 }
 
 .bigStar {
@@ -202,31 +202,31 @@
 
 
 .review_name{
-	font-size: 17px;
-	}
+    font-size: 17px;
+    }
 .review_star{
-	width:17px; 
-	height: 17px;
-	margin-bottom: 3px;
+    width:17px; 
+    height: 17px;
+    margin-bottom: 3px;
 }
 .ht_POV{
-	font-size: 17px;
-	font-weight: normal;
-	background-color: #FF7F70;
-	margin-left: 10px;
+    font-size: 17px;
+    font-weight: normal;
+    background-color: #FF7F70;
+    margin-left: 10px;
 }
 .review_post{
-	border:0.1px solid rgb(225, 225, 225);
-	margin-top:10px;
-	padding: 20px;
-	border-radius: 10px;
+    border:0.1px solid rgb(225, 225, 225);
+    margin-top:10px;
+    padding: 20px;
+    border-radius: 10px;
 }
 .ht_container{
-	grid-template-columns: repeat(10, 1fr);
+    grid-template-columns: repeat(10, 1fr);
 }
 .item2 {
-	grid-column: 2 / 11;
-	margin-top:10px;
+    grid-column: 2 / 11;
+    margin-top:10px;
 }
 
 .ht_POV {
@@ -234,22 +234,22 @@
 }
 
 .btnMoreHt{
-	border-radius: 20px;
-	border-color: #666670;
-	font-size: 14px;
+    border-radius: 20px;
+    border-color: #666670;
+    font-size: 14px;
 }
 .profile_img{
-	background: url("https://mblogthumb-phinf.pstatic.net/MjAyMjAyMDdfMjEy/MDAxNjQ0MTk0Mzk2MzY3.WAeeVCu2V3vqEz_98aWMOjK2RUKI_yHYbuZxrokf-0Ug.sV3LNWlROCJTkeS14PMu2UBl5zTkwK70aKX8B1w2oKQg.JPEG.41minit/1643900851960.jpg?type=w800");
-	background-position: center center;
-  	background-size: cover;
-  	width: 120px;
-  	height: 120px;
-  	border-radius: 50%;
+    background: url("https://mblogthumb-phinf.pstatic.net/MjAyMjAyMDdfMjEy/MDAxNjQ0MTk0Mzk2MzY3.WAeeVCu2V3vqEz_98aWMOjK2RUKI_yHYbuZxrokf-0Ug.sV3LNWlROCJTkeS14PMu2UBl5zTkwK70aKX8B1w2oKQg.JPEG.41minit/1643900851960.jpg?type=w800");
+    background-position: center center;
+    background-size: cover;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
 }
 
 .miniStar{
-	margin-bottom: 7px;
-	width: 15px; /* 원하는 너비로 조정 */
+    margin-bottom: 7px;
+    width: 15px; /* 원하는 너비로 조정 */
     height: 15px; /* 원하는 높이로 조정 */
     margin-bottom: 3px; /* 필요에 따라 조정 */
 }
@@ -257,57 +257,57 @@
 .flavor_rating_avg,
 .price_rating_avg, 
 .service_rating_avg{
-	margin-left: 10px;
-	font-size: 15px;
-	color:rgb(94, 94, 94);
+    margin-left: 10px;
+    font-size: 15px;
+    color:rgb(94, 94, 94);
 }
 .reviewImgList{
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	grid-template-rows: repeat(1,200px);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(1,200px);
 }
 
 .img1{
-	grid-column: 1/2;
-	grid-row:1/2;
-	background: url("https://d12zq4w4guyljn.cloudfront.net/20230904022649618_photo_85aa07219f05.jpg");
-	background-position: center center;
-  	background-size: cover;
+    grid-column: 1/2;
+    grid-row:1/2;
+    background: url("https://d12zq4w4guyljn.cloudfront.net/20230904022649618_photo_85aa07219f05.jpg");
+    background-position: center center;
+    background-size: cover;
 }
 .img2{
-	grid-column: 2/3;
-	grid-row:1/2;
-	background: url("https://d12zq4w4guyljn.cloudfront.net/300_300_20210425101017296_photo_bd96390afea4.jpg");
-	background-position: center center;
-  	background-size: cover;
+    grid-column: 2/3;
+    grid-row:1/2;
+    background: url("https://d12zq4w4guyljn.cloudfront.net/300_300_20210425101017296_photo_bd96390afea4.jpg");
+    background-position: center center;
+    background-size: cover;
 }
 .img3{
-	grid-column: 3/4;
-	grid-row:1/2;
-	background: url("https://d12zq4w4guyljn.cloudfront.net/20230904022649618_photo_85aa07219f05.jpg");
-	background-position: center center;
-  	background-size: cover;
+    grid-column: 3/4;
+    grid-row:1/2;
+    background: url("https://d12zq4w4guyljn.cloudfront.net/20230904022649618_photo_85aa07219f05.jpg");
+    background-position: center center;
+    background-size: cover;
 }
 .img4{
-	grid-column: 4/5;
-	grid-row:1/2;
-	background: url("https://d12zq4w4guyljn.cloudfront.net/300_300_20230904022724043_photo_85aa07219f05.jpg");
-	background-position: center center;
-  	background-size: cover;
+    grid-column: 4/5;
+    grid-row:1/2;
+    background: url("https://d12zq4w4guyljn.cloudfront.net/300_300_20230904022724043_photo_85aa07219f05.jpg");
+    background-position: center center;
+    background-size: cover;
 }
 
 .review_ht_list{
-	margin:5px;
+    margin:5px;
 }
 /*음식적 대표 이미지 리스트 처리*/
 .container {
-	display: grid;
+    display: grid;
 
-	list-style-type: none; 
-	justify-content: center;
-	 padding: 10px;
-	  
-	 height: 420px;
+    list-style-type: none; 
+    justify-content: center;
+     padding: 10px;
+      
+     height: 420px;
 }
 
 
@@ -386,9 +386,9 @@
 
 .carousel-img {
     max-width: 100%;
-	max-height: 300px; /* 최대 높이 */
-	object-fit: contain; /* 이미지 비율 유지 */
-	margin: auto; /* 이미지 중앙 */
+    max-height: 300px; /* 최대 높이 */
+    object-fit: contain; /* 이미지 비율 유지 */
+    margin: auto; /* 이미지 중앙 */
 }
 
 .carousel-control-prev-icon {
@@ -420,7 +420,7 @@
 }
 
 .review_scores{
-	margin-left: 10px;
+    margin-left: 10px;
 }
 
 .imgContainer_img {
@@ -553,4 +553,3 @@
     margin-right:10px;
     margin-bottom:15px;
 }
-
