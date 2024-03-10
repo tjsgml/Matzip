@@ -14,7 +14,7 @@
 			<div  class="member-title">
 				<a th:href="@{/}"><img src="../img/matzip_logo.png" alt="로고" /></a>
 			</div>
-			<form method="post" class="member-form signup-form">
+			<form method="post" th:action="@{/member/signup}" class="member-form signup-form">
 				<div>
 					<input id="username" name="username" type="text" required autofocus placeholder="아이디" />
 					<div id="username-check"></div>
@@ -32,17 +32,17 @@
 					<div id="nickname-check"></div>
 				</div>
 				<div>
-					<input name="birth" type="date" required />
+					<input name="birth" id="birth" type="date" required />
 				</div>
 
 				<div class="select">
 					<input type="radio" id="gender_m" name="gender" value="M" checked><label for="gender_m">남자</label>
 					<input type="radio" id="gender_f" name="gender" value="F"><label for="gender_f">여자</label>
 				</div>
-				<div>
-					<input id="btnSubmit" type="submit" value="회원가입" />
-				</div>
 			</form>
+				<div>
+					<input id="btnSubmit" type="submit" value="회원가입"/>
+				</div>
 		</div>
 	</main>
 
