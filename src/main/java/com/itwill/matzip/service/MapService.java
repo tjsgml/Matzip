@@ -78,7 +78,7 @@ public class MapService {
 	            MostLikedReviewDto dto = new MostLikedReviewDto();
 	            dto.setContent((String) row[0]);
 	            dto.setNickname((String) row[1]);
-	            dto.setTotalLikes(((BigDecimal) row[2]).longValue());
+	            dto.setTotalLikes(((Number) row[2]).longValue());
 	            dtoList.add(dto);
 	        }
 	        
