@@ -48,7 +48,7 @@
             if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
                 
                 // 현재 페이지의 URL을 가져와서 로그인 페이지로 이동하면서 전달
-                window.location.href = `/member/detailLogin?redirect=${redirectUrl}`;
+                window.location.href = `/member/login?redirect=${redirectUrl}`;
             } else {
                 alert('로그인이 취소되었습니다.');
             }
@@ -86,7 +86,7 @@
         }else{
              if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
                     // 로그인 페이지로 이동
-                     window.location.href = `/member/detailLogin?redirect=${redirectUrl}`;
+                     window.location.href = `/member/login?redirect=${redirectUrl}`;
                    /* window.location.href = '/member/login';*/
                 } else {
                     // 사용자가 취소한 경우

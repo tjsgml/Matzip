@@ -27,10 +27,9 @@ public class SecurityConfig {
 		http.csrf((csrf) -> csrf.disable());
 		
 		//로그인
-		http.formLogin((login) -> login.loginPage("/member/login"));
+		http.formLogin((login) -> login.loginPage("/member/login").successHandler(new CustomLoginSuccessHandler()));
 		//소셜 로그인
-		http.oauth2Login((login)->login.loginPage("/member/login")
-																	.successHandler(new CustomLoginSuccessHandler()));
+		http.oauth2Login((login)->login.loginPage("/member/login").successHandler(new CustomLoginSuccessHandler()));
 		
 		//로그아웃
 		http.logout((logout) -> logout.logoutSuccessHandler(new CustomLogoutSuccessHandler()));

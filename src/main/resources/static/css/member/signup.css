@@ -52,3 +52,19 @@ div.select {
 	border-color: #EA4037;
 	color: #EA4037;
 }
+
+input#btnSubmit {
+		background-color: #EA4037;
+	color: #F5E8CF;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 7px;
+	width: 100%;
+	height: 48px;
+	font-weight: 600;
+	margin-bottom: 15px;
+	padding: 0px;
+	font-size: 16px;
+	outline: none;
+	border : none;
+}

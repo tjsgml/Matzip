@@ -1,11 +1,5 @@
 package com.itwill.matzip.web;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 
 import org.springframework.http.ResponseEntity;
@@ -30,7 +24,7 @@ import com.itwill.matzip.service.MailService;
 import com.itwill.matzip.service.MemberService;
 import com.itwill.matzip.service.SocialMemberService;
 
-import jakarta.servlet.http.HttpServletResponse;
+
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -50,66 +44,15 @@ public class MemberController {
 	// 로그인 폼으로 이동
 	@GetMapping("/login")
 	public String login(Principal principal) {
-		log.info("Get - login()");
-		if (principal == null) {
+		log.info("Get - login() 호출");
+		if(principal == null) {
 			return "member/login";
-		} else {
+		}else {
 			return "redirect:/";
 		}
 	}
-
-	// 로그인을 한 후에 이전 페이지로 리다이렉트
-	@PreAuthorize("hasRole('USER')")
-	@GetMapping("/detailLogin")
-	public String detailLogin(HttpServletRequest request, HttpServletResponse response, Principal principal)
-			throws IOException {
-		log.info("Get - login()");
-//		 이전 페이지의 URI을 가져옴
-		String redirectUri = request.getParameter("redirect");
-		String queryString = request.getQueryString();
-
-		// "redirect=" 부분을 제거하여 실제 값만 추출
-		String queryRedirectUri = queryString.replaceFirst("redirect=", "");
-
-		if (principal == null) {
-			return "member/login";
-		}
-
-		// "&continue" 이후의 문자열은 삭제
-		int continueIndex = redirectUri.indexOf("&continue");
-		if (continueIndex != -1) {
-			queryRedirectUri = redirectUri.substring(0, continueIndex);
-		}
-		log.info("@@@ redirectUri ={}", redirectUri);
-
-		log.info("@@@ queryString ={}", queryString);
-
-		try {
-			if (redirectUri != null) {
-				if (containsUnicode(redirectUri)) {
-					// URL 인코딩을 사용하여 한글 문자를 ASCII로 변환하여 리다이렉트 URL 생성
-					String uri = new URI(redirectUri).toString();
-					log.info("@@@ uri={}", uri);
-					response.sendRedirect(queryRedirectUri);
-				} else {
-					// 리다이렉트할 URI이 있으면 해당 URI로 리다이렉트
-					response.sendRedirect(redirectUri);
-
-				}
-			} else {
-				// 리다이렉트할 URI이 없으면 기본적으로 설정된 URI로 리다이렉트
-				return "redirect:/";
-			}
-		} catch (URISyntaxException e) {
-			// 잘못된 URI가 제공된 경우 처리
-			log.error("Invalid URI: {}", redirectUri);
-			return "redirect:/";
-		}
-
-		return "redirect:/";
-
-	}
-
+	
+	
 	// 회원가입 폼으로 이동
 	@GetMapping("/signup")
 	public void signup() {
@@ -134,20 +77,21 @@ public class MemberController {
 	}
 
 	// 소셜 첫가입 회원 추가 정보 추가/기존 회원의 정보 수정
-	@PostMapping({ "/addinfo", "/modifyInfo" })
-	public String updateMemberInfo(MemberUpdateDto dto, @AuthenticationPrincipal MemberSecurityDto msd,
-			ServletRequest request) {
+	@PostMapping({"/addinfo", "/modifyInfo"})
+	public String updateMemberInfo(MemberUpdateDto dto, 
+																		@AuthenticationPrincipal MemberSecurityDto msd,
+																		ServletRequest request) {
 		log.info("updateMemberInfo(dto : {})", msd.getUserid());
-
-		HttpServletRequest req = (HttpServletRequest) request;
+		
+		HttpServletRequest req = (HttpServletRequest)request;
 		String target = req.getRequestURI();
-
+				
 		socialSvc.updateMember(dto, msd);
-
+		
 		if (target.equals("/member/modifyInfo")) {
 			return "redirect:/memberinfo/mymain";
 		}
-
+		
 		return "redirect:/";
 	}
 
@@ -164,23 +108,23 @@ public class MemberController {
 
 		Member m = memberSvc.checkEmail(email);
 
-		if (m != null) { // 이메일에 해당하는 유저 존재
-			if (m.getKakaoClientId() == null) { // 카카오 사용자가 아님
+		if (m != null) {			// 이메일에 해당하는 유저 존재
+			if(m.getKakaoClientId()==null) {			//카카오 사용자가 아님
 				reAtt.addFlashAttribute("email", m.getEmail());
 				session.setAttribute("username", m.getUsername());
 
 				mailService.sendHtmlEmail(m);
 
 				return "redirect:/member/forgot";
-			} else { // 카카오 사용자임
+			}else {		//카카오 사용자임
 				return "redirect:/member/forgot?another";
 			}
-		} else { // 이메일에 해당하는 유저 존재하지 않음
+		} else {			// 이메일에 해당하는 유저 존재하지 않음
 			return "redirect:/member/forgot?error";
 		}
 	}
 
-	// 비밀번호 변경 폼으로 이동
+	//비밀번호 변경 폼으로 이동
 	@GetMapping("/password")
 	public String passwordForm(@RequestParam(required = false, name = "key") String key, HttpSession session,
 			Model model) {
@@ -202,7 +146,7 @@ public class MemberController {
 		return "member/password";
 	}
 
-	// 비밀번호 찾기로 해서 비밀번호 변경하기
+	//비밀번호 찾기로 해서 비밀번호 변경하기
 	@PostMapping("/successpwd")
 	public String changePassword(@ModelAttribute("password") String pwd, HttpSession session) {
 		log.info("Post - changePassword (password : {}, username : {})", pwd,
@@ -227,14 +171,14 @@ public class MemberController {
 	public void successForm() {
 		log.info("Get - successForm");
 	}
-
-	// 비밀번호 변경
+	
+	//비밀번호 변경
 	@PostMapping("/modifypwd")
 	public String changePwd(@ModelAttribute("pwd") String pwd, Principal principal) {
 		log.info("changePwd : username - {}", pwd);
-
+		
 		memberSvc.updatePwd(principal.getName(), pwd);
-
+		
 		return "redirect:/memberinfo/profilemodify";
 	}
 
@@ -272,25 +216,17 @@ public class MemberController {
 		}
 		return ResponseEntity.ok(result);
 	}
-
-	// 비밀번호 변경시, 현재 비밀번호가 맞는지 확인
+	
+	//비밀번호 변경시, 현재 비밀번호가 맞는지 확인
 	@ResponseBody
 	@PostMapping("/checkpwd")
-	public ResponseEntity<String> checkPwd(@RequestBody String oldPwd, @AuthenticationPrincipal MemberSecurityDto msd) {
+	public ResponseEntity<String> checkPwd(@RequestBody String oldPwd, @AuthenticationPrincipal MemberSecurityDto msd){
 		log.info("현재 비밀번호가 맞는지 확인 : oldPwd : {}", oldPwd);
-
+		
 		String result = memberSvc.checkPassword(oldPwd, msd.getUserid());
-
+		
 		return ResponseEntity.ok(result);
 	}
+	
 
-	// 문자열에 유니코드가 포함되어 있는지 확인하는 메서드
-	private boolean containsUnicode(String str) {
-		for (char c : str.toCharArray()) {
-			if (c > 127) {
-				return true;
-			}
-		}
-		return false;
-	}
 }
