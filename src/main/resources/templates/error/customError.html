@@ -11,9 +11,9 @@
 	</head>
 		<body>
             <div>
-                <p>Status: <span th:text="${errorStatus}"></span></p>
-                <p>Message: <span th:text="${errorMessage}"></span></p>
-                <p>Details: <span th:text="${errorDetail}"></span></p>
+                <p>상태: <span th:text="${errorStatus}"></span></p>
+                <p>메시지: <span th:text="${errorMessage}"></span></p>
+                <p>예외 메시지: <span th:text="${errorDetail}"></span></p>
                 <img th:src="@{${errorImage}}" alt="Error Image" />
 			</div>
 			
