@@ -1,6 +1,8 @@
 package com.itwill.matzip.config;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,23 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 			response.sendRedirect("/member/addinfo");
 			return;
 		}
-
-		response.sendRedirect("/");
+		
+		 String redirectUrl = "/";
+		 String queryString = request.getQueryString();
+		 
+		 log.info("queryString={}",queryString);
+		// 로그인 후 리다이렉트할 URL이 있으면 변경
+        if (request.getParameter("redirect") != null) {
+            redirectUrl = request.getParameter("redirect");
+            log.info("redirectUrl={}",redirectUrl);
+        }
+        
+        
+        // 로그인 후 리다이렉트
+        response.sendRedirect(redirectUrl);
+		
+		
 	}
+	
+
 }
