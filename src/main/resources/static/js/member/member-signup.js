@@ -30,8 +30,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	const inputEmail = document.querySelector('input#email');
 	inputEmail.addEventListener('change', checkEmail);
 
+	const signUpForm = document.querySelector('form#signup-form');
 	const btnSubmit = document.querySelector('input#btnSubmit');
-
+	btnSubmit.addEventListener('click', submitForm);
 
 	//메서드 정의 ----------------------------------------------------------------------------------------------------
 
@@ -58,10 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			usernameDiv.innerHTML = '';
 			idChecked = true;
 		}
-
-		if (idChecked && pwdChecked && nickChecked && emailChecked) {
-			btnSubmit.disabled = false;
-		}
 	}
 
 	//닉네임 중복체크
@@ -85,10 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		} else {
 			nicknameDiv.innerHTML = '';
 			nickChecked = true;
-		}
-
-		if (idChecked && pwdChecked && nickChecked && emailChecked) {
-			btnSubmit.disabled = false;
 		}
 	}
 
@@ -116,10 +109,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			emailDiv.innerHTML = '';
 			emailChecked = true;
 		}
-
-		if (idChecked && pwdChecked && nickChecked && emailChecked) {
-			btnSubmit.disabled = false;
-		}
 	}
 
 
@@ -138,9 +127,15 @@ document.addEventListener('DOMContentLoaded', function() {
 			passwordDiv.innerHTML = '';
 			pwdChecked = true;
 		}
-
+	}
+	
+	
+	function submitForm(){
 		if (idChecked && pwdChecked && nickChecked && emailChecked) {
-			btnSubmit.disabled = false;
+			signUpForm.submit();
+		}else {
+			alert("필수 정보를 입력해주세요.");
 		}
 	}
+	
 });

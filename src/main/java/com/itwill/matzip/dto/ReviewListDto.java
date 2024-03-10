@@ -27,4 +27,5 @@ public class ReviewListDto {
     private Set<String> hashtags;
     private Set<String> hts;// 카테고리로 검색시 보여줄 결과 카테고리들..
     private boolean likedByUser;
+    private Long likesCount; // 리뷰 좋아요 개수
 }

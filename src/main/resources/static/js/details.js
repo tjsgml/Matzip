@@ -407,6 +407,8 @@
             }
         });
     }
+    window.checkLogin = checkLogin;
+    
     //회원의 해당 음식점에 좋아요를 눌렀는지 확인
     function changeMyPick(memberId,restId){
         

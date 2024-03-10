@@ -613,7 +613,7 @@ document.addEventListener('DOMContentLoaded',() =>{
                             <div  style="display: flex; justify-content: center; align-items: center; margin-top:150px;">
                                 <div>
                                     <span style="display: flex; justify-content: center;">
-                                        <img src="/img/icon_nullWarning.png" style="width: 45px; height: 45px;">
+                                        <img src="/img/dish.png" style="width: 70px; height: 70px;">
                                     </span>
                                     <br>
                                     <span style="font-size: 20px; font-weight: bold;">검색 결과가 없습니다.</span>
@@ -718,7 +718,7 @@ document.addEventListener('DOMContentLoaded',() =>{
                             <div  style="display: flex; justify-content: center; align-items: center; margin-top:150px;">
                                 <div>
                                     <span style="display: flex; justify-content: center;">
-                                        <img src="/img/icon_nullWarning.png" style="width: 45px; height: 45px;">
+                                        <img src="/img/dish.png" style="width: 70px; height: 70px;">
                                     </span>
                                     <br>
                                     <span style="font-size: 20px; font-weight: bold; color:#FF230A;" >'${keyword}'</span>
