@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
     initializeStarRatings();
+    
+    document.getElementById("review").placeholder = 
+     "방문한 식당의 솔직한 후기를 입력해 주세요!\n상세한 리뷰를 작성하고 좋아요를 받고 \n탑리뷰어에 도전해보세요!\n\n*부적절한 내용은 관리자에 의해 수정/삭제 될 수 있습니다.";
 
     // 수정 중 페이지 벗어날때 경고창
     window.addEventListener('beforeunload', function(e) {
