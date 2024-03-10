@@ -279,10 +279,12 @@ public class RestaurantService {
 				}
 			}
 
-			//dto에 저장하기
-			dto.add(TagRestaurantRequestDto.builder().tagId(exposeY.getId()).tagKeyword(exposeY.getKeyword())
-					.rest(pickList).restLength(restList.size()).build());
-			restTotalRating = 0.0;
+			if (pickList.size() != 0) {
+				// dto에 저장하기
+				dto.add(TagRestaurantRequestDto.builder().tagId(exposeY.getId()).tagKeyword(exposeY.getKeyword())
+						.rest(pickList).restLength(pickList.size()).build());
+				restTotalRating = 0.0;
+			}
 		}
 		return dto;
 	}
