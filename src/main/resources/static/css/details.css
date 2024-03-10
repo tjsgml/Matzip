@@ -455,14 +455,11 @@
     justify-content: flex-end; /* 양쪽으로 버튼을 분리 */
 }
 
-<<<<<<< HEAD
-=======
 .review-btn-container {
     display: flex;
     margin-top: 20px;
 }
 
->>>>>>> main
 .like-btn-container {
     justify-content: flex-start;
 }
