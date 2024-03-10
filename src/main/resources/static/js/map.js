@@ -105,11 +105,13 @@ document.addEventListener('DOMContentLoaded',() =>{
             
             data.forEach((restaurant)=>{
                    const overlayPosition = new kakao.maps.LatLng(restaurant.lat, restaurant.lon);
+                   const maxLength = 10;
+                   const restaurantName = restaurant.name.length > maxLength ? restaurant.name.substring(0, maxLength) + ".." : restaurant.name;
                    const content = `<div class="customoverlay" id="customoverlay-${restaurant.id}" data-id=${restaurant.id}>
                                             <a  href="/rest/details?id=${restaurant.id}" id="v15_44" class="v15_44 btnMarker" type="button">
                                                 <div class="v14_20"></div>
                                                 <div class="v14_19"></div>
-                                                <span class="v15_42">${restaurant.name}</span>
+                                                <span class="v15_42">${restaurantName}</span>
                                                 <span class="v15_43">${restaurant.category.name}</span>
                                             </a>
                                         </div>`;
