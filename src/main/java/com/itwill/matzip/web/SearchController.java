@@ -56,6 +56,6 @@ public class SearchController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("list", list);
 
-        return "/restaurant/searchList";
+        return "restaurant/searchList";
     }
 }
