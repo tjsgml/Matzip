@@ -226,10 +226,10 @@ document.addEventListener('DOMContentLoaded', function() {
 								</div>
 								<ul class="dropdown-menu text-small dropdown-menu-end">
 									<li>
-										<a class="dropdown-item" href="#">리뷰 수정</a>
+										<a class="dropdown-item" href="/review/update/${data.reviewId}">리뷰 수정</a>
 									</li>
 									<li>
-										<a class="dropdown-item" href="#">리뷰 삭제</a>
+										<a class="dropdown-item" href="/review/delete/${data.reviewId}">리뷰 삭제</a>
 									</li>
 								</ul>
 							</div>

@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+.btn-main{
+    color: white;
+    background-color:#ff432e;
+    
+}
+.btn-main:hover {
+    color: white;
+    background-color:#FF230A;
+}

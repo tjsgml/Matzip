@@ -8,14 +8,18 @@
 			  rel="stylesheet" 
 			  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
 			  crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/customError.css" />
 	</head>
-		<body>
+		<body style="background-color: #F0F0F3;">
                 <div class="">
-                    <img th:src="@{${errorImage}}" alt="Error Image" class="img-fluid"/>
+                    <img th:src="@{${errorImage}}" alt="Error Image" class="img-fluid" style="width: 100%; height: auto"/>
                 <div style="display: flex; justify-content: center;">
-                    <p><span th:text="${errorStatus}"></span></p>
+                    <!--  <p><span th:text="${errorStatus}"></span></p>
                     <p><span th:text="${errorMessage}"></span></p>
-                    <p><span th:text="${errorDetail}"></span></p>
+                    <p><span th:text="${errorDetail}"></span></p>-->
+                </div>
+                <div style="display: flex; justify-content: center; background-color:#F0F0F3; margin-top:20px;" >
+                    <button class="btn btn-main" onclick="window.location.href='/'">ㅤ메인으로ㅤ</button>
                 </div>
                 </div>                
 
