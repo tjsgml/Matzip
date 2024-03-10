@@ -448,11 +448,29 @@
     /* 확장됐을 때 스타일 */
 }
 
+
 .review-btn-container{
     margin-top: 20px;
      display: flex;
-    justify-content: flex-end; 
+    justify-content: flex-end; /* 양쪽으로 버튼을 분리 */
 }
+
+<<<<<<< HEAD
+=======
+.review-btn-container {
+    display: flex;
+    margin-top: 20px;
+}
+
+>>>>>>> main
+.like-btn-container {
+    justify-content: flex-start;
+}
+
+.edit-delete-btn-container {
+    
+}
+
 
 .edit-review-btn{
     margin-right:5px;
@@ -488,13 +506,14 @@
 }
 
 .like-review-btn{
-    margin-right:5px;
-    text-decoration: none;
+    padding: 10px 30px;
+    color: #666670;
     border:solid 2px #595C5F;
     border-radius: 10cap;
     color: #666670;
     padding:6px;
     font-size: 15px;
+    justify-content: flex-start; 
 }
 
 .like-review-btn:hover{
@@ -505,13 +524,33 @@
 }
 
 
+.like-button-img{
+    width: 25px;
+    height: auto;
+}
+
 .review_contents{
-    padding: 10px;
+    padding-right: 10px;
     font-size: 18px; 
-    margin-top:10px;
-    margin-left:10px;
+    margin-top:20px;
+    margin-right:10px;
+    margin-bottom:15px;
+}
+
+.likes-count {
+    display: inline-block;
+    min-width: 30px; /* 최소 너비 설정 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    height: 20px; /* 높이 설정 */
+    line-height: 20px; /* 라인 높이를 높이와 동일하게 설정하여 텍스트를 수직 중앙에 위치시킴 */
 }
 
 
-
+.review_contents{
+    padding-right: 10px;
+    font-size: 18px; 
+    margin-top:20px;
+    margin-right:10px;
+    margin-bottom:15px;
+}
 

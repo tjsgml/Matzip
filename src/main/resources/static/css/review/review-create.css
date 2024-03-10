@@ -12,7 +12,7 @@
 
 .stars {
     display: inline-block;
-    font-size: 25px;
+    font-size: 40px;
     cursor: pointer;
     
 }
@@ -33,22 +33,56 @@
 
 .rating-container{
     margin: 20px;
+    margin-right:80px;
+    margin-bottom:40px;
     /*display: inline-block; */ /*별 평점 가로로 나란히*/ 
+    text-align: center;
+    justify-content: center;
+    display: flex; /* p태그와 span태그를 가로로 나란히 정렬 */
 }
 
 p {
-    margin: 0%;
+    width: 50px; /* 고정된 너비 설정 */
+    margin-right: 10px; /* p태그와 span태그 사이 간격 조정 */
+    margin-top:20px;
 }
 
 textarea {
     resize: none; 
-    margin: 10px 0; 
+    margin: 20px 0; 
     padding: 10px; 
     width: calc(100% - 40px); 
     background-color: #e96464; 
     border: 1px solid #ccc; 
     border-radius: 5px; 
+    height: 200px;
+    
 }
+
+ /* textarea에 적용되는 스크롤바 스타일 */
+    textarea.text-content {
+        scrollbar-width: thin; /* Firefox에서 스크롤바를 얇게 설정 */
+        scrollbar-color: #D3D3D3 #F5F5F5; /* Firefox에서 스크롤바 색상 설정 (thumb and track) */
+    }
+
+    /* 스크롤바 트랙 스타일링 */
+    textarea.text-content::-webkit-scrollbar-track {
+        background-color: #F5F5F5;
+        border-radius: 10px; /* 트랙의 모서리를 둥글게 설정 */
+    }
+
+    /* 스크롤바 썸(손잡이) 스타일링 */
+    textarea.text-content::-webkit-scrollbar-thumb {
+        background-color: #D3D3D3;
+        border-radius: 10px; /* 썸의 모서리를 둥글게 설정 */
+    }
+
+    /* 스크롤바 스타일링 */
+    textarea.text-content::-webkit-scrollbar {
+        width: 8px; /* 스크롤바 너비 */
+        height: 8px; /* 수평 스크롤 시 스크롤바 높이 */
+    }
+
 
 p {
     font-size: 16px; 
@@ -98,7 +132,6 @@ p {
     flex: 1;
     min-width: 150px; 
     height: 150px; 
-    border: 1px solid #ccc;
     border-radius: 5px;
     overflow: hidden; 
 }

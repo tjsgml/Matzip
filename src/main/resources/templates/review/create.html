@@ -28,16 +28,16 @@
         <div class="row" style=" background-color: white; ">
                     <div class="navContainer">
                         <div class="nav1"><!--로고-->
-                             <div th:replace="~{/layout/fragment-navigation :: homeLogo}"></div>
+                             <div th:replace="~{layout/fragment-navigation :: homeLogo}"></div>
                         </div>
                         <div class="nav2"><!--검색 바-->
-                              <span th:replace="~{/layout/fragment-navigation :: searchBar}"></span>
+                              <span th:replace="~{layout/fragment-navigation :: searchBar}"></span>
                         </div>
                         <div class="nav3"><!-- 지도-->
-                             <div th:replace="~{/layout/fragment-navigation :: mapList}"> </div>
+                             <div th:replace="~{layout/fragment-navigation :: mapList}"> </div>
                         </div>
                         <div class="nav4"><!--로그인-->
-                             <div th:replace="~{/layout/fragment-navigation :: navLogin}"> </div>   
+                             <div th:replace="~{layout/fragment-navigation :: navLogin}"> </div>
                         </div>
                     </div>  
                         
@@ -53,7 +53,7 @@
                         <div>
                             <h4 class="text-center-title">평점</h4>
                             
-                            <div class="rating-container" id="taste">
+                            <div class="rating-container" id="taste" style="justify-content: center;">
                                 <p class="rating-flavor">맛</p>
                                 <span class="stars taste-stars">
                                     <span class="star" data-value="1"><i class="fas fa-star"></i></span>
@@ -108,6 +108,7 @@
                         
                             <!-- 이미지 업로드 -->
                             <div class="image-section">
+                                <div>
                                 <div class="image-upload">
                                     <div class="file">
                                         <span class="image-inner">
@@ -115,15 +116,16 @@
                                         </span>
                                     </div>
                                 </div>
+                                </div>
                                 <!-- 이미지 미리보기 -->
                                 <div class="image-preview-container">
-                                    <div class="image-preview-text ">이미지 업로드</div>
+                                    <div class="image-preview-text">이미지 업로드</div>
                                 </div>
                             </div>
 
                             <div class="review-content">
                                 <div>
-                                    <textarea class="form-control" id="review" rows="5" name="reviewContent" placeholder="방문한 식당의 솔직한 후기를 입력해 주세요!" ></textarea>
+                                    <textarea class="form-control text-content" id="review" rows="5" name="reviewContent" placeholder="방문한 식당의 솔직한 후기를 입력해 주세요!" ></textarea>
                                 </div><!-- -->
                             </div>
                         

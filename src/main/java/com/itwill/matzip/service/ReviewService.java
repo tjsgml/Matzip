@@ -72,6 +72,11 @@ public class ReviewService {
         this.reviewLikeDao=reviewLikeDao;
     }
     
+    // 리뷰 좋아요 개수
+    public Long countLikesByReviewId(Long reviewId) {
+        return reviewLikeDao.countByReviewId(reviewId);
+    }
+    
     // 리뷰 좋아요 삭제
     @Transactional
     public void deleteReviewLike(Long reviewId, Long memberId) {
@@ -82,8 +87,6 @@ public class ReviewService {
 
     // 리뷰 좋아요 상태 확인
     public Optional<ReviewLike> checkReviewLike(Long memberId, Long reviewId) {
-        // 멤버 ID와 리뷰 ID에 해당하는 좋아요가 있는지 확인
-        // 있으면 해당 좋아요 객체를 반환, 없으면 Optional.empty() 반환
         return reviewLikeDao.findByMemberIdAndReviewId(memberId, reviewId);
     }
 

@@ -266,24 +266,25 @@ public class RestaurantService {
 			
 			//가져온 레스토랑들의 리뷰들을 가져와 총점 계산
 			for (Restaurant re : restList) {
-				List<Review> l = reviewDao.findByRestaurantId(re.getId());
-				restTotalRating = reviewSvc.getTotalRating(l);
-				
-				pickList.add(MyPickRequestDto.builder()
-						.imgUrl(reviewSvc.getImgUrl(re.getId()))
-						.restaurantId(re.getId())
-						.restaurantName(re.getName())
-						.categoryName(re.getCategory().getName())
-						.totalSart(restTotalRating)
-						.build());
-				
-				restTotalRating=0.0;
+
+				if (re.getStatus().equals(RestaurantStatus.OPEN)) {
+					List<Review> l = reviewDao.findByRestaurantId(re.getId());
+					restTotalRating = reviewSvc.getTotalRating(l);
+
+					pickList.add(MyPickRequestDto.builder().imgUrl(reviewSvc.getImgUrl(re.getId()))
+							.restaurantId(re.getId()).restaurantName(re.getName())
+							.categoryName(re.getCategory().getName()).totalSart(restTotalRating).build());
+
+					restTotalRating = 0.0;
+				}
 			}
 
-			//dto에 저장하기
-			dto.add(TagRestaurantRequestDto.builder().tagId(exposeY.getId()).tagKeyword(exposeY.getKeyword())
-					.rest(pickList).restLength(restList.size()).build());
-			restTotalRating = 0.0;
+			if (pickList.size() != 0) {
+				// dto에 저장하기
+				dto.add(TagRestaurantRequestDto.builder().tagId(exposeY.getId()).tagKeyword(exposeY.getKeyword())
+						.rest(pickList).restLength(pickList.size()).build());
+				restTotalRating = 0.0;
+			}
 		}
 		return dto;
 	}

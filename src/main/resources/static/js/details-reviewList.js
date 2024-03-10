@@ -3,36 +3,35 @@
  * details 페이지의 리뷰 리스트
  */
 
-document.addEventListener('DOMContentLoaded', async()=>{
-    
+document.addEventListener('DOMContentLoaded', async () => {
+
     // 현재 로그인한 사용자의 닉네임
     const loggedInUserNickname = document.getElementById('loggedInUserNickname').textContent.trim();
-    
+
     const restId = document.querySelector('input#restId').value;//음식점 아이디
 
     reviewListLoad(restId);
     loadHashtagsByCategory(restId);
-    
+
     // 리뷰 목록 ----------------------------------------------------------------------
     async function reviewListLoad(restaurantId) {
         try {
             const response = await axios.get(`/rest/details/reviews/${restaurantId}`);
             const reviews = response.data;
-            console.log(reviews);
 
             let totalScoreSum = 0;
             let flavorScoreSum = 0;
             let priceScoreSum = 0;
             let serviceScoreSum = 0;
-   
+
             const reviewListContainer = document.getElementById('reviewListContainer');
             reviewListContainer.innerHTML = ''; // 초기화
 
-            reviews.hashtag 
-            
+            reviews.hashtag
+
             reviews.forEach((review, reviewIndex) => {
                 console.log(`Review ${reviewIndex}:`, review.memberNickname, loggedInUserNickname, review.memberNickname === loggedInUserNickname);
-                
+
                 const reviewElement = document.createElement('div');
                 reviewElement.className = 'review_post';
 
@@ -54,16 +53,16 @@ document.addEventListener('DOMContentLoaded', async()=>{
                     <div class="item2">
                         <p style="font-size: 23px; margin-left: 20px; font-weight: bold; margin-top: 15px; margin-bottom: 0;">${review.memberNickname}</p>
                         <div style="margin-left: 20px;">
-                            <span class="total_score" style="font-size:17px; font-weight: bold; color:rgb(94, 94, 94);">${roundedTotalScore}점</span>
+                            <span class="total_score" style="font-size:17px; font-weight: bold; color:rgb(94, 94, 94);">${roundedTotalScore}</span>
                             ${[1, 2, 3, 4, 5].map(index => {
-                                if (index <= Math.floor(roundedTotalScore)) {
-                                    return `<img class="star" data-index="${index}" src="/img/star_on.png" ${index === 1 ? 'style="margin-left: 0px;"' : ''}>`;
-                                } else if (index === Math.ceil(roundedTotalScore) && roundedTotalScore % 1 >= 0.5) {
-                                    return `<img class="star" data-index="${index}" src="/img/star_half.png" ${index === 1 ? 'style="margin-left: 0px;"' : ''}>`;
-                                } else {
-                                    return `<img class="star" data-index="${index}" src="/img/star_off.png" ${index === 1 ? 'style="margin-left: 0px;"' : ''}>`;
-                                }
-                            }).join('')}
+                    if (index <= Math.floor(roundedTotalScore)) {
+                        return `<img class="star" data-index="${index}" src="/img/star_on.png" ${index === 1 ? 'style="margin-left: 0px;"' : ''}>`;
+                    } else if (index === Math.ceil(roundedTotalScore) && roundedTotalScore % 1 >= 0.5) {
+                        return `<img class="star" data-index="${index}" src="/img/star_half.png" ${index === 1 ? 'style="margin-left: 0px;"' : ''}>`;
+                    } else {
+                        return `<img class="star" data-index="${index}" src="/img/star_off.png" ${index === 1 ? 'style="margin-left: 0px;"' : ''}>`;
+                    }
+                }).join('')}
                             <span style="margin-left: 5px; font-size: 18px; color:rgb(94, 94, 94);">${review.formattedRegisterDate}</span>
                         </div>
                         <div class="review_scores" style="margin-left: 10px;">
@@ -103,25 +102,25 @@ document.addEventListener('DOMContentLoaded', async()=>{
                 </div>`;
 
                 reviewElement.innerHTML = innerHTML;
-                
+
                 const btnContainer = reviewElement.querySelector('.review-btn-container');
-                
+
                 // 로그인한 회원이 리뷰 작성자인 경우 수정/삭제 버튼 추가
                 if (loggedInUserNickname && review.memberNickname === loggedInUserNickname) {
                     // 수정 버튼 생성
                     const editButton = document.createElement('button');
                     editButton.textContent = 'ㅤ수정ㅤ';
-                    editButton.className = 'btn edit-review-btn'; 
+                    editButton.className = 'btn edit-review-btn';
                     editButton.addEventListener('click', function() {
                         window.location.href = `/review/update/${review.id}`; /// review/update?review=${review.id}
-                    }); 
-                        
+                    });
+
                     // 삭제 버튼 생성
                     const deleteButton = document.createElement('button');
                     deleteButton.textContent = 'ㅤ삭제ㅤ'
                     deleteButton.className = 'btn delete-review-btn';
                     deleteButton.addEventListener('click', function() {
-                        deleteReview(review.id); 
+                        deleteReview(review.id);
                     });
 
                     btnContainer.appendChild(editButton);
@@ -130,22 +129,33 @@ document.addEventListener('DOMContentLoaded', async()=>{
                     const likeButton = document.createElement('button');
                     likeButton.className = 'btn like-review-btn';
                     if (review.likedByUser) {
-                        likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_On.png" class="like-button-img">';
+                        likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_On.png" class="like-button-img">' + `<span class="likes-count">${review.likesCount}</span>`;
                     } else {
-                        likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_Off.png" class="like-button-img">';
+                        likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_Off.png" class="like-button-img">' + `<span class="likes-count">${review.likesCount}</span>`;
                     }
-                    likeButton.addEventListener('click', function() {
-                        handleReviewLikeClick(review.id, likeButton);
 
+                    likeButton.addEventListener('click', function() {
+                        // 로그인하지 않았을 경우
+                        if (!loggedInUserNickname) {
+                            if (confirm('리뷰 좋아요는 로그인이 필요합니다. 로그인 하시겠습니까?')) {
+                                // 현재 페이지 URL 인코딩
+                                //const redirectUrl = encodeURIComponent(window.location.href);
+                                const redirectUrl = window.location.href;
+                                window.location.href = `/member/detailLogin?redirect=${redirectUrl}`;
+                            }
+                        } else {
+                            // 로그인 상태일 경우, 공감 기능 수행
+                            handleReviewLikeClick(review.id, likeButton);
+                        }
                     });
                     btnContainer.appendChild(likeButton);
 
                 }
-                
-               
-                                  
-                
-                
+
+
+
+
+
                 reviewListContainer.appendChild(reviewElement);
             });
 
@@ -161,8 +171,8 @@ document.addEventListener('DOMContentLoaded', async()=>{
 
             const evalAvg1Element1 = document.querySelector('.evalAvg1');
             const evalAvg1Element2 = document.querySelector('.evalAvg2');
-            evalAvg1Element1.textContent = `${roundedAverageScore}점`;
-            evalAvg1Element2.textContent = `${roundedAverageScore}점`;
+            evalAvg1Element1.textContent = `${roundedAverageScore}`;
+            evalAvg1Element2.textContent = `${roundedAverageScore}`;
 
             displayAverageRatingStars(roundedAverageScore); // 별점 표시 함수
 
@@ -180,7 +190,7 @@ document.addEventListener('DOMContentLoaded', async()=>{
             </div>`;
 
 
-            // 리뷰 이미지 클릭 이벤트 리스너 추가
+            // 리뷰 이미지 클릭 
             addReviewImageClickListener();
         } catch (error) {
             console.error('리뷰 목록을 불러오는 데 실패했습니다:', error);
@@ -189,35 +199,35 @@ document.addEventListener('DOMContentLoaded', async()=>{
 
     // 카테고리와 카테고리 이름을 매핑하는 객체
     const categoryNames = {
-      'visitPurpose': '방문 목적',
-      'mood': '분위기',
-      'convenience': '편의시설'
+        'visitPurpose': '방문 목적',
+        'mood': '분위기',
+        'convenience': '편의시설'
     };
 
     // 순서대로 정렬하기 위한 배열
     const orderedCategories = ['visitPurpose', 'mood', 'convenience'];
-    
+
     async function loadHashtagsByCategory(restaurantId) {
         try {
             const response = await axios.get(`/rest/details/hashtags/${restaurantId}`);
             const hashtagsByCategory = response.data;
             console.log(hashtagsByCategory);
-    
+
             const htContainer = document.querySelector('.ht_container');
-            htContainer.innerHTML = ''; 
-    
+            htContainer.innerHTML = '';
+
             Object.keys(hashtagsByCategory).forEach((category, index) => {
                 const hashtags = hashtagsByCategory[category];
                 const categoryDiv = document.createElement('div');
                 const categoryName = categoryNames[category] || category; // 카테고리 이름 매핑
-    
+
                 categoryDiv.classList.add('category-section');
                 categoryDiv.innerHTML = `
                     <div class="category-title" style="margin-top: 10px;">
                         <span class="HT_${category}_All" style="font-size: 20px;">${categoryName}</span>
                     </div>
                     <div class="item2" id="hashtags-${index}">`;
-    
+
                 // 해시태그 추가
                 hashtags.forEach((hashtag, hashtagIndex) => {
                     const span = document.createElement('span');
@@ -226,12 +236,12 @@ document.addEventListener('DOMContentLoaded', async()=>{
                     span.textContent = hashtag;
                     categoryDiv.querySelector('.item2').appendChild(span);
                 });
-    
+
                 // 해시태그가 5개 이상이면 '더보기'/'접기' 버튼 추가
                 if (hashtags.length > 5) {
                     const buttonContainer = document.createElement('div');
                     buttonContainer.classList.add('more-button-container');
-                
+
                     const moreButton = document.createElement('button');
                     moreButton.classList.add('btnMoreHt', 'btn');
                     moreButton.textContent = '더보기';
@@ -250,43 +260,53 @@ document.addEventListener('DOMContentLoaded', async()=>{
                     buttonContainer.appendChild(moreButton);
                     categoryDiv.appendChild(buttonContainer);
                 }
-    
+
                 htContainer.appendChild(categoryDiv);
             });
         } catch (error) {
             console.error('해시태그 정보를 불러오는 데 실패했습니다:', error);
         }
     }
-    
-    
-    // 리뷰 좋아요 버튼 클릭 이벤트 핸들러
+
+
+    // 리뷰 좋아요 버튼 클릭 
     async function handleReviewLikeClick(reviewId, likeButton) {
         // 좋아요 상태 확인
         const isLiked = likeButton.querySelector('img').src.includes('imgicon_Thumbs_On.png');
-        
+
         try {
+            let response; // 서버 응답 저장할 변수
             if (isLiked) {
                 // 좋아요 삭제 요청
-                await axios.delete(`/review/unlike/${reviewId}`);
-                likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_Off.png" class="like-button-img">';
+                response = await axios.delete(`/review/unlike/${reviewId}`);
             } else {
                 // 좋아요 추가 요청
-                await axios.post(`/review/likes`, { reviewId });
-                likeButton.innerHTML = '<img src="/img/imgicon_Thumbs_On.png" class="like-button-img">';
+                response = await axios.post(`/review/likes`, { reviewId });
             }
+
+            // 업데이트된 좋아요 개수 가져오기
+            const updatedLikesCount = response.data.likesCount;
+
+            // 좋아요 버튼 업데이트
+            const newButtonHtml = isLiked
+                ? `<img src="/img/imgicon_Thumbs_Off.png" class="like-button-img"><span class="likes-count">${updatedLikesCount}</span>`
+                : `<img src="/img/imgicon_Thumbs_On.png" class="like-button-img"><span class="likes-count">${updatedLikesCount}</span>`;
+
+            likeButton.innerHTML = newButtonHtml;
         } catch (error) {
-            console.error('리뷰 좋아요 처리 중 에러 발생:', error);
+            console.error('리뷰 좋아요 에러:', error);
         }
     }
 
-    
 
 
-    
+
+
+
     // 리뷰 이미지 클릭 이벤트 리스너 함수
     function addReviewImageClickListener() {
         document.querySelectorAll('.carousel-img').forEach(image => {
-            image.addEventListener('click', function () {
+            image.addEventListener('click', function() {
                 showImageInModal(image.src);
             });
         });
@@ -303,14 +323,14 @@ document.addEventListener('DOMContentLoaded', async()=>{
     function displayAverageRatingStars(roundedAverageScore) {
         // 첫 번째 별점 컨테이너 선택
         const ratingStarContainer = document.querySelector('.rating_star');
-        ratingStarContainer.innerHTML = ''; // 이전 별점 초기화
-    
+        ratingStarContainer.innerHTML = ''; 
+
         // 두 번째 별점 컨테이너 선택
         const ratingStarContainer2 = document.querySelector('.rating_star2');
-        ratingStarContainer2.innerHTML = ''; // 이전 별점 초기화
-    
+        ratingStarContainer2.innerHTML = ''; 
+
         let starsHTML = '';
-    
+
         for (let index = 1; index <= 5; index++) {
             if (index <= Math.floor(roundedAverageScore)) {
                 starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_on.png">`;
@@ -320,27 +340,27 @@ document.addEventListener('DOMContentLoaded', async()=>{
                 starsHTML += `<img class="bigStar" data-index="${index}" src="/img/star_off.png">`;
             }
         }
-    
+
         // 두 컨테이너에 동일한 별점 HTML 삽입
         ratingStarContainer.innerHTML = starsHTML;
         ratingStarContainer2.innerHTML = starsHTML;
     }
-        
-        // 리뷰 삭제
-        async function deleteReview(reviewId) {
-        if (!confirm("리뷰를 삭제하시겠습니까?")) return; // 사용자에게 삭제 확인 요청
-    
+
+    // 리뷰 삭제
+    async function deleteReview(reviewId) {
+        if (!confirm("리뷰를 삭제하시겠습니까?")) return; 
+
         try {
             const response = await fetch(`/review/delete/${reviewId}`, {
-                method: 'DELETE', 
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 },
             });
 
-            if (response.ok) { 
+            if (response.ok) {
                 alert("리뷰가 삭제되었습니다!");
-                window.location.reload(); 
+                window.location.reload();
             } else {
                 throw new Error('리뷰삭제실패');
             }
@@ -351,5 +371,5 @@ document.addEventListener('DOMContentLoaded', async()=>{
     }
 
 
-    
+
 });//end document
