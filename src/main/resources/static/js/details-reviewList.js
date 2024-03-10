@@ -7,27 +7,69 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 현재 로그인한 사용자의 닉네임
     const loggedInUserNickname = document.getElementById('loggedInUserNickname').textContent.trim();
-
+    
+    let currentPage = 0;
+    let isFetching = false; // 현재 데이터를 불러오는 중인지 확인하는 플래그
+    
     const restId = document.querySelector('input#restId').value;//음식점 아이디
 
     reviewListLoad(restId);
     loadHashtagsByCategory(restId);
+    
+     // 스크롤
+    function onScroll() {
+        console.log("스크롤@@@@@@@");
+         console.log(`innerHeight + scrollY: ${window.innerHeight + window.scrollY}, body.offsetHeight: ${document.body.offsetHeight}`);
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10 && !isFetching) { // 끝에 거의 도달했을 때 로딩
+            console.log("스크롤@@@@@@@ 되냐");
+            loadMoreData();
+        }
+    }
+    
+    async function loadMoreData() {
+        isFetching = true;
+        currentPage++;
+        await reviewListLoad(restId, currentPage);
+        isFetching = false;
+    }
+
+
+    
 
     // 리뷰 목록 ----------------------------------------------------------------------
-    async function reviewListLoad(restaurantId) {
+    async function reviewListLoad(restaurantId, currentPage) {
         try {
-            const response = await axios.get(`/rest/details/reviews/${restaurantId}`);
+            const response = await axios.get(`/rest/details/reviews/${restaurantId}?page=${currentPage}&size=10`);
+            //const { content, last } = response.data; // last: 마지막 페이지 여부
             const reviews = response.data;
-
+            
             let totalScoreSum = 0;
             let flavorScoreSum = 0;
             let priceScoreSum = 0;
             let serviceScoreSum = 0;
 
             const reviewListContainer = document.getElementById('reviewListContainer');
-            reviewListContainer.innerHTML = ''; // 초기화
+            //reviewListContainer.innerHTML = ''; // 초기화
+            
+            console.log(response.data);
 
-            reviews.hashtag
+            if (reviews.length === 0 && currentPage === 0) {
+                // 리뷰가 없을 때 
+                const noDataHTML = `
+                    <div class="card">
+                        <div id="none-data-div" class="card-body pt-5">
+                            <div class="row fw-semibold text-center" style="font-size: 20px;">
+                                <div class="col my-5">
+                                    <p style="font-size: 50px">🥄🥺🥢</p>
+                                    <div>아직 등록된 리뷰가 없어요..</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                reviewListContainer.innerHTML = noDataHTML;
+                return; 
+            }           
+            
 
             reviews.forEach((review, reviewIndex) => {
                 console.log(`Review ${reviewIndex}:`, review.memberNickname, loggedInUserNickname, review.memberNickname === loggedInUserNickname);
@@ -177,25 +219,36 @@ document.addEventListener('DOMContentLoaded', async () => {
             displayAverageRatingStars(roundedAverageScore); // 별점 표시 함수
 
             // 카테고리별 평점 평균
-            const flavorScoreAvg = flavorScoreSum / reviews.length;
-            const priceScoreAvg = priceScoreSum / reviews.length;
-            const serviceScoreAvg = serviceScoreSum / reviews.length;
+            const flavorScoreAvgText = reviews.length > 0 ? (flavorScoreSum / reviews.length).toFixed(1) : "0";
+            const priceScoreAvgText = reviews.length > 0 ? (priceScoreSum / reviews.length).toFixed(1) : "0";
+            const serviceScoreAvgText = reviews.length > 0 ? (serviceScoreSum / reviews.length).toFixed(1) : "0";
+            
+            // 0일 경우 소수점 제거
+            const formatScore = (score) => score.endsWith(".0") ? score.substring(0, score.length - 2) : score;
 
             const ratingCategoryAvgContainer = document.querySelector('.rating_category_avg');
             ratingCategoryAvgContainer.innerHTML = `
-            <div class="review_scores_all" >
-                <span class="flavor_rating_avg">맛 <img src="/img/miniStar.png" class="miniStar">${flavorScoreAvg.toFixed(1)}</span> 
-                <span class="price_rating_avg">가격 <img src="/img/miniStar.png" class="miniStar">${priceScoreAvg.toFixed(1)}</span>
-                <span class="service_rating_avg">서비스 <img src="/img/miniStar.png" class="miniStar">${serviceScoreAvg.toFixed(1)}</span>
+            <div class="review_scores_all">
+                <span class="flavor_rating_avg">맛 <img src="/img/miniStar.png" class="miniStar">${formatScore(flavorScoreAvgText)}</span> 
+                <span class="price_rating_avg">가격 <img src="/img/miniStar.png" class="miniStar">${formatScore(priceScoreAvgText)}</span>
+                <span class="service_rating_avg">서비스 <img src="/img/miniStar.png" class="miniStar">${formatScore(serviceScoreAvgText)}</span>
             </div>`;
 
 
             // 리뷰 이미지 클릭 
             addReviewImageClickListener();
+            
+            if (reviews.length < 10) { // 요청한 페이지 크기보다 적은 리뷰가 반환된 경우, 마지막 페이지로 간주
+                window.removeEventListener('scroll', onScroll); // 더 이상 스크롤 이벤트 리스너 필요 없음
+            }
+            
         } catch (error) {
             console.error('리뷰 목록을 불러오는 데 실패했습니다:', error);
         }
     }// -- reviewListLoad END --
+    
+    window.addEventListener('scroll', onScroll);
+    
 
     // 카테고리와 카테고리 이름을 매핑하는 객체
     const categoryNames = {
