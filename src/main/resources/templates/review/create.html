@@ -104,15 +104,15 @@
                             <input type="hidden" id="serviceRating" name="serviceRating" value="0">
                             <!--  -->
 
-                        
-                        
                             <!-- 이미지 업로드 -->
+                            <div class="image-container">
                             <div class="image-section">
                                 <div>
                                 <div class="image-upload">
                                     <div class="file">
                                         <span class="image-inner">
-                                            <input type="file" multiple accept="image/*" id="image-input" name="images" />
+                                            <label className="input-file-button" for="image-input">이미지파일 업로드</label>
+                                            <input type="file" multiple accept="image/*" id="image-input" name="images" d-none/>
                                         </span>
                                     </div>
                                 </div>
@@ -121,6 +121,7 @@
                                 <div class="image-preview-container">
                                     <div class="image-preview-text">이미지 업로드</div>
                                 </div>
+                            </div>
                             </div>
 
                             <div class="review-content">
@@ -136,7 +137,7 @@
                         <hr/>
                         
                         <h4 class="text-center-title">음식점 키워드</h4>
-                            <div>
+                            <div class="hashtag-group">
                                 <!-- 방문목적 -->
                                 <div class="keyword-purpose form-group">
                                     <div>방문목적</div>
@@ -160,9 +161,15 @@
     
                             </div>
                         
-
+                        <div class="btn-back-submit-group">
+                            <div class="btn-back-container" >
+                                <button type="button" class="btn btn-back" onclick="window.history.back();">ㅤ취소ㅤ</button>
+                            </div>
                             
-                          <button type="submit" class="btn btn-submit">리뷰 저장</button>
+                            <div class="btn-submit-container">
+                                <button type="submit" class="btn btn-submit">ㅤ저장ㅤ</button>
+                            </div>
+                        </div>
                         </form>
                     </div>
                     
