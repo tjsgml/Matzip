@@ -51,7 +51,7 @@ public class MemberController {
 	// 로그인 폼으로 이동
 	@GetMapping("/login")
 	public String login(Principal principal) {
-		log.info("Get - login()");
+		log.info("Get - login() 호출");
 		if(principal == null) {
 			return "member/login";
 		}else {
@@ -59,61 +59,6 @@ public class MemberController {
 		}
 	}
 	
-	// 로그인을 한 후에 이전 페이지로 리다이렉트
-	@PreAuthorize("hasRole('USER')")
-	@GetMapping("/detailLogin")
-	public void detailLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.info("Get - login()");
-		 // 이전 페이지의 URI을 가져옴
-		String redirectUri = request.getParameter("redirect");
-        String queryString = request.getQueryString();
-        
-        // "redirect=" 부분을 제거하여 실제 값만 추출
-        String queryRedirectUri = queryString.replaceFirst("redirect=", "");
-        // "&continue" 이후의 문자열은 삭제
-        int continueIndex = redirectUri.indexOf("&continue");
-        if (continueIndex != -1) {
-        	queryRedirectUri = redirectUri.substring(0, continueIndex);
-        }
-        log.info("@@@ redirectUri ={}", redirectUri);
-        
-        log.info("@@@ queryString ={}", queryString);
-        
-        
-        try {
-            if (redirectUri != null) {
-            	if(containsUnicode(redirectUri)) {
-            		 // URL 인코딩을 사용하여 한글 문자를 ASCII로 변환하여 리다이렉트 URL 생성
-                    String uri = new URI(redirectUri).toString();
-                    log.info("@@@ uri={}",uri);
-                    response.sendRedirect(queryRedirectUri);
-            	}else {
-            		// 리다이렉트할 URI이 있으면 해당 URI로 리다이렉트
-            		response.sendRedirect(redirectUri);
-            		
-            	}
-            } else {
-                // 리다이렉트할 URI이 없으면 기본적으로 설정된 URI로 리다이렉트
-                response.sendRedirect("/");
-            }
-        } catch (URISyntaxException e) {
-            // 잘못된 URI가 제공된 경우 처리
-            log.error("Invalid URI: {}", redirectUri);
-            response.sendRedirect("/");
-        }		
-		 // 이전 페이지의 URL을 가져옴
-//        String redirectUrl = request.getParameter("redirect");
-//        log.info("@@@ redirectUrl ={}",redirectUrl);
-//        
-//        if (redirectUrl != null) {
-//            // 리다이렉트할 URL이 있으면 해당 페이지로 리다이렉트
-//            response.sendRedirect(redirectUrl);
-//        } else {
-//            // 리다이렉트할 URL이 없으면 기본적으로 설정된 페이지로 리다이렉트
-//            response.sendRedirect("/");
-//        }
-
-	}
 	
 	// 회원가입 폼으로 이동
 	@GetMapping("/signup")
@@ -290,13 +235,5 @@ public class MemberController {
 		return ResponseEntity.ok(result);
 	}
 	
-	// 문자열에 유니코드가 포함되어 있는지 확인하는 메서드
-	private boolean containsUnicode(String str) {
-	    for (char c : str.toCharArray()) {
-	        if (c > 127) {
-	            return true;
-	        }
-	    }
-	    return false;
-	}
+
 }

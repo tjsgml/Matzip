@@ -28,7 +28,7 @@
 	    btnLogin.addEventListener('click', () => {
 			console.log('로그인 버튼 클릭');
 		    // 현재 페이지의 URL을 가져와서 로그인 페이지로 이동하면서 전달
-		    window.location.href = `/member/detailLogin?redirect=${currentUrl}`;
+		    window.location.href = `/member/login?redirect=` + encodeURIComponent(currentUrl);
 		});
 	}
 	
