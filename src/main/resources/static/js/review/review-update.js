@@ -1,24 +1,13 @@
 document.addEventListener("DOMContentLoaded", function() {
     initializeStarRatings();
-    console.log(hashtags);
-    
-    
-    
-    
-    
-    // 수정 중 페이지 벗어날때 경고창
-    //window.addEventListener('beforeunload', function(e) {
-    //    // 변경사항이 있을 때 경고를 표시
-    //    // 일단 평점 변경시에는 창 뜸
-    //    e.returnValue = '수정을 취소하시겠습니까? 수정한 내용은 저장되지 않습니다.'; // 대부분의 브라우저는 기본메시지 사용. e.returnValue에 값 설정해도 사용자 정의 메시지는 표시되지 않을 수 있음.
-     //   return e.returnValue;
-    //});
-    
-    
-    
-    
-    
 
+    // 수정 중 페이지 벗어날때 경고창
+    window.addEventListener('beforeunload', function(e) {
+        // 변경사항이 있을 때 경고를 표시
+        // 일단 평점 변경시에는 창 뜸
+        e.returnValue = '수정을 취소하시겠습니까? 수정한 내용은 저장되지 않습니다.'; // 대부분의 브라우저는 기본메시지 사용. e.returnValue에 값 설정해도 사용자 정의 메시지는 표시되지 않을 수 있음.
+        return e.returnValue;
+    });
 
 
 /* 이미지 */
@@ -56,7 +45,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (confirmed) {
                     deleteImageRequests.push(imageUrl); 
                     imagePreviewWrap.remove(); // 미리보기에서 이미지 삭제
-                    console.log(deleteImageRequests);
                     addDeletedImagesToForm();
                     // 모든 이미지가 삭제되었는지 확인하고 "이미지 업로드" 텍스트 다시 표시
                     if (imagePreviewContainer.querySelectorAll('.image-preview-wrap').length === 0) {
@@ -252,7 +240,6 @@ document.addEventListener("DOMContentLoaded", function() {
         // 'hashtagCategory' 필드를 사용하여 태그 리스트 선택
         const tagList = document.getElementById(hashtag.hashtagCategory + '-tags');
         if (!tagList) {
-            console.error('카테고리 태그목록 없음:', hashtag.hashtagCategory);
             return; // 해당 카테고리의 태그 리스트가 없으면 다음 해시태그로 넘어감
         }
     
@@ -273,7 +260,6 @@ document.addEventListener("DOMContentLoaded", function() {
             tagItem.remove(); // 태그 아이템 삭제
             deleteHashtagRequests.push(hiddenInput.value);
             addDeletedHashtagsToForm();
-                console.log(deleteHashtagRequests);
         });
     
         tagItem.appendChild(deleteButton);

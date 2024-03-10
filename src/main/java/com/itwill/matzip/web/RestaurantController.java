@@ -27,8 +27,8 @@ import com.itwill.matzip.dto.MemberSecurityDto;
 import com.itwill.matzip.dto.MyPickRegisterDto;
 import com.itwill.matzip.dto.ReviewListDto;
 import com.itwill.matzip.dto.UpdateRequestItemDto;
-import com.itwill.matzip.repository.reviewHashtag.ReviewHashtagRepository;
 import com.itwill.matzip.service.RestaurantService;
+import com.itwill.matzip.service.ReviewService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,9 +39,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/rest")
 public class RestaurantController {
 	private final RestaurantService restSvc;
+	private final ReviewService reviewSvc;
 
-	
-	
 	//details.html 보여주기(기본적인 음식점 정보 넣기)
 	@GetMapping("/details")
 	public String showdetails(@RequestParam(name="id")Long restId,Model model) {
@@ -174,6 +173,13 @@ public class RestaurantController {
 	    Long currentUserId = currentUser != null ? currentUser.getUserid() : null;
 	    
 	    List<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId, currentUserId);
+	    
+	 // 각 리뷰에 대한 좋아요 개수를 조회하여 ReviewListDto에 설정
+	    for (ReviewListDto review : reviews) {
+	        Long likesCount = reviewSvc.countLikesByReviewId(review.getId());
+	        review.setLikesCount(likesCount);
+	    }
+	    
 	    return ResponseEntity.ok(reviews);
 	}
 //	@GetMapping("/details/reviews/{restaurantId}")
