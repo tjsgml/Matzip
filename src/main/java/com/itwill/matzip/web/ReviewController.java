@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -91,6 +92,7 @@ public class ReviewController {
      * 리뷰 등록 --------------------------------------
      */
     // 리뷰 등록 폼
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/create")
     public String reviewCreateForm(@RequestParam("restaurantId") Long restaurantId, Model model) {
         log.info("GET - reviewCreateForm - restaurantId: {}", restaurantId);
@@ -102,6 +104,7 @@ public class ReviewController {
     }
 
     // 리뷰 등록
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/register")
     public String reviewRegister(@ModelAttribute ReviewCreateDto reviewDto, RedirectAttributes redirectAttributes) {
         try {
@@ -114,7 +117,7 @@ public class ReviewController {
             return "redirect:/review/create?restaurantId=" + reviewDto.getRestaurantId(); // 리다이렉트시 레스토랑ID 쿼리파라미터로 추가
 
         }
-
+        
         return "redirect:/rest/details?id=" + reviewDto.getRestaurantId();
     }
 
@@ -122,6 +125,7 @@ public class ReviewController {
      * 리뷰 수정 --------------------------------------
      */
     // 리뷰 수정
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/update/{reviewId}")
     public String reviewUpdate(@PathVariable("reviewId") Long reviewId, Model model) {
         // 리뷰 정보 조회 

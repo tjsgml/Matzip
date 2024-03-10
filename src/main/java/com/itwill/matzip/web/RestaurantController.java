@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -168,25 +172,41 @@ public class RestaurantController {
 	/* 은겸 추가 */
 	
 	// 리뷰 리스트 
+	// 리뷰 리스트 조회 (페이징 처리 포함)
 	@GetMapping("/details/reviews/{restaurantId}")
-	public ResponseEntity<List<ReviewListDto>> findReviews(@PathVariable("restaurantId") Long restaurantId, @AuthenticationPrincipal MemberSecurityDto currentUser) {
+	public ResponseEntity<List<ReviewListDto>> findReviews(
+	        @PathVariable("restaurantId") Long restaurantId,
+	        @AuthenticationPrincipal MemberSecurityDto currentUser,
+	        @PageableDefault(size = 3) Pageable pageable) {
 	    Long currentUserId = currentUser != null ? currentUser.getUserid() : null;
 	    
-	    List<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId, currentUserId);
 	    
-	 // 각 리뷰에 대한 좋아요 개수를 조회하여 ReviewListDto에 설정
+	    Page<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId, pageable, currentUserId);
+	    
 	    for (ReviewListDto review : reviews) {
-	        Long likesCount = reviewSvc.countLikesByReviewId(review.getId());
-	        review.setLikesCount(likesCount);
+	    	Long likesCount = reviewSvc.countLikesByReviewId(review.getId());
+	    	review.setLikesCount(likesCount);
 	    }
 	    
-	    return ResponseEntity.ok(reviews);
+	    return ResponseEntity.ok(reviews.getContent());
 	}
+
 //	@GetMapping("/details/reviews/{restaurantId}")
-//    public ResponseEntity<List<ReviewListDto>> findReviews(@PathVariable("restaurantId") Long restaurantId) {
-//        List<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId);
-//        return ResponseEntity.ok(reviews);
-//    }
+//	public ResponseEntity<List<ReviewListDto>> findReviews(@PathVariable("restaurantId") Long restaurantId, @AuthenticationPrincipal MemberSecurityDto currentUser) {
+//	    Long currentUserId = currentUser != null ? currentUser.getUserid() : null;
+//	    
+//	    List<ReviewListDto> reviews = restSvc.getReviewsForRestaurant(restaurantId, currentUserId);
+//	    
+//	 // 각 리뷰에 대한 좋아요 개수를 조회하여 ReviewListDto에 설정
+//	    for (ReviewListDto review : reviews) {
+//	        Long likesCount = reviewSvc.countLikesByReviewId(review.getId());
+//	        review.setLikesCount(likesCount);
+//	    }
+//	    
+//	    return ResponseEntity.ok(reviews);
+//	}
+	
+
 	
 	// 카테고리별 해시태그 
     @GetMapping("/details/hashtags/{restaurantId}")

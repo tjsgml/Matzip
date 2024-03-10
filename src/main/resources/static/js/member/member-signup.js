@@ -16,23 +16,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 	const inputUsername = document.querySelector('input#username');
-	inputUsername.addEventListener('change', checkUsername);
+	inputUsername.addEventListener('keyup', checkUsername);
 
 
 	const inputPassword = document.querySelector('input#password');
-	inputPassword.addEventListener('change', checkPassword);
+	inputPassword.addEventListener('keyup', checkPassword);
 
 
 	const inputNickname = document.querySelector('input#nickname');
-	inputNickname.addEventListener('change', checkNickname);
+	inputNickname.addEventListener('keyup', checkNickname);
 
 
 	const inputEmail = document.querySelector('input#email');
-	inputEmail.addEventListener('change', checkEmail);
+	inputEmail.addEventListener('keyup', checkEmail);
 
-	const signUpForm = document.querySelector('form#signup-form');
+
+	const signForm = document.querySelector('form.signup-form');
 	const btnSubmit = document.querySelector('input#btnSubmit');
-	btnSubmit.addEventListener('click', submitForm);
+	btnSubmit.addEventListener('click', submitForm);	
 
 	//메서드 정의 ----------------------------------------------------------------------------------------------------
 
@@ -59,6 +60,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			usernameDiv.innerHTML = '';
 			idChecked = true;
 		}
+
+		if (idChecked && pwdChecked && nickChecked && emailChecked) {
+			btnSubmit.disabled = false;
+		}
 	}
 
 	//닉네임 중복체크
@@ -69,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		const regExp = /^[a-zA-Zㄱ-ㅎ가-힣0-9_]{2,10}$/;
 		if (!regExp.test(nickname)) {
 			nicknameDiv.innerHTML = '2~10자의 한글, 영문 대/소문자,</br>숫자와 특수기호(_)만  사용해 주세요. (공백 사용 불가)'
+			nickChecked=false;
 			return;
 		}
 
@@ -83,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			nicknameDiv.innerHTML = '';
 			nickChecked = true;
 		}
+
 	}
 
 
@@ -95,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		if (!regExp.test(email)) {
 			emailDiv.innerHTML = '이메일 주소가 정확한지 확인해 주세요.';
+			emailChecked=false;
 			return;
 		}
 
@@ -129,13 +137,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 	
-	
 	function submitForm(){
-		if (idChecked && pwdChecked && nickChecked && emailChecked) {
-			signUpForm.submit();
-		}else {
-			alert("필수 정보를 입력해주세요.");
+		const birthInput = document.querySelector('input#birth').value;
+		
+		if (idChecked && pwdChecked && nickChecked && emailChecked&&birthInput!='') {
+			signForm.submit();
+		}else{
+			alert("필수 내용을 확인해주세요");
 		}
 	}
-	
 });
