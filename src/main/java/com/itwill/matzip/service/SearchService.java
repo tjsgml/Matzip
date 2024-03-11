@@ -175,6 +175,7 @@ public class SearchService {
 		//음식점 메인 이미지
 		String mainImg=null;
 		
+		int numLikes=0;//리뷰의 좋아요 수
 				
 		
 		//가게 정보 가져오기
@@ -195,7 +196,7 @@ public class SearchService {
 		
 		for(Review review : rvResults) {
 			
-			int numLikes=0;//리뷰의 좋아요 수
+			
 			
 			List<ReviewLike> rvLikes= reviewLikeDao.findByReviewId(review.getId());
 			if(rvLikes != null) {
