@@ -146,16 +146,27 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll('.tag-input').forEach(input => {
         input.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                e.preventDefault();
+                e.preventDefault(); // 폼 제출 방지
                 const tagValue = this.value.trim();
                 if (tagValue) {
                     const category = this.getAttribute('data-category');
-                    const tagId = `tag-${tagIdCounter++}`; // 태그 고유 ID 생성
-
+                    const tagListId = category + '-tags'; // 카테고리에 해당하는 태그 리스트의 ID
+                    const tagList = document.getElementById(tagListId);
+    
+                    // 동일한 내용의 태그가 이미 리스트에 있는지 확인
+                    const isDuplicate = Array.from(tagList.querySelectorAll('li')).some(tagItem => tagItem.textContent.replace('X', '').trim() === tagValue);
+                    if (isDuplicate) {
+                        alert('동일한 키워드가 이미 존재합니다.');
+                        this.value = ''; 
+                        return; // 
+                    }
+    
+                    // 태그 고유 ID 생성을 위한 카운터
+                    const tagId = `tag-${tagIdCounter++}`;
+    
                     // 숨겨진 입력 필드 생성
                     const hiddenInput = document.createElement('input');
                     hiddenInput.type = 'hidden';
-                    // name 속성 DTO 변수명과 일치하게 수정
                     let inputName = '';
                     if (category === 'visit-purpose') {
                         inputName = 'visitPurposeTags[]';
@@ -167,11 +178,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     hiddenInput.name = inputName;
                     hiddenInput.value = tagValue;
                     hiddenInput.id = tagId;
-
+    
                     document.getElementById('reviewForm').appendChild(hiddenInput);
-
+    
                     // 태그 UI 생성
-                    const tagList = document.getElementById(input.getAttribute('data-category') + '-tags');
                     const tagItem = document.createElement('li');
                     tagItem.textContent = tagValue;
                     const deleteBtn = document.createElement('button');
@@ -180,15 +190,16 @@ document.addEventListener("DOMContentLoaded", function() {
                         tagItem.remove(); // 태그 UI 삭제
                         document.getElementById(tagId).remove(); // 숨겨진 입력 필드 삭제
                     });
-
+    
                     tagItem.appendChild(deleteBtn);
                     tagList.appendChild(tagItem);
-
+    
                     this.value = ''; // 입력 필드 초기화
                 }
             }
         });
     });
+
 
 
 

@@ -14,7 +14,7 @@
         <link href="/css/font.css" rel="stylesheet" />        
         <link rel="stylesheet" href="/css/review/review-create.css">
         <link href="/css/layout/navigation.css" rel="stylesheet">
-
+        <link href="/css/layout/footer.css" rel="stylesheet"/>
 <style>
             
             
@@ -54,7 +54,7 @@
                             <h4 class="text-center-title">평점</h4>
                             
                             <div class="rating-container" id="taste" style="justify-content: center;">
-                                <p class="rating-flavor">맛</p>
+                                <p class="rating-flavor rating-title">맛</p>
                                 <span class="stars taste-stars">
                                     <span class="star" data-value="1"><i class="fas fa-star"></i></span>
                                     <span class="star" data-value="2"><i class="fas fa-star"></i></span>
@@ -65,7 +65,7 @@
                             </div>
                             
                             <div class="rating-container" id="price">
-                                <p class="rating-price" >가격</p>
+                                <p class="rating-price rating-title" >가격</p>
                                 <span class="stars price-stars">
                                     <span class="star" data-value="1"><i class="fas fa-star"></i></span>
                                     <span class="star" data-value="2"><i class="fas fa-star"></i></span>
@@ -76,7 +76,7 @@
                             </div>
                             
                             <div class="rating-container" id="service">
-                                <p class="rating-service">서비스</p>
+                                <p class="rating-service rating-title">서비스</p>
                                 <span class="stars service-stars">
                                     <span class="star" data-value="1"><i class="fas fa-star"></i></span>
                                     <span class="star" data-value="2"><i class="fas fa-star"></i></span>
@@ -106,22 +106,22 @@
 
                             <!-- 이미지 업로드 -->
                             <div class="image-container">
-                            <div class="image-section">
-                                <div>
-                                <div class="image-upload">
-                                    <div class="file">
-                                        <span class="image-inner">
-                                            <label className="input-file-button" for="image-input">이미지파일 업로드</label>
-                                            <input type="file" multiple accept="image/*" id="image-input" name="images" d-none/>
-                                        </span>
+                                <div class="image-section">
+                                    <div>
+                                    <div class="image-upload">
+                                        <div class="file">
+                                            <span class="image-inner">
+                                                <label className="input-file-button" for="image-input"></label>
+                                                <input type="file" multiple accept="image/*" id="image-input" name="images" d-none/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <!-- 이미지 미리보기 -->
+                                    <div class="image-preview-container">
+                                        <div class="image-preview-text">이미지 업로드</div>
                                     </div>
                                 </div>
-                                </div>
-                                <!-- 이미지 미리보기 -->
-                                <div class="image-preview-container">
-                                    <div class="image-preview-text">이미지 업로드</div>
-                                </div>
-                            </div>
                             </div>
 
                             <div class="review-content">
@@ -141,21 +141,27 @@
                                 <!-- 방문목적 -->
                                 <div class="keyword-purpose form-group">
                                     <div>방문목적</div>
-                                    <input type="text" class="tag-input" name="purpose" data-category="visit-purpose" placeholder="엔터를 눌러 해시태그 등록" />
+                                        <div class="tag-input-container">
+                                            <input type="text" class="tag-input" name="purpose" data-category="visit-purpose" placeholder="엔터를 눌러 해시태그 등록" />
+                                        </div>
                                     <ul id="visit-purpose-tags" class="tag-list"></ul>
                                 </div>
                                 
                                 <!-- 분위기 -->
                                 <div class="keyword-mood form-group">
                                     <div>분위기</div>
-                                    <input type="text" class="tag-input" name="mood" data-category="mood" placeholder="엔터를 눌러 해시태그 등록" />
+                                        <div class="tag-input-container">
+                                            <input type="text" class="tag-input" name="mood" data-category="mood" placeholder="엔터를 눌러 해시태그 등록" />
+                                        </div>
                                     <ul id="mood-tags" class="tag-list"></ul>
                                 </div>
                                 
                                 <!-- 편의시설 -->
                                 <div class="keyword-convenience form-group">
                                     <div>편의시설</div>
-                                    <input type="text" class="tag-input" name="convenience" data-category="convenience" placeholder="엔터를 눌러 해시태그 등록" />
+                                        <div class="tag-input-container">
+                                            <input type="text" class="tag-input" name="convenience" data-category="convenience" placeholder="엔터를 눌러 해시태그 등록" />
+                                        </div>
                                     <ul id="convenience-tags" class="tag-list"></ul>
                                 </div>
     
@@ -172,14 +178,10 @@
                         </div>
                         </form>
                     </div>
-                    
-                    
-
-                    
 
                 </div>
                 <div class="col-3" style="background-color: #F0F0F3;"></div>
-                
+                    <div th:replace="~{layout/fragment-footer :: footer}"></div>
                    
 
             
@@ -190,8 +192,27 @@
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
 				    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
 				    crossorigin="anonymous"></script>
-            <script src="../js/layout/navigation.js"></script>
             <script src="/js/review/review-create.js"></script>
-
+            <script src="../js/layout/navigation.js"></script>
+            <script>
+                    // 이미지 지도에서 마커가 표시될 위치입니다 
+                    const markerPosition  = new kakao.maps.LatLng(37.4987845817522,127.031704161063); 
+                    
+                    // 이미지 지도에 표시할 마커입니다
+                    // 이미지 지도에 표시할 마커는 Object 형태입니다
+                    const marker = {
+                        position: markerPosition
+                    };
+                    
+                    const staticMapContainer  = document.getElementById('footer-map'), // 이미지 지도를 표시할 div  
+                        staticMapOption = { 
+                            center: new kakao.maps.LatLng(37.4987845817522, 127.031704161063), // 이미지 지도의 중심좌표
+                            level: 3, // 이미지 지도의 확대 레벨
+                            marker: marker // 이미지 지도에 표시할 마커 
+                        };    
+                    
+                    // 이미지 지도를 생성합니다
+                    const staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
+                </script>
 		</body>
 </html>

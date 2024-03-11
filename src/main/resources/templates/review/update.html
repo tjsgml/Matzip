@@ -1,19 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>리뷰 수정 - MAT.ZIP</title>
-    <link rel="shortcut icon" type="image/x-icon" href="../img/tab_icon.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
-    <link rel="stylesheet" href="/css/review/review-update.css">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>[[${restaurantName}]] 리뷰 수정 - MAT.ZIP</title>
+             <link rel="shortcut icon" type="image/x-icon" href="../img/tab_icon.png">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+              rel="stylesheet" 
+              integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+              crossorigin="anonymous">
+        <!-- Font Awesome CDN 추가 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+        <link href="/css/font.css" rel="stylesheet" />        
+        <link rel="stylesheet" href="/css/review/review-update.css">
+        <link href="/css/layout/navigation.css" rel="stylesheet">
+        <link href="/css/layout/footer.css" rel="stylesheet"/>
 </head>
 <body>
+    <div class="container-fluid" style="background-color: #F0F0F3;">
+    <div class="row" style=" background-color: white; ">
+                    <div class="navContainer">
+                        <div class="nav1"><!--로고-->
+                             <div th:replace="~{layout/fragment-navigation :: homeLogo}"></div>
+                        </div>
+                        <div class="nav2"><!--검색 바-->
+                              <span th:replace="~{layout/fragment-navigation :: searchBar}"></span>
+                        </div>
+                        <div class="nav3"><!-- 지도-->
+                             <div th:replace="~{layout/fragment-navigation :: mapList}"> </div>
+                        </div>
+                        <div class="nav4"><!--로그인-->
+                             <div th:replace="~{layout/fragment-navigation :: navLogin}"> </div>
+                        </div>
+                    </div>  
+                        
+                </div>
 <main>
-    <div class="row">
-        <div class="col-3"></div>
-        <div class="col-6 mt-5">
+    <div class="row" >
+        <div class="col-3" style="background-color: #F0F0F3;"></div>
+        <div class="col-6 layout_1">
             <!-- 폼 시작 -->
             <form th:action="@{/review/update/{reviewId}(reviewId=${review.id})}" method="post" enctype="multipart/form-data" id="reviewForm">
                 <input type="hidden" name="restaurantId" th:value="${restaurantId}" />
@@ -29,7 +55,7 @@
                     <h4 class="text-center-title">평점</h4>
                     
                     <div class="rating-container" id="taste" th:data-rating="${review.flavorScore}">
-                        <p class="rating-flavor">맛</p>
+                        <p class="rating-flavor rating-title">맛</p>
                         <span class="stars taste-stars">
                             <span class="star" data-value="1"><i class="fas fa-star"></i></span>
                             <span class="star" data-value="2"><i class="fas fa-star"></i></span>
@@ -40,7 +66,7 @@
                     </div>
     
                     <div class="rating-container" id="price" th:data-rating="${review.priceScore}">
-                        <p class="rating-price">가격</p>
+                        <p class="rating-price rating-title">가격</p>
                         <span class="stars price-stars">
                             <span class="star" data-value="1"><i class="fas fa-star"></i></span>
                             <span class="star" data-value="2"><i class="fas fa-star"></i></span>
@@ -50,7 +76,7 @@
                         </span>
                     </div>
                     <div class="rating-container" id="service" th:data-rating="${review.serviceScore}">
-                        <p class="rating-service">서비스</p>
+                        <p class="rating-service rating-title">서비스</p>
                         <span class="stars service-stars">
                             <span class="star" data-value="1"><i class="fas fa-star"></i></span>
                             <span class="star" data-value="2"><i class="fas fa-star"></i></span>
@@ -64,48 +90,76 @@
                 
                 <div>
                     <h4 class="text-center-title">방문후기</h4>
-                    <!-- 이미지섹션 -->
-                    <div class="image-section">
-                        <div class="image-upload">
-                            <div class="file">
-                                <span class="image-inner">
-                                    <input type="file" multiple accept="image/*" id="image-input" name="images" />
-                                </span>
+                    
+                    <div class="image-container">
+                        <div class="image-section">
+                            <div>
+                                <div class="image-upload">
+                                    <div class="file">
+                                        <span class="image-inner">
+                                            <label className="input-file-button" for="image-input"></label>
+                                                <input type="file" multiple accept="image/*" id="image-input" name="images" d-none/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 이미지 미리보기 -->
+                            <div class="image-preview-container">
+                                <div class="image-preview-text ">이미지 업로드</div>
                             </div>
                         </div>
-                        <!-- 이미지 미리보기 -->
-                        <div class="image-preview-container">
-                            <div class="image-preview-text ">이미지 업로드</div>
-                        </div>
                     </div>
-                    <textarea th:text="${review.content}" class="form-control" id="review" rows="5" name="reviewContent" placeholder="방문한 식당의 솔직한 후기를 입력해 주세요!"></textarea>
+                    <div class="review-content">
+                        <div>
+                            <textarea th:text="${review.content}" class="form-control text-content" id="review" rows="5" name="reviewContent" placeholder="방문한 식당의 솔직한 후기를 입력해 주세요!"></textarea>
+                        </div><!-- -->
+                    </div>
                 </div>
                 <hr/>
                 <h4 class="text-center-title">음식점 키워드</h4>
-                <div>
-                    <!-- TODO: 해시태그 키워드들 각각의 input 및 ul 요소에 표시해야 함 -->
-                    <div class="keyword- form-group">
-                        <div>방문목적</div>
-                        <input type="text" class="tag-input" name="visitPurpose" data-category="visitPurpose" placeholder="엔터를 눌러 해시태그 등록" />
-                        <ul id="visitPurpose-tags" class="tag-list"></ul>
+                    <div class="hashtag-group">
+                        <!-- TODO: 해시태그 키워드들 각각의 input 및 ul 요소에 표시해야 함 -->
+                        <div class="keyword-purpose form-group">
+                            <div>방문목적</div>
+                                <div class="tag-input-container">
+                                    <input type="text" class="tag-input" name="visitPurpose" data-category="visitPurpose" placeholder="엔터를 눌러 해시태그 등록">
+                                </div>
+                            <ul id="visitPurpose-tags" class="tag-list"></ul>
+                        </div>
+                        <div class="keyword-mood form-group">
+                            <div>분위기</div>
+                                <div class="tag-input-container">
+                                    <input type="text" class="tag-input" name="mood" data-category="mood" placeholder="엔터를 눌러 해시태그 등록" />
+                                </div>
+                            <ul id="mood-tags" class="tag-list"></ul>
+                        </div>
+                        <div class="keyword-convenience form-group">
+                            <div>편의시설</div>
+                                <div class="tag-input-container">
+                                    <input type="text" class="tag-input" name="convenience" data-category="convenience" placeholder="엔터를 눌러 해시태그 등록" />
+                                </div>
+                            <ul id="convenience-tags" class="tag-list"></ul>
+                        </div>
+                        
                     </div>
-                    <div class="keyword-mood form-group">
-                        <div>분위기</div>
-                        <input type="text" class="tag-input" name="mood" data-category="mood" placeholder="엔터를 눌러 해시태그 등록" />
-                        <ul id="mood-tags" class="tag-list"></ul>
-                    </div>
-                    <div class="keyword-convenience form-group">
-                        <div>편의시설</div>
-                        <input type="text" class="tag-input" name="convenience" data-category="convenience" placeholder="엔터를 눌러 해시태그 등록" />
-                        <ul id="convenience-tags" class="tag-list"></ul>
-                    </div>
+                    
+                    
+                <div class="btn-back-submit-group">
+                      <div class="btn-back-container" >
+                           <button type="button" class="btn btn-back" onclick="window.history.back();">ㅤ취소ㅤ</button>
+                      </div>
+                      <div class="btn-submit-container">
+                           <button type="submit" class="btn btn-submit">ㅤ저장ㅤ</button>
+                      </div>
                 </div>
-                <button type="submit" class="btn btn-submit">리뷰 수정</button>
+                </div>
             </form>
             <!-- 폼 끝 -->
         </div>
-        <div class="col-3"></div>
-    </div>
+        <div class="col-3" style="background-color: #F0F0F3;"></div>
+        <div class="row">
+             <div th:replace="~{layout/fragment-footer :: footer}"></div>
+        </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 <script th:inline="javascript">
@@ -114,5 +168,26 @@
         let hashtags = /*[[${hashtags}]]*/ [];
 </script>
 <script src="/js/review/review-update.js"></script>
+<script src="../js/layout/navigation.js"></script>
+    <script>
+                    // 이미지 지도에서 마커가 표시될 위치입니다 
+                    const markerPosition  = new kakao.maps.LatLng(37.4987845817522,127.031704161063); 
+                    
+                    // 이미지 지도에 표시할 마커입니다
+                    // 이미지 지도에 표시할 마커는 Object 형태입니다
+                    const marker = {
+                        position: markerPosition
+                    };
+                    
+                    const staticMapContainer  = document.getElementById('footer-map'), // 이미지 지도를 표시할 div  
+                        staticMapOption = { 
+                            center: new kakao.maps.LatLng(37.4987845817522, 127.031704161063), // 이미지 지도의 중심좌표
+                            level: 3, // 이미지 지도의 확대 레벨
+                            marker: marker // 이미지 지도에 표시할 마커 
+                        };    
+                    
+                    // 이미지 지도를 생성합니다
+                    const staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
+                </script>
 </body>
 </html>

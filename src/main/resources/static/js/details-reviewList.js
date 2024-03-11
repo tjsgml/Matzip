@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 // 현재 페이지 URL 인코딩
                                 //const redirectUrl = encodeURIComponent(window.location.href);
                                 const redirectUrl = window.location.href;
-                                window.location.href = `/member/detailLogin?redirect=${redirectUrl}`;
+                                window.location.href = `/member/login?redirect=${redirectUrl}`;
                             }
                         } else {
                             // 로그인 상태일 경우, 공감 기능 수행
@@ -213,8 +213,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const evalAvg1Element1 = document.querySelector('.evalAvg1');
             const evalAvg1Element2 = document.querySelector('.evalAvg2');
-            evalAvg1Element1.textContent = `${roundedAverageScore}`;
-            evalAvg1Element2.textContent = `${roundedAverageScore}`;
+            evalAvg1Element1.textContent = `${roundedAverageScore}점`;
+            evalAvg1Element2.textContent = `${roundedAverageScore}점`;
 
             displayAverageRatingStars(roundedAverageScore); // 별점 표시 함수
 

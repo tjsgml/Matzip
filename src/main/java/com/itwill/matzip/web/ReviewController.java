@@ -69,8 +69,9 @@ public class ReviewController {
         Optional<ReviewLike> reviewLike = reviewSvc.checkReviewLike(memberId, reviewId);
         return ResponseEntity.ok(reviewLike.isPresent());
     }
-
+    
     // 리뷰 좋아요 추가
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/likes")
     @ResponseBody
     public ResponseEntity<?> registerReviewLike(@RequestBody ReviewLikeRegisterDto dto, @AuthenticationPrincipal MemberSecurityDto memberSecurityDto) {

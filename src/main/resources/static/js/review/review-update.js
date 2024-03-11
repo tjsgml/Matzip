@@ -1,15 +1,27 @@
 document.addEventListener("DOMContentLoaded", function() {
     initializeStarRatings();
+    
+    document.getElementById("review").placeholder = 
+     "방문한 식당의 솔직한 후기를 입력해 주세요!\n상세한 리뷰를 작성하고 좋아요를 받고 \n탑리뷰어에 도전해보세요!\n\n*부적절한 내용은 관리자에 의해 수정/삭제 될 수 있습니다.";
+    
+    
+    // 폼 제출 상태를 추적하는 변수
+    let formSubmitted = false;
 
+    document.getElementById("reviewForm").addEventListener("submit", function() {
+        // 폼이 제출되면 formSubmitted 플래그를 true로 설정
+        formSubmitted = true;
+    });
+    
     // 수정 중 페이지 벗어날때 경고창
     window.addEventListener('beforeunload', function(e) {
-        // 변경사항이 있을 때 경고를 표시
-        // 일단 평점 변경시에는 창 뜸
-        e.returnValue = '수정을 취소하시겠습니까? 수정한 내용은 저장되지 않습니다.'; // 대부분의 브라우저는 기본메시지 사용. e.returnValue에 값 설정해도 사용자 정의 메시지는 표시되지 않을 수 있음.
-        return e.returnValue;
+        // 폼이 제출되지 않았고 변경사항이 있을 경우에만 사용자에게 경고 표시
+        if (!formSubmitted) {
+            e.returnValue = '수정을 취소하시겠습니까? 수정한 내용은 저장되지 않습니다.';
+            return e.returnValue;
+        }
     });
-
-
+    
 /* 이미지 */
     const imageInput = document.getElementById('image-input');
     const imagePreviewContainer = document.querySelector('.image-preview-container');
@@ -162,29 +174,29 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll('.tag-input').forEach(input => {
         input.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                e.preventDefault();
+                e.preventDefault(); // 폼 제출 방지
                 const tagValue = this.value.trim();
-                
-                // 태그 중복 체크
-                const isDuplicate = hashtags.some(hashtag => hashtag.keyword.toLowerCase() === tagValue.toLowerCase());
-                if(isDuplicate){
-                    alert('동일한 키워드가 이미 존재합니다.');
-                    
-                    this.value = '';
-                    return; 
-                }
-                
-                
                 if (tagValue) {
                     const category = this.getAttribute('data-category');
-                    const tagId = `tag-${tagIdCounter++}`; // 태그 고유 ID 생성
-
+                    const tagListId = category + '-tags'; // 카테고리에 해당하는 태그 리스트의 ID
+                    const tagList = document.getElementById(tagListId);
+    
+                    // 동일한 내용의 태그가 이미 리스트에 있는지 확인
+                    const isDuplicate = Array.from(tagList.querySelectorAll('li')).some(tagItem => tagItem.textContent.replace('X', '').trim() === tagValue);
+                    if (isDuplicate) {
+                        alert('동일한 키워드가 이미 존재합니다.');
+                        this.value = ''; 
+                        return; // 
+                    }
+    
+                    // 태그 고유 ID 생성을 위한 카운터
+                    const tagId = `tag-${tagIdCounter++}`;
+    
                     // 숨겨진 입력 필드 생성
                     const hiddenInput = document.createElement('input');
                     hiddenInput.type = 'hidden';
-                    // name 속성 DTO 변수명과 일치하게 수정
                     let inputName = '';
-                    if (category === 'visitPurpose') {
+                    if (category === 'visit-purpose') {
                         inputName = 'visitPurposeTags[]';
                     } else if (category === 'mood') {
                         inputName = 'moodTags[]';
@@ -194,11 +206,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     hiddenInput.name = inputName;
                     hiddenInput.value = tagValue;
                     hiddenInput.id = tagId;
-
+    
                     document.getElementById('reviewForm').appendChild(hiddenInput);
-
+    
                     // 태그 UI 생성
-                    const tagList = document.getElementById(input.getAttribute('data-category') + '-tags');
                     const tagItem = document.createElement('li');
                     tagItem.textContent = tagValue;
                     const deleteBtn = document.createElement('button');
@@ -207,10 +218,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         tagItem.remove(); // 태그 UI 삭제
                         document.getElementById(tagId).remove(); // 숨겨진 입력 필드 삭제
                     });
-                    
+    
                     tagItem.appendChild(deleteBtn);
                     tagList.appendChild(tagItem);
-
+    
                     this.value = ''; // 입력 필드 초기화
                 }
             }

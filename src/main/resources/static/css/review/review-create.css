@@ -26,9 +26,11 @@
     color: gold;
 }
 
-
 .rating-title{
-    margin: 0%;
+    width: 50px; /* 고정된 너비 설정 */
+    margin-right: 10px; /* p태그와 span태그 사이 간격 조정 */
+    margin-top:20px;
+    font-size: 16px; 
 }
 
 .rating-container{
@@ -39,12 +41,6 @@
     text-align: center;
     justify-content: center;
     display: flex; /* p태그와 span태그를 가로로 나란히 정렬 */
-}
-
-p {
-    width: 50px; /* 고정된 너비 설정 */
-    margin-right: 10px; /* p태그와 span태그 사이 간격 조정 */
-    margin-top:20px;
 }
 
 .review-content{
@@ -91,11 +87,6 @@ textarea {
         width: 8px; /* 스크롤바 너비 */
         height: 8px; /* 수평 스크롤 시 스크롤바 높이 */
     }
-
-
-p {
-    font-size: 16px; 
-}
 
 /* 파일 입력 컨테이너*/
 .image-upload {
@@ -215,15 +206,7 @@ p {
     display: none;
 }
 
-
 /*  */
-
-/* 기본 설정 */
-* {
-  /*font-family: Helvetica, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    */
-}
 
 html {
   background-color: rgba(245, 248, 252, 1);
@@ -244,14 +227,14 @@ html {
 .tag-input {
   appearance: none;
   background-color: transparent;
-  border: 4px solid ; /* 경계선 */
+  border: 4px solid #ff9185; /* 경계선 */
   line-height: normal;
   font-size: 15px;
   width: 60%; /* 너비 */
   height:50px;
   padding: 5px; /* 여백 */
   border-radius: 20px; 
-  color: #ff9185;
+  color: grey;
   margin-top: 7px; /* 하단 여백 */
   margin-bottom: 5px; /* 하단 여백 */
   text-align:center;
@@ -329,4 +312,7 @@ html {
     
 }
 
-
+.tag-input-container {
+    display: flex;
+    flex-direction: column;
+}
