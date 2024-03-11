@@ -1,11 +1,5 @@
 package com.itwill.matzip.web;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 
 import org.springframework.http.ResponseEntity;
@@ -31,7 +25,6 @@ import com.itwill.matzip.service.MemberService;
 import com.itwill.matzip.service.SocialMemberService;
 
 
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
