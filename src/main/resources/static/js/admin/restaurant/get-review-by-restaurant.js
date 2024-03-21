@@ -82,7 +82,7 @@ function addDeleteBtnEvent() {
                 return;
             }
 
-            const {status} = await axios.delete(`/review/delete/${reviewId}`);
+            const {status} = await axios.delete(`/admin/review/${reviewId}`);
 
             if (status === 200) {
                 alert("해당 리뷰가 삭제되었습니다.")

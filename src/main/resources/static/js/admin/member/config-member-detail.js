@@ -120,7 +120,7 @@ async function deleteImg(e) {
 
     const imgId = e.target.getAttribute("data-id");
 
-    const {status} = await axios.delete(`./review/img/${imgId}`);
+    const {status} = await axios.delete(`/admin/review/img/${imgId}`);
 
     if (status !== 204) {
         alert("이미지를 삭제하는데 실패하였습니다. 다시 시도해주세요!");
@@ -145,7 +145,7 @@ async function deleteReview(e) {
     }
     const reviewId = e.target.getAttribute("data-id");
 
-    const {status} = await axios.delete(`./review/${reviewId}`);
+    const {status} = await axios.delete(`/admin/review/${reviewId}`);
 
     if (status !== 204) {
         alert("리뷰를 삭제하는데 실패하였습니다. 다시 시도해주세요!");

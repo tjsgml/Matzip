@@ -3,7 +3,9 @@ package com.itwill.matzip.web.admin;
 import com.itwill.matzip.domain.Restaurant;
 import com.itwill.matzip.dto.admin.MemberFilterDto;
 import com.itwill.matzip.dto.admin.RestaurantSearchCond;
+import com.itwill.matzip.service.AdminMemberService;
 import com.itwill.matzip.service.AdminService;
+import com.itwill.matzip.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +29,8 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
-    AdminService adminService;
+    final AdminService adminService;
+    final AdminMemberService memberService;
 
     @GetMapping("")
     public String getMatzipToControl() {
@@ -46,4 +49,17 @@ public class AdminController {
         adminService.getAllMemberByExcel(cond, response);
     }
 
+    @ResponseBody
+    @DeleteMapping("/review/img/{reviewId}")
+    public ResponseEntity<Void> deleteReview (@PathVariable (name = "reviewId") Long reviewId) {
+        memberService.deleteReview(reviewId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ResponseBody
+    @DeleteMapping("/review/img/{reviewImgId}")
+    public ResponseEntity<Object> deleteReviewImgId(@PathVariable("reviewImgId") Long reviewImgId) {
+        memberService.deleteReviewImg(reviewImgId);
+        return ResponseEntity.noContent().build();
+    }
 }
