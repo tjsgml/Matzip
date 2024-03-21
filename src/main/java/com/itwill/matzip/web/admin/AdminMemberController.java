@@ -69,12 +69,6 @@ public class AdminMemberController {
         return ResponseEntity.ok(reviews);
     }
 
-    @ResponseBody
-    @DeleteMapping("/review/img/{reviewImgId}")
-    public ResponseEntity<Object> deleteReviewImgId(@PathVariable("reviewImgId") Long reviewImgId) {
-        memberService.deleteReviewImg(reviewImgId);
-        return ResponseEntity.noContent().build();
-    }
 
     @ResponseBody
     @DeleteMapping("/review/{reviewId}")

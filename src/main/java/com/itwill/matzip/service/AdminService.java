@@ -4,6 +4,7 @@ import com.itwill.matzip.domain.*;
 import com.itwill.matzip.dto.admin.*;
 import com.itwill.matzip.repository.member.MemberRepository;
 import com.itwill.matzip.repository.restaurant.RestaurantRepository;
+import com.itwill.matzip.repository.review.ReviewRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class AdminService {
 
     private final RestaurantRepository restaurantDao;
     private final MemberRepository memberDao;
-
+    private final ReviewRepository reviewDao;
 
     public void getAllRestaurantByExcel(RestaurantSearchCond cond, HttpServletResponse resp) {
         final String fileName = "등록된 레스토랑 리스트";
@@ -175,6 +176,5 @@ public class AdminService {
 
         return TestStyle;
     }
-
 
 }
