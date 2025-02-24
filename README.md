@@ -49,20 +49,22 @@
 3. 필터링, 검생 기능 구현
 </br>
 
-### 네이게이션 바
+### 2️⃣네이게이션 바
 ![스크린샷 2024-03-11 095136](https://github.com/user-attachments/assets/11c72a3e-8610-42cc-9ea1-d2d91515f336)
 
 1. 검색 기능
 2. 로그인, 로그아웃 시 그 전의 페이지로 리다이렉트
 
-### 2️⃣검색 페이지
+</br>
+
+### 3️⃣검색 페이지
 ![image](https://github.com/user-attachments/assets/c07df15d-0c45-417a-8df7-0a52d0ea4631)
 
 1. 가게명, 해시태그 카테고리로 필터링
 2. 리뷰가 있는 음식점부터 차례대로 배열
 </br>
 
-### 3️⃣음식점 디테일 페이지
+### 4️⃣음식점 디테일 페이지
 ![Untitled](https://github.com/user-attachments/assets/f21fb639-6ed6-4ee5-808e-e788cbf266db)
 
 1. 음식점 사진 이미지 배열
